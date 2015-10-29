@@ -1,0 +1,95 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="@string/RemindMeSettings" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="RemindmeThroughTheDay"
+            android:title="@string/RemindmeThroughTheDay" />
+
+        <ListPreference
+            android:defaultValue="30"
+            android:entries="@array/ReminderIncrementOptions"
+            android:entryValues="@array/ReminderIncrementValues"
+            android:key="RemindMeEvery"
+            android:title="@string/RemindMeEvery" />
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/RemindmeThroughTheDayType"
+            android:entryValues="@array/RemindmeThroughTheDayTypeValues"
+            android:key="RemindmeThroughTheDayType"
+            android:title="@string/general_thikr_reminder_type" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/quiet_time" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="quiet_time_choice"
+            android:title="@string/quiet_time_choice" />
+
+        <com.HMSolutions.thikrallah.Utilities.TimePreference
+            android:defaultValue="22:00"
+            android:key="quiet_time_start"
+            android:title="@string/quiet_time_start" />
+        <com.HMSolutions.thikrallah.Utilities.TimePreference
+            android:defaultValue="@string/quiet_time_endvalue"
+            android:key="quiet_time_end"
+            android:title="@string/quiet_time_end" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/morningThikrSettings" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="remindMeMorningThikr"
+            android:title="@string/remindMeMorningThikr" />
+
+        <com.HMSolutions.thikrallah.Utilities.TimePreference
+            android:defaultValue="08:00"
+            android:key="daytReminderTime"
+            android:title="@string/changeReminderTime" />
+
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/RemindmeType"
+            android:entryValues="@array/RemindmeTypeValues"
+            android:key="remindMeDayThikrType"
+            android:title="@string/general_thikr_reminder_type" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/nightThikrSettings" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="remindMeNightThikr"
+            android:title="@string/remindMeNightThikr" />
+
+        <com.HMSolutions.thikrallah.Utilities.TimePreference
+            android:defaultValue="20:00"
+            android:key="nightReminderTime"
+            android:title="@string/changeReminderTime" />
+
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/RemindmeType"
+            android:entryValues="@array/RemindmeTypeValues"
+            android:key="remindMeNightThikrType"
+            android:title="@string/general_thikr_reminder_type" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/contactUs" >
+        <Preference
+            android:key="contactDevKey"
+            android:title="@string/email_Us" >
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/contact_developer_uri" >
+                <extra
+                    android:name="android.intent.extra.SUBJECT"
+                    android:value="@string/email_subject" />
+            </intent>
+        </Preference>
+        <Preference
+            android:key="rateus"
+            android:title="@string/rate" >
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="market://details?id=com.HMSolutions.thikrallah" >
+            </intent>
+        </Preference>
+    </PreferenceCategory>
+
+</PreferenceScreen>

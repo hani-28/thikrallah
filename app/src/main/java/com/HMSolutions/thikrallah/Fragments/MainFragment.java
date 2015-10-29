@@ -1,0 +1,83 @@
+package com.HMSolutions.thikrallah.Fragments;
+
+import com.HMSolutions.thikrallah.MainActivity;
+import com.HMSolutions.thikrallah.R;
+import com.HMSolutions.thikrallah.SetPreferenceActivity;
+import com.HMSolutions.thikrallah.Utilities.MainInterface;
+
+import android.app.Activity;
+import android.app.Fragment;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+
+public class MainFragment extends Fragment {
+	private MainInterface mCallback;
+
+	public MainFragment() {
+	}
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		try {
+			mCallback = (MainInterface) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString()
+					+ " must implement MainInterface");
+		}
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+
+		this.getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
+		this.getActivity().getActionBar().setDisplayShowHomeEnabled(true);
+		
+		View view = inflater.inflate(R.layout.fragment_main, container,
+				false);
+		Button button_remind_me_settings = (Button) view.findViewById(R.id.button_remind_me);
+		Button button_morning_thikr = (Button) view.findViewById(R.id.button_morning_thikr);
+		Button button_night_thikr = (Button) view.findViewById(R.id.button_night_thikr);
+		Button button_donate = (Button) view.findViewById(R.id.button_support_us);
+		button_donate.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				mCallback.upgrade();
+				
+			}
+			
+		});
+		
+		button_remind_me_settings.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent();
+				intent.setClass(v.getContext(), SetPreferenceActivity.class);
+				startActivityForResult(intent, 0); 
+			}});
+		
+		button_morning_thikr.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				Bundle data=new Bundle();
+				data.putString("DataType", MainActivity.DATA_TYPE_DAY_THIKR);
+				mCallback.launchFragment(new ThikrFragment(),data);	
+			}});
+		
+		button_night_thikr.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				Bundle data=new Bundle();
+				data.putString("DataType", MainActivity.DATA_TYPE_NIGHT_THIKR);
+				mCallback.launchFragment(new ThikrFragment(),data);	
+			}});
+		return view;
+	}
+	
+}

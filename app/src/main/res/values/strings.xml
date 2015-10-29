@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">أذكر الله</string>
+    <string name="share">شارك</string>
+    <string name="morningThikr">أذكار الصباح</string>
+    <string name="nightThikr">أذكار المساء</string>
+     <string name="now_playing">جاري الان تشغيل</string>
+    <string name="morningThikrSettings">أعدادات أذكار الصباح</string>
+    <string name="nightThikrSettings">أعدادات أذكار المساء</string>
+    <string name="RemindMe">ذكرني بالله</string>
+    <string name="Settings">الاعدادات</string>
+    <string name="play_all">شغل الكل</string>
+    <string name="remindMeMorningThikr">تذكير بقراءة أذكار اصباح</string>
+    <string name="remindMeNightThikr">تذكير بقراءة اذكار المساء</string>
+    <string name="changeReminderTime">تعديل وقت التنبية</string>
+    <string name="RemindMeSettings">اعدادات ذكرني بالله</string>
+    <string name="general_thikr_reminder_type">طريقة التذكير بالله</string>
+    <string name="RemindMeEvery">ذكرني بالله كل</string>
+    <string name="chooseDailyThikr">اختر الذكر اليومي للتذكير</string>
+    <string name="RemindmeThroughTheDay">ذكرني بالله على مدى اليوم</string>
+    <string name="thanksforupgrade">نشكركم على دعم المبرمج بشراء النسخة الكاملة. يرجى التقديم باية مقترحات او طلب بتحسينات على صفحة البرنامج في سوق الجوجل بلاي</string>
+    <string name="base64RSAPublicKey">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAimbTum9pr+eyRgWusXVWwvq16Ck5t/WXiftbHp2LJGbFmdILC4wEYmjwzd6JEzVLintUmt+cn29X8Plyi2MqWixnIvYL5WY6nGN9FG4FD9Gu/L7zDY9fL7qhMQhi2JLS3sRGQnIy9Cac/fEYy8Amx/18M816tsAZ3H01jQ2lDUaMOUGgc/SSQTg+GvO2GXyIADiCneptZ8btseqy8iOtwSXl2ZN6e6wd+LnHArQ6SYiXGoC3XFDXjWywPC6kqwcp+TsJuvM8QpAfZITl206I3a9srI87SPXoHbeu8Hg90vywH6IeXOs4FrHYtbFW3HLF8I5W7xO3s71y00Vi7M9eTQIDAQAB</string>
+    <string name="add_unit_id">ca-app-pub-2699427816916773/4290152443</string>
+    <string name="support_us_request">يرجى الضغط على الدعاية  للمساهمه بدعم المبرمج ماديا او بالدعاء لنا لدعمنا روحيا او الاثنين</string>
+    <string name="support_us">ادعمنا</string>
+    <string name="whatsnew">&#8226; ينصح بفتح الاعدادات لتغيير اي من الاعدادات الافتراضية.
+\n&#8226; الضغط على الدعايات مرة واحدة يقوم باخفاء الدعايات لمدة 7 ايام.
+\n&#8226; التبرع للمبرمج يقوم باخفاء الدعايات الى الابد.
+\n&#8226; وفقكم الله الى ذكره وحسن عبادته ولا تنسونا من الدعاء.
+</string>
+    <string name="ad_unit_id_interstital">ca-app-pub-2699427816916773/9181228848</string>
+    <string name="app_link">https://play.google.com/store/apps/details?id=com.HMSolutions.thikrallah</string>
+     <string name="app_package">com.HMSolutions.thikrallah</string>
+     <string name="contactUs">تواصل معنا</string>
+     <string name="email_Us">تواصل معنا عبر البريد الالكتروني</string>
+     <string name="contact_developer_uri">mailto:28.hani@gmail.com</string>
+     <string name="email_subject">مقترحات على برنامج اذكر الله</string>
+       <string name="quiet_time">وقت عدم التذكير الصوتي</string>
+     <string name="quiet_time_choice">اوقف التذكير الصوتي في هذه الاوقات</string>
+     <string name="quiet_time_start">وقت عدم التذكير يبدأ في</string>
+     <string name="quiet_time_end">وقت عدم التذكير ينتهي في</string>
+    <string name="rate_message">اذا لديك اي انطباع سلبي او ايجابي باستخدام برنامجنا يرجى اخذ لحظه من وقتك لتقييم البرنامج حتى نستطيع تحسين البرنامج الى الافضل ان شاء الله. ايظا يرجى دعم المبرمج بالضغط على الدعايات بين الحين والاخر. وشكرا.</string>
+    <string name="rate">قيم البرنامج</string>
+    <string name="remind_later">ذكرني مره اخرى</string>
+    <string name="dont_rate">لا اريد تقييم البرنامج</string>
+    <string name="quiet_time_endvalue">06:00</string>
+
+</resources>
