@@ -175,11 +175,12 @@ AudioManager.OnAudioFocusChangeListener{
 
 			afd = this.getApplicationContext().getAssets().openFd(this.getThikrType()+"/"+(fileNumber)+".mp3");
 			player.reset();
+			player.setAudioStreamType(AudioManager.STREAM_RING);
 			player.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
 			player.prepare();
 			am.requestAudioFocus(this,
 					// Use the music stream.
-					AudioManager.STREAM_MUSIC,
+					AudioManager.STREAM_RING,
 					// Request permanent focus.
 					AudioManager.AUDIOFOCUS_GAIN);
 			player.start();
@@ -211,6 +212,7 @@ AudioManager.OnAudioFocusChangeListener{
 				afd = this.getApplicationContext().getAssets().openFd(getThikrType()+"/"+this.getCurrentPlaying()+".mp3");
 				//player.reset();
 				this.initMediaPlayer();
+				player.setAudioStreamType(AudioManager.STREAM_RING);
 				player.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
 				player.prepare();
 				Log.d("media player", "current playing was prepared successfully "+getCurrentPlaying());
@@ -234,7 +236,7 @@ AudioManager.OnAudioFocusChangeListener{
 		player.setOnCompletionListener(this);
 		am.requestAudioFocus(this,
 				// Use the music stream.
-				AudioManager.STREAM_MUSIC,
+				AudioManager.STREAM_RING,
 				// Request permanent focus.
 				AudioManager.AUDIOFOCUS_GAIN);
 		player.start();
@@ -366,15 +368,26 @@ AudioManager.OnAudioFocusChangeListener{
 		case AudioManager.AUDIOFOCUS_GAIN:
 			// resume playback
 			Log.d("media player", "gained focus");
-			if (player == null) initMediaPlayer();
-			else if (!isPlaying()) player.start();
-			player.setVolume(1.0f, 1.0f);
+			if (player == null){
+				initMediaPlayer();
+			}else if (!isPlaying()){
+				player.start();
+			}
+			//if (am.getRingerMode()==AudioManager.RINGER_MODE_SILENT){
+				player.setVolume(1.0f, 1.0f);
+			//}else{
+				player.setVolume(1.0f, 1.0f);
+			//}
+
+
 			break;
 
 		case AudioManager.AUDIOFOCUS_LOSS:
 			// Lost focus for an unbounded amount of time: stop playback and release media player
 			Log.d("media player", "lost focus");
-			if (isPlaying()) player.stop();
+			if (isPlaying()){
+				player.stop();
+			}
 			player.reset();
 			player.release();
 			player = null;
@@ -392,12 +405,14 @@ AudioManager.OnAudioFocusChangeListener{
 			// Lost focus for a short time, but it's ok to keep playing
 			// at an attenuated level
 			Log.d("media player", "AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK");
-			if (isPlaying()) player.setVolume(0.1f, 0.1f);
+			if (isPlaying()) {
+				player.setVolume(0.1f, 0.1f);
+			}
 			break;
 		}
 	}
 
-	private void initMediaPlayer() {
+	private boolean initMediaPlayer() {
 		if(this.isPlaying()){
 			Log.d("media player", "initiMediaPlayer is called and player is not null");
 			this.resetPlayer();
@@ -408,14 +423,20 @@ AudioManager.OnAudioFocusChangeListener{
 			player = new MediaPlayer();
 			player.setWakeMode(this, PowerManager.PARTIAL_WAKE_LOCK);
 			am = (AudioManager) this.getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
-			am.requestAudioFocus(this,
+			int ret=am.requestAudioFocus(this,
 					// Use the music stream.
-					AudioManager.STREAM_MUSIC,
+					AudioManager.STREAM_RING,
 					// Request permanent focus.
 					AudioManager.AUDIOFOCUS_GAIN);
-			Log.d("media player", "init media player");
+			if (ret==AudioManager.AUDIOFOCUS_REQUEST_GRANTED){
+				return true;
+			}else {
+				return false;
+			}
 		}
-
+		return true;
 
 	}
+
+
 }

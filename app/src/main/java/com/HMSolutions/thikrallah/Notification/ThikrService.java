@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
@@ -61,6 +62,7 @@ public class ThikrService extends IntentService implements OnCompletionListener 
 				player.setWakeMode(this.getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
 				AssetFileDescriptor afd;
 				try {
+					player.setAudioStreamType(AudioManager.STREAM_RING);
 					afd = this.getApplicationContext().getAssets().openFd(thikrType+"/"+ fileNumber+".mp3");
 					player.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
 					player.prepare();

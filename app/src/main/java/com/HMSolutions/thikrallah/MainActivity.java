@@ -432,8 +432,8 @@ public class MainActivity extends Activity implements MainInterface {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) { 
 		// Pass on the activity result to the helper for handling
-		if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
-			if (requestCode == 1001) {           
+        if (requestCode == 1001) {
+            if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
 				String purchaseData = data.getStringExtra("INAPP_PURCHASE_DATA");
 				if (resultCode == RESULT_OK) {
 					try {
