@@ -37,10 +37,7 @@ public class ThikrFragment extends ListFragment implements OnClickListener {
 	public int getCurrentPlaying() {
 		return currentPlaying;
 	}
-	
-	/**
-	 * @param currentPlaying the currentPlaying to set
-	 */
+
 
 	public ThikrFragment() {
 	}

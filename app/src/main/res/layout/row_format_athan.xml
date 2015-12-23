@@ -3,14 +3,32 @@
     android:layout_height="wrap_content"
     android:padding="6dip" >
 
-    <TextView
-        android:id="@+id/toptext1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="20dp"
-        android:layout_alignParentRight="true"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
 
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:rowCount="1"
+        android:columnCount="4"
+        android:id="@+id/gridview_athan">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Large Text"
+            android:id="@+id/athan_name"
+            android:layout_row="0"
+            android:layout_column="0"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Large Text"
+            android:id="@+id/athan_time"
+            android:layout_row="0"
+            android:layout_column="2"/>
+    </GridLayout>
 
 
 </RelativeLayout>

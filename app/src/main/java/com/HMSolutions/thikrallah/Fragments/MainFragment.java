@@ -41,18 +41,28 @@ public class MainFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_main, container,
 				false);
 		Button button_remind_me_settings = (Button) view.findViewById(R.id.button_remind_me);
-		Button button_morning_thikr = (Button) view.findViewById(R.id.button_morning_thikr);
+        Button button_athan = (Button) view.findViewById(R.id.button_athan);
+        Button button_morning_thikr = (Button) view.findViewById(R.id.button_morning_thikr);
 		Button button_night_thikr = (Button) view.findViewById(R.id.button_night_thikr);
 		Button button_donate = (Button) view.findViewById(R.id.button_support_us);
-		button_donate.setOnClickListener(new OnClickListener(){
+		button_athan.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
-				mCallback.upgrade();
+                mCallback.launchFragment(new AthanFragment(), new Bundle());	;
 				
 			}
 			
 		});
+        button_donate.setOnClickListener(new OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                mCallback.upgrade();
+
+            }
+
+        });
 		
 		button_remind_me_settings.setOnClickListener(new OnClickListener(){
 			@Override

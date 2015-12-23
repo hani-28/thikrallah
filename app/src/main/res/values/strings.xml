@@ -45,5 +45,6 @@
     <string name="remind_later">ذكرني مره اخرى</string>
     <string name="dont_rate">لا اريد تقييم البرنامج</string>
     <string name="quiet_time_endvalue">06:00</string>
+    <string name="next_prayer">الصلاة القادمة</string>
 
 </resources>

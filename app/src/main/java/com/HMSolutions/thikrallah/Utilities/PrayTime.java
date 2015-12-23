@@ -1,7 +1,6 @@
 package com.HMSolutions.thikrallah.Utilities;
-
 //--------------------- Copyright Block ----------------------
-/*
+/* 
 
 PrayTime.java: Prayer Times Calculator (ver 1.0)
 Copyright (C) 2007-2010 PrayTimes.org
@@ -12,21 +11,26 @@ Original JS Code By: Hamid Zarrabi-Zadeh
 License: GNU LGPL v3.0
 
 TERMS OF USE:
-	Permission is granted to use this code, with or
-	without modification, in any website or application
-	provided that credit is given to the original work
+	Permission is granted to use this code, with or 
+	without modification, in any website or application 
+	provided that credit is given to the original work 
 	with a link back to PrayTimes.org.
 
-This program is distributed in the hope that it will
-be useful, but WITHOUT ANY WARRANTY.
+This program is distributed in the hope that it will 
+be useful, but WITHOUT ANY WARRANTY. 
 
 PLEASE DO NOT REMOVE THIS COPYRIGHT BLOCK.
 
 */
 
+import android.content.Context;
+import android.preference.PreferenceManager;
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.TimeZone;
 
@@ -44,29 +48,29 @@ public class PrayTime {
     private double JDate; // Julian date
     // ------------------------------------------------------------
     // Calculation Methods
-    private int Jafari; // Ithna Ashari
-    private int Karachi; // University of Islamic Sciences, Karachi
-    private int ISNA; // Islamic Society of North America (ISNA)
-    private int MWL; // Muslim World League (MWL)
-    private int Makkah; // Umm al-Qura, Makkah
-    private int Egypt; // Egyptian General Authority of Survey
-    private int Custom; // Custom Setting
-    private int Tehran; // Institute of Geophysics, University of Tehran
+    public static final int CALC_METHOD_Jafari=0; // Ithna Ashari
+    public static final int CALC_METHOD_Karachi=1; // University of Islamic Sciences, Karachi
+    public static final int CALC_METHOD_ISNA=2; // Islamic Society of North America (ISNA)
+    public static final int CALC_METHOD_MWL=3; // Muslim World League (MWL)
+    public static final int CALC_METHOD_Makkah=4; // Umm al-Qura, Makkah
+    public static final int CALC_METHOD_Egypt=5; // Egyptian General Authority of Survey
+    public static final int CALC_METHOD_Custom=7; // Custom Setting
+    public static final int CALC_METHOD_Tehran=6; // Institute of Geophysics, University of Tehran
     // Juristic Methods
-    private int Shafii; // Shafii (standard)
-    private int Hanafi; // Hanafi
+    public static final int JURISTIC_METHOD_Shafii=0; // Shafii (standard)
+    public static final int JURISTIC_METHOD_Hanafi=1; // Hanafi
     // Adjusting Methods for Higher Latitudes
-    private int None; // No adjustment
-    private int MidNight; // middle of night
-    private int OneSeventh; // 1/7th of night
-    private int AngleBased; // angle/60th of night
+    public static final int ADJUST_HIGHER_LATITUDE_None=0; // No adjustment
+    public static final int ADJUST_HIGHER_LATITUDE_MidNight=1; // middle of night
+    public static final int ADJUST_HIGHER_LATITUDE_OneSeventh=2; // 1/7th of night
+    public static final int ADJUST_HIGHER_LATITUDE_AngleBased=3; // angle/60th of night
     // Time Formats
-    private int Time24; // 24-hour format
-    private int Time12; // 12-hour format
-    private int Time12NS; // 12-hour format with no suffix
-    private int Floating; // floating point number
+    public static final int TIME_FORMAT_Time24=0; // 24-hour format
+    public static final int TIME_FORMAT_Time12=1; // 12-hour format
+    public static final int TIME_FORMAT_Time12NS=2; // 12-hour format with no suffix
+    public static final int TIME_FORMAT_Floating=3; // floating point number
     // Time Names
-    private ArrayList<String> timeNames;
+    private String[] timeNames;
     private String InvalidTime; // The string used for invalid times
     // --------------------- Technical Settings --------------------
     private int numIterations; // number of iterations needed to compute times
@@ -75,36 +79,6 @@ public class PrayTime {
 
 
 
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        double latitude = 41.6805306;
-        double longitude = -72.8222467;
-        double timezone = -5;
-        // Test Prayer times here
-        PrayTime prayers = new PrayTime();
-
-        prayers.setTimeFormat(prayers.Time24);
-        prayers.setCalcMethod(prayers.ISNA);
-        prayers.setAsrJuristic(prayers.Shafii);
-        prayers.setAdjustHighLats(prayers.None);
-        int[] offsets = {0, 0, 0, 0, 0, 0, 0}; // {Fajr,Sunrise,Dhuhr,Asr,Sunset,Maghrib,Isha}
-        prayers.tune(offsets);
-
-        Date now = new Date();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(now);
-
-        ArrayList<String> prayerTimes = prayers.getPrayerTimes(cal,
-                latitude, longitude, timezone);
-        ArrayList<String> prayerNames = prayers.getTimeNames();
-
-        for (int i = 0; i < prayerTimes.size(); i++) {
-            System.out.println(prayerNames.get(i) + " - " + prayerTimes.get(i));
-        }
-
-    }
 
     /*
      * this.methodParams[methodNum] = new Array(fa, ms, mv, is, iv);
@@ -117,6 +91,35 @@ public class PrayTime {
     private double[] prayerTimesCurrent;
     private int[] offsets;
 
+    public static PrayTime instancePrayTime(Context context){
+        Log.d("prayerTimes", "testing");
+        double latitude =  Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("latitude", "0.0"));
+        double longitude = Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("longitude","0.0"));
+        double timezone = getCurrentTimezoneOffset();
+        // Test Prayer times here
+        PrayTime prayers = new PrayTime();
+
+        prayers.setTimeFormat(PrayTime.TIME_FORMAT_Time12);
+        prayers.setCalcMethod(PrayTime.CALC_METHOD_ISNA);
+        prayers.setAsrJuristic(PrayTime.JURISTIC_METHOD_Shafii);
+        prayers.setAdjustHighLats(PrayTime.ADJUST_HIGHER_LATITUDE_None);
+        int[] offsets = {0, 0, 0, 0, 0, 0, 0}; // {Fajr,Sunrise,Dhuhr,Asr,Sunset,Maghrib,Isha}
+        prayers.tune(offsets);
+        return prayers;
+    }
+    public String[] getPrayerTimes(Context context){
+        double latitude =  Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("latitude", "0.0"));
+        double longitude = Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("longitude","0.0"));
+        double timezone = getCurrentTimezoneOffset();
+
+        Date now = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(now);
+
+        String[] prayerTimes = this.getPrayerTimes(cal,
+                latitude, longitude, timezone);
+        return prayerTimes;
+    }
     public PrayTime() {
         // Initialize vars
 
@@ -126,41 +129,15 @@ public class PrayTime {
         this.setAdjustHighLats(1);
         this.setTimeFormat(0);
 
-        // Calculation Methods
-        this.setJafari(0); // Ithna Ashari
-        this.setKarachi(1); // University of Islamic Sciences, Karachi
-        this.setISNA(2); // Islamic Society of North America (ISNA)
-        this.setMWL(3); // Muslim World League (MWL)
-        this.setMakkah(4); // Umm al-Qura, Makkah
-        this.setEgypt(5); // Egyptian General Authority of Survey
-        this.setTehran(6); // Institute of Geophysics, University of Tehran
-        this.setCustom(7); // Custom Setting
-
-        // Juristic Methods
-        this.setShafii(0); // Shafii (standard)
-        this.setHanafi(1); // Hanafi
-
-        // Adjusting Methods for Higher Latitudes
-        this.setNone(0); // No adjustment
-        this.setMidNight(1); // middle of night
-        this.setOneSeventh(2); // 1/7th of night
-        this.setAngleBased(3); // angle/60th of night
-
-        // Time Formats
-        this.setTime24(0); // 24-hour format
-        this.setTime12(1); // 12-hour format
-        this.setTime12NS(2); // 12-hour format with no suffix
-        this.setFloating(3); // floating point number
-
         // Time Names
-        timeNames = new ArrayList<String>();
-        timeNames.add("Fajr");
-        timeNames.add("Sunrise");
-        timeNames.add("Dhuhr");
-        timeNames.add("Asr");
-        timeNames.add("Sunset");
-        timeNames.add("Maghrib");
-        timeNames.add("Isha");
+        timeNames = new String[7];
+        timeNames[0]=("Fajr");
+        timeNames[1]=("Sunrise");
+        timeNames[2]=("Dhuhr");
+        timeNames[3]=("Asr");
+        timeNames[4]=("Sunset");
+        timeNames[5]=("Maghrib");
+        timeNames[6]=("Isha");
 
         InvalidTime = "-----"; // The string used for invalid times
 
@@ -423,7 +400,7 @@ public class PrayTime {
 
     // -------------------- Interface Functions --------------------
     // return prayer times for a given date
-    private ArrayList<String> getDatePrayerTimes(int year, int month, int day,
+    private String[] getDatePrayerTimes(int year, int month, int day,
                                                  double latitude, double longitude, double tZone) {
         this.setLat(latitude);
         this.setLng(longitude);
@@ -435,14 +412,14 @@ public class PrayTime {
     }
 
     // return prayer times for a given date
-    private ArrayList<String> getPrayerTimes(Calendar date, double latitude,
-                                             double longitude, double tZone) {
+    public String[] getPrayerTimes(Calendar date, double latitude,
+                                            double longitude, double tZone) {
 
         int year = date.get(Calendar.YEAR);
         int month = date.get(Calendar.MONTH);
         int day = date.get(Calendar.DATE);
 
-        return getDatePrayerTimes(year, month+1, day, latitude, longitude, tZone);
+        return getDatePrayerTimes(year, month + 1, day, latitude, longitude, tZone);
     }
 
     // set custom values for calculation parameters
@@ -597,7 +574,7 @@ public class PrayTime {
     }
 
     // compute prayer times at given julian date
-    private ArrayList<String> computeDayTimes() {
+    private String[] computeDayTimes() {
         double[] times = {5, 6, 12, 13, 18, 18, 18}; // default times
 
         for (int i = 1; i <= this.getNumIterations(); i++) {
@@ -609,7 +586,15 @@ public class PrayTime {
 
         return adjustTimesFormat(times);
     }
+    private static double getCurrentTimezoneOffset() {
 
+        TimeZone tz = TimeZone.getDefault();
+        int offsetInMillis = tz.getOffset(GregorianCalendar.getInstance(tz).getTimeInMillis());
+
+        double offset = offsetInMillis / 3600000;
+
+        return offset;
+    }
     // adjust times in a prayer time array
     private double[] adjustTimes(double[] times) {
         for (int i = 0; i < times.length; i++) {
@@ -634,24 +619,24 @@ public class PrayTime {
     }
 
     // convert times array to given time format
-    private ArrayList<String> adjustTimesFormat(double[] times) {
+    private String[] adjustTimesFormat(double[] times) {
 
-        ArrayList<String> result = new ArrayList<String>();
+        String[] result = new String[7];
 
         if (this.getTimeFormat() == this.getFloating()) {
-            for (double time : times) {
-                result.add(String.valueOf(time));
+            for (int i=0;i<7;i++) {
+                result[i]=(String.valueOf(times[i]));
             }
             return result;
         }
 
         for (int i = 0; i < 7; i++) {
             if (this.getTimeFormat() == this.getTime12()) {
-                result.add(floatToTime12(times[i], false));
+                result[i]=(floatToTime12(times[i], false));
             } else if (this.getTimeFormat() == this.getTime12NS()) {
-                result.add(floatToTime12(times[i], true));
+                result[i]=(floatToTime12(times[i], true));
             } else {
-                result.add(floatToTime24(times[i]));
+                result[i]=(floatToTime24(times[i]));
             }
         }
         return result;
@@ -689,11 +674,11 @@ public class PrayTime {
     private double nightPortion(double angle) {
         double calc = 0;
 
-        if (adjustHighLats == AngleBased)
+        if (adjustHighLats == ADJUST_HIGHER_LATITUDE_AngleBased)
             calc = (angle)/60.0;
-        else if (adjustHighLats == MidNight)
+        else if (adjustHighLats == ADJUST_HIGHER_LATITUDE_MidNight)
             calc = 0.5;
-        else if (adjustHighLats == OneSeventh)
+        else if (adjustHighLats == ADJUST_HIGHER_LATITUDE_OneSeventh)
             calc = 0.14286;
 
         return calc;
@@ -803,148 +788,111 @@ public class PrayTime {
     }
 
     private int getJafari() {
-        return Jafari;
+        return CALC_METHOD_Jafari;
     }
 
-    private void setJafari(int jafari) {
-        Jafari = jafari;
-    }
+
 
     private int getKarachi() {
-        return Karachi;
+        return CALC_METHOD_Karachi;
     }
 
-    private void setKarachi(int karachi) {
-        Karachi = karachi;
-    }
+
 
     private int getISNA() {
-        return ISNA;
+        return CALC_METHOD_ISNA;
     }
 
-    private void setISNA(int iSNA) {
-        ISNA = iSNA;
-    }
+
 
     private int getMWL() {
-        return MWL;
+        return CALC_METHOD_MWL;
     }
 
-    private void setMWL(int mWL) {
-        MWL = mWL;
-    }
+
 
     private int getMakkah() {
-        return Makkah;
+        return CALC_METHOD_Makkah;
     }
 
-    private void setMakkah(int makkah) {
-        Makkah = makkah;
-    }
+
 
     private int getEgypt() {
-        return Egypt;
+        return CALC_METHOD_Egypt;
     }
 
-    private void setEgypt(int egypt) {
-        Egypt = egypt;
-    }
+
 
     private int getCustom() {
-        return Custom;
+        return CALC_METHOD_Custom;
     }
 
-    private void setCustom(int custom) {
-        Custom = custom;
-    }
+
 
     private int getTehran() {
-        return Tehran;
+        return CALC_METHOD_Tehran;
     }
 
-    private void setTehran(int tehran) {
-        Tehran = tehran;
-    }
+
 
     private int getShafii() {
-        return Shafii;
+        return JURISTIC_METHOD_Shafii;
     }
 
-    private void setShafii(int shafii) {
-        Shafii = shafii;
-    }
 
     private int getHanafi() {
-        return Hanafi;
+        return JURISTIC_METHOD_Hanafi;
     }
 
-    private void setHanafi(int hanafi) {
-        Hanafi = hanafi;
-    }
+
 
     private int getNone() {
-        return None;
+        return ADJUST_HIGHER_LATITUDE_None;
     }
 
-    private void setNone(int none) {
-        None = none;
-    }
+
 
     private int getMidNight() {
-        return MidNight;
+        return ADJUST_HIGHER_LATITUDE_MidNight;
     }
 
-    private void setMidNight(int midNight) {
-        MidNight = midNight;
-    }
+
 
     private int getOneSeventh() {
-        return OneSeventh;
+        return ADJUST_HIGHER_LATITUDE_OneSeventh;
     }
 
-    private void setOneSeventh(int oneSeventh) {
-        OneSeventh = oneSeventh;
-    }
+
 
     private int getAngleBased() {
-        return AngleBased;
+        return ADJUST_HIGHER_LATITUDE_AngleBased;
     }
 
-    private void setAngleBased(int angleBased) {
-        AngleBased = angleBased;
-    }
+
 
     private int getTime24() {
-        return Time24;
+        return TIME_FORMAT_Time24;
     }
 
-    private void setTime24(int time24) {
-        Time24 = time24;
-    }
+
 
     private int getTime12() {
-        return Time12;
+        return TIME_FORMAT_Time12;
     }
 
-    private void setTime12(int time12) {
-        Time12 = time12;
-    }
+
 
     private int getTime12NS() {
-        return Time12NS;
+        return TIME_FORMAT_Time12NS;
     }
 
-    private void setTime12NS(int time12ns) {
-        Time12NS = time12ns;
-    }
+
 
     private int getFloating() {
-        return Floating;
+        return TIME_FORMAT_Floating;
     }
 
-    private void setFloating(int floating) {
-        Floating = floating;
-    }
+
 
     private int getNumIterations() {
         return numIterations;
@@ -954,7 +902,7 @@ public class PrayTime {
         this.numIterations = numIterations;
     }
 
-    public ArrayList<String> getTimeNames() {
+    public String[] getTimeNames() {
         return timeNames;
     }
 }

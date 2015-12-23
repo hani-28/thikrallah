@@ -3,6 +3,9 @@ package com.HMSolutions.thikrallah;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,6 +14,7 @@ import com.HMSolutions.thikrallah.Fragments.MainFragment;
 import com.HMSolutions.thikrallah.Fragments.ThikrFragment;
 import com.HMSolutions.thikrallah.Utilities.AppRater;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
+import com.HMSolutions.thikrallah.Utilities.PrayTime;
 import com.HMSolutions.thikrallah.Utilities.WhatsNewScreen;
 import com.HMSolutions.thikrallah.Utilities.inapp.IabHelper;
 import com.HMSolutions.thikrallah.Utilities.inapp.IabResult;
@@ -26,15 +30,23 @@ import android.app.Fragment;
 import android.app.AlertDialog.Builder;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.*;
-public class MainActivity extends Activity implements MainInterface {
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+
+public class MainActivity extends Activity implements MainInterface,GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,LocationListener {
 	private String appLink;
 	ThikrMediaPlayerService mediaService;
 	boolean mBound = false;
@@ -112,12 +124,14 @@ public class MainActivity extends Activity implements MainInterface {
 		}
 	};
 	private String deviceId;
-	private AdListener adsListener;
+    private AdListener adsListener;
 
 
-	@Override
+
+    @Override
 	protected void onStart() {
-		super.onStart();
+        mGoogleApiClient.connect();
+        super.onStart();
 
 	}
 	public void sendActionToMediaService(Bundle data){
@@ -128,7 +142,8 @@ public class MainActivity extends Activity implements MainInterface {
 	}
 	@Override
 	protected void onStop() {
-		super.onStop();
+        mGoogleApiClient.disconnect();
+        super.onStop();
 
 	}
 
@@ -154,6 +169,19 @@ public class MainActivity extends Activity implements MainInterface {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+
+        // Create an instance of GoogleAPIClient.
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
+
+
+
 		setContentView(R.layout.activity_main);
 		PreferenceManager.setDefaultValues (this.getApplicationContext(), R.xml.preferences, false);
 		 
@@ -340,7 +368,7 @@ public class MainActivity extends Activity implements MainInterface {
 	}
 	@Override
 	public void onPause(){
-
+        stopLocationUpdates();
 		super.onPause();
 	}
 	@Override
@@ -453,7 +481,52 @@ public class MainActivity extends Activity implements MainInterface {
 		}
 
 	}
-	class myAdListener extends com.google.android.gms.ads.AdListener{
+    private Location mLastLocation;
+    private GoogleApiClient mGoogleApiClient;
+    private LocationRequest locationRequest;
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.d("test","onConnectionFailed "+connectionResult.toString());
+    }
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        Log.d("test","onConnected");
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+        if (mLastLocation != null) {
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putString("latitude", Double.toString(mLastLocation.getLatitude())).commit();
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putString("longitude", Double.toString(mLastLocation.getLongitude())).commit();
+            Log.d("test", "latitude is " + Double.toString(mLastLocation.getLatitude()));
+            PrayTime.instancePrayTime(this);
+        }else{
+            locationRequest = LocationRequest.create();
+            locationRequest.setPriority(LocationRequest.PRIORITY_LOW_POWER);
+            locationRequest.setInterval(5000);
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, this);
+        }
+    }
+    protected void stopLocationUpdates() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(
+                mGoogleApiClient, this);
+    }
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.d("test", "onConnectionSuspended");
+    }
+
+
+    @Override
+    public void onLocationChanged(Location location) {
+        Log.d("test","latitude is "+Double.toString(location.getLatitude()));
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putString("latitude", Double.toString(location.getLatitude())).commit();
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putString("longitude", Double.toString(location.getLongitude())).commit();
+        stopLocationUpdates();
+        PrayTime.instancePrayTime(this);
+
+    }
+
+    class myAdListener extends com.google.android.gms.ads.AdListener{
 		MainActivity myActivity;
 		public myAdListener(MainActivity context){
 			super();
