@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.HMSolutions.thikrallah"
-    android:versionCode="15"
-    android:versionName="2.3" >
+    package="com.HMSolutions.thikrallah">
 
-    <uses-sdk
-        android:minSdkVersion="14"
-        android:targetSdkVersion="21" />
+
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -15,7 +11,6 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -37,7 +32,7 @@
             android:theme="@style/AppTheme"
             >
         </activity>
-
+/home/hani/AndroidStudioProjects/ThikrAllah/app/build
         <service
             android:name="com.HMSolutions.thikrallah.Notification.ThikrService"
             android:enabled="true" />

@@ -26,13 +26,15 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 
-
-public class ThikrService extends IntentService implements OnCompletionListener {
+public class ThikrService extends IntentService implements OnCompletionListener, AudioManager.OnAudioFocusChangeListener {
 	private final static int NOTIFICATION_ID=0;
 	private MediaPlayer player;
-	public ThikrService() {
+    private AudioManager am;
+
+    public ThikrService() {
 		super("service");
 	}
 
@@ -43,7 +45,7 @@ public class ThikrService extends IntentService implements OnCompletionListener 
 		Bundle data=intent.getExtras();
 		String thikrType="";
 		thikrType=data.getString("com.HMSolutions.thikrallah.datatype");
-
+        am = (AudioManager) this.getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
 		if (thikrType.equals(MainActivity.DATA_TYPE_GENERAL_THIKR)){
 
 			int fileNumber=new Random().nextInt(5) + 1;
@@ -58,15 +60,26 @@ public class ThikrService extends IntentService implements OnCompletionListener 
 			if ((reminderType==1 ||reminderType==2)&&isQuietTime==false){
 				player = new MediaPlayer();
 				player.reset();
-				player.setOnCompletionListener(this);
+
 				player.setWakeMode(this.getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
 				AssetFileDescriptor afd;
 				try {
-					player.setAudioStreamType(AudioManager.STREAM_RING);
+					player.setAudioStreamType(AudioManager.STREAM_MUSIC);
 					afd = this.getApplicationContext().getAssets().openFd(thikrType+"/"+ fileNumber+".mp3");
-					player.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
+					player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
 					player.prepare();
-					player.start();
+
+                    int ret=am.requestAudioFocus(this,
+                            // Use the music stream.
+                            AudioManager.STREAM_MUSIC,
+                            // Request permanent focus.
+                            AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+                    if (ret==AudioManager.AUDIOFOCUS_REQUEST_GRANTED){
+                        Log.d("media player","focus req granted");
+                        player.start();
+                        player.setOnCompletionListener(this);
+                    }
+
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					player.stop();
@@ -156,15 +169,9 @@ public class ThikrService extends IntentService implements OnCompletionListener 
 		if (quiet_time_choice){
 			String quiet_time_start=sharedPrefs.getString("quiet_time_start", "22:00");
 			String quiet_time_end=sharedPrefs.getString("quiet_time_end", "22:00");
-
-
-
-
 			Calendar now = Calendar.getInstance();
-
 			int hour = now.get(Calendar.HOUR_OF_DAY); // Get hour in 24 hour format
 			int minute = now.get(Calendar.MINUTE);
-
 			Date date = parseDate(hour + ":" + minute);
 			Date dateCompareOne = parseDate(quiet_time_start);
 			Date dateCompareTwo = parseDate(quiet_time_end);
@@ -199,8 +206,30 @@ public class ThikrService extends IntentService implements OnCompletionListener 
 	@Override
 	public void onCompletion(MediaPlayer mp) {
 		// TODO Auto-generated method stub
-		mp.reset();
+        Log.d("media player", "on completion called");
+        mp.reset();
 		mp.release();
+        am.abandonAudioFocus(this);
+        player=null;
+        Log.d("media player", "general athkar focus abandoned");
 	}
 
+    @Override
+    public void onAudioFocusChange(int focusChange) {
+
+    }
+    @Override
+    public void onDestroy(){
+        Log.d("media player", "ondestroy called thikrservice");
+        if (player != null){
+            player.reset();
+            player.release();
+            player=null;
+        }
+        am.abandonAudioFocus(this);
+        Log.d("media player", "general athkar focus abandoned @ onDestroy");
+        this.stopSelf();
+        super.onDestroy();
+
+    }
 }

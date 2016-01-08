@@ -21,6 +21,8 @@
         <item>3</item>
     </string-array>
     <string-array name="ReminderIncrementOptions">
+        <item>5 دقائق</item>
+        <item>10 دقائق</item>
         <item>15 دقيقة</item>
         <item>30 دقيقة</item>
         <item>1 ساعة</item>
@@ -37,6 +39,8 @@
         <item>12 ساعات</item>
     </string-array>
     <string-array name="ReminderIncrementValues">
+        <item>1</item>
+        <item>10</item>
         <item>15</item>
         <item>30</item>
         <item>60</item>

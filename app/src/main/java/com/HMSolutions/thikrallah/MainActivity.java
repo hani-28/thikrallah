@@ -130,7 +130,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 
     @Override
 	protected void onStart() {
-        mGoogleApiClient.connect();
+        //mGoogleApiClient.connect();
         super.onStart();
 
 	}
@@ -142,7 +142,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 	}
 	@Override
 	protected void onStop() {
-        mGoogleApiClient.disconnect();
+        //mGoogleApiClient.disconnect();
         super.onStop();
 
 	}
@@ -368,7 +368,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 	}
 	@Override
 	public void onPause(){
-        stopLocationUpdates();
+      //  stopLocationUpdates();
 		super.onPause();
 	}
 	@Override
