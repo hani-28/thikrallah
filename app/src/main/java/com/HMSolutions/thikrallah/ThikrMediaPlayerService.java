@@ -43,13 +43,15 @@ AudioManager.OnAudioFocusChangeListener{
 	public int currentThikrCounter=0;
 	private boolean isPaused;
 	private int NOTIFICATION_ID=23;
+    private int currentPlaying;
+    private String ThikrType;
 
 
     @Override
 	public void onCreate() {
 		initMediaPlayer();
 		//below is wip
-		initNotification();
+		//initNotification();
 
 	}
 
@@ -65,8 +67,11 @@ AudioManager.OnAudioFocusChangeListener{
 
 		// Creates an explicit intent for an Activity in your app
 		Intent resultIntent = new Intent(this, MainActivity.class);
-		resultIntent.putExtra("FromNotification", true);
-		resultIntent.putExtra("DataType", this.getThikrType());
+		if (getThikrType()!=MainActivity.DATA_TYPE_GENERAL_THIKR){
+            resultIntent.putExtra("FromNotification", true);
+            resultIntent.putExtra("DataType", this.getThikrType());
+        }
+
 		
 		resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
@@ -96,35 +101,40 @@ AudioManager.OnAudioFocusChangeListener{
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+        this.setThikrType(intent.getExtras().getString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_DAY_THIKR));
+        if (this.getThikrType().equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)&&this.isPlaying()){
+            return Service.START_NOT_STICKY;
+        }
+        initNotification();
         Bundle data=intent.getExtras();
 		int action =data.getInt("ACTION", -1);
-		Log.d("media", "action "+action);
+		Log.d("media1", "action "+action);
 		switch (action){
 		case MEDIA_PLAYER_PAUSE:
-			Log.d("media","pause called");
+			Log.d("media1","pause called");
 			this.pausePlayer();
 			break;
 
 		case MEDIA_PLAYER_RESET:
-			Log.d("media","reset called");
+			Log.d("media1","reset called");
 			this.resetPlayer();
 			
 			this.stopForeground(true);
 			this.stopSelf();
 			break;
 		case MEDIA_PLAYER_PLAYALL:
-			Log.d("media", "playall called");
+			Log.d("media1", "playall called");
 			this.playAll();
          //   if ((TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE)).getCallState()!=TelephonyManager.CALL_STATE_OFFHOOK;
 			break;
 		case MEDIA_PLAYER_ISPLAYING:
-			Log.d("media","isplaying called");
+			Log.d("media1","isplaying called");
 			this.isPlaying();
 			break;
 		case MEDIA_PLAYER_PLAY:
 
 			int file=data.getInt("FILE");
-			Log.d("media","play "+file+" called");
+			Log.d("media1","play "+file+" called");
 			this.play(file);
 			break;
 		}
@@ -149,16 +159,13 @@ AudioManager.OnAudioFocusChangeListener{
 	 * @return the currentPlaying
 	 */
 	public int getCurrentPlaying() {
-
-		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-		return sharedPrefs.getInt("currentPlaying",1);
+		return currentPlaying;
 	}
 	/**
-	 * @param currentPlaying the currentPlaying to set
+	 * @param icurrentPlaying the currentPlaying to set
 	 */
-	public void setCurrentPlaying(int currentPlaying) {
-		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-		sharedPrefs.edit().putInt("currentPlaying", currentPlaying).commit();
+	public void setCurrentPlaying(int icurrentPlaying) {
+        currentPlaying=icurrentPlaying;
 	}
 
 
@@ -170,8 +177,10 @@ AudioManager.OnAudioFocusChangeListener{
 		AssetFileDescriptor afd;
 		try {
 
+            Log.d("media1 player", "file number is "+fileNumber);
 			afd = this.getApplicationContext().getAssets().openFd(this.getThikrType()+"/"+(fileNumber)+".mp3");
-			player.reset();
+            Log.d("media1 player", "file path  is "+this.getThikrType()+"/"+(fileNumber)+".mp3");
+            player.reset();
 			player.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
 			player.prepare();
@@ -181,6 +190,7 @@ AudioManager.OnAudioFocusChangeListener{
 					// Request permanent focus.
 					AudioManager.AUDIOFOCUS_GAIN);
 			if (ret==AudioManager.AUDIOFOCUS_REQUEST_GRANTED){
+                setVolume();
                 player.start();
             }
 
@@ -199,6 +209,10 @@ AudioManager.OnAudioFocusChangeListener{
 		if (this.getThikrType().equals(MainActivity.DATA_TYPE_NIGHT_THIKR)){
 			numbers_text = getResources().getStringArray(R.array.NightThikr); 
 		}
+        if (this.getThikrType().equals(MainActivity.DATA_TYPE_GENERAL_THIKR)){
+            numbers_text = getResources().getStringArray(R.array.GeneralThikr);
+        }
+
 		return numbers_text;
 	}
 	public void playAll( ) {
@@ -208,14 +222,14 @@ AudioManager.OnAudioFocusChangeListener{
 
 			AssetFileDescriptor afd;
 			try {
-				Log.d("media player", "current playing is "+getCurrentPlaying());
+				Log.d("media1 player", "current playing is "+getCurrentPlaying());
 				afd = this.getApplicationContext().getAssets().openFd(getThikrType()+"/"+this.getCurrentPlaying()+".mp3");
 				player.reset();
 				this.initMediaPlayer();
 				player.setAudioStreamType(AudioManager.STREAM_MUSIC);
 				player.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
 				player.prepare();
-				Log.d("media player", "current playing was prepared successfully "+getCurrentPlaying());
+				Log.d("media1 player", "current playing was prepared successfully "+getCurrentPlaying());
 			} catch (IOException e) {
 				if(this.getCurrentPlaying()<1){
 					setCurrentPlaying(1);
@@ -240,6 +254,7 @@ AudioManager.OnAudioFocusChangeListener{
                 // Request permanent focus.
                 AudioManager.AUDIOFOCUS_GAIN);
         if (ret==AudioManager.AUDIOFOCUS_REQUEST_GRANTED){
+            setVolume();
             player.start();
         }
 
@@ -247,7 +262,7 @@ AudioManager.OnAudioFocusChangeListener{
 
     @Override
     public void onDestroy(){
-        Log.d("media player", "ondestroy called");
+        Log.d("media1 player", "ondestroy called");
         if (player != null){
             player.release();
             player=null;
@@ -278,10 +293,17 @@ AudioManager.OnAudioFocusChangeListener{
 	@Override
 	public void onCompletion(MediaPlayer mp) {
 		mp.reset();
-		Log.d("mediaplayer", "oncomplete called");
+		Log.d("media1 player", "oncomplete called");
 
+        Log.d("media1 player", "thikrtype is "+this.getThikrType()+" vs "+MainActivity.DATA_TYPE_GENERAL_THIKR);
 		currentThikrCounter++;
-		if (this.getCurrentPlaying()>=getThikrArray().length&&currentThikrCounter>=getCurrentThikrRepeat()){
+		if (this.getThikrType().equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)){;
+            this.resetPlayer();
+
+            this.stopForeground(true);
+            this.stopSelf();
+        }
+        if (this.getCurrentPlaying()>=getThikrArray().length&&currentThikrCounter>=getCurrentThikrRepeat()){
 
             setCurrentPlaying(1);
 			currentThikrCounter=0;
@@ -314,17 +336,22 @@ AudioManager.OnAudioFocusChangeListener{
 	}
 
 	private String getThikrType(){
-		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-		return sharedPrefs.getString("thikrType", MainActivity.DATA_TYPE_DAY_THIKR);
+		return ThikrType;
 
 	}
+    private void setThikrType(String iThikrType){
+        ThikrType=iThikrType;
+
+    }
 	private String getThikrTypeString(String thikTypeConstant){
 		if (thikTypeConstant.equals(MainActivity.DATA_TYPE_DAY_THIKR)){
 			return this.getString(R.string.morningThikr);
 		}else if(thikTypeConstant.equals(MainActivity.DATA_TYPE_NIGHT_THIKR)){
 			return this.getString(R.string.nightThikr);
-		}
-		return null;
+		}else{
+            return "تذكير بالله";
+        }
+
 	}
 
 	public void resetPlayer() {
@@ -370,7 +397,7 @@ AudioManager.OnAudioFocusChangeListener{
 		switch (focusChange) {
 		case AudioManager.AUDIOFOCUS_GAIN:
 			// resume playback
-			Log.d("media player", "gained focus");
+			Log.d("media1 player", "gained focus");
 			if (player == null){
 				initMediaPlayer();
 			}else if (!isPlaying()){
@@ -384,11 +411,11 @@ AudioManager.OnAudioFocusChangeListener{
 
 		case AudioManager.AUDIOFOCUS_LOSS:
 			// Lost focus for an unbounded amount of time: stop playback and release media player
-			Log.d("media player", "lost focus");
+			Log.d("media1 player", "lost focus");
 			if (isPlaying()){
 				player.stop();
 			}
-            Log.d("media","reseting player and releasing service");
+            Log.d("media1","reseting player and releasing service");
             this.resetPlayer();
             this.stopForeground(true);
             this.stopSelf();
@@ -398,14 +425,14 @@ AudioManager.OnAudioFocusChangeListener{
 			// Lost focus for a short time, but we have to stop
 			// playback. We don't release the media player because playback
 			// is likely to resume
-			Log.d("media player", "transient loss of  focus");
+			Log.d("media1 player", "transient loss of  focus");
 			if (isPlaying()) player.pause();
 			break;
 
 		case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
 			// Lost focus for a short time, but it's ok to keep playing
 			// at an attenuated level
-			Log.d("media player", "AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK");
+			Log.d("media1 player", "AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK");
 			if (isPlaying()) {
 
 				player.setVolume(0.1f, 0.1f);
@@ -419,20 +446,22 @@ AudioManager.OnAudioFocusChangeListener{
 
         float normalVolume = (float)volumeLevel/maxVolume;
 
-        if (am.getRingerMode()==AudioManager.RINGER_MODE_SILENT){
+        if (am.getRingerMode()==AudioManager.RINGER_MODE_SILENT ||am.getRingerMode()==AudioManager.RINGER_MODE_VIBRATE){
             player.setVolume(0f,0f);
+            Log.d("media1 player", "volume set to 0 ringer mode is "+am.getRingerMode());
         }else{
             player.setVolume(normalVolume, normalVolume);
+            Log.d("media1 player", "volume set to normal");
         }
     }
 	private boolean initMediaPlayer() {
 		if(this.isPlaying()){
-			Log.d("media player", "initiMediaPlayer is called and player is not null");
+			Log.d("media1 player", "initiMediaPlayer is called and player is not null");
 			this.resetPlayer();
 		}
 		//this.setCurrentPlaying(1);
 		if (player==null){
-			Log.d("media player", "initiMediaPlayer is called and player is null");
+			Log.d("media1 player", "initiMediaPlayer is called and player is null");
 			player = new MediaPlayer();
 			player.setWakeMode(this, PowerManager.PARTIAL_WAKE_LOCK);
 			am = (AudioManager) this.getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
@@ -441,12 +470,13 @@ AudioManager.OnAudioFocusChangeListener{
 					AudioManager.STREAM_MUSIC,
 					// Request permanent focus.
 					AudioManager.AUDIOFOCUS_GAIN);
-            Log.d("media player", "audio focus requested");
+            Log.d("media1 player", "audio focus requested");
 			if (ret==AudioManager.AUDIOFOCUS_REQUEST_GRANTED){
-                Log.d("media player", "audio focus granted");
+                Log.d("media1 player", "audio focus granted");
+                setVolume();
 				return true;
 			}else {
-                Log.d("media player", "audio focus denied");
+                Log.d("media1 player", "audio focus denied");
 				return false;
 			}
 		}

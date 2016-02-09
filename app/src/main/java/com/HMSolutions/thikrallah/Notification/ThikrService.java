@@ -29,10 +29,8 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 
-public class ThikrService extends IntentService implements OnCompletionListener, AudioManager.OnAudioFocusChangeListener {
+public class ThikrService extends IntentService  {
 	private final static int NOTIFICATION_ID=0;
-	private MediaPlayer player;
-    private AudioManager am;
 
     public ThikrService() {
 		super("service");
@@ -45,7 +43,6 @@ public class ThikrService extends IntentService implements OnCompletionListener,
 		Bundle data=intent.getExtras();
 		String thikrType="";
 		thikrType=data.getString("com.HMSolutions.thikrallah.datatype");
-        am = (AudioManager) this.getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
 		if (thikrType.equals(MainActivity.DATA_TYPE_GENERAL_THIKR)){
 
 			int fileNumber=new Random().nextInt(5) + 1;
@@ -58,34 +55,13 @@ public class ThikrService extends IntentService implements OnCompletionListener,
 			int reminderType=Integer.parseInt(sharedPrefs.getString("RemindmeThroughTheDayType", "1"));
 			boolean isQuietTime=isTimeNowQuietTime();
 			if ((reminderType==1 ||reminderType==2)&&isQuietTime==false){
-				player = new MediaPlayer();
-				player.reset();
+                sharedPrefs.edit().putString("thikrType", MainActivity.DATA_TYPE_GENERAL_THIKR).commit();
 
-				player.setWakeMode(this.getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
-				AssetFileDescriptor afd;
-				try {
-					player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-					afd = this.getApplicationContext().getAssets().openFd(thikrType+"/"+ fileNumber+".mp3");
-					player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-					player.prepare();
 
-                    int ret=am.requestAudioFocus(this,
-                            // Use the music stream.
-                            AudioManager.STREAM_MUSIC,
-                            // Request permanent focus.
-                            AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
-                    if (ret==AudioManager.AUDIOFOCUS_REQUEST_GRANTED){
-                        Log.d("media player","focus req granted");
-                        player.start();
-                        player.setOnCompletionListener(this);
-                    }
-
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					player.stop();
-					player.release();
-					e.printStackTrace();
-				}
+                data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAY);
+                Log.d("media1 player","fileNumber sent through intent is "+fileNumber);
+                data.putInt("FILE", fileNumber);
+                this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
 			}
 
 
@@ -119,9 +95,9 @@ public class ThikrService extends IntentService implements OnCompletionListener,
 				//new here
 
 				sharedPrefs.edit().putString("thikrType", MainActivity.DATA_TYPE_DAY_THIKR).commit();
-				Bundle data2=new Bundle();
-				data2.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAYALL);
-				this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data2));
+
+				data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAYALL);
+				this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
 			}
 		}
 		if (thikrType.equals(MainActivity.DATA_TYPE_NIGHT_THIKR)){
@@ -150,9 +126,8 @@ public class ThikrService extends IntentService implements OnCompletionListener,
 			}else{
 
 				sharedPrefs.edit().putString("thikrType", MainActivity.DATA_TYPE_NIGHT_THIKR).commit();
-				Bundle data2=new Bundle();
-				data2.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAYALL);
-				this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data2));
+				data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAYALL);
+				this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
 
 			}
 
@@ -203,32 +178,10 @@ public class ThikrService extends IntentService implements OnCompletionListener,
 			return new Date(0);
 		}
 	}
-	@Override
-	public void onCompletion(MediaPlayer mp) {
-		// TODO Auto-generated method stub
-        Log.d("media player", "on completion called");
-        mp.reset();
-		mp.release();
-        am.abandonAudioFocus(this);
-        player=null;
-        Log.d("media player", "general athkar focus abandoned");
-	}
 
-    @Override
-    public void onAudioFocusChange(int focusChange) {
 
-    }
     @Override
     public void onDestroy(){
-        Log.d("media player", "ondestroy called thikrservice");
-        if (player != null){
-            player.reset();
-            player.release();
-            player=null;
-        }
-        am.abandonAudioFocus(this);
-        Log.d("media player", "general athkar focus abandoned @ onDestroy");
-        this.stopSelf();
         super.onDestroy();
 
     }
