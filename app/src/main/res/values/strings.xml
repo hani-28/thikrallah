@@ -3,6 +3,8 @@
 
     <string name="app_name">أذكر الله</string>
     <string name="share">شارك</string>
+    <string name="volume_level">مستوى صوت التذكير</string>
+    <string name="mute_when_ringer_mute">كتم التذكير اذا الجهاز في وضع الصامت</string>
     <string name="morningThikr">أذكار الصباح</string>
     <string name="nightThikr">أذكار المساء</string>
      <string name="now_playing">جاري الان تشغيل</string>
