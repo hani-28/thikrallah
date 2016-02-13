@@ -5,7 +5,11 @@ import android.content.res.TypedArray;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TimePicker;
 
 public class TimePreference extends DialogPreference {
@@ -62,12 +66,18 @@ public class TimePreference extends DialogPreference {
             }
         }
     }
+    @Override
+    protected View onCreateView(ViewGroup parent) {
+        View view = super.onCreateView(parent);
 
+        RelativeLayout layout = (RelativeLayout) ((LinearLayout) view).getChildAt(1);
+        layout.setGravity(Gravity.RIGHT);
+        return view;
+    }
     @Override
     protected Object onGetDefaultValue(TypedArray a, int index) {
         return(a.getString(index));
     }
-
     @Override
     protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
         String time=null;
