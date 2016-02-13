@@ -89,12 +89,12 @@ AudioManager.OnAudioFocusChangeListener{
 		.setSmallIcon(R.drawable.ic_launcher)		        
 		.setAutoCancel(true)
 		.setContentTitle(getString(R.string.app_name))
-		.setContentText(this.getString(R.string.now_playing)+" "+getThikrTypeString(this.getThikrType()));
+		.setContentText(this.getString(R.string.now_playing) + " " + getThikrTypeString(this.getThikrType()));
 
 	
 		mBuilder.setContentIntent(launchAppPendingIntent);
 		Notification notification = mBuilder.build();
-		startForeground(NOTIFICATION_ID,notification );
+		startForeground(NOTIFICATION_ID, notification);
 		//mNotificationManager.notify(NOTIFICATION_ID,notification );
 
 	}
@@ -192,6 +192,10 @@ AudioManager.OnAudioFocusChangeListener{
 			if (ret==AudioManager.AUDIOFOCUS_REQUEST_GRANTED){
                 setVolume();
                 player.start();
+            }else{
+                am.abandonAudioFocus(this);
+                this.stopForeground(true);
+                this.stopSelf();
             }
 
 
@@ -441,17 +445,15 @@ AudioManager.OnAudioFocusChangeListener{
 		}
 	}
     private void setVolume(){
-        int volumeLevel = am.getStreamVolume(AudioManager.STREAM_MUSIC);
-        int maxVolume = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-
-        float normalVolume = (float)volumeLevel/maxVolume;
-
-        if (am.getRingerMode()==AudioManager.RINGER_MODE_SILENT ||am.getRingerMode()==AudioManager.RINGER_MODE_VIBRATE){
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+        boolean isRespectMute = sharedPrefs.getBoolean("mute_thikr_when_ringer_mute",true);
+        int volumeLevel =sharedPrefs.getInt("volume",100);
+        if ((am.getRingerMode()==AudioManager.RINGER_MODE_SILENT ||am.getRingerMode()==AudioManager.RINGER_MODE_VIBRATE) && isRespectMute==true){
             player.setVolume(0f,0f);
-            Log.d("media1 player", "volume set to 0 ringer mode is "+am.getRingerMode());
         }else{
-            player.setVolume(normalVolume, normalVolume);
-            Log.d("media1 player", "volume set to normal");
+            int maxVolume = 101;
+            float volume=(float)(1-Math.log(maxVolume-volumeLevel)/Math.log(maxVolume));
+            player.setVolume(volume,volume);
         }
     }
 	private boolean initMediaPlayer() {

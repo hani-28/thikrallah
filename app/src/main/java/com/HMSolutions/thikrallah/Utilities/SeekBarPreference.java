@@ -1,7 +1,9 @@
 package com.HMSolutions.thikrallah.Utilities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
+import android.os.Bundle;
 import android.preference.Preference;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -10,7 +12,11 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
+import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.R;
+import com.HMSolutions.thikrallah.ThikrMediaPlayerService;
+
+import java.util.Random;
 
 public class SeekBarPreference extends Preference implements OnSeekBarChangeListener {
     private SeekBar mSeekBar;
@@ -50,7 +56,7 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        Log.d("1thikr1", "onProgressChanged called" );
+        Log.d("1thikr1", "onProgressChanged called");
         if (!fromUser)
             return;
        // this.summaryTV.setText(progress);
@@ -64,7 +70,7 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-
+        playRandrom();
     }
 
     @Override
@@ -89,5 +95,21 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
     @Override
     protected Object onGetDefaultValue(TypedArray a, int index) {
         return a.getInt(index, 0);
+    }
+
+    public void playRandrom() {
+        Bundle data=new Bundle();
+        int fileNumber=new Random().nextInt(5) + 1;
+        data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAY);
+        data.putInt("FILE", fileNumber);
+        data.putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_GENERAL_THIKR);
+        sendActionToMediaService(data);
+
+    }
+    public void sendActionToMediaService(Bundle data){
+        if (data!=null){
+            this.getContext().startService(new Intent(this.getContext(), ThikrMediaPlayerService.class).putExtras(data));
+        }
+
     }
 }

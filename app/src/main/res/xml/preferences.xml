@@ -19,12 +19,12 @@
             android:key="RemindmeThroughTheDayType"
             android:title="@string/general_thikr_reminder_type" />
         <com.HMSolutions.thikrallah.Utilities.SeekBarPreference
-            android:defaultValue="60"
+            android:defaultValue="100"
             android:key="volume"
             android:title="@string/volume_level"/>
         <CheckBoxPreference
             android:defaultValue="true"
-            android:key="mute_when_ringer_mute"
+            android:key="mute_thikr_when_ringer_mute"
             android:title="@string/mute_when_ringer_mute" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/quiet_time" >
