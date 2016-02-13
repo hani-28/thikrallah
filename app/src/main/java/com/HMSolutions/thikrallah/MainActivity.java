@@ -130,7 +130,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 
     @Override
 	protected void onStart() {
-        //mGoogleApiClient.connect();
+        mGoogleApiClient.connect();
         super.onStart();
 
 	}
@@ -142,7 +142,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 	}
 	@Override
 	protected void onStop() {
-        //mGoogleApiClient.disconnect();
+        mGoogleApiClient.disconnect();
         super.onStop();
 
 	}
@@ -256,23 +256,15 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 			}
 		});
 
-
-
-
-
-
-
-
-
-
 		if (savedInstanceState == null) {
 			getFragmentManager().beginTransaction().add(R.id.container, new MainFragment()).commit();
 		}
 		Intent intent=this.getIntent();
 		boolean isNotification=intent.getBooleanExtra("FromNotification", false);
 		if (isNotification==true){
-			Bundle data=intent.getExtras();
-			launchFragment(new ThikrFragment(), data);
+            if(!intent.getExtras().getString("DataType").equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)){
+                launchFragment(new ThikrFragment(), intent.getExtras());
+            }
 		}
 
 	}
@@ -495,13 +487,14 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         if (mLastLocation != null) {
+
             PreferenceManager.getDefaultSharedPreferences(this).edit().putString("latitude", Double.toString(mLastLocation.getLatitude())).commit();
             PreferenceManager.getDefaultSharedPreferences(this).edit().putString("longitude", Double.toString(mLastLocation.getLongitude())).commit();
             Log.d("test", "latitude is " + Double.toString(mLastLocation.getLatitude()));
             PrayTime.instancePrayTime(this);
         }else{
             locationRequest = LocationRequest.create();
-            locationRequest.setPriority(LocationRequest.PRIORITY_LOW_POWER);
+            locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
             locationRequest.setInterval(5000);
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, this);
         }

@@ -2,27 +2,21 @@ package com.HMSolutions.thikrallah.Fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.ListFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
-import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.Models.Prayer;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
 
 import com.HMSolutions.thikrallah.Utilities.PrayTime;
-import com.HMSolutions.thikrallah.Utilities.CustumAthanAdapter;
 
-public class AthanFragment extends Fragment implements OnClickListener, AdapterView.OnItemClickListener {
+public class AthanFragment extends Fragment {
 
 
 
@@ -30,6 +24,12 @@ public class AthanFragment extends Fragment implements OnClickListener, AdapterV
 
 	private MainInterface mCallback;
     private ListView AthanList;
+    private TextView prayer1_time;
+    private TextView prayer2_time;
+    private TextView prayer3_time;
+    private TextView prayer4_time;
+    private TextView prayer5_time;
+    private TextView sunrise_time;
 
 
     public AthanFragment() {
@@ -53,17 +53,33 @@ public class AthanFragment extends Fragment implements OnClickListener, AdapterV
 		this.getActivity().getActionBar().setDisplayShowHomeEnabled(true);
 		this.setHasOptionsMenu(true);
 		
-		View view = inflater.inflate(R.layout.athan, container,
+		View view = inflater.inflate(R.layout.athan_fragment, container,
 				false);
-		AthanList = (ListView) view.findViewById(R.id.listViewPrayers);
+        prayer1_time=(TextView) view.findViewById(R.id.athan_timing1);
+        prayer2_time=(TextView) view.findViewById(R.id.athan_timing2);
+        prayer3_time=(TextView) view.findViewById(R.id.athan_timing3);
+        prayer4_time=(TextView) view.findViewById(R.id.athan_timing4);
+        prayer5_time=(TextView) view.findViewById(R.id.athan_timing5);
+        sunrise_time=(TextView) view.findViewById(R.id.sunrise_timing1);
 
-		prayers=getPrayersArray();
-        CustumAthanAdapter<Prayer> adapter = new CustumAthanAdapter<Prayer>(getActivity(), R.layout.row_format_athan, prayers);
-        AthanList.setAdapter(adapter);
-        AthanList.setOnItemClickListener(this);
+        this.updateprayerTimes();
+
 		return view;
 	}
-	@Override
+
+    private void updateprayerTimes() {
+        prayers=getPrayersArray();
+        prayer1_time.setText(prayers[0].getTime());
+        sunrise_time.setText(prayers[1].getTime());
+        sunrise_time.setText(prayers[1].getTime());
+        prayer2_time.setText(prayers[2].getTime());
+        prayer3_time.setText(prayers[3].getTime());
+        prayer4_time.setText(prayers[5].getTime());
+        prayer5_time.setText(prayers[6].getTime());
+
+    }
+
+    @Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    if (item.getItemId()==android.R.id.home) {
 	    // Respond to the action bar's Up/Home button
@@ -84,10 +100,6 @@ public class AthanFragment extends Fragment implements OnClickListener, AdapterV
         }
 		return prayers;
 	}
-	@Override
-	public void onClick(View v) {
-
-	}
 
 	@Override
 	public void onPause(){
@@ -99,8 +111,4 @@ public class AthanFragment extends Fragment implements OnClickListener, AdapterV
 	}
 
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-    }
 }

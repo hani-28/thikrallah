@@ -64,7 +64,7 @@ public class MyAlarmsManager {
 			calendar1.set(Calendar.HOUR_OF_DAY, Integer.parseInt(NightReminderTime[0]));
 			calendar1.set(Calendar.MINUTE, Integer.parseInt(NightReminderTime[1]));
 			calendar1.set(Calendar.SECOND, 0);
-			
+
 			setAlarm(calendar1,pendingIntentNightThikr);
 			
 		}else{
