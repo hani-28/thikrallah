@@ -101,14 +101,17 @@ AudioManager.OnAudioFocusChangeListener{
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-        this.setThikrType(intent.getExtras().getString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_DAY_THIKR));
-        if (this.getThikrType().equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)&&this.isPlaying()){
+
+        if (intent.getExtras().getString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_DAY_THIKR).equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)&&this.isPlaying()){
             return Service.START_NOT_STICKY;
+        }else{
+            this.setThikrType(intent.getExtras().getString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_DAY_THIKR));
         }
+
         initNotification();
         Bundle data=intent.getExtras();
 		int action =data.getInt("ACTION", -1);
-		Log.d("media1", "action "+action);
+		Log.d("media1", "action " + action);
 		switch (action){
 		case MEDIA_PLAYER_PAUSE:
 			Log.d("media1","pause called");
@@ -168,7 +171,12 @@ AudioManager.OnAudioFocusChangeListener{
         currentPlaying=icurrentPlaying;
 	}
 
-
+    public int getAudioFocusRequestType(){
+        if (this.getThikrType().equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)){
+            return AudioManager.AUDIOFOCUS_GAIN_TRANSIENT;
+        }
+        return AudioManager.AUDIOFOCUS_GAIN;
+    }
 
 	public void play(int fileNumber){
 		this.initMediaPlayer();
@@ -179,16 +187,17 @@ AudioManager.OnAudioFocusChangeListener{
 
             Log.d("media1 player", "file number is "+fileNumber);
 			afd = this.getApplicationContext().getAssets().openFd(this.getThikrType()+"/"+(fileNumber)+".mp3");
-            Log.d("media1 player", "file path  is "+this.getThikrType()+"/"+(fileNumber)+".mp3");
+            Log.d("media1 player", "file path  is " + this.getThikrType() + "/" + (fileNumber) + ".mp3");
             player.reset();
 			player.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
 			player.prepare();
+
 			int ret=am.requestAudioFocus(this,
 					// Use the music stream.
 					AudioManager.STREAM_MUSIC,
 					// Request permanent focus.
-					AudioManager.AUDIOFOCUS_GAIN);
+                    getAudioFocusRequestType());
 			if (ret==AudioManager.AUDIOFOCUS_REQUEST_GRANTED){
                 setVolume();
                 player.start();
@@ -256,7 +265,7 @@ AudioManager.OnAudioFocusChangeListener{
                 // Use the music stream.
                 AudioManager.STREAM_MUSIC,
                 // Request permanent focus.
-                AudioManager.AUDIOFOCUS_GAIN);
+                getAudioFocusRequestType());
         if (ret==AudioManager.AUDIOFOCUS_REQUEST_GRANTED){
             setVolume();
             player.start();
@@ -467,11 +476,12 @@ AudioManager.OnAudioFocusChangeListener{
 			player = new MediaPlayer();
 			player.setWakeMode(this, PowerManager.PARTIAL_WAKE_LOCK);
 			am = (AudioManager) this.getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
-			int ret=am.requestAudioFocus(this,
+			/*
+            int ret=am.requestAudioFocus(this,
 					// Use the music stream.
 					AudioManager.STREAM_MUSIC,
 					// Request permanent focus.
-					AudioManager.AUDIOFOCUS_GAIN);
+                    getAudioFocusRequestType());
             Log.d("media1 player", "audio focus requested");
 			if (ret==AudioManager.AUDIOFOCUS_REQUEST_GRANTED){
                 Log.d("media1 player", "audio focus granted");
@@ -481,6 +491,7 @@ AudioManager.OnAudioFocusChangeListener{
                 Log.d("media1 player", "audio focus denied");
 				return false;
 			}
+			*/
 		}
 		return true;
 

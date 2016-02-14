@@ -78,8 +78,10 @@ public class MyAlarmsManager {
 			// Set the alarm to start at approximately 2:00 p.m.
 			//Calendar calendar2 = Calendar.getInstance();
 			//calendar2.setTimeInMillis(System.currentTimeMillis());
-			alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+ Long.parseLong(RandomReminderInterval)*1000*60,
-					Long.parseLong(RandomReminderInterval)*1000*60, pendingIntentGeneral);
+			//alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+ Long.parseLong(RandomReminderInterval)*1000*60,
+			//		Long.parseLong(RandomReminderInterval)*1000*60, pendingIntentGeneral);
+            alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+ Long.parseLong(RandomReminderInterval)*1000*60,
+                    Long.parseLong(RandomReminderInterval)*1000*60, pendingIntentGeneral);
 			
 			//alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+ 30*1000,
 				//	30*1000, pendingIntentGeneral);
