@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
 import com.HMSolutions.thikrallah.R;
 
 import android.app.Notification;
@@ -103,11 +104,14 @@ AudioManager.OnAudioFocusChangeListener{
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
         if (intent.getExtras().getString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_DAY_THIKR).equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)&&this.isPlaying()){
+            new MyAlarmsManager(this).UpdateAllApplicableAlarms();
             return Service.START_NOT_STICKY;
         }else{
             this.setThikrType(intent.getExtras().getString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_DAY_THIKR));
         }
-
+        if (this.getThikrType().equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)){
+            new MyAlarmsManager(this).UpdateAllApplicableAlarms();
+        }
         initNotification();
         Bundle data=intent.getExtras();
 		int action =data.getInt("ACTION", -1);

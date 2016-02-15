@@ -8,8 +8,8 @@ android {
         applicationId "com.HMSolutions.thikrallah"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 19
-        versionName "2.3.0.4"
+        versionCode 21
+        versionName "2.3.0.6"
     }
 
     buildTypes {
