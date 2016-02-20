@@ -71,7 +71,7 @@ public class MyAlarmsManager {
 			alarmMgr.cancel(pendingIntentNightThikr);
 			
 		}
-		PendingIntent pendingIntentGeneral =PendingIntent.getBroadcast(context, requestCodeRandomAlarm,launchIntent.putExtra("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_GENERAL_THIKR), PendingIntent.FLAG_UPDATE_CURRENT);		
+		PendingIntent pendingIntentGeneral =PendingIntent.getBroadcast(context, requestCodeRandomAlarm,launchIntent.putExtra("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_GENERAL_THIKR), PendingIntent.FLAG_UPDATE_CURRENT);
 		
 		if (RemindmeThroughTheDay){
 			//Random Reminder
@@ -80,7 +80,8 @@ public class MyAlarmsManager {
 			//calendar2.setTimeInMillis(System.currentTimeMillis());
 			//alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+ Long.parseLong(RandomReminderInterval)*1000*60,
 			//		Long.parseLong(RandomReminderInterval)*1000*60, pendingIntentGeneral);
-            alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+ Long.parseLong(RandomReminderInterval)*1000*60,
+            alarmMgr.cancel(pendingIntentGeneral);
+            alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + Long.parseLong(RandomReminderInterval) * 1000 * 60,
                     Long.parseLong(RandomReminderInterval)*1000*60, pendingIntentGeneral);
 			
 			//alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+ 30*1000,

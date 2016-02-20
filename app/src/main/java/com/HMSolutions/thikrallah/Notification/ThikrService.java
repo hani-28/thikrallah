@@ -45,7 +45,7 @@ public class ThikrService extends IntentService  {
 		thikrType=data.getString("com.HMSolutions.thikrallah.datatype");
 		if (thikrType.equals(MainActivity.DATA_TYPE_GENERAL_THIKR)){
 
-			int fileNumber=new Random().nextInt(5) + 1;
+			int fileNumber=new Random().nextInt(6) + 1;
 			//fire text chat head service
 			Intent intentChatHead=new Intent(this.getApplicationContext(), ChatHeadService.class);
 			intentChatHead.putExtra("thikr", fileNumber);
