@@ -99,7 +99,8 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 
     public void playRandrom() {
         Bundle data=new Bundle();
-        int fileNumber=new Random().nextInt(5) + 1;
+        int ThikrCount = this.getContext().getResources().getStringArray(R.array.GeneralThikr).length;
+        int fileNumber=new Random().nextInt(ThikrCount) + 1;
         data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAY);
         data.putInt("FILE", fileNumber);
         data.putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_GENERAL_THIKR);

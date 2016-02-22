@@ -1,6 +1,7 @@
 package com.HMSolutions.thikrallah.Notification;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
@@ -44,7 +45,7 @@ public class MyAlarmsManager {
 			calendar0.set(Calendar.HOUR_OF_DAY, Integer.parseInt(MorningReminderTime[0]));
 			calendar0.set(Calendar.MINUTE, Integer.parseInt(MorningReminderTime[1]));
 			calendar0.set(Calendar.SECOND, 0);
-			
+
 
 			setAlarm(calendar0,pendingIntentMorningThikr);
 			
@@ -75,17 +76,17 @@ public class MyAlarmsManager {
 		
 		if (RemindmeThroughTheDay){
 			//Random Reminder
-			// Set the alarm to start at approximately 2:00 p.m.
-			//Calendar calendar2 = Calendar.getInstance();
-			//calendar2.setTimeInMillis(System.currentTimeMillis());
-			//alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+ Long.parseLong(RandomReminderInterval)*1000*60,
-			//		Long.parseLong(RandomReminderInterval)*1000*60, pendingIntentGeneral);
             alarmMgr.cancel(pendingIntentGeneral);
-            alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + Long.parseLong(RandomReminderInterval) * 1000 * 60,
-                    Long.parseLong(RandomReminderInterval)*1000*60, pendingIntentGeneral);
-			
-			//alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+ 30*1000,
-				//	30*1000, pendingIntentGeneral);
+           // alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + Long.parseLong(RandomReminderInterval) * 1000 * 60,
+            //        Long.parseLong(RandomReminderInterval) * 1000 * 60, pendingIntentGeneral);
+
+
+            Date dat  = new Date();
+            Calendar calendar1 = Calendar.getInstance();
+            calendar1.setTime(dat);
+            calendar1.add(Calendar.MINUTE,Integer.parseInt(RandomReminderInterval));
+            this.setAlarm(calendar1, pendingIntentGeneral);
+
 		}else{
 			alarmMgr.cancel(pendingIntentGeneral);
 		}
