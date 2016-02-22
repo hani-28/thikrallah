@@ -136,6 +136,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 	}
 	public void sendActionToMediaService(Bundle data){
 		if (data!=null){
+            data.putString("com.HMSolutions.thikrallah.datatype",this.getThikrType());
 			this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
 		}
 
@@ -354,8 +355,8 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 
 	@Override
 	public void upgrade() {
-		mHelper.launchPurchaseFlow(this, SKU_PREMIUM, RC_REQUEST, 
-				mPurchaseFinishedListener, "");
+		mHelper.launchPurchaseFlow(this, SKU_PREMIUM, RC_REQUEST,
+                mPurchaseFinishedListener, "");
 
 	}
 	@Override
@@ -377,8 +378,10 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 	}
 	@Override
 	public void incrementCurrentPlaying(int i) {
-		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-		sharedPrefs.edit().putInt("currentPlaying",  sharedPrefs.getInt("currentPlaying",1)+i).commit();
+        Bundle data=new Bundle();
+        data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_INNCREMENT);
+        data.putInt("INCREMENT", i);
+        sendActionToMediaService(data);
 	}
 	@Override
 	public void pausePlayer() {
@@ -431,6 +434,9 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 		sharedPrefs.edit().putString("thikrType", thikrType).commit();
 
 	}
+    public String getThikrType(){
+        return this.mPrefs.getString("thikrType",MainActivity.DATA_TYPE_DAY_THIKR);
+    }
 	public String md5(String s) {
 		try {
 			// Create MD5 Hash

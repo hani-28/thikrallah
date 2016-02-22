@@ -37,6 +37,7 @@ AudioManager.OnAudioFocusChangeListener{
 	public static final int MEDIA_PLAYER_PLAY=3;
 	public static final int MEDIA_PLAYER_PLAYALL=4;
 	public static final int MEDIA_PLAYER_ISPLAYING=5;
+    public static final int MEDIA_PLAYER_INNCREMENT=6;
 	AudioManager am;
 	
 	private MediaPlayer player;
@@ -107,7 +108,7 @@ AudioManager.OnAudioFocusChangeListener{
             new MyAlarmsManager(this).UpdateAllApplicableAlarms();
             return Service.START_NOT_STICKY;
         }else{
-            this.setThikrType(intent.getExtras().getString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_DAY_THIKR));
+            this.setThikrType(intent.getExtras().getString("com.HMSolutions.thikrallah.datatype"));
         }
         if (this.getThikrType().equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)){
             new MyAlarmsManager(this).UpdateAllApplicableAlarms();
@@ -121,6 +122,12 @@ AudioManager.OnAudioFocusChangeListener{
 			Log.d("media1","pause called");
 			this.pausePlayer();
 			break;
+        case MEDIA_PLAYER_INNCREMENT:
+            Log.d("media1", "increment called");
+            int increment=intent.getExtras().getInt("INCREMENT",1);
+            this.setCurrentPlaying(this.getCurrentPlaying()+increment);
+            this.playAll();
+            break;
 
 		case MEDIA_PLAYER_RESET:
 			Log.d("media1","reset called");
@@ -237,14 +244,23 @@ AudioManager.OnAudioFocusChangeListener{
 
 		if (isPaused==false){  //mediaplayer was stopped
 
+            if(this.getCurrentPlaying()<1){
+                setCurrentPlaying(1);
+            }
+
 			AssetFileDescriptor afd;
 			try {
-				Log.d("media1 player", "current playing is "+getCurrentPlaying());
+                Log.d("media1 player", "current playing is "+getCurrentPlaying());
+                Log.d("media1 player", "thikrtype is "+getThikrType());
 				afd = this.getApplicationContext().getAssets().openFd(getThikrType()+"/"+this.getCurrentPlaying()+".mp3");
-				player.reset();
-				this.initMediaPlayer();
+				//player.reset();
+                Log.d("media1 player", "now will call initmediaplayer");
+                this.initMediaPlayer();
+                Log.d("media1 player", "finished initmediaplayer");
 				player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-				player.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
+                Log.d("media1 player", "audio stream type set");
+				player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+                Log.d("media1 player", "datasource set");
 				player.prepare();
 				Log.d("media1 player", "current playing was prepared successfully "+getCurrentPlaying());
 			} catch (IOException e) {
