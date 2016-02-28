@@ -1,12 +1,15 @@
 package com.HMSolutions.thikrallah.Utilities;
 
 
+import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.R;
+import com.HMSolutions.thikrallah.SetPreferenceActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -44,19 +47,37 @@ public class WhatsNewScreen {
                 // Show the News since last version
                 AlertDialog.Builder builder = new AlertDialog.Builder(mActivity)
                         .setTitle(title)
-                        .setMessage(message)
-                        .setPositiveButton(android.R.string.ok, new Dialog.OnClickListener() {
- 
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                // Mark this version as read
-                                SharedPreferences.Editor editor = prefs.edit();
-                                editor.putLong(LAST_VERSION_CODE_KEY, packageInfo.versionCode);
-                                editor.commit();
-                                dialogInterface.dismiss();
-                            }
-                        });
-                builder.create().show();
-            } else {
+                        .setMessage(message);
+                builder.setNegativeButton(android.R.string.cancel, new Dialog.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putLong(LAST_VERSION_CODE_KEY, packageInfo.versionCode);
+                        editor.commit();
+                        dialogInterface.dismiss();
+                    }});
+                builder.setPositiveButton(R.string.open_settings,new Dialog.OnClickListener()
+
+                    {
+
+                        public void onClick (DialogInterface dialogInterface,int i){
+                        // Mark this version as read
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putLong(LAST_VERSION_CODE_KEY, packageInfo.versionCode);
+                        editor.commit();
+                        dialogInterface.dismiss();
+                        Intent intent = new Intent();
+                        intent.setClass(mActivity, SetPreferenceActivity.class);
+                        mActivity.startActivityForResult(intent, 0);
+                    }
+                    }
+
+                    );
+                    builder.create().
+
+                    show();
+                } else {
                 Log.i(LOG_TAG, "versionCode " + packageInfo.versionCode + "is already known");
             }
  

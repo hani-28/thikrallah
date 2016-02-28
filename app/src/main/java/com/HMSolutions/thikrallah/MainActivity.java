@@ -137,6 +137,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 	public void sendActionToMediaService(Bundle data){
 		if (data!=null){
             data.putString("com.HMSolutions.thikrallah.datatype",this.getThikrType());
+            data.putBoolean("isUserAction",true);
 			this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
 		}
 

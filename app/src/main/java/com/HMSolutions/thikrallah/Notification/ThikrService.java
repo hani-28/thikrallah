@@ -56,8 +56,6 @@ public class ThikrService extends IntentService  {
 			boolean isQuietTime=isTimeNowQuietTime();
 			if ((reminderType==1 ||reminderType==2)&&isQuietTime==false){
                 sharedPrefs.edit().putString("thikrType", MainActivity.DATA_TYPE_GENERAL_THIKR).commit();
-
-
                 data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAY);
                 Log.d("media1 player","fileNumber sent through intent is "+fileNumber);
                 data.putInt("FILE", fileNumber);

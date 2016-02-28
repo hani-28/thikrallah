@@ -55,4 +55,6 @@
     <string name="prayer3">صلاة العصر</string>
     <string name="prayer4">صلاة المغرب</string>
     <string name="prayer5">صلاة العشاء</string>
+    <string name="open_settings">افتح الاعدادات</string>
+
 </resources>
