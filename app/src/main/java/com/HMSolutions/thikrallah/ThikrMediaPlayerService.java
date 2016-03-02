@@ -683,7 +683,13 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                     super.onStop();
                 }
             });
-            mediaSession.setActive(true);
+            try{
+
+                mediaSession.setActive(true);
+            }catch (Exception e){
+                mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+                mediaSession.setActive(true);
+            }
 
             //mController = MediaController.fromToken( mediaSession.getSessionToken() );
 
