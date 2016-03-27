@@ -10,8 +10,10 @@ import java.util.Locale;
 import java.util.Random;
 
 import com.HMSolutions.thikrallah.MainActivity;
+import com.HMSolutions.thikrallah.Models.UserThikr;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.ThikrMediaPlayerService;
+import com.HMSolutions.thikrallah.Utilities.MyDBHelper;
 
 import android.app.IntentService;
 import android.app.NotificationManager;
@@ -45,16 +47,18 @@ public class ThikrService extends IntentService  {
 		thikrType=data.getString("com.HMSolutions.thikrallah.datatype");
 		if (thikrType.equals(MainActivity.DATA_TYPE_GENERAL_THIKR)){
             int ThikrCount = this.getResources().getStringArray(R.array.GeneralThikr).length;
-			int fileNumber=new Random().nextInt(ThikrCount) + 1;
+            MyDBHelper db = new MyDBHelper(this);
+            UserThikr thikr=db.getRandomThikr();
+            int fileNumber=Integer.parseInt(thikr.getFile());
 			//fire text chat head service
 			Intent intentChatHead=new Intent(this.getApplicationContext(), ChatHeadService.class);
-			intentChatHead.putExtra("thikr", fileNumber);
+			intentChatHead.putExtra("thikr", thikr.getThikrText());
 			startService(intentChatHead);
 
 
 			int reminderType=Integer.parseInt(sharedPrefs.getString("RemindmeThroughTheDayType", "1"));
 			boolean isQuietTime=isTimeNowQuietTime();
-			if ((reminderType==1 ||reminderType==2)&&isQuietTime==false){
+			if ((reminderType==1 ||reminderType==2)&&isQuietTime==false&&thikr.isBuiltIn()==true){
                 sharedPrefs.edit().putString("thikrType", MainActivity.DATA_TYPE_GENERAL_THIKR).commit();
                 data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAY);
                 Log.d("media1 player","fileNumber sent through intent is "+fileNumber);

@@ -7,7 +7,7 @@
     <string name="mute_when_ringer_mute">كتم التذكير اذا الجهاز في وضع الصامت</string>
     <string name="morningThikr">أذكار الصباح</string>
     <string name="nightThikr">أذكار المساء</string>
-     <string name="now_playing">جاري الان تشغيل</string>
+    <string name="now_playing">جاري الان تشغيل</string>
     <string name="morningThikrSettings">أعدادات أذكار الصباح</string>
     <string name="nightThikrSettings">أعدادات أذكار المساء</string>
     <string name="RemindMe">ذكرني بالله</string>
@@ -33,15 +33,15 @@
 </string>
     <string name="ad_unit_id_interstital">ca-app-pub-2699427816916773/9181228848</string>
     <string name="app_link">https://play.google.com/store/apps/details?id=com.HMSolutions.thikrallah</string>
-     <string name="app_package">com.HMSolutions.thikrallah</string>
-     <string name="contactUs">تواصل معنا</string>
-     <string name="email_Us">تواصل معنا عبر البريد الالكتروني</string>
-     <string name="contact_developer_uri">mailto:28.hani@gmail.com</string>
-     <string name="email_subject">مقترحات على برنامج اذكر الله</string>
-       <string name="quiet_time">وقت عدم التذكير الصوتي</string>
-     <string name="quiet_time_choice">اوقف التذكير الصوتي في هذه الاوقات</string>
-     <string name="quiet_time_start">وقت عدم التذكير يبدأ في</string>
-     <string name="quiet_time_end">وقت عدم التذكير ينتهي في</string>
+    <string name="app_package">com.HMSolutions.thikrallah</string>
+    <string name="contactUs">تواصل معنا</string>
+    <string name="email_Us">تواصل معنا عبر البريد الالكتروني</string>
+    <string name="contact_developer_uri">mailto:28.hani@gmail.com</string>
+    <string name="email_subject">مقترحات على برنامج اذكر الله</string>
+    <string name="quiet_time">وقت عدم التذكير الصوتي</string>
+    <string name="quiet_time_choice">اوقف التذكير الصوتي في هذه الاوقات</string>
+    <string name="quiet_time_start">وقت عدم التذكير يبدأ في</string>
+    <string name="quiet_time_end">وقت عدم التذكير ينتهي في</string>
     <string name="rate_message">اذا لديك اي انطباع سلبي او ايجابي باستخدام برنامجنا يرجى اخذ لحظه من وقتك لتقييم البرنامج حتى نستطيع تحسين البرنامج الى الافضل ان شاء الله. ايظا يرجى دعم المبرمج بالضغط على الدعايات بين الحين والاخر. وشكرا.</string>
     <string name="rate">قيم البرنامج</string>
     <string name="remind_later">ذكرني مره اخرى</string>
@@ -56,5 +56,9 @@
     <string name="prayer4">صلاة المغرب</string>
     <string name="prayer5">صلاة العشاء</string>
     <string name="open_settings">افتح الاعدادات</string>
+    <string name="my_athkar">اذكاري</string>
+    <string name="add_thikr">اضف ذكر</string>
+    <string name="add_thikr_hint">اكتب نص ذكرك هنا</string>
+    <string name="one_thikr_warning">من الضروري ان يكون على الاقل واحد من الاذكار مفعلا</string>
 
 </resources>

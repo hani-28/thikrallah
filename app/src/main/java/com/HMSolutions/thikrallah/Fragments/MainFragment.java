@@ -45,6 +45,7 @@ public class MainFragment extends Fragment {
         Button button_morning_thikr = (Button) view.findViewById(R.id.button_morning_thikr);
 		Button button_night_thikr = (Button) view.findViewById(R.id.button_night_thikr);
 		Button button_donate = (Button) view.findViewById(R.id.button_support_us);
+        Button button_my_athkar = (Button) view.findViewById(R.id.button_my_athkar);
 /*
         Button button_athan = (Button) view.findViewById(R.id.button_athan);
         button_athan.setOnClickListener(new OnClickListener(){
@@ -80,7 +81,7 @@ public class MainFragment extends Fragment {
 			public void onClick(View v) {
 				Bundle data=new Bundle();
 				data.putString("DataType", MainActivity.DATA_TYPE_DAY_THIKR);
-				mCallback.launchFragment(new ThikrFragment(),data);	
+				mCallback.launchFragment(new ThikrFragment(), data);
 			}});
 		
 		button_night_thikr.setOnClickListener(new OnClickListener(){
@@ -90,6 +91,12 @@ public class MainFragment extends Fragment {
 				data.putString("DataType", MainActivity.DATA_TYPE_NIGHT_THIKR);
 				mCallback.launchFragment(new ThikrFragment(),data);	
 			}});
+        button_my_athkar.setOnClickListener(new OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Bundle data=new Bundle();
+                mCallback.launchFragment(new MyAthkarFragment(),data);
+            }});
 		return view;
 	}
 	

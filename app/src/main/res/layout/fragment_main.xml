@@ -53,5 +53,14 @@
         android:layout_alignRight="@+id/button_remind_me"
         android:layout_below="@+id/button_remind_me"
         android:text="@string/support_us" />
+    <Button
+        android:id="@+id/button_my_athkar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button_night_thikr"
+        android:layout_alignRight="@+id/button_night_thikr"
+        android:layout_above="@+id/button_morning_thikr"
+        android:text="@string/my_athkar"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>

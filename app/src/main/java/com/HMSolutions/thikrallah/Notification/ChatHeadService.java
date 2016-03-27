@@ -36,8 +36,8 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
 		int reminderType=Integer.parseInt(sharedPrefs.getString("RemindmeThroughTheDayType", "1"));
 	    if (reminderType==1 ||reminderType==3){
-	    	int thikrNumber=intent.getIntExtra("thikr", 1);
-		    thikr=this.getApplicationContext().getResources().getStringArray(R.array.GeneralThikr)[thikrNumber-1];
+	    	String thikr=intent.getStringExtra("thikr");
+            //thikr=this.getApplicationContext().getResources().getStringArray(R.array.GeneralThikr)[thikrNumber-1];
 		    // We want this service to continue running until it is explicitly
 		    // stopped, so return sticky.
 			windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);

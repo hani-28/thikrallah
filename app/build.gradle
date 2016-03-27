@@ -8,8 +8,8 @@ android {
         applicationId "com.HMSolutions.thikrallah"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 26
-        versionName "2.3.1.1"
+        versionCode 27
+        versionName "2.4.0"
     }
 
     buildTypes {
@@ -19,7 +19,6 @@ android {
         }
     }
 }
-
 dependencies {
     compile 'com.google.android.gms:play-services-ads:+'
     compile 'com.google.android.gms:play-services-location:+'

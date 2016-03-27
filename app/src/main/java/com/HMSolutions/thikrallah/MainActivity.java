@@ -14,6 +14,7 @@ import com.HMSolutions.thikrallah.Fragments.MainFragment;
 import com.HMSolutions.thikrallah.Fragments.ThikrFragment;
 import com.HMSolutions.thikrallah.Utilities.AppRater;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
+import com.HMSolutions.thikrallah.Utilities.MyDBHelper;
 import com.HMSolutions.thikrallah.Utilities.PrayTime;
 import com.HMSolutions.thikrallah.Utilities.WhatsNewScreen;
 import com.HMSolutions.thikrallah.Utilities.inapp.IabHelper;
@@ -173,6 +174,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 		super.onCreate(savedInstanceState);
 
 
+
         // Create an instance of GoogleAPIClient.
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -192,6 +194,13 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 
 
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if (mPrefs.getBoolean("isDataBasePopulated",false)==false){
+            MyDBHelper db = new MyDBHelper(this);
+            db.getReadableDatabase();
+            db.close();
+            db.populateInitialThikr();
+            mPrefs.edit().putBoolean("isDataBasePopulated",true).commit();
+        }
 		Intent intent1 = new Intent("com.HMSolutions.thikrallah.Notification.ThikrBootReceiver.android.action.broadcast");  
 		new WhatsNewScreen(this).show();
 		AppRater.app_launched(this);

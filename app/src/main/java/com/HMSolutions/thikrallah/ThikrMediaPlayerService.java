@@ -412,14 +412,16 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
     public int getCurrentThikrRepeat() {
         int repeat = 1;
-        String currentThikr = this.getThikrArray()[this.getCurrentPlaying() - 1];
-
+        String currentThikr="";
+        try{
+            currentThikr = this.getThikrArray()[this.getCurrentPlaying() - 1];
+        }catch (IndexOutOfBoundsException e){
+            Log.d("hani_error","'index out of bound");
+        }
         Pattern pattern = Pattern.compile("[\\d]+");
         Matcher matcher = pattern.matcher(currentThikr);
         if (matcher.find()) {
-
-
-            repeat = Integer.parseInt(matcher.group(0));
+           repeat = Integer.parseInt(matcher.group(0));
         } else {
             repeat = 1;
         }
@@ -439,6 +441,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
             this.stopForeground(true);
             this.stopSelf();
+            return;
         }
         if (this.getCurrentPlaying() >= getThikrArray().length && currentThikrCounter >= getCurrentThikrRepeat()) {
 
