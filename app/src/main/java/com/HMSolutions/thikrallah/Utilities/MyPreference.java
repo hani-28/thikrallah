@@ -1,6 +1,7 @@
 package com.HMSolutions.thikrallah.Utilities;
 
 import android.content.Context;
+import android.os.Build;
 import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -30,7 +31,8 @@ public class MyPreference extends Preference {
         View view = super.onCreateView(parent);
 
         RelativeLayout layout = (RelativeLayout) ((LinearLayout) view).getChildAt(1);
-        layout.setGravity(Gravity.RIGHT);
+        layout.setGravity(Gravity.START);
+
         return view;
     }
 }

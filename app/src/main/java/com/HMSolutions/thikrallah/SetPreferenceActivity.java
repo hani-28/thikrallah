@@ -5,9 +5,12 @@ package com.HMSolutions.thikrallah;
 import com.HMSolutions.thikrallah.Fragments.PrefsFragment;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+
+import java.util.Locale;
 
 public class SetPreferenceActivity extends Activity{
 
@@ -16,7 +19,14 @@ public class SetPreferenceActivity extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+        Locale locale = new Locale("en");
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config,
+                getBaseContext().getResources().getDisplayMetrics());
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setDisplayShowHomeEnabled(false);
 		getFragmentManager().beginTransaction().replace(android.R.id.content,
 				new PrefsFragment()).commit();

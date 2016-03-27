@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Remember Allah</string>
+    <string name="share">share</string>
+    <string name="volume_level">Notification volume level</string>
+    <string name="mute_when_ringer_mute">Mute notification if device is in silent mode</string>
+    <string name="morningThikr">Morning rememberance</string>
+    <string name="nightThikr">Evening rememberance</string>
+    <string name="now_playing">Now playing</string>
+    <string name="morningThikrSettings">Morning rememberance settings</string>
+    <string name="nightThikrSettings">Evening rememberance settings</string>
+    <string name="RemindMe">Remind me of Allah</string>
+    <string name="Settings">Settings</string>
+    <string name="play_all">Play all</string>
+    <string name="remindMeMorningThikr">Remind me of morning rememberance</string>
+    <string name="remindMeNightThikr">Remind me of evening rememberance</string>
+    <string name="changeReminderTime">Modify reminder time</string>
+    <string name="RemindMeSettings">Auto reminders settings</string>
+    <string name="general_thikr_reminder_type">Method of Allah\'s remembrance</string>
+    <string name="RemindMeEvery">Remind me of Allah every</string>
+    <string name="chooseDailyThikr">اختر الذكر اليومي للتذكير</string>
+    <string name="RemindmeThroughTheDay">Remind me of Allah throughout day</string>
+    <string name="thanksforupgrade">We thank you for supporting developer by making the donation. If you have any recommendation, please email us or leave feedback on Google\'s Play Store</string>
+    <string name="support_us_request">Please support the developer my clicking on interesting ads every now and then and by making dua\'a for me.</string>
+    <string name="support_us">Support us</string>    <string name="whatsnew">&#8226; We recommend opening settings to change any of the default settings.\n&#8226; Clicking on ads once, makes ads disappear for 7 days.
+\n&#8226; Making donation makes the app ads free forever.
+\n&#8226; May Allah guide you to his remembrance and worship. Please don\'t forget us from your prayers.</string>
+    <string name="contactUs">Contact us</string>
+    <string name="email_Us">Email us</string>
+    <string name="email_subject">App recommendations</string>
+    <string name="quiet_time">Time to stop reminders</string>
+    <string name="quiet_time_choice">Stop audio reminders during this time</string>
+    <string name="quiet_time_start">No reminders time starts on</string>
+    <string name="quiet_time_end">No reminders time ends on</string>
+    <string name="rate_message">If you have any good or bad experience using our app, please give us a minute of your time to give us that feedback so that we can improve this app God willing. Also, please support us by clicking on interesting ads every now and then. Thank you.</string>
+    <string name="rate">Rate app</string>
+    <string name="remind_later">Remind me again</string>
+    <string name="dont_rate">I do not want to rate app</string>
+    <string name="quiet_time_endvalue">06:00</string>
+    <string name="next_prayer">الصلاة القادمة</string>
+    <string name="athan">الاذان</string>
+    <string name="sunrise">شروق الشمس</string>
+    <string name="prayer1">صلاة الفجر</string>
+    <string name="prayer2">صلاة الظهر</string>
+    <string name="prayer3">صلاة العصر</string>
+    <string name="prayer4">صلاة المغرب</string>
+    <string name="prayer5">صلاة العشاء</string>
+    <string name="open_settings">Open settings</string>
+    <string name="my_athkar">My Supplications</string>
+    <string name="cancel">Cancel</string>
+    <string name="add_thikr">Add supplication</string>
+    <string name="add_thikr_hint">supplication text here</string>
+    <string name="one_thikr_warning">At least one supplication must be enabled</string>
+
+    <string name="notification_sound_and_text">Audio and Visual Reminder</string>
+    <string name="notification_sound_only">Audio reminder only</string>
+    <string name="notification_text_only">Visual reminder only</string>
+    <string name="play_athkar_at_notification_time">Play supplications audio at time of reminder</string>
+    <string name="one_minute">1 minute</string>
+    <string name="five_minutes">5 minutes</string>
+    <string name="ten_minutes">10 minutes</string>
+    <string name="fifteen_minutes">15 minutes</string>
+    <string name="thirty_minutes">30 minutes</string>
+    <string name="one_hour">1 hour</string>
+    <string name="two_hours">2 hours</string>
+    <string name="three_hours">3 hours</string>
+    <string name="four_hours">4 hours</string>
+    <string name="five_hours">5 hours</string>
+    <string name="six_hours">6 hours</string>
+    <string name="seven_hours">7 hours</string>
+    <string name="eight_hours">8 hours</string>
+    <string name="nine_hours">9 hours</string>
+    <string name="ten_hours">10 hours</string>
+    <string name="eleven_hours">11 hours</string>
+    <string name="twelve_hours">12 hours</string>
+
+    <string name="thikr1">Glory be to Allah (Subhan Allah)</string>
+    <string name="thikr2">Praise be to Allah (Alhamdulillah)</string>
+    <string name="thikr3">There is no god but Allah (La ilaha illallah )</string>
+    <string name="thikr4">God is the Greatest (Allahu Akbar)</string>
+    <string name="thikr5">There is neither strength nor power except with Allah (La Haula wala Quwwata il-la bil-lah)</string>
+    <string name="thikr6">O Allah, bless prophet Muhammad. (Allahumma sallee ala nabiena muhammad)</string>
+    <string name="thikr7">I ask for forgiveness (Astaghfirul lah )</string>
+
+    <string name="thikr_kursi">Allahu la ilaha illa Huwa, Al-Haiyul-Qaiyum La ta\'khudhuhu sinatun wa la nawm, lahu ma fis-samawati wa ma fil-\'ard Man dhal-ladhi yashfa\'u \'indahu illa bi-idhnihi Ya\'lamu ma baina aidihim wa ma khalfahum, wa la yuhituna bi shai\'im-min \'ilmihi illa bima sha\'a Wasi\'a kursiyuhus-samawati wal ard, wa la ya\'uduhu hifdhuhuma Wa Huwal \'Aliyul-Adheem. (There is no god but He, The Living, the Everlasting, 
+Slumber seizes Him not, neither sleep, To Him belongs all that is in the heavens and the earth. Who is there that can intercede with His, except by His leave? 
+He knows what lies before them and what is after them, And they comprehend not anything of His Knowledge save as He wills. His throne comprises the heavens and the earth, The preserving of them fatigues Him not, And He is the All-High, All-Glorious)</string>
+    <string name="thikr_iklhlas">Qul huwal laahu ahad. Allah hus-samad. Lam yalid wa lam yoolad. Wa lam yakul-lahu kufuwan ahad. (Say: He is Allah, the One and Only; Allah, the Eternal, Absolute; He begetteth not, nor is He begotten; And there is none like unto Him.)</string>
+    <string name="thikr_alfalak">Qul a\'uzoo bi rabbil-falaq. Min sharri ma khalaq. Wa min sharri ghasiqin iza waqab. Wa min sharrin-naffaa-thaati fil \'uqad. Wa min shar ri haasidin iza hasad. (Say: I seek refuge with the Lord of the Dawn. From the mischief of created things; From the mischief of Darkness as it overspreads; From the mischief of those who practice secret arts; And from the mischief of the envious one as he practices envy)</string>
+    <string name="thikr_alnas">Qul a\'uzu birabbin naas. Malikin naas. Ilaahin naas. Min sharril was waasil khannaas. Al lazee yuwas wisu fee sudoorin naas. Minal jinnati wan naas. (Say: I seek refuge with the Lord and Cherisher of Mankind, The King (or Ruler) of Mankind, The Allah (for judge) of Mankind,From the mischief of the Whisperer (of Evil), who withdraws (after his whisper),(The same) who whispers into the hearts of Mankind, Among Jinns and among men.)</string>
+    <string name="morning_thikr1">We have reached the morning and at this very time unto Allah belongs all sovereignty, and all praise is for Allah. None has the right to be worshiped except Allah, alone, without partner, to Him belongs all sovereignty and praise and He is over all things omnipotent. My Lord, I ask You for the good of this day and the good of what follows it and I take refuge in You from the evil of this day and the evil of what follows it. My Lord, I take refuge in You from laziness and senility. My Lord, I take refuge in You from torment in the Fire and punishment in the grave. (Asbahna wa-asbahal-mulku lillah walhamdu lillah la ilaha illal-lah, wahdahu la shareeka lah, lahul-mulku walahul-hamd, wahuwa AAala kulli shayin qadeer, rabbi as-aluka khayra ma fee hatha-alyawmi, wakhayra ma baAAdaho, wa-aAAoothu bika min sharri hatha-alyawmi, washarri ma baAAdaho, rabbi aAAoothu bika minal-kasal, wasoo-il kibar, rabbi aAAoothu bika min AAathabin fin-nar, waAAathabin fil-qabr.)</string>
+    <string name="morning_thikr2">O Allah, by your leave we have reached the morning and by Your leave we have reached the evening, by Your leave we live and die and unto You is our resurrection. (Allahumma bika asbahna wabika amsayna, wabika nahya ,wabika namootu wa-ilaykan-nushoor)</string>
+    <string name="thikr_istighfar">O Allah, You are my Lord, none has the right to be worshipped except You, You created me and I am Your servant and I abide to Your covenant and promise as best I can, I take refuge in You from the evil of which I have committed. I acknowledge Your favour upon me and I acknowledge my sin, so forgive me, for verily none can forgive sin except You. (Allahumma anta rabbee la ilaha illa ant, khalaqtanee wa-ana AAabduk, wa-ana AAala AAahdika wawaAAdika mas-tataAAt, aAAoothu bika min sharri ma sanaAAt, aboo-o laka biniAAmatika AAalay, wa-aboo-o bithanbee, faghfir lee fa-innahu la yaghfiruth-thunooba illa ant)</string>
+    <string name="morning_thikr3">O Allah, verily I have reached the morning and call on You, the bearers of Your throne, Your angles, and all of Your creation to witness that You are Allah, none has the right to be worshiped except You, alone, without partner and that Muhammad is Your Servant and Messenger. (4 times). (Allahumma innee asbahtu oshhiduk, wa-oshhidu hamalata AAarshik, wamala-ikatak, wajameeAAa khalqik, annaka antal-lahu la ilaha illa ant, wahdaka la shareeka lak, wa-anna Muhammadan AAabduka warasooluk (four times). )</string>
+    <string name="morning_thikr4">O Allah, what blessing I or any of Your creation have risen upon, is from You alone, without partner, so for You is all praise and unto You all thanks. (Allahumma ma asbaha bee min niAAmatin, aw bi-ahadin min khalqik, faminka wahdaka la shareeka lak, falakal-hamdu walakash-shukr)</string>
+    <string name="thikr_afani">O Allah, grant my body health, O Allah, grant my hearing health, O Allah, grant my sight health. None has the right to be worshipped except You. (3 times) (Allahumma AAafinee fee badanee, allahumma AAafinee fee samAAee, allahumma AAafinee fee basaree, la ilaha illa ant.(three times))</string>
+    <string name="thikr_hasbi">Allah is Sufficient for me, none has the right to be worshipped except Him, upon Him I rely and He is Lord of the exalted throne. (7 times) (Hasbiyal-lahu la ilaha illa huwa, AAalayhi tawakkalt, wahuwa rabbul-AAarshil-AAatheem  (7 times) )</string>
+    <string name="thikr_alafo">O Allah, I ask You for pardon and well-being in this life and the next. O Allah, I ask You for pardon and well-being in my religious and worldly affairs, and my family and my wealth. O Allah, veil my weaknesses and set at ease my dismay. O Allah, preserve me from the front and from behind and on my right and on my left and from above, and I take refuge with You lest I be swallowed up by the earth. (Allahumma innee as-alukal-AAafwa walAAafiyah, fid-dunya wal-akhirah, allahumma innee as-alukal-AAafwa walAAafiyah fee deenee, wadunyaya wa-ahlee, wamalee, allahummas-tur AAawratee, wa-amin rawAAatee, allahummah-fathnee min bayni yaday, wamin khalfee, waAAan yameenee, waAAan shimalee, wamin fawqee, wa-aAAoothu biAAathamatika an oghtala min tahtee.)</string>
+    <string name="thikr_alem">O Allah, Knower of the unseen and the seen, Creator of the heavens and the Earth, Lord and Sovereign of all things, I bear witness that none has the right to be worshiped except You. I take refuge in You from the evil of my soul and from the evil and shirk of the devil, and from committing wrong against my soul or bringing such upon another Muslim. (Allahumma AAalimal-ghaybi washshahadah, fatiras-samawati wal-ard, rabba kulli shayin wamaleekah, ashhadu an la ilaha illa ant, aAAoothu bika min sharri nafsee wamin sharrish-shaytani washirkih, waan aqtarifa AAala nafsee soo-an aw ajurrahu ila muslim)</string>
+    <string name="thikr_wikaya">In the name of Allah with whose name nothing is harmed on earth nor in the heavens and He is The All-Seeing, The All-Knowing(3 times) (Bismil-lahil-lathee la yadurru maAAas-mihi shay-on fil-ardi wala fis-sama-i wahuwas-sameeAAul-AAaleem (3 times) )</string>
+    <string name="thikr_istighatha">O Ever Living, O Self-Subsisting and Supporter of all, by Your mercy I seek assistance, rectify for me all of my affairs and do not leave me to myself, even for the blink of an eye. (Ya hayyu ya qayyoom, birahmatika astagheeth, aslih lee sha/nee kullah, wala takilnee ila nafsee tarfata AAayn.)</string>
+    <string name="morning_thikr5">We have reached the morning and at this very time all sovereignty belongs to Allah, Lord of the worlds. O Allah, I ask You for the good of this day, its triumphs and its victories, its light and its blessings and its guidance, and I take refuge in You from the evil of this day and the evil that follows it. (Asbahna wa-asbahal-mulku lillahi rabbil-AAalameen, allahumma innee as-aluka khayra hathal-yawm, fat-hahu, wanasrahu, wanoorahu, wabarakatahu, wahudahu, wa-aAAoothu bika min sharri ma feehi, washarri ma baAAdah.)</string>
+    <string name="morning_thikr6">Our morning-rise upon the fitrah (nature) of Islam, and the word of pure faith, and upon the religion of prophet Mohamed (Peace and Blessings of Allah be upon him) and the creed of prophet Ibrahim (Alayh Asalam), who was a Muslim of true faith and was not amongst who associate partners with Allah (Asbahna ‘Ala Fitrat Al Islam Wa ‘Ala Kalimat Al Ikhlas, Wa ‘Ala Dini Nabyna Muhamadin(Sala Allahu ‘Alayhi Wa Salam) Wa ‘Ala Milati Ibraheem Hanifan Musliman Wa Ma Kana Minal Mushrikin)</string>
+    <string name="thikr_subhan">Allah is exalted with his praise, the number of His creatures and His pleasure, by the weight of His throne and the ink of His words (3 times) (Subahana Allah Wa bi Hamdih, ‘Adada Khalqih, Wa Rida Nafsih Wa Zinata ‘Arshih Wa Midada Kalimateh) (3 times)</string>
+    <string name="morning_thikr7">O Allaah indeed I ask You for beneficial knowledge, and a good Halal provision, and actions which are accepted. (Allaahumma innee assaluka ilman nafia, wa rizzqan tayyeebun, wa amalan mutaqabilan)</string>
+    <string name="thikr_taoba">I beg forgiveness from Allah and I turn to Him in repentance (3 times) ) (Astaghfiru Allah a\'atooob Elaih (3 times))</string>
+    <string name="thikr_salah">O Allah, bless prophet Muhammad. (Allahumma sallee ala nabiena muhammad)</string>
+
+
+    <string name="night_thikr1">We have reached the evening and at this very time unto Allah belongs all sovereignty, and all praise is for Allah. None has the right to be worshiped except Allah, alone, without partner, to Him belongs all sovereignty and praise and He is over all things omnipotent. My Lord, I ask You for the good of this night and the good of what follows it and I take refuge in You from the evil of this night and the evil of what follows it. My Lord, I take refuge in You from laziness and senility. My Lord, I take refuge in You from torment in the Fire and punishment in the grave. (Amsayna wa-amsal-mulku lillah walhamdu lillah la ilaha illal-lah, wahdahu la shareeka lah, lahul-mulku walahul-hamd, wahuwa AAala kulli shayin qadeer, rabbi as-aluka khayra ma fee hathihil-laylah, wakhayra ma baAAdaha, wa-aAAoothu bika min sharri hathihil-laylah, washarri ma baAAdaha, rabbi aAAoothu bika minal-kasal, wasoo-il kibar, rabbi aAAoothu bika min AAathabin fin-nar, waAAathabin fil-qabr.)</string>
+    <string name="night_thikr2">O Allah, by Your leave we have reached the evening and by Your leave we have reached the morning, by Your leave we live and die and unto You is our return. (Allahumma bika amsayna, wabika asbahna, wabika nahya wabika namootu wa-ilayka-nushoor)</string>
+    <string name="night_thikr3">O Allah, verily I have reached the evening and call on You, the bearers of Your throne, Your angles, and all of Your creation to witness that You are Allah, none has the right to be worshiped except You, alone, without partner and that Muhammad is Your Servant and Messenger (4 times). (Allahumma innee amsaytu oshhiduk, wa-oshhidu hamalata AAarshik, wamala-ikatak, wajameeAAa khalqik, annaka antal-lahu la ilaha illa ant, wahdaka la shareeka lak, wa-anna Muhammadan AAabduka warasooluk (4 times))</string>
+    <string name="night_thikr4">O Allah, what blessing I or any of Your creation have risen upon, is from You alone, without partner, so for You is all praise and unto You all thanks. (Allahumma ma amsa bee min niAAmatin, aw bi-ahadin min khalqik, faminka wahdaka la shareeka lak, falakal-hamdu walakash-shukr)</string>
+    <string name="night_thikr5">I am pleased with Allah as a Lord, and Islam as a religion and Muhammad peace be upon to him as a Prophet (3 times). (Radeetu billahi rabban wabil-islami deenan wabiMuhammadin peace be upon to him nabiyya (3 times))</string>
+    <string name="night_thikr6">We have reached the evening and at this very time all sovereignty belongs to Allah, Lord of the worlds. O Allah, I ask You for the good of this day, its triumphs and its victories, its light and its blessings and its guidance, and I take refuge in You from the evil of this day and the evil that follows it. (Amsayna wa-amsal-mulku lillahi rabbil-AAalameen, allahumma innee as-aluka khayra hathal-yawm, fat-hahu, wanasrahu, wanoorahu, wabarakatahu, wahudahu, wa-aAAoothu bika min sharri ma feehi, washarri ma baAAdah)</string>
+    <string name="night_thikr7">أَمْسَيْـنا عَلَى فِطْرَةِ الإِسْلامِ ، وَعَلَى كَلِمَةِ الإِخْلاصِ ، وَعَلَى دِينِ نَبِيِّنَا مُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ ، وَعَلَى مِلَّةِ أَبِينَا إِبْرَاهِيمَ حَنِيفًا مُسْلِمًا ، وَمَا كَانَ مِنَ الْمُشْرِكِينَ</string>
+    <string name="night_thikr8">None has the right to be worshipped except Allah, alone, without partner, to Him belongs all sovereignty and praise, and He is over all things omnipotent (10 times). (La ilaha illal-lah, wahdahu la shareeka lah, lahul-mulku walahul-hamd, wahuwa AAala kulli shay-in qadeer (10 times))</string>
+    <string name="night_thikr9">I take refuge in Allah’s perfect words from the evil He has created. (3 times) (aAAoothu bikalimatil-lahit-tammati min sharri ma khalaq (3 times))</string>
+    <string name="help_translate">Help with translation</string>
+</resources>

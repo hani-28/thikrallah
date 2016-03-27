@@ -5,6 +5,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import org.json.JSONException;
@@ -31,6 +32,7 @@ import android.app.Fragment;
 import android.app.AlertDialog.Builder;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -140,7 +142,8 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
             data.putString("com.HMSolutions.thikrallah.datatype",this.getThikrType());
             data.putBoolean("isUserAction",true);
 			this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
-		}
+		
+        }
 
 	}
 	@Override
@@ -172,7 +175,12 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+        Locale locale = new Locale("en");
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config,
+                getBaseContext().getResources().getDisplayMetrics());
 
 
         // Create an instance of GoogleAPIClient.

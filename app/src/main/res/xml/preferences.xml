@@ -91,6 +91,14 @@
             </intent>
         </com.HMSolutions.thikrallah.Utilities.MyPreference>
         <com.HMSolutions.thikrallah.Utilities.MyPreference
+            android:key="help_translate"
+            android:title="@string/help_translate" >
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/translation_link" >
+            </intent>
+        </com.HMSolutions.thikrallah.Utilities.MyPreference>
+        <com.HMSolutions.thikrallah.Utilities.MyPreference
             android:key="rateus"
             android:title="@string/rate" >
             <intent
