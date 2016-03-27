@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="base64RSAPublicKey">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAimbTum9pr+eyRgWusXVWwvq16Ck5t/WXiftbHp2LJGbFmdILC4wEYmjwzd6JEzVLintUmt+cn29X8Plyi2MqWixnIvYL5WY6nGN9FG4FD9Gu/L7zDY9fL7qhMQhi2JLS3sRGQnIy9Cac/fEYy8Amx/18M816tsAZ3H01jQ2lDUaMOUGgc/SSQTg+GvO2GXyIADiCneptZ8btseqy8iOtwSXl2ZN6e6wd+LnHArQ6SYiXGoC3XFDXjWywPC6kqwcp+TsJuvM8QpAfZITl206I3a9srI87SPXoHbeu8Hg90vywH6IeXOs4FrHYtbFW3HLF8I5W7xO3s71y00Vi7M9eTQIDAQAB</string>
+    <string name="add_unit_id">ca-app-pub-2699427816916773/4290152443</string>
+    <string name="ad_unit_id_interstital">ca-app-pub-2699427816916773/9181228848</string>
+    <string name="app_link">https://play.google.com/store/apps/details?id=com.HMSolutions.thikrallah</string>
+    <string name="app_package">com.HMSolutions.thikrallah</string>
+    <string name="contact_developer_uri">mailto:28.hani@gmail.com</string>
+
 
     <string name="app_name">أذكر الله</string>
     <string name="share">شارك</string>
@@ -22,8 +29,6 @@
     <string name="chooseDailyThikr">اختر الذكر اليومي للتذكير</string>
     <string name="RemindmeThroughTheDay">ذكرني بالله على مدى اليوم</string>
     <string name="thanksforupgrade">نشكركم على دعم المبرمج بشراء النسخة الكاملة. يرجى التقديم باية مقترحات او طلب بتحسينات على صفحة البرنامج في سوق الجوجل بلاي</string>
-    <string name="base64RSAPublicKey">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAimbTum9pr+eyRgWusXVWwvq16Ck5t/WXiftbHp2LJGbFmdILC4wEYmjwzd6JEzVLintUmt+cn29X8Plyi2MqWixnIvYL5WY6nGN9FG4FD9Gu/L7zDY9fL7qhMQhi2JLS3sRGQnIy9Cac/fEYy8Amx/18M816tsAZ3H01jQ2lDUaMOUGgc/SSQTg+GvO2GXyIADiCneptZ8btseqy8iOtwSXl2ZN6e6wd+LnHArQ6SYiXGoC3XFDXjWywPC6kqwcp+TsJuvM8QpAfZITl206I3a9srI87SPXoHbeu8Hg90vywH6IeXOs4FrHYtbFW3HLF8I5W7xO3s71y00Vi7M9eTQIDAQAB</string>
-    <string name="add_unit_id">ca-app-pub-2699427816916773/4290152443</string>
     <string name="support_us_request">يرجى الضغط على الدعاية  للمساهمه بدعم المبرمج ماديا او بالدعاء لنا لدعمنا روحيا او الاثنين</string>
     <string name="support_us">ادعمنا</string>
     <string name="whatsnew">&#8226; ينصح بفتح الاعدادات لتغيير اي من الاعدادات الافتراضية.
@@ -31,12 +36,8 @@
 \n&#8226; التبرع للمبرمج يقوم باخفاء الدعايات الى الابد.
 \n&#8226; وفقكم الله الى ذكره وحسن عبادته ولا تنسونا من الدعاء.
 </string>
-    <string name="ad_unit_id_interstital">ca-app-pub-2699427816916773/9181228848</string>
-    <string name="app_link">https://play.google.com/store/apps/details?id=com.HMSolutions.thikrallah</string>
-    <string name="app_package">com.HMSolutions.thikrallah</string>
     <string name="contactUs">تواصل معنا</string>
     <string name="email_Us">تواصل معنا عبر البريد الالكتروني</string>
-    <string name="contact_developer_uri">mailto:28.hani@gmail.com</string>
     <string name="email_subject">مقترحات على برنامج اذكر الله</string>
     <string name="quiet_time">وقت عدم التذكير الصوتي</string>
     <string name="quiet_time_choice">اوقف التذكير الصوتي في هذه الاوقات</string>
@@ -57,8 +58,77 @@
     <string name="prayer5">صلاة العشاء</string>
     <string name="open_settings">افتح الاعدادات</string>
     <string name="my_athkar">اذكاري</string>
+    <string name="cancel">الغاء</string>
     <string name="add_thikr">اضف ذكر</string>
     <string name="add_thikr_hint">اكتب نص ذكرك هنا</string>
     <string name="one_thikr_warning">من الضروري ان يكون على الاقل واحد من الاذكار مفعلا</string>
+
+
+    <string name="notification_sound_and_text">تذكير صوتي وتذكير كتابي</string>
+    <string name="notification_sound_only">تذكير صوتي فقط</string>
+    <string name="notification_text_only">تذكير كتابي فقط</string>
+    <string name="play_athkar_at_notification_time">تشغيل الاذكار صوتيا في وقت الاشعار</string>
+
+    <string name="one_minute">1 دقيقة</string>
+    <string name="five_minutes">5 دقائق</string>
+    <string name="ten_minutes">10 دقائق</string>
+    <string name="fifteen_minutes">15 دقيقة</string>
+    <string name="thirty_minutes">30 دقيقة</string>
+    <string name="one_hour">1 ساعة</string>
+    <string name="two_hours">2 ساعات</string>
+    <string name="three_hours">3 ساعات</string>
+    <string name="four_hours">4 ساعات</string>
+    <string name="five_hours">5 ساعات</string>
+    <string name="six_hours">6 ساعات</string>
+    <string name="seven_hours">7 ساعات</string>
+    <string name="eight_hours">8 ساعات</string>
+    <string name="nine_hours">9 ساعات</string>
+    <string name="ten_hours">10 ساعات</string>
+    <string name="eleven_hours">11 ساعات</string>
+    <string name="twelve_hours">12 ساعات</string>
+
+
+    <string name="thikr1">سبحان الله</string>
+    <string name="thikr2">الحمدلله</string>
+    <string name="thikr3">لا اله الا الله</string>
+    <string name="thikr4">الله اكبر</string>
+    <string name="thikr5">لا حول ولا قوة الا بالله</string>
+    <string name="thikr6">اللهم صل على نبينا محمد</string>
+    <string name="thikr7">استغفرالله</string>
+
+
+    <string name="thikr_kursi">اللّهُ لاَ إِلَهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ لَّهُ مَا فِي السَّمَوَاتِ وَمَا فِي الأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُم وَلاَ يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلاَّ بِمَا شَاء وَسِعَ كُرْسِيُّهُ السَّمَوَاتِ وَالأَرْضَ وَلاَ يَؤُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيم</string>
+    <string name="thikr_iklhlas">قُلۡ هُوَ اللّٰہُ اَحَدٌ. اَللّٰہُ الصَّمَدُ. لَمۡ یَلِدۡۙ وَ لَمۡ یُوۡلَدۡ. وَ لَمۡ یَکُنۡ لَّهّ کُفُوًا اَحَدٌ -3 مرات</string>
+    <string name="thikr_alfalak">قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ. مِنْ شَرِّ مَا خَلَقَ. وَمِنْ شَرِّ غَاسِقٍ إِذَا وَقَبَ. وَمِنْ شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ. وَمِنْ شَرِّ حَاسِدٍ إِذَا حَسَدَ -3 مرات</string>
+    <string name="thikr_alnas">قُل أَعُوذُ بِرَبِّ ٱلنَّاسِ. مَلِكِ ٱلنَّاسِ. إِلَـٰهِ ٱلنَّاسِ. مِن شَرِّ ٱلوَسوَاسِ ٱلخَنَّاسِ. ٱلَّذِي يُوَسۡوِسُ فِى صُدُورِ ٱلنَّاسِ.مِنَ ٱلجِنَّةِ وَٱلنَّاسِ -3 مرات</string>
+    <string name="morning_thikr1">أَصْـبَحْنا وَأَصْـبَحَ المُـلْكُ لله وَالحَمدُ لله ، لا إلهَ إلاّ اللّهُ وَحدَهُ لا شَريكَ لهُ، لهُ المُـلكُ ولهُ الحَمْـد، وهُوَ على كلّ شَيءٍ قدير ، رَبِّ أسْـأَلُـكَ خَـيرَ ما في هـذا اليوم وَخَـيرَ ما بَعْـدَه ، وَأَعـوذُ بِكَ مِنْ شَـرِّ هـذا اليوم وَشَرِّ ما بَعْـدَه، رَبِّ أَعـوذُبِكَ مِنَ الْكَسَـلِ وَسـوءِ الْكِـبَر ، رَبِّ أَعـوذُبِكَ مِنْ عَـذابٍ في النّـارِ وَعَـذابٍ في القَـبْر</string>
+    <string name="morning_thikr2">اللّهُـمَّ بِكَ أَصْـبَحْنا وَبِكَ أَمْسَـينا ، وَبِكَ نَحْـيا وَبِكَ نَمُـوتُ وَإِلَـيْكَ النُّـشُور</string>
+    <string name="thikr_istighfar">اللّهـمَّ أَنْتَ رَبِّـي لا إلهَ إلاّ أَنْتَ ، خَلَقْتَنـي وَأَنا عَبْـدُك ، وَأَنا عَلـى عَهْـدِكَ وَوَعْـدِكَ ما اسْتَـطَعْـت ، أَعـوذُبِكَ مِنْ شَـرِّ ما صَنَـعْت ، أَبـوءُ لَـكَ بِنِعْـمَتِـكَ عَلَـيَّ وَأَبـوءُ بِذَنْـبي فَاغْفـِرْ لي فَإِنَّـهُ لا يَغْـفِرُ الذُّنـوبَ إِلاّ أَنْتَ</string>
+    <string name="morning_thikr3">اللّهُـمَّ إِنِّـي أَصْبَـحْتُ أَُشْـهِدُك ، وَأُشْـهِدُ حَمَلَـةَ عَـرْشِـك ، وَمَلائِكَتِك ، وَجَمـيعَ خَلْـقِك ، أَنَّـكَ أَنْـتَ اللهُ لا إلهَ إلاّ أَنْـتَ وَحْـدَكَ لا شَريكَ لَـك ، وَأَنَّ ُ مُحَمّـداً عَبْـدُكَ وَرَسـولُـك -4 مرات</string>
+    <string name="morning_thikr4">اللّهُـمَّ ما أَصْبَـَحَ بي مِـنْ نِعْـمَةٍ أَو بِأَحَـدٍ مِـنْ خَلْـقِك ، فَمِـنْكَ وَحْـدَكَ لا شريكَ لَـك ، فَلَـكَ الْحَمْـدُ وَلَـكَ الشُّكْـر</string>
+    <string name="thikr_afani">اللّهُـمَّ عافِـني في بَدَنـي ، اللّهُـمَّ عافِـني في سَمْـعي ، اللّهُـمَّ عافِـني في بَصَـري ، لا إلهَ إلاّ أَنْـتَ. اللّهُـمَّ إِنّـي أَعـوذُبِكَ مِنَ الْكُـفر ، وَالفَـقْر ، وَأَعـوذُبِكَ مِنْ عَذابِ القَـبْر ، لا إلهَ إلاّ أَنْـتَ -3 مرات</string>
+    <string name="thikr_hasbi">حَسْبِـيَ اللّهُ لا إلهَ إلاّ هُوَ عَلَـيهِ تَوَكَّـلتُ وَهُوَ رَبُّ العَرْشِ العَظـيم -7 مرات</string>
+    <string name="thikr_alafo">اللّهُـمَّ إِنِّـي أسْـأَلُـكَ العَـفْوَ وَالعـافِـيةَ في الدُّنْـيا وَالآخِـرَة ، اللّهُـمَّ إِنِّـي أسْـأَلُـكَ العَـفْوَ وَالعـافِـيةَ في ديني وَدُنْـيايَ وَأهْـلي وَمالـي ، اللّهُـمَّ اسْتُـرْ عـوْراتي وَآمِـنْ رَوْعاتـي ، اللّهُـمَّ احْفَظْـني مِن بَـينِ يَدَيَّ وَمِن خَلْفـي وَعَن يَمـيني وَعَن شِمـالي ، وَمِن فَوْقـي ، وَأَعـوذُ بِعَظَمَـتِكَ أَن أُغْـتالَ مِن تَحْتـي</string>
+    <string name="thikr_alem">اللّهُـمَّ عالِـمَ الغَـيْبِ وَالشّـهادَةِ فاطِـرَ السّماواتِ وَالأرْضِ رَبَّ كـلِّ شَـيءٍ وَمَليـكَه ، أَشْهَـدُ أَنْ لا إِلـهَ إِلاّ أَنْت ، أَعـوذُ بِكَ مِن شَـرِّ نَفْسـي وَمِن شَـرِّ الشَّيْـطانِ وَشِـرْكِه ، وَأَنْ أَقْتَـرِفَ عَلـى نَفْسـي سوءاً أَوْ أَجُـرَّهُ إِلـى مُسْـلِم</string>
+    <string name="thikr_wikaya">بِسـمِ اللهِ الذي لا يَضُـرُّ مَعَ اسمِـهِ شَيءٌ في الأرْضِ وَلا في السّمـاءِ وَهـوَ السّمـيعُ العَلـيم -3 مرات</string>
+    <string name="thikr_istighatha">يا حَـيُّ يا قَيّـومُ بِـرَحْمَـتِكِ أَسْتَـغـيث ، أَصْلِـحْ لي شَـأْنـي كُلَّـه ، وَلا تَكِلـني إِلى نَفْـسي طَـرْفَةَ عَـين</string>
+    <string name="morning_thikr5">أَصْبَـحْـنا وَأَصْبَـحْ المُـلكُ للهِ رَبِّ العـالَمـين ، اللّهُـمَّ إِنِّـي أسْـأَلُـكَ خَـيْرَ هـذا الـيَوْم ، فَـتْحَهُ ، وَنَصْـرَهُ ، وَنـورَهُ وَبَـرَكَتَـهُ ، وَهُـداهُ ، وَأَعـوذُ بِـكَ مِـنْ شَـرِّ ما فـيهِ وَشَـرِّ ما بَعْـدَه -3 مرات</string>
+    <string name="morning_thikr6">أَصْبَحْنَا عَلَى فِطْرَةِ الإِسْلامِ ، وَعَلَى كَلِمَةِ الإِخْلاصِ ، وَعَلَى دِينِ نَبِيِّنَا مُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ ، وَعَلَى مِلَّةِ أَبِينَا إِبْرَاهِيمَ حَنِيفًا مُسْلِمًا ، وَمَا كَانَ مِنَ الْمُشْرِكِينَ</string>
+    <string name="thikr_subhan">سُبْحـانَ اللهِ وَبِحَمْـدِهِ عَدَدَ خَلْـقِه ، وَرِضـا نَفْسِـه ، وَزِنَـةَ عَـرْشِـه ، وَمِـدادَ كَلِمـاتِـه -3 مرات</string>
+    <string name="morning_thikr7">اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا وَرِزْقًا طَيِّبًا وَعَمَلا مُتَقَبَّلا</string>
+    <string name="thikr_taoba">أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ -3 مرات</string>
+    <string name="thikr_salah">اللهم صل وسلم على نبينا محمد -10 مرات</string>
+
+
+
+    <string name="night_thikr1">أَمْسَيْـنا وَأَمْسـى المـلكُ لله وَالحَمدُ لله ، لا إلهَ إلاّ اللّهُ وَحدَهُ لا شَريكَ لهُ، لهُ المُـلكُ ولهُ الحَمْـد، وهُوَ على كلّ شَيءٍ قدير ، رَبِّ أسْـأَلُـكَ خَـيرَ ما في هـذهِ اللَّـيْلَةِ وَخَـيرَ ما بَعْـدَهـا ، وَأَعـوذُ بِكَ مِنْ شَـرِّ ما في هـذهِ اللَّـيْلَةِ وَشَرِّ ما بَعْـدَهـا ، رَبِّ أَعـوذُبِكَ مِنَ الْكَسَـلِ وَسـوءِ الْكِـبَر ، رَبِّ أَعـوذُبِكَ مِنْ عَـذابٍ في النّـارِ وَعَـذابٍ في القَـبْر</string>
+    <string name="night_thikr2">اللّهُـمَّ بِكَ أَمْسَـينا، وَبِكَ أَصْـبَحْنا، وَبِكَ نَحْـيا، وَبِكَ نَمـوتُ وَإِلَـيْكَ النُّـشُور</string>
+    <string name="night_thikr3">اللّهُـمَّ إِنِّـي أَمسيتُ أَُشْـهِدُك ، وَأُشْـهِدُ حَمَلَـةَ عَـرْشِـك ، وَمَلائِكَتِك ، وَجَمـيعَ خَلْـقِك ، أَنَّـكَ أَنْـتَ اللهُ لا إلهَ إلاّ أَنْـتَ وَحْـدَكَ لا شَريكَ لَـك ، وَأَنَّ ُ مُحَمّـداً عَبْـدُكَ وَرَسـولُـك -4 مرات</string>
+    <string name="night_thikr4">اللّهُـمَّ ما أَمسى بي مِـنْ نِعْـمَةٍ أَو بِأَحَـدٍ مِـنْ خَلْـقِك ، فَمِـنْكَ وَحْـدَكَ لا شريكَ لَـك ، فَلَـكَ الْحَمْـدُ وَلَـكَ الشُّكْـر</string>
+    <string name="night_thikr5">رَضيـتُ بِاللهِ رَبَّـاً وَبِالإسْلامِ ديـناً وَبِمُحَـمَّدٍ صلى الله عليه وسلم نَبِيّـاً -3 مرات</string>
+    <string name="night_thikr6">أَمْسَيْنا وَأَمْسَى الْمُلْكُ للهِ رَبُّ الْعَالَمَيْنِ، اللَّهُمَّ إِنَّي أسْأَلُكَ خَيْرَ هَذَه اللَّيْلَةِ فَتْحُهَا وَنُصَرُّهَا، وَنورَهُا و برَكَتَهُا، وَهُداهُا، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فيهِا وَشَرَّ مَا بَعْدَهَا</string>
+    <string name="night_thikr7">أَمْسَيْـنا عَلَى فِطْرَةِ الإِسْلامِ ، وَعَلَى كَلِمَةِ الإِخْلاصِ ، وَعَلَى دِينِ نَبِيِّنَا مُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ ، وَعَلَى مِلَّةِ أَبِينَا إِبْرَاهِيمَ حَنِيفًا مُسْلِمًا ، وَمَا كَانَ مِنَ الْمُشْرِكِينَ</string>
+    <string name="night_thikr8">لَا إلَه إلّا اللهُ وَحَدُّهُ لَا شَرِيكَ لَهُ، لَهُ الْمَلِكَ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلُّ شَيْءِ قَدِيرِ -10 مرات</string>
+    <string name="night_thikr9">اعـوذُبِكَلِمـاتِ اللّهِ التّـامّـاتِ مِنْ شَـرِّ ما خَلَـق -3 مرات</string>
 
 </resources>

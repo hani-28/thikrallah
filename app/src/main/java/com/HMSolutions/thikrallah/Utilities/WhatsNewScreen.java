@@ -40,7 +40,7 @@ public class WhatsNewScreen {
             if (packageInfo.versionCode != lastVersionCode) {
                 Log.i(LOG_TAG, "versionCode " + packageInfo.versionCode + "is different from the last known version " + lastVersionCode);
  
-                final String title = mActivity.getString(R.string.app_name) + " v" + packageInfo.versionName;
+                final String title = mActivity.getString(R.string.app_name) + " " + packageInfo.versionName;
  
                 final String message = mActivity.getString(R.string.whatsnew);
  
@@ -48,7 +48,7 @@ public class WhatsNewScreen {
                 AlertDialog.Builder builder = new AlertDialog.Builder(mActivity)
                         .setTitle(title)
                         .setMessage(message);
-                builder.setNegativeButton(android.R.string.cancel, new Dialog.OnClickListener() {
+                builder.setNegativeButton(R.string.cancel, new Dialog.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialogInterface, int which) {
