@@ -5,8 +5,10 @@ package com.HMSolutions.thikrallah;
 import com.HMSolutions.thikrallah.Fragments.PrefsFragment;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MenuItem;
 
@@ -19,7 +21,8 @@ public class SetPreferenceActivity extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-        Locale locale = new Locale("en");
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Locale locale = new Locale(mPrefs.getString("language","ar"));
         Locale.setDefault(locale);
         Configuration config = new Configuration();
         config.locale = locale;

@@ -142,7 +142,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
             data.putString("com.HMSolutions.thikrallah.datatype",this.getThikrType());
             data.putBoolean("isUserAction",true);
 			this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
-		
+
         }
 
 	}
@@ -175,7 +175,8 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        Locale locale = new Locale("en");
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Locale locale = new Locale(mPrefs.getString("language","ar"));
         Locale.setDefault(locale);
         Configuration config = new Configuration();
         config.locale = locale;
@@ -195,21 +196,18 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 
 
 		setContentView(R.layout.activity_main);
-		PreferenceManager.setDefaultValues (this.getApplicationContext(), R.xml.preferences, false);
+		PreferenceManager.setDefaultValues(this.getApplicationContext(), R.xml.preferences, false);
 		 
 		adsListener=new myAdListener(this);
 		appLink="\n"+this.getResources().getString(R.string.app_link);
 
 
-		mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        if (mPrefs.getBoolean("isDataBasePopulated",false)==false){
-            MyDBHelper db = new MyDBHelper(this);
-            db.getReadableDatabase();
-            db.close();
-            db.populateInitialThikr();
-            mPrefs.edit().putBoolean("isDataBasePopulated",true).commit();
-        }
-		Intent intent1 = new Intent("com.HMSolutions.thikrallah.Notification.ThikrBootReceiver.android.action.broadcast");  
+
+        populateBuiltinDatabase();
+
+
+
+		Intent intent1 = new Intent("com.HMSolutions.thikrallah.Notification.ThikrBootReceiver.android.action.broadcast");
 		new WhatsNewScreen(this).show();
 		AppRater.app_launched(this);
 		if (mPrefs.getBoolean("isFirstLaunch", true)){
@@ -285,10 +283,26 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
                 launchFragment(new ThikrFragment(), intent.getExtras());
             }
 		}
+        boolean isFromSettings=intent.getBooleanExtra("FromPreferenceActivity", false);
+        if (isFromSettings==true){
+            intent = new Intent();
+            intent.setClass(MainActivity.this, SetPreferenceActivity.class);
+            startActivityForResult(intent, 0);
+        }
 
 	}
 
-	@Override
+    private void populateBuiltinDatabase() {
+        MyDBHelper db = new MyDBHelper(this);
+        db.getReadableDatabase();
+        db.close();
+        if(db.getAllBuiltinThikrs().size()==0){
+            db.populateInitialThikr();
+        }
+
+    }
+
+    @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 		// Inflate the menu; this adds items to the action bar if it is present.

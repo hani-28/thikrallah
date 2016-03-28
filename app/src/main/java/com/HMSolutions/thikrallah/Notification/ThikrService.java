@@ -49,6 +49,9 @@ public class ThikrService extends IntentService  {
             int ThikrCount = this.getResources().getStringArray(R.array.GeneralThikr).length;
             MyDBHelper db = new MyDBHelper(this);
             UserThikr thikr=db.getRandomThikr();
+            if (thikr==null){
+                return;
+            }
             int fileNumber=Integer.parseInt(thikr.getFile());
 			//fire text chat head service
 			Intent intentChatHead=new Intent(this.getApplicationContext(), ChatHeadService.class);

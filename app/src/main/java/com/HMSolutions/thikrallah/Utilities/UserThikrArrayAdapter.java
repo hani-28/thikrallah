@@ -124,7 +124,7 @@ public class UserThikrArrayAdapter extends ArrayAdapter<UserThikr> implements Co
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         MyDBHelper db=new MyDBHelper(this.getContext());
-        if(db.getAllEnabledThikrs().size()>1|isChecked==true){
+        if(db.getAllBuiltinEnabledThikrs().size()>1 || db.getThikr((long)buttonView.getTag()).isBuiltIn()==false || isChecked==true){
             db.updateIsEnabled((long) buttonView.getTag(), isChecked);
             updateData();
             this.notifyDataSetChanged();

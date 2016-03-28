@@ -18,7 +18,7 @@ import java.util.Random;
  * Created by hani on 3/25/16.
  */
 public class MyDBHelper  extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "MyAthkar.db";
     private static final String TEXT_TYPE = " TEXT";
     private static final String COMMA_SEP = ",";
@@ -39,6 +39,7 @@ public class MyDBHelper  extends SQLiteOpenHelper {
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + TABLE_NAME;
     private Context context;
+    private ArrayList<UserThikr> backupUserThikrs;
 
     public MyDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -62,6 +63,12 @@ public class MyDBHelper  extends SQLiteOpenHelper {
         for (int i=0;i<generalThikrs.length;i++){
             this.addThikr(generalThikrs[i],1,String.valueOf(i+1));
         }
+        if (backupUserThikrs != null) {
+            for (int i=0;i<backupUserThikrs.size();i++){
+                this.addThikr(backupUserThikrs.get(i).getThikrText(),0,"1");
+            }
+        }
+
     }
 
     /**
@@ -86,6 +93,8 @@ public class MyDBHelper  extends SQLiteOpenHelper {
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        Log.d("testing123","on upgrade called");
+        backupUserThikrs = getAllUserThikrs(db);
         db.execSQL(SQL_DELETE_ENTRIES);
         onCreate(db);
     }
@@ -115,8 +124,8 @@ public class MyDBHelper  extends SQLiteOpenHelper {
 // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
         values.put(THIKR_COLUMN, thikr);
+        values.put(IS_BUILTIN_COLUMN,isBuiltIn);
         values.put(ENABLED_COLUMN, 1);
-        values.put(IS_BUILTIN_COLUMN, 1);
         values.put(FILE_PATH, filePath);
 
 // Insert the new row, returning the primary key value of the new row
@@ -128,18 +137,18 @@ public class MyDBHelper  extends SQLiteOpenHelper {
         db.close();
         return newRowId;
     }
-    public void getThikr(long id){
+    public UserThikr getThikr(long id){
         SQLiteDatabase db = this.getReadableDatabase();
 
 // Define a projection that specifies which columns from the database
 // you will actually use after this query.
-        String[] projection = {THIKR_COLUMN};
+        String[] projection = {THIKR_COLUMN,ID_COLUMN,ENABLED_COLUMN,IS_BUILTIN_COLUMN,FILE_PATH};
 // Define 'where' part of query.
         String selection = ID_COLUMN+" LIKE ?";
 // Specify arguments in placeholder order.
         String[] selectionArgs = { String.valueOf(id) };
 // Issue SQL statement.
-        Cursor c = db.query(
+        Cursor cursor = db.query(
                 TABLE_NAME,  // The table to query
                 projection,                               // The columns to return
                 selection,                                // The columns for the WHERE clause
@@ -148,7 +157,23 @@ public class MyDBHelper  extends SQLiteOpenHelper {
                 null,                                     // don't filter by row groups
                 null                                 // The sort order
         );
+        if (cursor .moveToFirst()) {
+            String thikr = cursor.getString(cursor.getColumnIndex(THIKR_COLUMN));
+            boolean isEnabled = cursor.getInt(cursor.getColumnIndex(ENABLED_COLUMN))==1;
+            boolean isBuiltIn = cursor.getInt(cursor.getColumnIndex(IS_BUILTIN_COLUMN)) == 1;
+            id = cursor.getLong(cursor.getColumnIndex(ID_COLUMN));
+            String  file=cursor.getString(cursor.getColumnIndex(FILE_PATH));
+            if(isBuiltIn==true){
+                thikr=this.context.getResources().getStringArray(R.array.GeneralThikr)[Integer.parseInt(file)-1];
+            }
+            UserThikr requested_thikr = new UserThikr(id, thikr, isEnabled, isBuiltIn, file);
+            db.close();
+            return requested_thikr;
+
+
+        }
         db.close();
+        return null;
     }
     public void deleteThikr(long id){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -171,7 +196,36 @@ public class MyDBHelper  extends SQLiteOpenHelper {
         String file="";
         ArrayList<UserThikr> list=new ArrayList<UserThikr>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor  cursor = db.rawQuery("select * from "+TABLE_NAME, null);
+        Cursor  cursor = db.rawQuery("select * from " + TABLE_NAME, null);
+        if (cursor .moveToFirst()) {
+
+            while (cursor.isAfterLast() == false) {
+                thikr = cursor.getString(cursor
+                        .getColumnIndex(THIKR_COLUMN));
+                isEnabled = cursor.getInt(cursor.getColumnIndex(ENABLED_COLUMN))==1;
+                isBuiltIn = cursor.getInt(cursor.getColumnIndex(IS_BUILTIN_COLUMN)) == 1;
+                id = cursor.getLong(cursor.getColumnIndex(ID_COLUMN));
+                file=cursor.getString(cursor.getColumnIndex(FILE_PATH));
+                if(isBuiltIn==true){
+                    thikr=this.context.getResources().getStringArray(R.array.GeneralThikr)[Integer.parseInt(file)-1];
+                }
+                list.add(new UserThikr(id,thikr,isEnabled,isBuiltIn,file));
+                cursor.moveToNext();
+            }
+        }
+        db.close();
+        return list;
+    }
+    public ArrayList<UserThikr> getAllBuiltinEnabledThikrs(){
+        String thikr="";
+        boolean isEnabled=true;
+        boolean isBuiltIn;
+        long id=-1;
+        String file="";
+        ArrayList<UserThikr> list=new ArrayList<UserThikr>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_NAME, null, ENABLED_COLUMN + " LIKE '%" + 1 + "%'" + " AND " + IS_BUILTIN_COLUMN + " LIKE '%" + 1 + "%'", null, null, null, null);
+
         if (cursor .moveToFirst()) {
 
             while (cursor.isAfterLast() == false) {
@@ -184,10 +238,12 @@ public class MyDBHelper  extends SQLiteOpenHelper {
                 list.add(new UserThikr(id,thikr,isEnabled,isBuiltIn,file));
                 cursor.moveToNext();
             }
+            Log.d("testing123","enabledThikrs count is "+list.size());
         }
         db.close();
         return list;
     }
+
     public ArrayList<UserThikr> getAllEnabledThikrs(){
         String thikr="";
         boolean isEnabled=true;
@@ -210,7 +266,61 @@ public class MyDBHelper  extends SQLiteOpenHelper {
                 list.add(new UserThikr(id,thikr,isEnabled,isBuiltIn,file));
                 cursor.moveToNext();
             }
+            Log.d("testing123", "enabledThikrs count is " + list.size());
+        }
+        db.close();
+        return list;
+    }
+    public ArrayList<UserThikr> getAllUserThikrs(SQLiteDatabase db){
+        String thikr="";
+        boolean isEnabled=true;
+        boolean isBuiltIn;
+        long id=-1;
+        String file="";
+        ArrayList<UserThikr> list=new ArrayList<UserThikr>();
+
+        Cursor cursor = db.query(TABLE_NAME, null, IS_BUILTIN_COLUMN + " LIKE '%" + 0 + "%'", null, null, null, null);
+
+        if (cursor .moveToFirst()) {
+
+            while (cursor.isAfterLast() == false) {
+                thikr = cursor.getString(cursor
+                        .getColumnIndex(THIKR_COLUMN));
+                isEnabled = cursor.getInt(cursor.getColumnIndex(ENABLED_COLUMN))==1;
+                isBuiltIn = cursor.getInt(cursor.getColumnIndex(IS_BUILTIN_COLUMN)) == 1;
+                id = cursor.getLong(cursor.getColumnIndex(ID_COLUMN));
+                file=cursor.getString(cursor.getColumnIndex(FILE_PATH));
+                list.add(new UserThikr(id,thikr,isEnabled,isBuiltIn,file));
+                cursor.moveToNext();
+            }
             Log.d("testing123","enabledThikrs count is "+list.size());
+        }
+
+        return list;
+    }
+    public ArrayList<UserThikr> getAllBuiltinThikrs(){
+        String thikr="";
+        boolean isEnabled=true;
+        boolean isBuiltIn;
+        long id=-1;
+        String file="";
+        ArrayList<UserThikr> list=new ArrayList<UserThikr>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_NAME, null, IS_BUILTIN_COLUMN + " LIKE '%" + 1 + "%'", null, null, null, null);
+
+        if (cursor .moveToFirst()) {
+
+            while (cursor.isAfterLast() == false) {
+                thikr = cursor.getString(cursor
+                        .getColumnIndex(THIKR_COLUMN));
+                isEnabled = cursor.getInt(cursor.getColumnIndex(ENABLED_COLUMN))==1;
+                isBuiltIn = cursor.getInt(cursor.getColumnIndex(IS_BUILTIN_COLUMN)) == 1;
+                id = cursor.getLong(cursor.getColumnIndex(ID_COLUMN));
+                file=cursor.getString(cursor.getColumnIndex(FILE_PATH));
+                list.add(new UserThikr(id,thikr,isEnabled,isBuiltIn,file));
+                cursor.moveToNext();
+            }
+            Log.d("testing123", "enabledThikrs count is " + list.size());
         }
         db.close();
         return list;
@@ -221,8 +331,11 @@ public class MyDBHelper  extends SQLiteOpenHelper {
 
         // nextInt is normally exclusive of the top value,
         // so add 1 to make it inclusive
-        int randomThikr = rand.nextInt(allEnabledThikrs.size());
-        return allEnabledThikrs.get(randomThikr);
+        if(allEnabledThikrs.size()!=0){
+            int randomThikr = rand.nextInt(allEnabledThikrs.size());
+            return allEnabledThikrs.get(randomThikr);
+        }
+        return null;
     }
     public void updateIsEnabled(long id,boolean enabled){
         SQLiteDatabase db = this.getWritableDatabase();

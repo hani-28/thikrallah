@@ -1,11 +1,17 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-
+    <PreferenceCategory android:title="@string/language" >
+        <com.HMSolutions.thikrallah.Utilities.MyListPreference
+            android:defaultValue="ar"
+            android:entries="@array/languagelist"
+            android:entryValues="@array/languagelistValues"
+            android:key="language"
+            android:title="@string/language" />
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/RemindMeSettings" >
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="RemindmeThroughTheDay"
             android:title="@string/RemindmeThroughTheDay" />
-
         <com.HMSolutions.thikrallah.Utilities.MyListPreference
             android:defaultValue="30"
             android:entries="@array/ReminderIncrementOptions"

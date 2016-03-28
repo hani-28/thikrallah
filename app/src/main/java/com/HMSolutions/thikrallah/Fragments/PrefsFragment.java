@@ -1,9 +1,12 @@
 package com.HMSolutions.thikrallah.Fragments;
 
+import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
+import com.HMSolutions.thikrallah.SetPreferenceActivity;
 import com.HMSolutions.thikrallah.Utilities.TimePreference;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
@@ -117,6 +120,14 @@ public class PrefsFragment extends PreferenceFragment implements OnSharedPrefere
 
 		Preference pref = findPreference(key);
 		updatePrefSummary(pref);
+
+        if (key.equalsIgnoreCase("language")){
+            Intent intent=new Intent();
+            intent.setClass(this.getActivity(), MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.putExtra("FromPreferenceActivity",true);
+            this.startActivity(intent);
+        }
 	
 
 	}
