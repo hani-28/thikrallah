@@ -182,7 +182,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 Log.d("media1", "increment called");
                 int increment = intent.getExtras().getInt("INCREMENT", 1);
                 this.setCurrentPlaying(this.getCurrentPlaying() + increment);
-
+                currentThikrCounter=0;
                 this.playAll();
                 updateActions();
                 break;
@@ -204,7 +204,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 //         .setState(PlaybackStateCompat.STATE_PLAYING, 0, 0)
                 //       .setActions(PlaybackStateCompat.ACTION_PAUSE | PlaybackStateCompat.ACTION_STOP)
                 //     .build());
-
+                currentThikrCounter=0;
                 this.playAll();
                 updateActions();
                 //   if ((TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE)).getCallState()!=TelephonyManager.CALL_STATE_OFFHOOK;
@@ -221,6 +221,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 //        .setState(PlaybackStateCompat.STATE_PLAYING, 0, 0)
                 //        .setActions(PlaybackStateCompat.ACTION_PAUSE | PlaybackStateCompat.ACTION_STOP)
                 //        .build());
+                currentThikrCounter=0;
                 this.play(file);
                 updateActions();
                 break;
