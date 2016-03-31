@@ -81,7 +81,7 @@ public class MainFragment extends Fragment {
 			public void onClick(View v) {
 				Bundle data=new Bundle();
 				data.putString("DataType", MainActivity.DATA_TYPE_DAY_THIKR);
-				mCallback.launchFragment(new ThikrFragment(), data);
+				mCallback.launchFragment(new ThikrFragment(), data,"ThikrFragment");
 			}});
 		
 		button_night_thikr.setOnClickListener(new OnClickListener(){
@@ -89,13 +89,13 @@ public class MainFragment extends Fragment {
 			public void onClick(View v) {
 				Bundle data=new Bundle();
 				data.putString("DataType", MainActivity.DATA_TYPE_NIGHT_THIKR);
-				mCallback.launchFragment(new ThikrFragment(),data);	
+				mCallback.launchFragment(new ThikrFragment(),data,"ThikrFragment");
 			}});
         button_my_athkar.setOnClickListener(new OnClickListener(){
             @Override
             public void onClick(View v) {
                 Bundle data=new Bundle();
-                mCallback.launchFragment(new MyAthkarFragment(),data);
+                mCallback.launchFragment(new MyAthkarFragment(),data,"MyAthkarFragment");
             }});
 		return view;
 	}

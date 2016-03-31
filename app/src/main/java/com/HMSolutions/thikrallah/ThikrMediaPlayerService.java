@@ -2,6 +2,7 @@ package com.HMSolutions.thikrallah;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,8 +23,12 @@ import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Binder;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
 import android.os.PowerManager;
+import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
@@ -33,6 +38,7 @@ import android.os.Vibrator;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.widget.Toast;
 
 public class ThikrMediaPlayerService extends Service implements OnCompletionListener,
         AudioManager.OnAudioFocusChangeListener {
@@ -58,8 +64,76 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     private boolean overRideRespectMute=false;
     private boolean isUserAction=true;
     private NotificationCompat.Builder notificationBuilder;
+    ArrayList<Messenger> mClients = new ArrayList<Messenger>(); // Keeps track of all current registered clients.
+    /** Command to the service to display a message */
+    static final int MSG_CURRENT_PLAYING = 100;
+    static final int MSG_UNBIND = 99;
+
+    /**
+     * Handler of incoming messages from clients.
+     */
+    class IncomingHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            Log.d("testing321","service recieved message what="+msg.what);
+            Message msg2;
+            switch (msg.what) {
+                case MSG_CURRENT_PLAYING:
+                    mClients.clear();
+                    mClients.add(msg.replyTo);
+                    sendMessageToUI(MSG_CURRENT_PLAYING, getCurrentPlaying());
+                   // Toast.makeText(getApplicationContext(), "hello! 1", Toast.LENGTH_SHORT).show();
+                    msg2= Message.obtain(null, ThikrMediaPlayerService.MSG_CURRENT_PLAYING, 0, 0);
+                  //  try {
+                       // msg.replyTo.send(msg2);
+                  //  } catch (RemoteException e) {
+                   //     e.printStackTrace();
+                  //  }
+                    break;
+                default:
+                    Toast.makeText(getApplicationContext(), "hello! 2", Toast.LENGTH_SHORT).show();
+                    msg2= Message.obtain(null, ThikrMediaPlayerService.MSG_CURRENT_PLAYING, 0, 0);
+                    try {
+                        msg.replyTo.send(msg2);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                    super.handleMessage(msg);
+            }
+        }
+    }
 
 
+    /**
+     * Target we publish for clients to send messages to IncomingHandler.
+     */
+    final Messenger mMessenger = new Messenger(new IncomingHandler());
+
+
+    private void sendMessageToUI(int what,int intvaluetosend) {
+        for (int i=mClients.size()-1; i>=0; i--) {
+            try {
+                // Send data as an Integer
+                mClients.get(i).send(Message.obtain(null, what, intvaluetosend, 0));
+
+
+            }
+            catch (RemoteException e) {
+                // The client is dead. Remove it from the list; we are going through the list from back to front so this is safe to do inside the loop.
+                mClients.remove(i);
+            }
+        }
+    }
+
+    /**
+     * When binding to the service, we return an interface to our messenger
+     * for sending messages to the service.
+     */
+    @Override
+    public IBinder onBind(Intent intent) {
+
+        return mMessenger.getBinder();
+    }
     @Override
     public void onCreate() {
         super.onCreate();
@@ -233,12 +307,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         return Service.START_NOT_STICKY;
     }
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        // TODO Auto-generated method stub
 
-        return null;//hanihanimBinder;
-    }
 
 
     /** method for clients */
@@ -256,6 +325,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
      */
     public void setCurrentPlaying(int icurrentPlaying) {
         currentPlaying = icurrentPlaying;
+        //sendMessageToUI(MSG_CURRENT_PLAYING,currentPlaying);
     }
 
     public int getAudioFocusRequestType() {
@@ -405,6 +475,8 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             player = null;
         }
         am.abandonAudioFocus(this);
+        this.sendMessageToUI(MSG_CURRENT_PLAYING,-99);
+        this.sendMessageToUI(MSG_UNBIND,MSG_UNBIND);
         this.stopForeground(true);
         this.stopSelf();
         super.onDestroy();
@@ -600,6 +672,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
     }
     private void startPlayerIfAllowed(){
+
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         boolean isRespectMute = sharedPrefs.getBoolean("mute_thikr_when_ringer_mute", true);
         if ((am.getRingerMode() == AudioManager.RINGER_MODE_SILENT || am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE)
@@ -611,6 +684,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             }
 
         }else{
+            sendMessageToUI(MSG_CURRENT_PLAYING,currentPlaying);
             player.start();
         }
     }

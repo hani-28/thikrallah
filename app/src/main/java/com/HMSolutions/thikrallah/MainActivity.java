@@ -1,12 +1,14 @@
 package com.HMSolutions.thikrallah;
 
 
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,11 +32,19 @@ import com.google.android.gms.ads.AdView;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.AlertDialog.Builder;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
@@ -51,8 +61,7 @@ import com.google.android.gms.location.LocationServices;
 
 public class MainActivity extends Activity implements MainInterface,GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,LocationListener {
 	private String appLink;
-	ThikrMediaPlayerService mediaService;
-	boolean mBound = false;
+
 	public static final String DATA_TYPE_NIGHT_THIKR="night";
 	public static final String DATA_TYPE_DAY_THIKR="morning";
 	public static final String DATA_TYPE_GENERAL_THIKR="general";
@@ -66,6 +75,99 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 	private final static String SKU_PREMIUM = "premiumupgrade";
 	private String base64RSAPublicKey="";
 	static final int RC_REQUEST = 9648253;
+    private Context mcontext;
+
+    Messenger mServiceThikrMediaPlayerMessenger = null;
+    boolean mIsBound;
+    final Messenger mMessenger = new Messenger(new IncomingHandler());
+
+    class IncomingHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            Log.d("testing321","message recieved what="+msg.what+"arg1="+msg.arg1);
+            switch (msg.what) {
+                case ThikrMediaPlayerService.MSG_CURRENT_PLAYING:
+                    Log.d("testing321","position"+msg.arg1);
+                    sendPositionToThikrFragment(msg.arg1);
+                    break;
+                case ThikrMediaPlayerService.MSG_UNBIND:
+                    unbindtoMediaService();
+                    break;
+                default:
+                    super.handleMessage(msg);
+            }
+        }
+    }
+    private void sendPositionToThikrFragment(int position){
+        ThikrFragment thikrFragment = (ThikrFragment)this.getFragmentManager().findFragmentByTag("ThikrFragment");
+        if (thikrFragment != null && thikrFragment.isVisible()) {
+            thikrFragment.setCurrentlyPlaying(position);
+        }
+    }
+    private ServiceConnection mConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            mServiceThikrMediaPlayerMessenger = new Messenger(service);
+            mIsBound=true;
+            Log.d("testing123","connected. binded? mIsBound set to true");
+            try {
+                Message msg = Message.obtain(null, ThikrMediaPlayerService.MSG_CURRENT_PLAYING);
+                msg.replyTo = mMessenger;
+                mServiceThikrMediaPlayerMessenger.send(msg);
+                requestMediaServiceStatus();
+                Log.d("testing321","requested status");
+            }
+            catch (RemoteException e) {
+
+            }
+        }
+
+        public void onServiceDisconnected(ComponentName className) {
+            // This is called when the connection with the service has been unexpectedly disconnected - process crashed.
+            unbindtoMediaService();
+            mService = null;
+            mIsBound=false;
+            Log.d("testing123","Disconnected. unbided? mIsBound set to false");
+        }
+    };
+    private void requestMediaServiceStatus(){
+        if (mIsBound) {
+            if (mServiceThikrMediaPlayerMessenger != null) {
+                try {
+                    Message msg = Message.obtain(null, ThikrMediaPlayerService.MSG_CURRENT_PLAYING, 0, 0);
+                    msg.replyTo = mMessenger;
+                    mServiceThikrMediaPlayerMessenger.send(msg);
+                }
+                catch (RemoteException e) {
+                }
+            }
+        }
+    }
+
+    private void unbindtoMediaService(){
+        // unbind to the service
+        Log.d("testing123","unbind called. mIsBound ="+mIsBound);
+        if (mIsBound==true){
+            unbindService(mConnection);
+        }
+
+
+        mIsBound=false;
+
+    }
+    private void bindtoMediaService(){
+        // Bind to the service
+        if (mIsBound==false){
+            try{
+                mIsBound=bindService(new Intent(this, ThikrMediaPlayerService.class), mConnection,
+                        Context.BIND_ABOVE_CLIENT);
+
+            }catch(Exception e){
+                mIsBound=false;
+            }
+
+        }
+        Log.d("testing123","bind called. mIsBound"+mIsBound);
+    }
 	// Listener that's called when we finish querying the items and subscriptions we own
 	IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
 		public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
@@ -135,13 +237,16 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 	protected void onStart() {
      //   mGoogleApiClient.connect();
         super.onStart();
+        bindtoMediaService();
 
 	}
 	public void sendActionToMediaService(Bundle data){
 		if (data!=null){
-            data.putString("com.HMSolutions.thikrallah.datatype",this.getThikrType());
-            data.putBoolean("isUserAction",true);
-			this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+            data.putString("com.HMSolutions.thikrallah.datatype", this.getThikrType());
+            data.putBoolean("isUserAction", true);
+            this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+            bindtoMediaService();
+            this.requestMediaServiceStatus();
 
         }
 
@@ -175,6 +280,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        mcontext=this.getApplicationContext();
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         Locale locale = new Locale(mPrefs.getString("language","ar"));
         Locale.setDefault(locale);
@@ -280,7 +386,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 		boolean isNotification=intent.getBooleanExtra("FromNotification", false);
 		if (isNotification==true){
             if(!intent.getExtras().getString("DataType").equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)){
-                launchFragment(new ThikrFragment(), intent.getExtras());
+                launchFragment(new ThikrFragment(), intent.getExtras(),"ThikrFragment");
             }
 		}
         boolean isFromSettings=intent.getBooleanExtra("FromPreferenceActivity", false);
@@ -376,10 +482,10 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 	}
 
 	@Override
-	public void launchFragment(Fragment iFragment, Bundle args) {
+	public void launchFragment(Fragment iFragment, Bundle args,String tag) {
 		iFragment.setArguments(args);
 		android.app.FragmentTransaction fragmentTransaction1 = this.getFragmentManager().beginTransaction();
-		fragmentTransaction1.replace(R.id.container, iFragment);
+		fragmentTransaction1.replace(R.id.container, iFragment,tag);
 		fragmentTransaction1.addToBackStack(null);
 		fragmentTransaction1.commit();
 
@@ -394,8 +500,23 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 	@Override
 	public void onPause(){
       //  stopLocationUpdates();
+        unbindtoMediaService();
 		super.onPause();
+
 	}
+    @Override
+    protected void onResume() {
+        unbindtoMediaService();
+        super.onResume();
+
+    }
+    @Override
+    protected void onDestroy() {
+
+        unbindtoMediaService();
+        super.onDestroy();
+
+    }
 	@Override
 	public void onBackPressed()
 	{

@@ -2,11 +2,15 @@ package com.HMSolutions.thikrallah.Fragments;
 
 import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.R;
+import com.HMSolutions.thikrallah.Utilities.CustumThickerAdapter;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
 
 import android.app.Activity;
 import android.app.ListFragment;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class ThikrFragment extends ListFragment implements OnClickListener {
 	
@@ -31,7 +36,9 @@ public class ThikrFragment extends ListFragment implements OnClickListener {
 	public int currentThikrCounter=0;
 	
 	private MainInterface mCallback;
-	/**
+    private CustumThickerAdapter adapter;
+
+    /**
 	 * @return the currentPlaying
 	 */
 	public int getCurrentPlaying() {
@@ -76,9 +83,9 @@ public class ThikrFragment extends ListFragment implements OnClickListener {
 		playPrevious = (Button) view.findViewById(R.id.button_previous);
 		playPrevious.setOnClickListener(this);
 		thickerArray=getThikrArray();
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.row_format, R.id.toptext1);
+        adapter = new CustumThickerAdapter(getActivity(), R.layout.row_format,thickerArray );
 		setListAdapter(adapter); 
-		adapter.addAll(thickerArray);
+		//adapter.addAll(thickerArray);
 	
 
 
@@ -100,12 +107,14 @@ public class ThikrFragment extends ListFragment implements OnClickListener {
 				mCallback.pausePlayer();
 			}else{
 				mCallback.resetPlayer();
-				mCallback.setCurrentPlaying(position+1);
+				mCallback.setCurrentPlaying(position + 1);
+                setCurrentlyPlaying(position+1);
 				mCallback.play(mCallback.getCurrentPlaying());
 			}
 			mCallback.pausePlayer();
 		} else {
-			mCallback.play(position+1);
+			mCallback.play(position + 1);
+            setCurrentlyPlaying(position+1);
 		}
 	}
 	
@@ -130,7 +139,9 @@ public class ThikrFragment extends ListFragment implements OnClickListener {
 			
 		}
 		if (v==this.play && this.mCallback.isPlaying()==false){
-			mCallback.playAll();
+            setCurrentlyPlaying(this.getCurrentPlaying());
+            mCallback.playAll();
+
 		}
 		if (v==this.playNext){
 			mCallback.incrementCurrentPlaying(1);
@@ -156,7 +167,19 @@ public class ThikrFragment extends ListFragment implements OnClickListener {
 		//player.reset();
 		//player.release();
 	}
-	
-	
+    private int smoothpositionOn=-1;
+    public void setCurrentlyPlaying(int position) {
+        if(smoothpositionOn!=position){
+            if(position>0){
+                getListView().smoothScrollToPosition(position-1);
+                Log.d("testing321","smoothTo"+position);
+            }
+            //  getListView().smoothScrollToPosition(position-1);
+            adapter.setCurrentPlaying(position-1);
+            this.adapter.notifyDataSetChanged();
+            smoothpositionOn=position;
+        }
 
+
+    }
 }
