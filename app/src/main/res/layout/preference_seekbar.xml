@@ -16,11 +16,29 @@
             android:layout_alignParentTop="true"
             style="@android:style/TextAppearance.Medium"/>
 
+       <TextView
+            android:id="@+id/volumeValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_below="@android:id/title"
+
+            android:text="value"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            />
         <SeekBar
             android:id="@+id/seekbar"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@android:id/title"/>
+            android:layout_alignTop="@id/volumeValue"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@android:id/title"
+            android:layout_toRightOf="@id/volumeValue"
+            android:layout_toEndOf="@id/volumeValue"
+
+            android:indeterminate="false"/>
     </RelativeLayout>
 
 </LinearLayout>

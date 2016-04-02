@@ -4,6 +4,7 @@ package com.HMSolutions.thikrallah;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
@@ -20,10 +21,8 @@ import com.HMSolutions.thikrallah.Utilities.MainInterface;
 import com.HMSolutions.thikrallah.Utilities.MyDBHelper;
 import com.HMSolutions.thikrallah.Utilities.PrayTime;
 import com.HMSolutions.thikrallah.Utilities.WhatsNewScreen;
-import com.HMSolutions.thikrallah.Utilities.inapp.IabHelper;
-import com.HMSolutions.thikrallah.Utilities.inapp.IabResult;
-import com.HMSolutions.thikrallah.Utilities.inapp.Inventory;
-import com.HMSolutions.thikrallah.Utilities.inapp.Purchase;
+
+import com.HMSolutions.thikrallah.Utilities.inapp.Security;
 import com.android.vending.billing.IInAppBillingService;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -31,14 +30,16 @@ import com.google.android.gms.ads.AdView;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.AlertDialog.Builder;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -46,6 +47,7 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -66,8 +68,8 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 	public static final String DATA_TYPE_DAY_THIKR="morning";
 	public static final String DATA_TYPE_GENERAL_THIKR="general";
 	private InterstitialAd interstitial;
-	IInAppBillingService mService;
-	IabHelper mHelper;
+
+
 	SharedPreferences mPrefs;
 	private static final String TAG = "MainActivity";
 	Activity activity=this;
@@ -78,7 +80,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
     private Context mcontext;
 
     Messenger mServiceThikrMediaPlayerMessenger = null;
-    boolean mIsBound;
+    boolean mIsBoundMediaService;
     final Messenger mMessenger = new Messenger(new IncomingHandler());
 
     class IncomingHandler extends Handler {
@@ -104,11 +106,11 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
             thikrFragment.setCurrentlyPlaying(position);
         }
     }
-    private ServiceConnection mConnection = new ServiceConnection() {
+    private ServiceConnection mConnectionMediaServer = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
             mServiceThikrMediaPlayerMessenger = new Messenger(service);
-            mIsBound=true;
-            Log.d("testing123","connected. binded? mIsBound set to true");
+            mIsBoundMediaService=true;
+            Log.d("testing123","connected. binded? mIsBoundMediaService set to true");
             try {
                 Message msg = Message.obtain(null, ThikrMediaPlayerService.MSG_CURRENT_PLAYING);
                 msg.replyTo = mMessenger;
@@ -124,13 +126,29 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
         public void onServiceDisconnected(ComponentName className) {
             // This is called when the connection with the service has been unexpectedly disconnected - process crashed.
             unbindtoMediaService();
-            mService = null;
-            mIsBound=false;
-            Log.d("testing123","Disconnected. unbided? mIsBound set to false");
+            mServiceThikrMediaPlayerMessenger = null;
+            mIsBoundMediaService=false;
+            Log.d("testing123","Disconnected. unbided? mIsBoundMediaService set to false");
+        }
+    };
+    IInAppBillingService mServiceInAppBilling;
+
+    ServiceConnection mServiceInAppBillingConn = new ServiceConnection() {
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mServiceInAppBilling = null;
+        }
+
+        @Override
+        public void onServiceConnected(ComponentName name,
+                                       IBinder service) {
+            Log.d("testing123","service connected");
+            mServiceInAppBilling = IInAppBillingService.Stub.asInterface(service);
+            isPremiumPurchasedAsync();
         }
     };
     private void requestMediaServiceStatus(){
-        if (mIsBound) {
+        if (mIsBoundMediaService) {
             if (mServiceThikrMediaPlayerMessenger != null) {
                 try {
                     Message msg = Message.obtain(null, ThikrMediaPlayerService.MSG_CURRENT_PLAYING, 0, 0);
@@ -145,89 +163,32 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 
     private void unbindtoMediaService(){
         // unbind to the service
-        Log.d("testing123","unbind called. mIsBound ="+mIsBound);
-        if (mIsBound==true){
-            unbindService(mConnection);
+        Log.d("testing123","unbind called. mIsBoundMediaService ="+mIsBoundMediaService);
+        if (mIsBoundMediaService==true){
+            unbindService(mConnectionMediaServer);
         }
 
 
-        mIsBound=false;
+        mIsBoundMediaService=false;
 
     }
     private void bindtoMediaService(){
         // Bind to the service
-        if (mIsBound==false){
+        if (mIsBoundMediaService==false){
             try{
-                mIsBound=bindService(new Intent(this, ThikrMediaPlayerService.class), mConnection,
+                mIsBoundMediaService=bindService(new Intent(this, ThikrMediaPlayerService.class), mConnectionMediaServer,
                         Context.BIND_ABOVE_CLIENT);
 
             }catch(Exception e){
-                mIsBound=false;
+                mIsBoundMediaService=false;
             }
 
         }
-        Log.d("testing123","bind called. mIsBound"+mIsBound);
+        Log.d("testing123","bind called. mIsBoundMediaService"+mIsBoundMediaService);
     }
-	// Listener that's called when we finish querying the items and subscriptions we own
-	IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
-		public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
-
-			//Log.d(TAG, "Query inventory finished.");
-			// Have we been disposed of in the meantime? If so, quit.
-			if (mHelper == null) return;
-			if (result.isFailure()) {
-				//Toast.makeText(MainActivity.this, "Failed to query inventory: " + result, Toast.LENGTH_SHORT).show();
-				return;
-			}
-
-			//Log.d(TAG, "Query inventory was successful.");
-
-			/*
-			 * Check for items we own. Notice that for each purchase, we check
-			 * the developer payload to see if it's correct! See
-			 * verifyDeveloperPayload().
-			 */
-
-			// Do we have the premium upgrade?
-			Purchase premiumPurchase = inventory.getPurchase(SKU_PREMIUM);
-			mIsPremium = (premiumPurchase != null);
-			Log.d(TAG, "User is " + (mIsPremium ? "PREMIUM" : "NOT PREMIUM"));
-			mPrefs.edit().putBoolean("isPremium", mIsPremium).commit();
-			//Log.d(TAG, "Initial inventory query finished; enabling main UI.");
-		}
-	};
-
-	// Callback for when a purchase is finished
-	IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
-		public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
-			Log.d(TAG, "Purchase finished: " + result + ", purchase: " + purchase);
-			// if we were disposed of in the meantime, quit.
-			if (mHelper == null) return;
-
-			if (result.isFailure()) {
-				//Toast.makeText(MainActivity.this, "Error purchasing: " + result, Toast.LENGTH_SHORT).show();
-				return;
-			}
-			/*
-	            if (!verifyDeveloperPayload(purchase)) {
-	            	Toast.makeText(MainActivity.this, "Error purchasing. Authenticity verification failed.", Toast.LENGTH_SHORT).show();
-	                return;
-	            }
-			 */
-
-			Log.d(TAG, "Purchase successful.");
 
 
-			if (purchase.getSku().equals(SKU_PREMIUM)) {
-				// bought the premium upgrade!
-				Log.d(TAG, "Purchase is premium upgrade. Congratulating user.");
-				Builder lBuilder = new Builder(MainActivity.this);
-				lBuilder.setMessage(activity.getString(R.string.thanksforupgrade));
-				lBuilder.create().show();
-				mIsPremium = true;
-			}
-		}
-	};
+
 	private String deviceId;
     private AdListener adsListener;
 
@@ -258,36 +219,36 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 
 	}
 
-	/** Defines callbacks for service binding, passed to bindService() */
-	/*
-	private ServiceConnection mConnection = new ServiceConnection() {
-
-		@Override
-		public void onServiceConnected(ComponentName className,
-				IBinder service) {
-			// We've bound to LocalService, cast the IBinder and get LocalService instance
-			MyBinder binder = (MyBinder) service;
-			mediaService = binder.getService();
-			mBound = true;
-		}
-
-		@Override
-		public void onServiceDisconnected(ComponentName arg0) {
-			mBound = false;
-		}
-	};
-	 */
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+        base64RSAPublicKey=getResources().getText(R.string.base64RSAPublicKey).toString();
+        deviceId = "AC73D67B1C23A45BBDFCAF3F4040A0AA";//md5(android_id).toUpperCase();
+
+
         mcontext=this.getApplicationContext();
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        Locale locale = new Locale(mPrefs.getString("language","ar"));
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.locale = locale;
-        getBaseContext().getResources().updateConfiguration(config,
-                getBaseContext().getResources().getDisplayMetrics());
+        String lang=mPrefs.getString("language",null);
+
+        if (lang!=null){
+            Locale locale = new Locale(lang);
+            Locale.setDefault(locale);
+            Configuration config = new Configuration();
+            config.locale = locale;
+            getBaseContext().getResources().updateConfiguration(config,
+                    getBaseContext().getResources().getDisplayMetrics());
+        }
+
+
+
+        Intent serviceIntent =
+                new Intent("com.android.vending.billing.InAppBillingService.BIND");
+        serviceIntent.setPackage("com.android.vending");
+        bindService(serviceIntent, mServiceInAppBillingConn, Context.BIND_AUTO_CREATE);
+
+
 
 
         // Create an instance of GoogleAPIClient.
@@ -322,12 +283,13 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 			mPrefs.edit().putBoolean("isFirstLaunch", false).commit();
 			mPrefs.edit().putLong("time_at_last_ad",System.currentTimeMillis()).commit();
 		}
-		base64RSAPublicKey=getResources().getText(R.string.base64RSAPublicKey).toString();
-		deviceId = "AC73D67B1C23A45BBDFCAF3F4040A0AA";//md5(android_id).toUpperCase();
 
 		interstitial = new InterstitialAd(this);
 		interstitial.setAdUnitId(getResources().getText(R.string.ad_unit_id_interstital).toString());
 		interstitial.setAdListener(adsListener);
+
+
+
 		if (mPrefs.getBoolean("isPremium", false)==true||doesAdShowBasedOnClicks()==false){
 			Log.d("ads management", "ad hide"+doesAdShowBasedOnClicks());
 			hideAd();
@@ -350,34 +312,6 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 		}
 
 
-		//bindService(new Intent("com.android.vending.billing.InAppBillingService.BIND"), mServiceConn, Context.BIND_AUTO_CREATE);
-		// Create the helper, passing it our context and the public key to verify signatures with
-		//Log.d(TAG, "Creating IAB helper.");
-		mHelper = new IabHelper(this, base64RSAPublicKey);
-
-		// enable debug logging (for a production application, you should set this to false).
-		mHelper.enableDebugLogging(false);
-
-		// Start setup. This is asynchronous and the specified listener
-		// will be called once setup completes.
-		//	Log.d(TAG, "Starting setup.");
-		mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
-			public void onIabSetupFinished(IabResult result) {
-				//Log.d(TAG, "Setup finished.");
-
-				if (!result.isSuccess()) {
-					// Oh noes, there was a problem.
-					//Toast.makeText(MainActivity.this, "Problem setting up in-app billing: " + result, Toast.LENGTH_SHORT).show();
-					return;
-				}
-				// Have we been disposed of in the meantime? If so, quit.
-				if (mHelper == null) return;
-
-				// Hooray, IAB is fully set up. Now, let's get an inventory of stuff we own.
-				//	Log.d(TAG, "Setup successful. Querying inventory.");
-				mHelper.queryInventoryAsync(mGotInventoryListener);
-			}
-		});
 
 		if (savedInstanceState == null) {
 			getFragmentManager().beginTransaction().add(R.id.container, new MainFragment()).commit();
@@ -397,7 +331,10 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
         }
 
 	}
+    private void isPremiumPurchasedAsync(){
+        new isPremiumPurchased().execute();
 
+    }
     private void populateBuiltinDatabase() {
         MyDBHelper db = new MyDBHelper(this);
         db.getReadableDatabase();
@@ -493,8 +430,32 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 
 	@Override
 	public void upgrade() {
-		mHelper.launchPurchaseFlow(this, SKU_PREMIUM, RC_REQUEST,
-                mPurchaseFinishedListener, "");
+        Bundle buyIntentBundle = null;
+       if (mServiceInAppBilling!=null) {
+           try {
+               buyIntentBundle = mServiceInAppBilling.getBuyIntent(3, getPackageName(),
+                       String.valueOf(SKU_PREMIUM), "inapp", String.valueOf(RC_REQUEST));
+               if (buyIntentBundle != null) {
+                   PendingIntent pendingIntent = buyIntentBundle.getParcelable("BUY_INTENT");
+                   if (pendingIntent != null) {
+                       startIntentSenderForResult(pendingIntent.getIntentSender(),
+                               RC_REQUEST, new Intent(), Integer.valueOf(0), Integer.valueOf(0),
+                               Integer.valueOf(0));
+                   }
+
+               }
+
+           } catch (RemoteException e) {
+               e.printStackTrace();
+           } catch (IntentSender.SendIntentException e) {
+               e.printStackTrace();
+           }
+       }
+
+
+
+
+       // mHelper.launchPurchaseFlow(this, SKU_PREMIUM, RC_REQUEST, mPurchaseFinishedListener, "");
 
 	}
 	@Override
@@ -514,6 +475,9 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
     protected void onDestroy() {
 
         unbindtoMediaService();
+        if (mServiceInAppBilling != null) {
+            unbindService(mServiceInAppBillingConn);
+        }
         super.onDestroy();
 
     }
@@ -610,25 +574,31 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 	}
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) { 
+		Log.d("testing123", " RC_REQUEST  " + RC_REQUEST + "results ok " + RESULT_OK);
 		// Pass on the activity result to the helper for handling
-        if (requestCode == 1001) {
-            if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
-				String purchaseData = data.getStringExtra("INAPP_PURCHASE_DATA");
-				if (resultCode == RESULT_OK) {
-					try {
-						JSONObject jo = new JSONObject(purchaseData);
-						String sku = jo.getString("productId");
+        if (requestCode == RC_REQUEST) {
+            int responseCode = data.getIntExtra("RESPONSE_CODE", 0);
+            String purchaseData = data.getStringExtra("INAPP_PURCHASE_DATA");
+            String dataSignature = data.getStringExtra("INAPP_DATA_SIGNATURE");
+            if (resultCode == RESULT_OK&&responseCode==0) {
 
-						if (sku.equals(SKU_PREMIUM)){
-							mPrefs.edit().putBoolean("isPremium", true).commit();
-						}
-					}
-					catch (JSONException e) {
+                try {
 
-						e.printStackTrace();
-					}
-				}
-			}
+                    JSONObject jo = new JSONObject(purchaseData);
+                    String sku = jo.getString("productId");
+                    if(Security.verifyPurchase(base64RSAPublicKey, dataSignature, String.valueOf(RC_REQUEST)) && sku.equalsIgnoreCase(SKU_PREMIUM)) {
+
+                        mPrefs.edit().putBoolean("isPremium", true).commit();
+                        this.hideAd();
+                    }
+                    //alert("You have bought the " + sku + ". Excellent choice,adventurer!");
+                }
+                catch (JSONException e) {
+                   // alert("Failed to parse purchase data.");
+                    e.printStackTrace();
+                }
+            }
+
 		}
 
 	}
@@ -704,6 +674,82 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 
 		}
 	}
+
+
+
+    private class isPremiumPurchased extends AsyncTask<Void, Void, Boolean> {
+
+
+        /**
+         * Override this method to perform a computation on a background thread. The
+         * specified parameters are the parameters passed to {@link #execute}
+         * by the caller of this task.
+         * <p/>
+         * This method can call {@link #publishProgress} to publish updates
+         * on the UI thread.
+         *
+         * @param params The parameters of the task.
+         * @return A result, defined by the subclass of this task.
+         * @see #onPreExecute()
+         * @see #onPostExecute
+         * @see #publishProgress
+         */
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                Log.d("testing123","isPremiumPurchased called");
+                Bundle ownedItems = mServiceInAppBilling.getPurchases(3, getPackageName(), "inapp", null);
+                int response = ownedItems.getInt("RESPONSE_CODE");
+                Log.d("testing123","response ="+response);
+                if (response == 0) {
+                    ArrayList<String> ownedSkus =
+                            ownedItems.getStringArrayList("INAPP_PURCHASE_ITEM_LIST");
+                    ArrayList<String>  purchaseDataList =
+                            ownedItems.getStringArrayList("INAPP_PURCHASE_DATA_LIST");
+                    ArrayList<String>  signatureList =
+                            ownedItems.getStringArrayList("INAPP_DATA_SIGNATURE_LIST");
+                    String continuationToken =
+                            ownedItems.getString("INAPP_CONTINUATION_TOKEN");
+                    Log.d("testing123","ownedSkus ="+ownedSkus.size());
+                    for (int i = 0; i < purchaseDataList.size(); ++i) {
+
+                        String purchaseData = purchaseDataList.get(i);
+                        String signature = signatureList.get(i);
+                        String sku = ownedSkus.get(i);
+                        Log.d("testing123","sku ="+sku);
+                        Log.d("testing123","base64"+signature);
+                        Log.d("testing123","base64"+base64RSAPublicKey);
+                        Log.d("testing123","Is signature valid? "+Security.verifyPurchase(base64RSAPublicKey,String.valueOf(RC_REQUEST),signature));
+                        Log.d("testing123","Is premium sku? "+sku.equalsIgnoreCase(SKU_PREMIUM));
+                        if(Security.verifyPurchase(base64RSAPublicKey, signature, String.valueOf(RC_REQUEST)) && sku.equalsIgnoreCase(SKU_PREMIUM)) {
+
+                            Log.d("testing123", "ispremium true ");
+                            Log.d("base64", "base64 matches");
+                            return true;
+
+                        }
+                    }
+
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
+
+        protected void onProgressUpdate(Void...progress) {
+        }
+
+        protected void onPostExecute(Boolean isPremium) {
+           if (isPremium==true){
+               mPrefs.edit().putBoolean("isPremium", true).commit();
+               hideAd();
+           }
+            return;
+        }
+    }
+
+
 }
 
 

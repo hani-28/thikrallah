@@ -22,12 +22,16 @@ public class SetPreferenceActivity extends Activity{
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        Locale locale = new Locale(mPrefs.getString("language","ar"));
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.locale = locale;
-        getBaseContext().getResources().updateConfiguration(config,
-                getBaseContext().getResources().getDisplayMetrics());
+        String lang=mPrefs.getString("language",null);
+
+        if (lang!=null){
+            Locale locale = new Locale(lang);
+            Locale.setDefault(locale);
+            Configuration config = new Configuration();
+            config.locale = locale;
+            getBaseContext().getResources().updateConfiguration(config,
+                    getBaseContext().getResources().getDisplayMetrics());
+        }
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setDisplayShowHomeEnabled(false);

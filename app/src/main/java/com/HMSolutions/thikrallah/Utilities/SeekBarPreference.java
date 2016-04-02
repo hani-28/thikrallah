@@ -22,6 +22,7 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
     private SeekBar mSeekBar;
     private TextView summaryTV;
     private int mProgress;
+    private TextView volumeValue;
 
     public SeekBarPreference(Context context) {
 
@@ -49,8 +50,10 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
         Log.d("1thikr1", "onBindView called");
         //summaryTV=(TextView) view.findViewById(R.id.sum);
         mSeekBar = (SeekBar) view.findViewById(R.id.seekbar);
+        volumeValue = (TextView) view.findViewById(R.id.volumeValue);
         mSeekBar.setMax(100);
         mSeekBar.setProgress(mProgress);
+        volumeValue.setText(String.valueOf(mProgress));
         mSeekBar.setOnSeekBarChangeListener(this);
     }
 
@@ -60,6 +63,7 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
         if (!fromUser)
             return;
        // this.summaryTV.setText(progress);
+        //volumeValue.setText(progress);
         setValue(progress);
     }
 
@@ -77,6 +81,7 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
     protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
 
         setValue(restoreValue ? getPersistedInt(mProgress) : (Integer) defaultValue);
+//        volumeValue.setText(restoreValue ? getPersistedInt(mProgress) : (Integer) defaultValue);
     }
 
     public void setValue(int value) {

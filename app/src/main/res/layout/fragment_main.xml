@@ -52,7 +52,8 @@
         android:layout_alignLeft="@+id/button_remind_me"
         android:layout_alignRight="@+id/button_remind_me"
         android:layout_below="@+id/button_remind_me"
-        android:text="@string/support_us" />
+        android:text="@string/support_us"
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
     <Button
         android:id="@+id/button_my_athkar"
         android:layout_width="wrap_content"

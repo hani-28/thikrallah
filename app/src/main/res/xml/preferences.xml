@@ -1,7 +1,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     <PreferenceCategory android:title="@string/language" >
         <com.HMSolutions.thikrallah.Utilities.MyListPreference
-            android:defaultValue="ar"
             android:entries="@array/languagelist"
             android:entryValues="@array/languagelistValues"
             android:key="language"

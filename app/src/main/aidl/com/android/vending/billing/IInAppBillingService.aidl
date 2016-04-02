@@ -141,4 +141,45 @@ interface IInAppBillingService {
      * @return 0 if consumption succeeded. Appropriate error values for failures.
      */
     int consumePurchase(int apiVersion, String packageName, String purchaseToken);
+
+
+       /**
+     * This API is currently under development.
+     */
+    int stub(int apiVersion, String packageName, String type);
+
+    /**
+     * Returns a pending intent to launch the purchase flow for upgrading or downgrading a
+     * subscription. The existing owned SKU(s) should be provided along with the new SKU that
+     * the user is upgrading or downgrading to.
+     * @param apiVersion billing API version that the app is using, must be 5 or later
+     * @param packageName package name of the calling app
+     * @param oldSkus the SKU(s) that the user is upgrading or downgrading from,
+     *        if null or empty this method will behave like {@link #getBuyIntent}
+     * @param newSku the SKU that the user is upgrading or downgrading to
+     * @param type of the item being purchased, currently must be "subs"
+     * @param developerPayload optional argument to be sent back with the purchase information
+     * @return Bundle containing the following key-value pairs
+     *         "RESPONSE_CODE" with int value, RESULT_OK(0) if success, appropriate response codes
+     *                         on failures.
+     *         "BUY_INTENT" - PendingIntent to start the purchase flow
+     *
+     * The Pending intent should be launched with startIntentSenderForResult. When purchase flow
+     * has completed, the onActivityResult() will give a resultCode of OK or CANCELED.
+     * If the purchase is successful, the result data will contain the following key-value pairs
+     *         "RESPONSE_CODE" with int value, RESULT_OK(0) if success, appropriate response
+     *                         codes on failures.
+     *         "INAPP_PURCHASE_DATA" - String in JSON format similar to
+     *                                 '{"orderId":"12999763169054705758.1371079406387615",
+     *                                   "packageName":"com.example.app",
+     *                                   "productId":"exampleSku",
+     *                                   "purchaseTime":1345678900000,
+     *                                   "purchaseToken" : "122333444455555",
+     *                                   "developerPayload":"example developer payload" }'
+     *         "INAPP_DATA_SIGNATURE" - String containing the signature of the purchase data that
+     *                                  was signed with the private key of the developer
+     *                                  TODO: change this to app-specific keys.
+     */
+    Bundle getBuyIntentToReplaceSkus(int apiVersion, String packageName,
+        in List<String> oldSkus, String newSku, String type, String developerPayload);
 }
