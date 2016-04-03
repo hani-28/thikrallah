@@ -10,6 +10,7 @@
     <string name="help_translate">ساعدنا بترجمة البرنامج</string>
     <string name="app_name">أذكر الله</string>
     <string name="share">شارك</string>
+    <string name="share_text">انصحكم تحملو برنامج اذكر الله وانشر الرسالة ليصبح لك صدقة جارية ان شاء الله. \n يقول الله في كتابة الكريم والذاكرين الله كثيرا والذاكرات اعد الله لهم مغفرة وأجرا عظيما.\n\nهذا البرنامج يقوم باظهار الاذكار والادعية على شاشة الهاتف وايظا تذكير صوتي بقولة سبحان الله, الحمدلله, اللهم صلى على نبينا محمد, وغيرة من الادعية الرائعة بدون ان تحتاج حتى ان تفتح البرنامج\n\nحمل البرنامج وانشر هذه الرسالة لكي يكون لك صدقة جارية على كل شخص يذكر الله بعد تذكير البرنامج له. تخيل الحسنات والخير الكثير. للتحميل:\n\nاندرويد: https://play.google.com/store/apps/details?id=com.HMSolutions.thikrallah \n\n  ايفون: جرب هذا البرنامج من مبرمج مختلف ولكنة نفس الفكرة https://itunes.apple.com/app/id1004470625</string>
     <string name="volume_level">مستوى صوت التذكير</string>
     <string name="mute_when_ringer_mute">كتم التذكير اذا الجهاز في وضع الصامت</string>
     <string name="morningThikr">أذكار الصباح</string>
@@ -135,5 +136,6 @@
     <string name="language">االلغه</string>
     <string name="arabic">العربية</string>
     <string name="english">English</string>
+    <string name="sadaqa">صدقة جارية</string>
 
 </resources>

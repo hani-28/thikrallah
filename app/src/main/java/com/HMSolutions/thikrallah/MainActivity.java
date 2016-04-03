@@ -366,10 +366,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 			return true;
 		}
 		if (id == R.id.menu_share) {
-			Intent shareIntent = new Intent(Intent.ACTION_SEND);
-			shareIntent.setType("text/plain");
-			shareIntent.putExtra(Intent.EXTRA_TEXT,appLink);
-			startActivity(Intent.createChooser(shareIntent, this.getResources().getString(R.string.share)));
+            share();
 			//mCallback.shareToFacebook(DBHelper.getInstance(this.getActivity()).getHadithTextforPageCurlView(v.getHadithsIdList(), v.getmIndex()));
 			return true;
 		}
@@ -428,7 +425,15 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 
 	}
 
-	@Override
+    @Override
+    public void share() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT,this.getResources().getText(R.string.share_text));
+        startActivity(Intent.createChooser(shareIntent, this.getResources().getString(R.string.share)));
+    }
+
+    @Override
 	public void upgrade() {
         Bundle buyIntentBundle = null;
        if (mServiceInAppBilling!=null) {

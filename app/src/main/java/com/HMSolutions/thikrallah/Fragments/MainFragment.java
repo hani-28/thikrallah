@@ -40,12 +40,13 @@ public class MainFragment extends Fragment {
 		
 		View view = inflater.inflate(R.layout.fragment_main, container,
 				false);
-		Button button_remind_me_settings = (Button) view.findViewById(R.id.button_remind_me);
+		Button button_remind_me_settings = (Button) view.findViewById(R.id.button_settings);
 
         Button button_morning_thikr = (Button) view.findViewById(R.id.button_morning_thikr);
 		Button button_night_thikr = (Button) view.findViewById(R.id.button_night_thikr);
 		Button button_donate = (Button) view.findViewById(R.id.button_support_us);
         Button button_my_athkar = (Button) view.findViewById(R.id.button_my_athkar);
+        Button button_sadaqa= (Button) view.findViewById(R.id.button_sadaqa);
 /*
         Button button_athan = (Button) view.findViewById(R.id.button_athan);
         button_athan.setOnClickListener(new OnClickListener(){
@@ -58,6 +59,12 @@ public class MainFragment extends Fragment {
 			
 		});
 */
+        button_sadaqa.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback.share();
+            }
+        });
         button_donate.setOnClickListener(new OnClickListener(){
 
             @Override

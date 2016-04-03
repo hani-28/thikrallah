@@ -7,61 +7,75 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.HMSolutions.thikrallah.MainActivity$PlaceholderFragment" >
-
-    <Button
-        android:id="@+id/button_night_thikr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/button_morning_thikr"
+    <LinearLayout
+        android:id="@+id/bottom_row"
+        android:orientation="vertical"
         android:layout_centerVertical="true"
-        android:text="@string/nightThikr"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <Button
-        android:id="@+id/button_morning_thikr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/button_night_thikr"
         android:layout_centerHorizontal="true"
-        android:text="@string/morningThikr"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-    <!--Button
-        android:id="@+id/button_athan"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/button_night_thikr"
-        android:layout_centerHorizontal="true"
-        android:layout_alignLeft="@+id/button_night_thikr"
-        android:layout_alignRight="@+id/button_night_thikr"
-        android:text="@string/athan"
-        android:textAppearance="?android:attr/textAppearanceLarge" /-->
-    <Button
-        android:id="@+id/button_remind_me"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button_night_thikr"
-        android:layout_alignRight="@+id/button_night_thikr"
-        android:layout_below="@+id/button_night_thikr"
-        android:text="@string/Settings"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_height="wrap_content" >
 
-    <Button
-        android:id="@+id/button_support_us"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button_remind_me"
-        android:layout_alignRight="@+id/button_remind_me"
-        android:layout_below="@+id/button_remind_me"
-        android:text="@string/support_us"
-        android:textAppearance="?android:attr/textAppearanceLarge"/>
-    <Button
-        android:id="@+id/button_my_athkar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button_night_thikr"
-        android:layout_alignRight="@+id/button_night_thikr"
-        android:layout_above="@+id/button_morning_thikr"
-        android:text="@string/my_athkar"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        <Button
+            android:id="@+id/button_my_athkar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/my_athkar"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+        <Button
+            android:id="@+id/button_morning_thikr"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/morningThikr"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+        <Button
+            android:id="@+id/button_night_thikr"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/nightThikr"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+
+        <!--Button
+            android:id="@+id/button_athan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/button_night_thikr"
+            android:layout_centerHorizontal="true"
+            android:layout_alignLeft="@+id/button_night_thikr"
+            android:layout_alignRight="@+id/button_night_thikr"
+            android:text="@string/athan"
+            android:textAppearance="?android:attr/textAppearanceLarge" /-->
+        <Button
+            android:id="@+id/button_settings"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/Settings"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+
+        <Button
+            android:id="@+id/button_support_us"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/support_us"
+            android:textAppearance="?android:attr/textAppearanceLarge"/>
+        <Button
+            android:id="@+id/button_sadaqa"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/sadaqa"
+            android:textAppearance="?android:attr/textAppearanceLarge"/>
+    </LinearLayout>
 
 </RelativeLayout>
