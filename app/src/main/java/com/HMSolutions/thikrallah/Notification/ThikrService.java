@@ -32,6 +32,7 @@ import android.util.Log;
 
 
 public class ThikrService extends IntentService  {
+    String TAG = "ThikrService";
 	private final static int NOTIFICATION_ID=0;
 
     public ThikrService() {
@@ -64,11 +65,11 @@ public class ThikrService extends IntentService  {
 			if ((reminderType==1 ||reminderType==2)&&isQuietTime==false&&thikr.isBuiltIn()==true){
                 sharedPrefs.edit().putString("thikrType", MainActivity.DATA_TYPE_GENERAL_THIKR).commit();
                 data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAY);
-                Log.d("media1 player","fileNumber sent through intent is "+fileNumber);
+                Log.d(TAG,"fileNumber sent through intent is "+fileNumber);
                 data.putInt("FILE", fileNumber);
                 this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
 			}
-
+            return;
 
 
 
@@ -104,6 +105,7 @@ public class ThikrService extends IntentService  {
 				data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAYALL);
 				this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
 			}
+            return;
 		}
 		if (thikrType.equals(MainActivity.DATA_TYPE_NIGHT_THIKR)){
 			int reminderType=Integer.parseInt(sharedPrefs.getString("remindMeNightThikrType", "1"));
@@ -135,10 +137,46 @@ public class ThikrService extends IntentService  {
 				this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
 
 			}
-
+            return;
 
 
 		}
+        if (thikrType.equals(MainActivity.DATA_TYPE_QURAN_KAHF)){
+            sharedPrefs.edit().putInt("", Calendar.getInstance().get(Calendar.DAY_OF_MONTH)).commit();
+
+            int reminderType=Integer.parseInt(sharedPrefs.getString("remindMekahfType", "1"));
+            if (reminderType==1){
+                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                android.support.v4.app.NotificationCompat.Builder mBuilder = new android.support.v4.app.NotificationCompat.Builder(this);
+                mBuilder.setContentTitle(this.getString(R.string.app_name))
+                        .setContentText(this.getString(R.string.surat_alkahf))
+                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setAutoCancel(true);
+
+
+
+                Intent launchAppIntent = new Intent(this, MainActivity.class);
+
+                launchAppIntent.putExtra("FromNotification",true);
+                launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_QURAN);
+                launchAppIntent.putExtra("surat", 0);
+                PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
+                        0, launchAppIntent, PendingIntent.FLAG_CANCEL_CURRENT
+                );
+
+                mBuilder.setContentIntent(launchAppPendingIntent);
+
+                mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+            }else{
+                //new here
+
+                sharedPrefs.edit().putString("thikrType", MainActivity.DATA_TYPE_QURAN_KAHF).commit();
+
+                data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAYALL);
+                this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+            }
+            return;
+        }
 
 	}
 

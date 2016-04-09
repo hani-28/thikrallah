@@ -37,6 +37,7 @@ public class ThikrFragment extends ListFragment implements OnClickListener {
 	
 	private MainInterface mCallback;
     private CustumThickerAdapter adapter;
+    private int surat=0;
 
     /**
 	 * @return the currentPlaying
@@ -67,7 +68,7 @@ public class ThikrFragment extends ListFragment implements OnClickListener {
 		this.getActivity().getActionBar().setDisplayShowHomeEnabled(true);
 		this.setHasOptionsMenu(true);
 		
-		mCallback.setCurrentPlaying(1);
+		mCallback.setCurrentPlaying(this.thikrType,1);
 		thikrType=this.getArguments().getString("DataType");
 		mCallback.setThikrType(thikrType);
 		View view = inflater.inflate(R.layout.fragment_thikr, container,
@@ -107,13 +108,13 @@ public class ThikrFragment extends ListFragment implements OnClickListener {
 				mCallback.pausePlayer();
 			}else{
 				mCallback.resetPlayer();
-				mCallback.setCurrentPlaying(position + 1);
+				mCallback.setCurrentPlaying(this.thikrType,position + 1);
                 setCurrentlyPlaying(position+1);
-				mCallback.play(mCallback.getCurrentPlaying());
+				mCallback.play(this.thikrType,mCallback.getCurrentPlaying());
 			}
 			mCallback.pausePlayer();
 		} else {
-			mCallback.play(position + 1);
+			mCallback.play(this.thikrType,position + 1);
             setCurrentlyPlaying(position+1);
 		}
 	}
@@ -121,11 +122,15 @@ public class ThikrFragment extends ListFragment implements OnClickListener {
 	private String[] getThikrArray(){
 		String[] numbers_text = null;
 		if (this.thikrType.equals(MainActivity.DATA_TYPE_DAY_THIKR)){
-			numbers_text = getResources().getStringArray(R.array.MorningThikr);
+			return getResources().getStringArray(R.array.MorningThikr);
 		}
 		if (this.thikrType.equals(MainActivity.DATA_TYPE_NIGHT_THIKR)){
-			numbers_text = getResources().getStringArray(R.array.NightThikr); 
+			return getResources().getStringArray(R.array.NightThikr);
 		}
+        if (this.thikrType.equals(MainActivity.DATA_TYPE_QURAN)){
+            surat=this.getArguments().getInt("surat");
+            return new String[]{this.getActivity().getResources().getStringArray(R.array.surat_text)[surat]};
+        }
 		return numbers_text;
 	}
 	@Override
@@ -140,16 +145,16 @@ public class ThikrFragment extends ListFragment implements OnClickListener {
 		}
 		if (v==this.play && this.mCallback.isPlaying()==false){
             setCurrentlyPlaying(this.getCurrentPlaying());
-            mCallback.playAll();
+            mCallback.playAll(this.thikrType);
 
 		}
 		if (v==this.playNext){
-			mCallback.incrementCurrentPlaying(1);
-			mCallback.playAll();
+			mCallback.incrementCurrentPlaying(this.thikrType,1);
+			mCallback.playAll(this.thikrType);
 		}
 		if (v==this.playPrevious){
-			mCallback.incrementCurrentPlaying(-1);
-			mCallback.playAll();
+			mCallback.incrementCurrentPlaying(this.thikrType,-1);
+			mCallback.playAll(this.thikrType);
 		}
 
 
@@ -162,7 +167,7 @@ public class ThikrFragment extends ListFragment implements OnClickListener {
 		//player.pause();
 	}
 	@Override
-	public void onDestroy(){
+    public void onDestroy(){
 		super.onDestroy();
 		//player.reset();
 		//player.release();

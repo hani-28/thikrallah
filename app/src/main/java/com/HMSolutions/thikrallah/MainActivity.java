@@ -15,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.HMSolutions.thikrallah.Fragments.MainFragment;
+import com.HMSolutions.thikrallah.Fragments.QuranFragment;
 import com.HMSolutions.thikrallah.Fragments.ThikrFragment;
 import com.HMSolutions.thikrallah.Utilities.AppRater;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
@@ -63,15 +64,16 @@ import com.google.android.gms.location.LocationServices;
 
 public class MainActivity extends Activity implements MainInterface,GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,LocationListener {
 	private String appLink;
-
+    String TAG = "MainActivity";
 	public static final String DATA_TYPE_NIGHT_THIKR="night";
 	public static final String DATA_TYPE_DAY_THIKR="morning";
 	public static final String DATA_TYPE_GENERAL_THIKR="general";
+    public static final String DATA_TYPE_QURAN_KAHF="quran/0";
+    public static final String DATA_TYPE_QURAN="quran";
 	private InterstitialAd interstitial;
 
 
 	SharedPreferences mPrefs;
-	private static final String TAG = "MainActivity";
 	Activity activity=this;
 	private static boolean mIsPremium = false;
 	private final static String SKU_PREMIUM = "premiumupgrade";
@@ -90,7 +92,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
             switch (msg.what) {
                 case ThikrMediaPlayerService.MSG_CURRENT_PLAYING:
                     Log.d("testing321","position"+msg.arg1);
-                    sendPositionToThikrFragment(msg.arg1);
+                    sendPositionToThikrFragment(msg.arg1, msg.getData());
                     break;
                 case ThikrMediaPlayerService.MSG_UNBIND:
                     unbindtoMediaService();
@@ -100,11 +102,27 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
             }
         }
     }
-    private void sendPositionToThikrFragment(int position){
-        ThikrFragment thikrFragment = (ThikrFragment)this.getFragmentManager().findFragmentByTag("ThikrFragment");
-        if (thikrFragment != null && thikrFragment.isVisible()) {
-            thikrFragment.setCurrentlyPlaying(position);
+    private void sendPositionToThikrFragment(int position, Bundle data){
+        String datatype=data.getString("com.HMSolutions.thikrallah.datatype",null);
+        Log.d("testing567","datatype="+datatype);
+        if(datatype==null){
+            return;
         }
+        if(datatype.contains(DATA_TYPE_QURAN)){
+            Log.d("testing567","quran");
+            QuranFragment fragment = (QuranFragment)this.getFragmentManager().findFragmentByTag("QuranFragment");
+            if (fragment != null && fragment.isVisible()) {
+                Log.d("testing567","visible");
+                fragment.setCurrentlyPlaying(position);
+            }
+            return;
+        }else{
+            ThikrFragment fragment = (ThikrFragment)this.getFragmentManager().findFragmentByTag("ThikrFragment");
+            if (fragment != null && fragment.isVisible()) {
+                fragment.setCurrentlyPlaying(position);
+            }
+        }
+
     }
     private ServiceConnection mConnectionMediaServer = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
@@ -203,7 +221,10 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 	}
 	public void sendActionToMediaService(Bundle data){
 		if (data!=null){
-            data.putString("com.HMSolutions.thikrallah.datatype", this.getThikrType());
+            if(data.getString("com.HMSolutions.thikrallah.datatype","").equalsIgnoreCase("")){
+                data.putString("com.HMSolutions.thikrallah.datatype", this.getThikrType());
+            }
+
             data.putBoolean("isUserAction", true);
             this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
             bindtoMediaService();
@@ -319,8 +340,18 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 		Intent intent=this.getIntent();
 		boolean isNotification=intent.getBooleanExtra("FromNotification", false);
 		if (isNotification==true){
-            if(!intent.getExtras().getString("DataType").equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)){
+            Log.d("hanihani","from notification");
+            if(intent.getExtras().getString("DataType").equalsIgnoreCase(MainActivity.DATA_TYPE_DAY_THIKR)||
+                    intent.getExtras().getString("DataType").equalsIgnoreCase(MainActivity.DATA_TYPE_NIGHT_THIKR)){
+                Log.d("hanihani","general thikr notification");
                 launchFragment(new ThikrFragment(), intent.getExtras(),"ThikrFragment");
+            }
+            if(intent.getExtras().getString("DataType").contains(MainActivity.DATA_TYPE_QURAN)){
+                Log.d("hanihani","quran thikr notification");
+                Bundle  data=new Bundle();
+                data.putString("DataType",DATA_TYPE_QURAN);
+                data.putInt("surat", this.getResources().getIntArray(R.array.surat_values)[0]);
+                launchFragment(new QuranFragment(), data, "QuranFragment");
             }
 		}
         boolean isFromSettings=intent.getBooleanExtra("FromPreferenceActivity", false);
@@ -493,30 +524,34 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 		super.onBackPressed();  
 	}
 	@Override
-	public void playAll() {
+	public void playAll(String AssetFolder) {
 		Bundle data=new Bundle();
 		data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAYALL);
-		sendActionToMediaService(data);
+        data.putString("com.HMSolutions.thikrallah.datatype", AssetFolder);
+        sendActionToMediaService(data);
 	}
 	@Override
-	public void incrementCurrentPlaying(int i) {
+	public void incrementCurrentPlaying(String AssetFolder,int i) {
         Bundle data=new Bundle();
         data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_INNCREMENT);
         data.putInt("INCREMENT", i);
+        data.putString("com.HMSolutions.thikrallah.datatype", AssetFolder);
         sendActionToMediaService(data);
 	}
 	@Override
 	public void pausePlayer() {
+        Log.d("testing123","pauseplayer called");
 		Bundle data=new Bundle();
 		data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PAUSE);
 		sendActionToMediaService(data);
 
 	}
 	@Override
-	public void play(int fileNumber) {
+	public void play(String AssetFolder,int fileNumber) {
 		Bundle data=new Bundle();
 		data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAY);
 		data.putInt("FILE", fileNumber);
+        data.putString("com.HMSolutions.thikrallah.datatype", AssetFolder);
 		sendActionToMediaService(data);
 
 	}
@@ -539,7 +574,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 
 	}
 	@Override
-	public void setCurrentPlaying(int currentPlaying) {
+	public void setCurrentPlaying(String AssetFolder,int currentPlaying) {
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
 		sharedPrefs.edit().putInt("currentPlaying", currentPlaying).commit();
 

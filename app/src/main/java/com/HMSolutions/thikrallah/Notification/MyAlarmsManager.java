@@ -15,9 +15,11 @@ import android.preference.PreferenceManager;
 import com.HMSolutions.thikrallah.MainActivity;
 
 public class MyAlarmsManager {
+    String TAG = "MyAlarmsManager";
 	public static final int requestCodeMorningAlarm=8;
 	public static final int requestCodeNightAlarm=20;
 	public static final int requestCodeRandomAlarm=1;
+    public static final int requestCodeKahfAlarm=25;
 	AlarmManager alarmMgr;
 	Context context;
 	public MyAlarmsManager(Context icontext){
@@ -29,10 +31,12 @@ public class MyAlarmsManager {
 
 		String[] MorningReminderTime=sharedPrefs.getString("daytReminderTime", "8:00").split(":");
 		String[] NightReminderTime=sharedPrefs.getString("nightReminderTime", "20:00").split(":");
+        String[] kahfReminderTime=sharedPrefs.getString("kahfReminderTime", "10:00").split(":");
 		String RandomReminderInterval= sharedPrefs.getString("RemindMeEvery", "60");
 		boolean remindMeMorningThikr=sharedPrefs.getBoolean("remindMeMorningThikr", true);
 		boolean remindMeNightThikr=sharedPrefs.getBoolean("remindMeNightThikr", true);
 		boolean RemindmeThroughTheDay=sharedPrefs.getBoolean("RemindmeThroughTheDay", true);
+        boolean Remindmekahf=sharedPrefs.getBoolean("remindMekahf", true);
 		Intent launchIntent=new Intent(context, ThikrAlarmReceiver.class);
 
 		//Morning Reminder		
@@ -90,6 +94,27 @@ public class MyAlarmsManager {
 		}else{
 			alarmMgr.cancel(pendingIntentGeneral);
 		}
+
+        PendingIntent pendingIntentKahf =PendingIntent.getBroadcast(context, requestCodeKahfAlarm,launchIntent.putExtra("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_QURAN_KAHF), PendingIntent.FLAG_UPDATE_CURRENT);
+
+        if (Remindmekahf && sharedPrefs.getInt("lastKahfPlayed",-1)!=Calendar.getInstance().get(Calendar.DAY_OF_MONTH)){
+            //Random Reminder
+            alarmMgr.cancel(pendingIntentKahf);
+            // alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + Long.parseLong(RandomReminderInterval) * 1000 * 60,
+            //        Long.parseLong(RandomReminderInterval) * 1000 * 60, pendingIntentGeneral);
+
+            Calendar calendar1 = Calendar.getInstance();
+            //calendar.setTimeInMillis(System.currentTimeMillis());
+            calendar1.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+            calendar1.set(Calendar.HOUR_OF_DAY, Integer.parseInt(kahfReminderTime[0]));
+            calendar1.set(Calendar.MINUTE, Integer.parseInt(kahfReminderTime[1]));
+            calendar1.set(Calendar.SECOND, 0);
+
+            setAlarm(calendar1, pendingIntentKahf);
+
+        }else{
+            alarmMgr.cancel(pendingIntentKahf);
+        }
 
 	}
 	@SuppressLint("NewApi")

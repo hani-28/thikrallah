@@ -13,6 +13,7 @@ import com.HMSolutions.thikrallah.ThikrMediaPlayerService;
 
 public class ThikrMediaBroadcastReciever extends BroadcastReceiver {
         private Context context;
+    String TAG = "ThikrMediaBroadcastReciever";
     private Bundle data;
 
     // Constructor is mandatory
@@ -25,6 +26,7 @@ public class ThikrMediaBroadcastReciever extends BroadcastReceiver {
             context=icontext;
             String intentAction = intent.getAction();
             data=new Bundle();
+            Log.d(TAG,"onReceive called");
             data.putBoolean("isUserAction",true);
             Log.i("mediastyle", intentAction.toString() + " happended");
             if (Intent.ACTION_MEDIA_BUTTON.equals(intent.getAction())) {
@@ -94,6 +96,7 @@ public class ThikrMediaBroadcastReciever extends BroadcastReceiver {
     }
     public void sendActionToMediaService(Bundle data){
         if (data.getInt("ACTION",-100)!=-100){
+            Log.d(TAG,"sendActionToMediaService called with action"+data.getInt("action",-100));
             context.startService(new Intent(context, ThikrMediaPlayerService.class).putExtras(data));
         }
 

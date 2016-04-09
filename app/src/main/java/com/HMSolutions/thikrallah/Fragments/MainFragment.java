@@ -6,7 +6,10 @@ import com.HMSolutions.thikrallah.SetPreferenceActivity;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,13 +20,15 @@ import android.widget.Button;
 
 public class MainFragment extends Fragment {
 	private MainInterface mCallback;
+    private Context mContext;
 
 	public MainFragment() {
 	}
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		try {
+        mContext=activity;
+        try {
 			mCallback = (MainInterface) activity;
 		} catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString()
@@ -47,6 +52,7 @@ public class MainFragment extends Fragment {
 		Button button_donate = (Button) view.findViewById(R.id.button_support_us);
         Button button_my_athkar = (Button) view.findViewById(R.id.button_my_athkar);
         Button button_sadaqa= (Button) view.findViewById(R.id.button_sadaqa);
+        Button button_quran= (Button) view.findViewById(R.id.button_quran);
 /*
         Button button_athan = (Button) view.findViewById(R.id.button_athan);
         button_athan.setOnClickListener(new OnClickListener(){
@@ -59,6 +65,29 @@ public class MainFragment extends Fragment {
 			
 		});
 */
+
+        button_quran.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+                b.setTitle(R.string.choosesura);
+                String[] types = mContext.getResources().getStringArray(R.array.surat_list);
+                b.setItems(types, new AlertDialog.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int choice) {
+                        dialog.dismiss();
+                        Bundle data=new Bundle();
+                        data.putString("DataType", MainActivity.DATA_TYPE_QURAN);
+                        data.putInt("surat", mContext.getResources().getIntArray(R.array.surat_values)[choice]);
+                        mCallback.launchFragment(new QuranFragment(), data, "QuranFragment");
+                    }
+
+                });
+
+                b.show();
+            }
+        });
         button_sadaqa.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

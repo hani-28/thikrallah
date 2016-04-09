@@ -39,6 +39,14 @@
             android:layout_centerHorizontal="true"
             android:text="@string/nightThikr"
             android:textAppearance="?android:attr/textAppearanceLarge" />
+        <Button
+            android:id="@+id/button_quran"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/quranic_verses"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
 
         <!--Button

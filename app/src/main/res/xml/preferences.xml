@@ -83,6 +83,24 @@
             android:key="remindMeNightThikrType"
             android:title="@string/general_thikr_reminder_type" />
     </PreferenceCategory>
+    <PreferenceCategory android:title="@string/kahfThikrSettings" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="remindMekahf"
+            android:title="@string/remindMekahf" />
+
+        <com.HMSolutions.thikrallah.Utilities.TimePreference
+            android:defaultValue="10:00"
+            android:key="kahfReminderTime"
+            android:title="@string/changeReminderTime" />
+
+        <com.HMSolutions.thikrallah.Utilities.MyListPreference
+            android:defaultValue="1"
+            android:entries="@array/RemindmeType"
+            android:entryValues="@array/RemindmeTypeValues"
+            android:key="remindMekahfType"
+            android:title="@string/kahf_reminder_type" />
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/contactUs" >
         <com.HMSolutions.thikrallah.Utilities.MyPreference
             android:key="contactDevKey"
