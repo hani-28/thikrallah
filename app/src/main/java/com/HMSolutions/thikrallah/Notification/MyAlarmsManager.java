@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.HMSolutions.thikrallah.MainActivity;
 
@@ -39,7 +40,13 @@ public class MyAlarmsManager {
         boolean Remindmekahf=sharedPrefs.getBoolean("remindMekahf", true);
 		Intent launchIntent=new Intent(context, ThikrAlarmReceiver.class);
 
-		//Morning Reminder		
+
+        Date dat  = new Date();
+        Calendar now = Calendar.getInstance();
+        now.setTime(dat);
+        now.add(Calendar.SECOND,10);
+
+		//Morning Reminder
 		PendingIntent pendingIntentMorningThikr =PendingIntent.getBroadcast(context, requestCodeMorningAlarm, launchIntent.putExtra("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_DAY_THIKR), PendingIntent.FLAG_UPDATE_CURRENT);		
 		if (remindMeMorningThikr){
 			
@@ -52,8 +59,19 @@ public class MyAlarmsManager {
 
 
 			setAlarm(calendar0,pendingIntentMorningThikr);
-			
-		}else{
+
+
+            if(calendar0.after(now)){
+                setAlarm(calendar0, pendingIntentMorningThikr);
+                Log.d(TAG,"daytime reminder set"+calendar0.getTime());
+            }else{
+                calendar0.add(Calendar.HOUR,24);
+                Log.d(TAG,"daytime reminder time in past. 1 day added. alarm set on "+calendar0.getTime());
+                setAlarm(calendar0, pendingIntentMorningThikr);
+            }
+
+
+        }else{
 			alarmMgr.cancel(pendingIntentMorningThikr);
 		
 		}
@@ -70,7 +88,15 @@ public class MyAlarmsManager {
 			calendar1.set(Calendar.MINUTE, Integer.parseInt(NightReminderTime[1]));
 			calendar1.set(Calendar.SECOND, 0);
 
-			setAlarm(calendar1,pendingIntentNightThikr);
+            if(calendar1.after(now)){
+                setAlarm(calendar1, pendingIntentNightThikr);
+                Log.d(TAG,"night reminder set"+calendar1.getTime());
+            }else{
+                calendar1.add(Calendar.HOUR,24);
+                Log.d(TAG,"nigh reminder time in past. 1 day added. alarm set on "+calendar1.getTime());
+                setAlarm(calendar1, pendingIntentNightThikr);
+            }
+
 			
 		}else{
 			alarmMgr.cancel(pendingIntentNightThikr);
@@ -85,7 +111,6 @@ public class MyAlarmsManager {
             //        Long.parseLong(RandomReminderInterval) * 1000 * 60, pendingIntentGeneral);
 
 
-            Date dat  = new Date();
             Calendar calendar1 = Calendar.getInstance();
             calendar1.setTime(dat);
             calendar1.add(Calendar.MINUTE,Integer.parseInt(RandomReminderInterval));
@@ -98,19 +123,26 @@ public class MyAlarmsManager {
         PendingIntent pendingIntentKahf =PendingIntent.getBroadcast(context, requestCodeKahfAlarm,launchIntent.putExtra("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_QURAN_KAHF), PendingIntent.FLAG_UPDATE_CURRENT);
 
         if (Remindmekahf && sharedPrefs.getInt("lastKahfPlayed",-1)!=Calendar.getInstance().get(Calendar.DAY_OF_MONTH)){
+
+
+
             //Random Reminder
             alarmMgr.cancel(pendingIntentKahf);
-            // alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + Long.parseLong(RandomReminderInterval) * 1000 * 60,
-            //        Long.parseLong(RandomReminderInterval) * 1000 * 60, pendingIntentGeneral);
-
             Calendar calendar1 = Calendar.getInstance();
-            //calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar1.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+            calendar1.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
             calendar1.set(Calendar.HOUR_OF_DAY, Integer.parseInt(kahfReminderTime[0]));
             calendar1.set(Calendar.MINUTE, Integer.parseInt(kahfReminderTime[1]));
             calendar1.set(Calendar.SECOND, 0);
 
-            setAlarm(calendar1, pendingIntentKahf);
+            if(calendar1.after(now)){
+                setAlarm(calendar1, pendingIntentKahf);
+                Log.d(TAG,"kahf reminder set"+calendar1.getTime());
+            }else{
+                calendar1.add(Calendar.HOUR,24*7);
+                Log.d(TAG,"kahf reminder time in past. 7 days added. alarm set on "+calendar1.getTime());
+                setAlarm(calendar1, pendingIntentKahf);
+            }
+
 
         }else{
             alarmMgr.cancel(pendingIntentKahf);

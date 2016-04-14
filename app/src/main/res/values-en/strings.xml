@@ -121,5 +121,8 @@ He knows what lies before them and what is after them, And they comprehend not a
     <string name="share_text">I advise you to install this app called Remember Allah.\n\n It reminds you of Allah throughout the day by shoing you visual reminders of Allah as well as audio reminders throughout the day. I advise you also share this message with other muslims so that they may also benefit from it and you get an ongoing reward for it.\n\nAndroid: https://play.google.com/store/apps/details?id=com.HMSolutions.thikrallah  \n\nIphone: By a different developer but does same thing https://itunes.apple.com/app/id1004470625 \n</string>
     <string name="sadaqa">Ceaseless charity</string>
     <string name="quranic_verses">Quran</string>
+    <string name="kahfThikrSettings">Surat Alkahf Reminders Settings</string>
+    <string name="remindMekahf">Remind me of Surat Alkahf on Fridays</string>
+    <string name="kahf_reminder_type">Reminder Method</string>
 
 </resources>
