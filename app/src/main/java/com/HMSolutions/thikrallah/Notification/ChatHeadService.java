@@ -5,6 +5,7 @@ import com.HMSolutions.thikrallah.R;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Handler;
@@ -15,6 +16,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
+
+import java.util.Locale;
 
 public class ChatHeadService extends Service implements View.OnTouchListener {
 
@@ -30,7 +33,18 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 	}
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		if (intent==null){
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String lang=mPrefs.getString("language",null);
+
+        if (lang!=null){
+            Locale locale = new Locale(lang);
+            Locale.setDefault(locale);
+            Configuration config = new Configuration();
+            config.locale = locale;
+            getBaseContext().getResources().updateConfiguration(config,
+                    getBaseContext().getResources().getDisplayMetrics());
+        }
+        if (intent==null){
 			return START_NOT_STICKY;
 		}
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());

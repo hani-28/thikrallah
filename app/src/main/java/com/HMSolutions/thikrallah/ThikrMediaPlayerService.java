@@ -3,6 +3,7 @@ package com.HMSolutions.thikrallah;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,6 +18,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
+import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -143,6 +145,17 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     @Override
     public void onCreate() {
         super.onCreate();
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String lang=mPrefs.getString("language",null);
+
+        if (lang!=null){
+            Locale locale = new Locale(lang);
+            Locale.setDefault(locale);
+            Configuration config = new Configuration();
+            config.locale = locale;
+            getBaseContext().getResources().updateConfiguration(config,
+                    getBaseContext().getResources().getDisplayMetrics());
+        }
         Log.d(TAG,"oncreate called");
         initMediaPlayer();
         //below is wip
@@ -155,6 +168,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         if (getThikrType() != MainActivity.DATA_TYPE_GENERAL_THIKR) {
             resultIntent.putExtra("FromNotification", true);
             resultIntent.putExtra("DataType", this.getThikrType());
+
         }
 
 
@@ -533,7 +547,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
         Log.d(TAG, "thikrtype is " + this.getThikrType() + " vs " + MainActivity.DATA_TYPE_GENERAL_THIKR);
         currentThikrCounter++;
-        if (this.getThikrType().equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)) {
+        if (this.getThikrType().equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)||this.getThikrType().contains(MainActivity.DATA_TYPE_QURAN)) {
             ;
             this.resetPlayer();
 
@@ -591,8 +605,10 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             return this.getString(R.string.morningThikr);
         } else if (thikTypeConstant.equals(MainActivity.DATA_TYPE_NIGHT_THIKR)) {
             return this.getString(R.string.nightThikr);
-        } else if (thikTypeConstant.contains(MainActivity.DATA_TYPE_QURAN_KAHF)) {
+        } else if (thikTypeConstant.equals(MainActivity.DATA_TYPE_QURAN_KAHF)) {
             return this.getString(R.string.surat_alkahf);
+        } else if (thikTypeConstant.contains(MainActivity.DATA_TYPE_QURAN_MULK)) {
+            return this.getString(R.string.surat_almulk);
         } else {
             return "تذكير بالله";
         }

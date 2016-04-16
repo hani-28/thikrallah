@@ -69,6 +69,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 	public static final String DATA_TYPE_DAY_THIKR="morning";
 	public static final String DATA_TYPE_GENERAL_THIKR="general";
     public static final String DATA_TYPE_QURAN_KAHF="quran/0";
+    public static final String DATA_TYPE_QURAN_MULK="quran/1";
     public static final String DATA_TYPE_QURAN="quran";
 	private InterstitialAd interstitial;
 
@@ -349,7 +350,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
             if(intent.getExtras().getString("DataType").contains(MainActivity.DATA_TYPE_QURAN)){
                 Log.d("hanihani","quran thikr notification");
                 Bundle  data=new Bundle();
-                data.putString("DataType",DATA_TYPE_QURAN);
+                data.putString("DataType",intent.getExtras().getString("DataType"));
                 data.putInt("surat", this.getResources().getIntArray(R.array.surat_values)[0]);
                 launchFragment(new QuranFragment(), data, "QuranFragment");
             }

@@ -65,7 +65,12 @@ public class QuranFragment extends ListFragment implements OnClickListener {
 		this.setHasOptionsMenu(true);
 		
 		mCallback.setCurrentPlaying(this.thikrType,1);
-		thikrType=this.getArguments().getString("DataType")+"/"+this.getArguments().getInt("surat");;
+        if(this.getArguments().getString("DataType").contains("/")){
+            thikrType=this.getArguments().getString("DataType");
+        }else{
+            thikrType=this.getArguments().getString("DataType")+"/"+this.getArguments().getInt("surat");;
+        }
+
 		mCallback.setThikrType(thikrType);
 		View view = inflater.inflate(R.layout.fragment_thikr, container,
 				false);
@@ -110,10 +115,9 @@ public class QuranFragment extends ListFragment implements OnClickListener {
 
         SuratText=this.getActivity().getResources().getStringArray(R.array.surat_text)[surat];
 
-        numbers_text=SuratText.split("\\)");
-        Log.d("hanihani","aiat count is "+numbers_text.length);
-        for (int i=0;i<numbers_text.length;i++){
-            numbers_text[i]=numbers_text[i]+")";
+        numbers_text=SuratText.split("\\(\\uFEFF*\\d+\\uFEFF*\\)");
+        for (int i=1;i<=numbers_text.length;i++){
+            numbers_text[i-1]=numbers_text[i-1]+"("+i+")";
         }
         return numbers_text;//new String[]{};
 
