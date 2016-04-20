@@ -129,7 +129,7 @@ public class MyAlarmsManager {
             //Random Reminder
             alarmMgr.cancel(pendingIntentKahf);
             Calendar calendar1 = Calendar.getInstance();
-            calendar1.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
+            calendar1.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
             calendar1.set(Calendar.HOUR_OF_DAY, Integer.parseInt(kahfReminderTime[0]));
             calendar1.set(Calendar.MINUTE, Integer.parseInt(kahfReminderTime[1]));
             calendar1.set(Calendar.SECOND, 0);

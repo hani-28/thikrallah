@@ -54,7 +54,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     public static final int MEDIA_PLAYER_CHANGE_VOLUME = 7;
     public static final int MEDIA_PLAYER_RESUME = 8;
     AudioManager am;
-
+    private boolean StayPaused=false;
     int play_count=0;
     private MediaPlayer player;
     //public int counter=0;
@@ -274,6 +274,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 //           .build());
 
                 this.pausePlayer();
+
                 updateActions();
                 break;
             case MEDIA_PLAYER_INNCREMENT:
@@ -411,9 +412,9 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 startPlayerIfAllowed();
                 setVolume();
             } else {
-                am.abandonAudioFocus(this);
-                this.stopForeground(true);
-                this.stopSelf();
+                //am.abandonAudioFocus(this);
+                //this.stopForeground(true);
+                //this.stopSelf();
             }
 
 
@@ -645,8 +646,10 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
     public void pausePlayer() {
         isPaused = true;
+        StayPaused=true;
         if (this.isPlaying()) {
             this.player.pause();
+            am.abandonAudioFocus(this);
         }else{
             if(this.play_count==0){
                 this.stopSelf();
@@ -720,21 +723,32 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     }
     private void startPlayerIfAllowed(){
         Log.d(TAG,"startPlayerIfAllowed called");
-        this.play_count++;
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-        boolean isRespectMute = sharedPrefs.getBoolean("mute_thikr_when_ringer_mute", true);
-        if ((am.getRingerMode() == AudioManager.RINGER_MODE_SILENT || am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE)
-                && isRespectMute == true && this.overRideRespectMute==false && isUserAction==false) {
-            if (!this.getThikrType().equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)) {
-                this.pausePlayer();
-                Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
-                v.vibrate(500);
-            }
 
-        }else{
-            sendMessageToUI(MSG_CURRENT_PLAYING,currentPlaying);
-            player.start();
-            Log.d(TAG,"player started");
+        int ret = am.requestAudioFocus(this,
+                // Use the music stream.
+                this.getStreamType(),
+                // Request permanent focus.
+                getAudioFocusRequestType());
+        if (ret == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+
+
+            this.play_count++;
+            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+            boolean isRespectMute = sharedPrefs.getBoolean("mute_thikr_when_ringer_mute", true);
+            if ((am.getRingerMode() == AudioManager.RINGER_MODE_SILENT || am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE)
+                    && isRespectMute == true && this.overRideRespectMute==false && isUserAction==false) {
+                if (!this.getThikrType().equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)) {
+                    this.pausePlayer();
+                    Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
+                    v.vibrate(500);
+                }
+
+            }else{
+                sendMessageToUI(MSG_CURRENT_PLAYING,currentPlaying);
+                StayPaused=false;
+                player.start();
+                Log.d(TAG,"player started");
+            }
         }
     }
 

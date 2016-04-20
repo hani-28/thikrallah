@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation"
     <string name="base64RSAPublicKey" translatable="false">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAimbTum9pr+eyRgWusXVWwvq16Ck5t/WXiftbHp2LJGbFmdILC4wEYmjwzd6JEzVLintUmt+cn29X8Plyi2MqWixnIvYL5WY6nGN9FG4FD9Gu/L7zDY9fL7qhMQhi2JLS3sRGQnIy9Cac/fEYy8Amx/18M816tsAZ3H01jQ2lDUaMOUGgc/SSQTg+GvO2GXyIADiCneptZ8btseqy8iOtwSXl2ZN6e6wd+LnHArQ6SYiXGoC3XFDXjWywPC6kqwcp+TsJuvM8QpAfZITl206I3a9srI87SPXoHbeu8Hg90vywH6IeXOs4FrHYtbFW3HLF8I5W7xO3s71y00Vi7M9eTQIDAQAB</string>
     <string name="add_unit_id" translatable="false">ca-app-pub-2699427816916773/4290152443</string>
     <string name="ad_unit_id_interstital" translatable="false">ca-app-pub-2699427816916773/9181228848</string>

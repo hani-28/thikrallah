@@ -8,10 +8,16 @@ android {
         applicationId "com.HMSolutions.thikrallah"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 36
+        versionCode 37
         versionName "2.5"
     }
-
+    lintOptions {
+        disable 'MissingTranslation'
+       // checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        //abortOnError false
+    }
     buildTypes {
         release {
             minifyEnabled false
