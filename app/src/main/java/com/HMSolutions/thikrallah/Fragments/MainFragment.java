@@ -53,18 +53,18 @@ public class MainFragment extends Fragment {
         Button button_my_athkar = (Button) view.findViewById(R.id.button_my_athkar);
         Button button_sadaqa= (Button) view.findViewById(R.id.button_sadaqa);
         Button button_quran= (Button) view.findViewById(R.id.button_quran);
-/*
+
         Button button_athan = (Button) view.findViewById(R.id.button_athan);
         button_athan.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
-                mCallback.launchFragment(new AthanFragment(), new Bundle());	;
+                mCallback.launchFragment(new AthanFragment(), new Bundle(),"AthanFragment");	;
 				
 			}
 			
 		});
-*/
+
 
         button_quran.setOnClickListener(new OnClickListener() {
             @Override

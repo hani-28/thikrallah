@@ -49,16 +49,14 @@
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
 
-        <!--Button
+        <Button
             android:id="@+id/button_athan"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/button_night_thikr"
+            android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
-            android:layout_alignLeft="@+id/button_night_thikr"
-            android:layout_alignRight="@+id/button_night_thikr"
             android:text="@string/athan"
-            android:textAppearance="?android:attr/textAppearanceLarge" /-->
+            android:textAppearance="?android:attr/textAppearanceLarge" />
         <Button
             android:id="@+id/button_settings"
             android:layout_width="fill_parent"

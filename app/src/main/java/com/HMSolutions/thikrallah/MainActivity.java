@@ -89,10 +89,10 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
     class IncomingHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
-            Log.d("testing321","message recieved what="+msg.what+"arg1="+msg.arg1);
+            Log.d(TAG,"message recieved what="+msg.what+"arg1="+msg.arg1);
             switch (msg.what) {
                 case ThikrMediaPlayerService.MSG_CURRENT_PLAYING:
-                    Log.d("testing321","position"+msg.arg1);
+                    Log.d(TAG,"position"+msg.arg1);
                     sendPositionToThikrFragment(msg.arg1, msg.getData());
                     break;
                 case ThikrMediaPlayerService.MSG_UNBIND:
@@ -105,15 +105,15 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
     }
     private void sendPositionToThikrFragment(int position, Bundle data){
         String datatype=data.getString("com.HMSolutions.thikrallah.datatype",null);
-        Log.d("testing567","datatype="+datatype);
+        Log.d(TAG,"datatype="+datatype);
         if(datatype==null){
             return;
         }
         if(datatype.contains(DATA_TYPE_QURAN)){
-            Log.d("testing567","quran");
+            Log.d(TAG,"quran");
             QuranFragment fragment = (QuranFragment)this.getFragmentManager().findFragmentByTag("QuranFragment");
             if (fragment != null && fragment.isVisible()) {
-                Log.d("testing567","visible");
+                Log.d(TAG,"visible");
                 fragment.setCurrentlyPlaying(position);
             }
             return;
@@ -129,13 +129,13 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
         public void onServiceConnected(ComponentName className, IBinder service) {
             mServiceThikrMediaPlayerMessenger = new Messenger(service);
             mIsBoundMediaService=true;
-            Log.d("testing123","connected. binded? mIsBoundMediaService set to true");
+            Log.d(TAG,"connected. binded? mIsBoundMediaService set to true");
             try {
                 Message msg = Message.obtain(null, ThikrMediaPlayerService.MSG_CURRENT_PLAYING);
                 msg.replyTo = mMessenger;
                 mServiceThikrMediaPlayerMessenger.send(msg);
                 requestMediaServiceStatus();
-                Log.d("testing321","requested status");
+                Log.d(TAG,"requested status");
             }
             catch (RemoteException e) {
 
@@ -147,7 +147,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
             unbindtoMediaService();
             mServiceThikrMediaPlayerMessenger = null;
             mIsBoundMediaService=false;
-            Log.d("testing123","Disconnected. unbided? mIsBoundMediaService set to false");
+            Log.d(TAG,"Disconnected. unbided? mIsBoundMediaService set to false");
         }
     };
     IInAppBillingService mServiceInAppBilling;
@@ -161,7 +161,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
         @Override
         public void onServiceConnected(ComponentName name,
                                        IBinder service) {
-            Log.d("testing123","service connected");
+            Log.d(TAG,"service connected");
             mServiceInAppBilling = IInAppBillingService.Stub.asInterface(service);
             isPremiumPurchasedAsync();
         }
@@ -182,7 +182,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 
     private void unbindtoMediaService(){
         // unbind to the service
-        Log.d("testing123","unbind called. mIsBoundMediaService ="+mIsBoundMediaService);
+        Log.d(TAG,"unbind called. mIsBoundMediaService ="+mIsBoundMediaService);
         if (mIsBoundMediaService==true){
             unbindService(mConnectionMediaServer);
         }
@@ -203,7 +203,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
             }
 
         }
-        Log.d("testing123","bind called. mIsBoundMediaService"+mIsBoundMediaService);
+        Log.d(TAG,"bind called. mIsBoundMediaService"+mIsBoundMediaService);
     }
 
 
@@ -215,7 +215,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 
     @Override
 	protected void onStart() {
-     //   mGoogleApiClient.connect();
+        mGoogleApiClient.connect();
         super.onStart();
         bindtoMediaService();
 
@@ -236,7 +236,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 	}
 	@Override
 	protected void onStop() {
-       // mGoogleApiClient.disconnect();
+        mGoogleApiClient.disconnect();
         super.onStop();
 
 	}
@@ -245,34 +245,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-        base64RSAPublicKey=getResources().getText(R.string.base64RSAPublicKey).toString();
-        deviceId = "AC73D67B1C23A45BBDFCAF3F4040A0AA";//md5(android_id).toUpperCase();
-
-
-        mcontext=this.getApplicationContext();
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String lang=mPrefs.getString("language",null);
-
-        if (lang!=null){
-            Locale locale = new Locale(lang);
-            Locale.setDefault(locale);
-            Configuration config = new Configuration();
-            config.locale = locale;
-            getBaseContext().getResources().updateConfiguration(config,
-                    getBaseContext().getResources().getDisplayMetrics());
-        }
-
-
-
-        Intent serviceIntent =
-                new Intent("com.android.vending.billing.InAppBillingService.BIND");
-        serviceIntent.setPackage("com.android.vending");
-        bindService(serviceIntent, mServiceInAppBillingConn, Context.BIND_AUTO_CREATE);
-
-
-
-
+        Log.d(TAG,"oncreate 1");
         // Create an instance of GoogleAPIClient.
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -281,6 +254,37 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
                     .addApi(LocationServices.API)
                     .build();
         }
+        Log.d(TAG,"oncreate 2");
+
+        base64RSAPublicKey=getResources().getText(R.string.base64RSAPublicKey).toString();
+        deviceId = "AC73D67B1C23A45BBDFCAF3F4040A0AA";//md5(android_id).toUpperCase();
+
+
+        mcontext=this.getApplicationContext();
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String lang=mPrefs.getString("language",null);
+        Log.d(TAG,"oncreate 3");
+        if (lang!=null){
+            Locale locale = new Locale(lang);
+            Locale.setDefault(locale);
+            Configuration config = new Configuration();
+            config.locale = locale;
+            getBaseContext().getResources().updateConfiguration(config,
+                    getBaseContext().getResources().getDisplayMetrics());
+            Log.d(TAG,"oncreate 4");
+        }
+        Log.d(TAG,"oncreate 5");
+
+
+        Intent serviceIntent =
+                new Intent("com.android.vending.billing.InAppBillingService.BIND");
+        serviceIntent.setPackage("com.android.vending");
+        bindService(serviceIntent, mServiceInAppBillingConn, Context.BIND_AUTO_CREATE);
+        Log.d(TAG,"oncreate 6");
+
+
+
+
 
 
 
@@ -294,13 +298,15 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 
         populateBuiltinDatabase();
 
-
+        Log.d(TAG,"oncreate 7");
 
 		Intent intent1 = new Intent("com.HMSolutions.thikrallah.Notification.ThikrBootReceiver.android.action.broadcast");
+
 		new WhatsNewScreen(this).show();
+        Log.d(TAG,"oncreate 8");
 		AppRater.app_launched(this);
 		if (mPrefs.getBoolean("isFirstLaunch", true)){
-			Log.d("thikr", "first launch. calling boot recbiever");
+			Log.d(TAG, "first launch. calling boot recbiever");
 			sendBroadcast(intent1);
 			mPrefs.edit().putBoolean("isFirstLaunch", false).commit();
 			mPrefs.edit().putLong("time_at_last_ad",System.currentTimeMillis()).commit();
@@ -313,13 +319,13 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 
 
 		if (mPrefs.getBoolean("isPremium", false)==true||doesAdShowBasedOnClicks()==false){
-			Log.d("ads management", "ad hide"+doesAdShowBasedOnClicks());
+			Log.d(TAG, "ad hide"+doesAdShowBasedOnClicks());
 			hideAd();
 		}else{
 			//show banner ad
 			showAd();
 			//load interstital ad
-			Log.d("ads management", "ad show");
+			Log.d(TAG, "ad show");
 			// Create the interstitial.
 			//String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
 
@@ -341,14 +347,14 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 		Intent intent=this.getIntent();
 		boolean isNotification=intent.getBooleanExtra("FromNotification", false);
 		if (isNotification==true){
-            Log.d("hanihani","from notification");
+            Log.d(TAG,"from notification");
             if(intent.getExtras().getString("DataType").equalsIgnoreCase(MainActivity.DATA_TYPE_DAY_THIKR)||
                     intent.getExtras().getString("DataType").equalsIgnoreCase(MainActivity.DATA_TYPE_NIGHT_THIKR)){
-                Log.d("hanihani","general thikr notification");
+                Log.d(TAG,"general thikr notification");
                 launchFragment(new ThikrFragment(), intent.getExtras(),"ThikrFragment");
             }
             if(intent.getExtras().getString("DataType").contains(MainActivity.DATA_TYPE_QURAN)){
-                Log.d("hanihani","quran thikr notification");
+                Log.d(TAG,"quran thikr notification");
                 Bundle  data=new Bundle();
                 data.putString("DataType",intent.getExtras().getString("DataType"));
                 data.putInt("surat", this.getResources().getIntArray(R.array.surat_values)[0]);
@@ -436,12 +442,12 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 	}
 	private boolean doesAdShowBasedOnClicks(){
 		if(mPrefs.getBoolean("isPremium", false)==true){
-			Log.d("ads management", "user is premium");
+			Log.d(TAG, "user is premium");
 			return false;
 		}
 		long timeAtLastAd=mPrefs.getLong("time_at_last_click", 0);
 		if ((System.currentTimeMillis()-timeAtLastAd)<7*24*60*60*1000){
-			Log.d("ads management", "time since last ad="+(System.currentTimeMillis()-timeAtLastAd));
+			Log.d(TAG, "time since last ad="+(System.currentTimeMillis()-timeAtLastAd));
 			return false;
 		}
 		return true;
@@ -497,7 +503,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 	}
 	@Override
 	public void onPause(){
-      //  stopLocationUpdates();
+        stopLocationUpdates();
         unbindtoMediaService();
 		super.onPause();
 
@@ -541,7 +547,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 	}
 	@Override
 	public void pausePlayer() {
-        Log.d("testing123","pauseplayer called");
+        Log.d(TAG,"pauseplayer called");
 		Bundle data=new Bundle();
 		data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PAUSE);
 		sendActionToMediaService(data);
@@ -615,7 +621,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 	}
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) { 
-		Log.d("testing123", " RC_REQUEST  " + RC_REQUEST + "results ok " + RESULT_OK);
+		Log.d(TAG, " RC_REQUEST  " + RC_REQUEST + "results ok " + RESULT_OK);
 		// Pass on the activity result to the helper for handling
         if (requestCode == RC_REQUEST) {
             int responseCode = data.getIntExtra("RESPONSE_CODE", 0);
@@ -648,19 +654,19 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
     private LocationRequest locationRequest;
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.d("test","onConnectionFailed "+connectionResult.toString());
+        Log.d(TAG,"onConnectionFailed "+connectionResult.toString());
     }
 
     @Override
     public void onConnected(Bundle connectionHint) {
-        Log.d("test","onConnected");
+        Log.d(TAG,"onConnected");
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         if (mLastLocation != null) {
 
             PreferenceManager.getDefaultSharedPreferences(this).edit().putString("latitude", Double.toString(mLastLocation.getLatitude())).commit();
             PreferenceManager.getDefaultSharedPreferences(this).edit().putString("longitude", Double.toString(mLastLocation.getLongitude())).commit();
-            Log.d("test", "latitude is " + Double.toString(mLastLocation.getLatitude()));
+            Log.d(TAG, "latitude is " + Double.toString(mLastLocation.getLatitude()));
             PrayTime.instancePrayTime(this);
         }else{
             locationRequest = LocationRequest.create();
@@ -670,18 +676,21 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
         }
     }
     protected void stopLocationUpdates() {
-        LocationServices.FusedLocationApi.removeLocationUpdates(
-                mGoogleApiClient, this);
+        if (mGoogleApiClient.isConnected()){
+            LocationServices.FusedLocationApi.removeLocationUpdates(
+                    mGoogleApiClient, this);
+        }
+
     }
     @Override
     public void onConnectionSuspended(int i) {
-        Log.d("test", "onConnectionSuspended");
+        Log.d(TAG, "onConnectionSuspended");
     }
 
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.d("test","latitude is "+Double.toString(location.getLatitude()));
+        Log.d(TAG,"latitude is "+Double.toString(location.getLatitude()));
         PreferenceManager.getDefaultSharedPreferences(this).edit().putString("latitude", Double.toString(location.getLatitude())).commit();
         PreferenceManager.getDefaultSharedPreferences(this).edit().putString("longitude", Double.toString(location.getLongitude())).commit();
         stopLocationUpdates();
@@ -698,7 +707,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 		@Override
 		public void onAdOpened() {
 			// this
-			Log.d("ads management","ad openned");
+			Log.d(TAG,"ad openned");
 			//mPrefs.edit().putLong("time_at_last_click", System.currentTimeMillis()).commit();
 			super.onAdOpened();
 		}
@@ -708,7 +717,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 		}
 		@Override
 		public void onAdLeftApplication(){
-			Log.d("ads management","ad left application");
+			Log.d(TAG,"ad left application");
 			myActivity.hideAd();
 			mPrefs.edit().putLong("time_at_last_click", System.currentTimeMillis()).commit();
 			super.onAdLeftApplication();
@@ -719,7 +728,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 
 
     private class isPremiumPurchased extends AsyncTask<Void, Void, Boolean> {
-
+        int response;
 
         /**
          * Override this method to perform a computation on a background thread. The
@@ -738,10 +747,10 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
-                Log.d("testing123","isPremiumPurchased called");
+                Log.d(TAG,"isPremiumPurchased called");
                 Bundle ownedItems = mServiceInAppBilling.getPurchases(3, getPackageName(), "inapp", null);
-                int response = ownedItems.getInt("RESPONSE_CODE");
-                Log.d("testing123","response ="+response);
+                response = ownedItems.getInt("RESPONSE_CODE");
+                Log.d(TAG,"response ="+response);
                 if (response == 0) {
                     ArrayList<String> ownedSkus =
                             ownedItems.getStringArrayList("INAPP_PURCHASE_ITEM_LIST");
@@ -751,21 +760,21 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
                             ownedItems.getStringArrayList("INAPP_DATA_SIGNATURE_LIST");
                     String continuationToken =
                             ownedItems.getString("INAPP_CONTINUATION_TOKEN");
-                    Log.d("testing123","ownedSkus ="+ownedSkus.size());
+                    Log.d(TAG,"ownedSkus ="+ownedSkus.size());
                     for (int i = 0; i < purchaseDataList.size(); ++i) {
 
                         String purchaseData = purchaseDataList.get(i);
                         String signature = signatureList.get(i);
                         String sku = ownedSkus.get(i);
-                        Log.d("testing123","sku ="+sku);
-                        Log.d("testing123","base64"+signature);
-                        Log.d("testing123","base64"+base64RSAPublicKey);
-                        Log.d("testing123","Is signature valid? "+Security.verifyPurchase(base64RSAPublicKey,String.valueOf(RC_REQUEST),signature));
-                        Log.d("testing123","Is premium sku? "+sku.equalsIgnoreCase(SKU_PREMIUM));
+                        Log.d(TAG,"sku ="+sku);
+                        Log.d(TAG,"base64"+signature);
+                        Log.d(TAG,"base64"+base64RSAPublicKey);
+                        Log.d(TAG,"Is signature valid? "+Security.verifyPurchase(base64RSAPublicKey,String.valueOf(RC_REQUEST),signature));
+                        Log.d(TAG,"Is premium sku? "+sku.equalsIgnoreCase(SKU_PREMIUM));
                         if(Security.verifyPurchase(base64RSAPublicKey, signature, String.valueOf(RC_REQUEST)) && sku.equalsIgnoreCase(SKU_PREMIUM)) {
 
-                            Log.d("testing123", "ispremium true ");
-                            Log.d("base64", "base64 matches");
+                            Log.d(TAG, "ispremium true ");
+                            Log.d(TAG, "base64 matches");
                             return true;
 
                         }
@@ -785,6 +794,35 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
            if (isPremium==true){
                mPrefs.edit().putBoolean("isPremium", true).commit();
                hideAd();
+           }else{
+               switch (response){
+                   case 1://BILLING_RESPONSE_RESULT_USER_CANCELED
+                       Toast.makeText(mcontext,"User cancelled",Toast.LENGTH_LONG).show();
+                       break;
+                   case 2:
+                       Toast.makeText(mcontext,"No Internet",Toast.LENGTH_LONG).show();
+                       break;
+                   case 3:
+                       Toast.makeText(mcontext,"Billing API version is not supported for the type requested",Toast.LENGTH_LONG).show();
+                       break;
+                   case 4:
+                       Toast.makeText(mcontext,"Product not available",Toast.LENGTH_LONG).show();
+                       break;
+                   case 5:
+                       Toast.makeText(mcontext,"developer error. App not signed or not properly setup",Toast.LENGTH_LONG).show();
+                       break;
+                   case 6:
+                       Toast.makeText(mcontext,"Fatal error during the API action",Toast.LENGTH_LONG).show();
+                       break;
+                   case 7:
+                       Toast.makeText(mcontext,"Product already owned",Toast.LENGTH_LONG).show();
+                       mPrefs.edit().putBoolean("isPremium", true).commit();
+                       hideAd();
+                       break;
+                   case 8:
+                       Toast.makeText(mcontext,"Failure to consume since item is not owned",Toast.LENGTH_LONG).show();
+                       break;
+               }
            }
             return;
         }

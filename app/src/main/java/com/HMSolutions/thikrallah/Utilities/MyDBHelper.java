@@ -257,7 +257,7 @@ public class MyDBHelper  extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_NAME, null, ENABLED_COLUMN + " LIKE '%" + 1 + "%'", null, null, null, null);
 
-        if (cursor .moveToFirst()) {
+        if (cursor.moveToFirst()) {
 
             while (cursor.isAfterLast() == false) {
                 thikr = cursor.getString(cursor
@@ -268,15 +268,26 @@ public class MyDBHelper  extends SQLiteOpenHelper {
 
                 id = cursor.getLong(cursor.getColumnIndex(ID_COLUMN));
                 file=cursor.getString(cursor.getColumnIndex(FILE_PATH));
+
                 if(isBuiltIn==true){
+                    //gets thikr in correct locale
                     thikr=this.context.getResources().getStringArray(R.array.GeneralThikr)[Integer.parseInt(file)-1];
                 }
                 list.add(new UserThikr(id,thikr,isEnabled,isBuiltIn,file));
                 cursor.moveToNext();
             }
-            Log.d("testing123", "enabledThikrs count is " + list.size());
+            db.close();
+        }else{
+            db.close();
+            list=this.getAllBuiltinThikrs();
+            for (int i=0;i<list.size();i++){
+                this.updateIsEnabled(list.get(i).getId(),true);
+            }
+            list.clear();
+            list=getAllEnabledThikrs();
+
         }
-        db.close();
+        Log.d("testing123", "enabledThikrs count is " + list.size());
         return list;
     }
     public ArrayList<UserThikr> getAllUserThikrs(SQLiteDatabase db){

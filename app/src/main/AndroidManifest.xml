@@ -3,7 +3,7 @@
     package="com.HMSolutions.thikrallah">
 
 
-    <!--uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
