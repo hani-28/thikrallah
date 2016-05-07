@@ -2,8 +2,8 @@ package com.HMSolutions.thikrallah.Utilities;
 
 
 import com.HMSolutions.thikrallah.MainActivity;
+import com.HMSolutions.thikrallah.PreferenceActivity;
 import com.HMSolutions.thikrallah.R;
-import com.HMSolutions.thikrallah.SetPreferenceActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -68,7 +68,7 @@ public class WhatsNewScreen {
                         editor.commit();
                         dialogInterface.dismiss();
                         Intent intent = new Intent();
-                        intent.setClass(mActivity, SetPreferenceActivity.class);
+                        intent.setClass(mActivity, PreferenceActivity.class);
                         mActivity.startActivityForResult(intent, 0);
                     }
                     }

@@ -1,11 +1,5 @@
 package com.HMSolutions.thikrallah.Fragments;
 
-import com.HMSolutions.thikrallah.MainActivity;
-import com.HMSolutions.thikrallah.R;
-import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
-import com.HMSolutions.thikrallah.SetPreferenceActivity;
-import com.HMSolutions.thikrallah.Utilities.TimePreference;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -18,17 +12,20 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.util.Log;
 
-public class PrefsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener{
+import com.HMSolutions.thikrallah.MainActivity;
+import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
+import com.HMSolutions.thikrallah.R;
+import com.HMSolutions.thikrallah.Utilities.TimePreference;
 
+public class PrefsAthanFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener{
 
-
-    @Override
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
+
 		super.onCreate(savedInstanceState);
 
 		// Load the preferences from an XML resource
-		addPreferencesFromResource(R.xml.preferences);
+		addPreferencesFromResource(R.xml.preferences_athan);
 		initSummary(getPreferenceScreen());
 	}
 	

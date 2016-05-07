@@ -35,7 +35,7 @@ import java.util.HashMap;
 import java.util.TimeZone;
 
 public class PrayTime {
-
+    private static final String TAG="PrayTime";
     // ---------------------- Global Variables --------------------
     private int calcMethod; // caculation method
     private int asrJuristic; // Juristic method for Asr
@@ -100,8 +100,11 @@ public class PrayTime {
         PrayTime prayers = new PrayTime();
 
         prayers.setTimeFormat(PrayTime.TIME_FORMAT_Time12);
-        prayers.setCalcMethod(PrayTime.CALC_METHOD_ISNA);
-        prayers.setAsrJuristic(PrayTime.JURISTIC_METHOD_Shafii);
+        int calc_method=Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString("calc_method","4"));
+        Log.d(TAG,"calc_method="+calc_method);
+        prayers.setCalcMethod(calc_method);
+        int asr_calc_method=Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString("asr_calc_method","0"));
+        prayers.setAsrJuristic(asr_calc_method);
         prayers.setAdjustHighLats(PrayTime.ADJUST_HIGHER_LATITUDE_None);
         int[] offsets = {0, 0, 0, 0, 0, 0, 0}; // {Fajr,Sunrise,Dhuhr,Asr,Sunset,Maghrib,Isha}
         prayers.tune(offsets);
@@ -111,7 +114,8 @@ public class PrayTime {
         double latitude =  Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("latitude", "0.0"));
         double longitude = Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("longitude","0.0"));
         double timezone = getCurrentTimezoneOffset();
-
+        Log.d(TAG,"longitude is"+longitude);
+        Log.d(TAG,"latitude is"+latitude);
         Date now = new Date();
         Calendar cal = Calendar.getInstance();
         cal.setTime(now);

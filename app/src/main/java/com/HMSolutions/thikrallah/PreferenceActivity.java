@@ -1,37 +1,57 @@
 package com.HMSolutions.thikrallah;
 
 
+/*
+* Copyright 2013 The Android Open Source Project
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+
+
+
 import android.app.Activity;
-import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TabHost;
-import android.widget.TextView;
 
-import com.HMSolutions.thikrallah.Fragments.PrefsFragment;
+import com.HMSolutions.thikrallah.Fragments.SlidingTabsBasicFragment;
 
 import java.util.Locale;
 
-public class PreferenceActivity extends Activity implements TabHost.OnTabChangeListener {
 
+/**
+ * A simple launcher activity containing a summary sample description, sample log and a custom
+ * {@link android.support.v4.app.Fragment} which can display a view.
+ * <p>
+ * For devices with displays with a width of 720dp or greater, the sample log is always visible,
+ * on other devices it's visibility is controlled by an item on the Action Bar.
+ */
+public class PreferenceActivity extends Activity {
 
-    private static final String TAG ="PreferenceActivity" ;
-    private TabHost mTabHost;
-    public static final String TAB_PREF1 = "words";
-    public static final String TAB_PREF2 = "numbers";
-    private int mCurrentTab;
+    public static final String TAG = "MainActivity";
+
+    // Whether the Log Fragment is currently shown
+    private boolean mLogShown;
 
     @Override
-	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         String lang=mPrefs.getString("language",null);
 
@@ -45,68 +65,41 @@ public class PreferenceActivity extends Activity implements TabHost.OnTabChangeL
         }
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setDisplayShowHomeEnabled(false);
-
-        this.setContentView(R.layout.preference_tab_layout);
-        mTabHost = (TabHost) findViewById(android.R.id.tabhost);
-        setupTabs();
+        getActionBar().setDisplayShowHomeEnabled(false);
 
 
+        setContentView(R.layout.preference_activity_layout);
 
-        mTabHost.setOnTabChangedListener(this);
-        mTabHost.setCurrentTab(mCurrentTab);
-        // manually start loading stuff in the first tab
-        updateTab(TAB_PREF1, R.id.pref_tab1);
-		//getFragmentManager().beginTransaction().replace(android.R.id.content,new PrefsFragment()).commit();
-	}
-    private void setupTabs() {
-        mTabHost.setup(); // you must call this before adding your tabs!
-        mTabHost.addTab(newTab(TAB_PREF1, R.string.pref_tab1, R.id.pref_tab1));
-        mTabHost.addTab(newTab(TAB_PREF2, R.string.pref_tab2, R.id.pref_tab2));
+        if (savedInstanceState == null) {
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            SlidingTabsBasicFragment fragment = new SlidingTabsBasicFragment();
+            transaction.replace(R.id.sample_content_fragment, fragment);
+            transaction.commit();
+        }
     }
-    private TabHost.TabSpec newTab(String tag, int labelId, int tabContentId) {
-        Log.d(TAG, "buildTab(): tag=" + tag);
-
-        View indicator = LayoutInflater.from(this).inflate(R.layout.row_format, (ViewGroup) findViewById(android.R.id.tabs), false);
-        ((TextView) indicator.findViewById(R.id.toptext1)).setText(labelId);
-
-        TabHost.TabSpec tabSpec = mTabHost.newTabSpec(tag);
-        tabSpec.setIndicator(indicator);
-        tabSpec.setContent(tabContentId);
-        return tabSpec;
-    }
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
-	    // Respond to the action bar's Up/Home button
-	    case android.R.id.home:
-	    	Log.d("actionbar","onoptionselected called");
-	        this.onBackPressed();
-	        return true;
-	    }
-	    return super.onOptionsItemSelected(item);
-	}
 
     @Override
-    public void onTabChanged(String tabId) {
-        Log.d(TAG, "onTabChanged(): tabId=" + tabId);
-        if (TAB_PREF1.equals(tabId)) {
-            updateTab(tabId, R.id.pref_tab1);
-            mCurrentTab = 0;
-            return;
-        }
-        if (TAB_PREF2.equals(tabId)) {
-            updateTab(tabId, R.id.pref_tab2);
-            mCurrentTab = 1;
-            return;
-        }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return true;
     }
-    private void updateTab(String tabId, int placeholder) {
-        FragmentManager fm = getFragmentManager();
-        if (fm.findFragmentByTag(tabId) == null) {
-            fm.beginTransaction()
-                    .replace(placeholder, new PrefsFragment(), tabId)
-                    .commit();
-        }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        return super.onPrepareOptionsMenu(menu);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                Log.d("actionbar","onoptionselected called");
+                this.onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
 }

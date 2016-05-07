@@ -14,6 +14,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.HMSolutions.thikrallah.MainActivity;
+import com.HMSolutions.thikrallah.Utilities.PrayTime;
 
 public class MyAlarmsManager {
     String TAG = "MyAlarmsManager";
@@ -21,16 +22,23 @@ public class MyAlarmsManager {
 	public static final int requestCodeNightAlarm=20;
 	public static final int requestCodeRandomAlarm=1;
     public static final int requestCodeKahfAlarm=25;
+    public static final int requestCodeAthan1=100;
+    public static final int requestCodeAthan2=101;
+    public static final int requestCodeAthan3=102;
+    public static final int requestCodeAthan4=103;
+    public static final int requestCodeAthan5=104;
 	AlarmManager alarmMgr;
 	Context context;
-	public MyAlarmsManager(Context icontext){
+    private SharedPreferences sharedPrefs;
+
+    public MyAlarmsManager(Context icontext){
 		context=icontext;
 	}
 	public void UpdateAllApplicableAlarms() {
-		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 		alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-		String[] MorningReminderTime=sharedPrefs.getString("daytReminderTime", "8:00").split(":");
+        String[] MorningReminderTime=sharedPrefs.getString("daytReminderTime", "8:00").split(":");
 		String[] NightReminderTime=sharedPrefs.getString("nightReminderTime", "20:00").split(":");
         String[] kahfReminderTime=sharedPrefs.getString("kahfReminderTime", "10:00").split(":");
 		String RandomReminderInterval= sharedPrefs.getString("RemindMeEvery", "60");
@@ -44,7 +52,7 @@ public class MyAlarmsManager {
         Date dat  = new Date();
         Calendar now = Calendar.getInstance();
         now.setTime(dat);
-        now.add(Calendar.SECOND,10);
+        //now.add(Calendar.SECOND,10);
 
 		//Morning Reminder
 		PendingIntent pendingIntentMorningThikr =PendingIntent.getBroadcast(context, requestCodeMorningAlarm, launchIntent.putExtra("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_DAY_THIKR), PendingIntent.FLAG_UPDATE_CURRENT);		
@@ -147,9 +155,13 @@ public class MyAlarmsManager {
         }else{
             alarmMgr.cancel(pendingIntentKahf);
         }
+        updateAllPrayerAlarms();
 
 	}
-	@SuppressLint("NewApi")
+
+
+
+    @SuppressLint("NewApi")
 	private void setAlarm(Calendar time, PendingIntent pendingIntent){
 		Long timeInMilliseconds=getFutureTimeIfTimeInPast(time.getTimeInMillis());
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
@@ -167,4 +179,59 @@ public class MyAlarmsManager {
 		}
 
 	}
+    private void updateAllPrayerAlarms() {
+        updatePrayerAlarms(requestCodeAthan1,"isFajrReminder",0,MainActivity.DATA_TYPE_ATHAN1);
+        updatePrayerAlarms(requestCodeAthan2,"isDuhrReminder",2,MainActivity.DATA_TYPE_ATHAN2);
+        updatePrayerAlarms(requestCodeAthan3,"isAsrReminder",3,MainActivity.DATA_TYPE_ATHAN3);
+        updatePrayerAlarms(requestCodeAthan4,"isMaghribReminder",5,MainActivity.DATA_TYPE_ATHAN4);
+        updatePrayerAlarms(requestCodeAthan5,"isIshaaReminder",6,MainActivity.DATA_TYPE_ATHAN5);
+    }
+
+    private void updatePrayerAlarms(int requestCode, String isReminderPreference,int prayerPosition,String datatype) {
+        PrayTime prayertimes = PrayTime.instancePrayTime(context);
+        prayertimes.setTimeFormat(PrayTime.TIME_FORMAT_Time24);
+        String[] prayerTimes = prayertimes.getPrayerTimes(context);
+        if (prayerPosition==0){
+            //TODO:testing only remove before publishing
+           // prayerTimes[0]="22:45";
+        }
+        boolean isAthanReminder=sharedPrefs.getBoolean(isReminderPreference, true);
+        Intent launchIntent=new Intent(context, ThikrAlarmReceiver.class);
+
+
+        Date dat  = new Date();
+        Calendar now = Calendar.getInstance();
+        now.setTime(dat);
+        //now.add(Calendar.SECOND,10);
+
+        //athan Reminder
+        PendingIntent pendingIntentAthan =PendingIntent.getBroadcast(context, requestCode, launchIntent.putExtra("com.HMSolutions.thikrallah.datatype", datatype), PendingIntent.FLAG_UPDATE_CURRENT);
+
+        if (isAthanReminder){
+
+            Calendar calendar0 = Calendar.getInstance();
+            //calendar.setTimeInMillis(System.currentTimeMillis());
+            calendar0.set(Calendar.HOUR_OF_DAY, Integer.parseInt(prayerTimes[prayerPosition].split(":")[0]));
+            calendar0.set(Calendar.MINUTE, Integer.parseInt(prayerTimes[prayerPosition].split(":")[1]));
+            calendar0.set(Calendar.SECOND, 0);
+
+
+            setAlarm(calendar0,pendingIntentAthan);
+
+
+            if(calendar0.after(now)){
+                setAlarm(calendar0, pendingIntentAthan);
+                Log.d(TAG,"athan reminder set"+calendar0.getTime());
+            }else{
+                calendar0.add(Calendar.HOUR,24);
+                Log.d(TAG,"athan reminder time in past. 1 day added. alarm set on "+calendar0.getTime());
+                setAlarm(calendar0, pendingIntentAthan);
+            }
+
+
+        }else{
+            alarmMgr.cancel(pendingIntentAthan);
+
+        }
+    }
 }

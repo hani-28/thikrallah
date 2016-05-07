@@ -192,5 +192,40 @@
         <item>30</item>
     </integer-array>
 
+    <string-array name="athan_calculation_method">
+        <item>@string/calc_method_karachi</item>
+        <item>@string/calc_method_isna</item>
+        <item>@string/calc_method_mwl</item>
+        <item>@string/calc_method_mekkah</item>
+        <item>@string/calc_method_egypt</item>
+    </string-array>
+    <string-array name="athan_calculation_method_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+
+    <string-array name="asr_calculation_method">
+        <item>@string/asr_calc_method_standard</item>
+        <item>@string/asr_calc_method_hanafi</item>
+    </string-array>
+    <string-array name="asr_calculation_method_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="athan_notification_types">
+        <item>@string/prayer_reminder_type_viberate</item>
+        <item>@string/prayer_reminder_type_ring</item>
+        <item>@string/prayer_reminder_type_athan_mecca</item>
+    </string-array>
+    <string-array name="athan_notification_types_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
 
 </resources>

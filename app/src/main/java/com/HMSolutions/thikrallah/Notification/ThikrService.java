@@ -25,8 +25,11 @@ import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -177,10 +180,119 @@ public class ThikrService extends IntentService  {
             }
             return;
         }
+        if (thikrType.contains(MainActivity.DATA_TYPE_ATHAN)){
+            int reminderType=3;
+
+
+            String athan=this.getString(R.string.athan);
+            switch (thikrType){
+                case MainActivity.DATA_TYPE_ATHAN1:
+                    athan=this.getString(R.string.prayer1);
+                    reminderType=Integer.parseInt(sharedPrefs.getString("fajr_reminder_type", "3"));
+                    break;
+                case MainActivity.DATA_TYPE_ATHAN2:
+                    athan=this.getString(R.string.prayer2);
+                    reminderType=Integer.parseInt(sharedPrefs.getString("duhr_reminder_type", "3"));
+                    break;
+                case MainActivity.DATA_TYPE_ATHAN3:
+                    athan=this.getString(R.string.prayer3);
+                    reminderType=Integer.parseInt(sharedPrefs.getString("asr_reminder_type", "3"));
+                    break;
+                case MainActivity.DATA_TYPE_ATHAN4:
+                    athan=this.getString(R.string.prayer4);
+                    reminderType=Integer.parseInt(sharedPrefs.getString("maghrib_reminder_type", "3"));
+                    break;
+                case MainActivity.DATA_TYPE_ATHAN5:
+                    athan=this.getString(R.string.prayer5);
+                    reminderType=Integer.parseInt(sharedPrefs.getString("isha_reminder_type", "3"));
+                    break;
+            }
+
+            if (reminderType==1){//vibrate
+                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                android.support.v4.app.NotificationCompat.Builder mBuilder = new android.support.v4.app.NotificationCompat.Builder(this);
+                mBuilder.setContentTitle(this.getString(R.string.app_name))
+                        .setContentText(athan )
+                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setAutoCancel(true);
+
+
+
+                Intent launchAppIntent = new Intent(this, MainActivity.class);
+
+                launchAppIntent.putExtra("FromNotification",true);
+                launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_ATHAN);
+                PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
+                        0, launchAppIntent, PendingIntent.FLAG_CANCEL_CURRENT
+                );
+
+                mBuilder.setContentIntent(launchAppPendingIntent);
+
+                mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+                vibrate();
+            }else if (reminderType==2){
+                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                //Define sound URI
+                Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+                android.support.v4.app.NotificationCompat.Builder mBuilder = new android.support.v4.app.NotificationCompat.Builder(this);
+                mBuilder.setContentTitle(this.getString(R.string.app_name))
+                        .setContentText(athan )
+                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setAutoCancel(true)
+                        .setSound(soundUri,AudioManager.STREAM_NOTIFICATION);
+
+
+
+                Intent launchAppIntent = new Intent(this, MainActivity.class);
+
+                launchAppIntent.putExtra("FromNotification",true);
+                launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_ATHAN);
+                PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
+                        0, launchAppIntent, PendingIntent.FLAG_CANCEL_CURRENT
+                );
+
+                mBuilder.setContentIntent(launchAppPendingIntent);
+
+                mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+            }else{
+                sharedPrefs.edit().putString("thikrType", thikrType).commit();
+                data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAY);
+                Log.d(TAG,"fileNumber sent through intent is "+1);
+                data.putInt("FILE", 1);
+                data.putInt("reminderType",reminderType);
+                this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+            }
+
+
+        }
 
 	}
 
+    private void vibrate(){
+        // Get instance of Vibrator from current Context
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
+// This example will cause the phone to vibrate "SOS" in Morse Code
+// In Morse Code, "s" = "dot-dot-dot", "o" = "dash-dash-dash"
+// There are pauses to separate dots/dashes, letters, and words
+// The following numbers represent millisecond lengths
+        int dot = 200;      // Length of a Morse Code "dot" in milliseconds
+        int dash = 500;     // Length of a Morse Code "dash" in milliseconds
+        int short_gap = 200;    // Length of Gap Between dots/dashes
+        int medium_gap = 500;   // Length of Gap Between Letters
+        int long_gap = 1000;    // Length of Gap Between Words
+        long[] pattern = {
+                0,  // Start immediately
+
+                dash, medium_gap, dash, // o
+                medium_gap,
+        };
+
+// Only perform this pattern one time (-1 means "do not repeat")
+        v.vibrate(pattern, -1);
+
+    }
 	private boolean isTimeNowQuietTime() {
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
 		boolean quiet_time_choice=sharedPrefs.getBoolean("quiet_time_choice", true);

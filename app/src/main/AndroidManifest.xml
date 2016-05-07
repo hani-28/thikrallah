@@ -31,7 +31,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SetPreferenceActivity"
+            android:name=".PreferenceActivity"
             android:theme="@style/AppTheme"
             >
         </activity>

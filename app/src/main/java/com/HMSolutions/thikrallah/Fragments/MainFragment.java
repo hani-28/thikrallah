@@ -2,7 +2,7 @@ package com.HMSolutions.thikrallah.Fragments;
 
 import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.R;
-import com.HMSolutions.thikrallah.SetPreferenceActivity;
+import com.HMSolutions.thikrallah.PreferenceActivity;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
 
 import android.app.Activity;
@@ -108,7 +108,7 @@ public class MainFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent();
-				intent.setClass(v.getContext(), SetPreferenceActivity.class);
+				intent.setClass(v.getContext(), PreferenceActivity.class);
 				startActivityForResult(intent, 0); 
 			}});
 		

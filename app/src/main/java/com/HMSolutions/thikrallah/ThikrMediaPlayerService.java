@@ -201,14 +201,17 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 addAction(notificationBuilder, "pause", R.drawable.ic_media_pause);
                 addAction(notificationBuilder, "stop", R.drawable.ic_media_stop);
                 notificationBuilder.setStyle(new NotificationCompat.MediaStyle()
-                        .setShowActionsInCompactView(new int[]{0})
+                        .setShowActionsInCompactView(new int[]{0,1})
                         .setMediaSession(mediaSession.getSessionToken()));
             } else {
                 Log.d(TAG, "show play");
                 addAction(notificationBuilder, "play", R.drawable.ic_media_play);
+                addAction(notificationBuilder, "stop", R.drawable.ic_media_stop);
                 notificationBuilder.setStyle(new NotificationCompat.MediaStyle()
                         .setShowActionsInCompactView(new int[]{0})
                         .setMediaSession(mediaSession.getSessionToken()));
+
+
             }
             mediaSession.setActive(true);
             startForeground(NOTIFICATION_ID, notificationBuilder.build());
@@ -256,6 +259,9 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                     && isRespectMute == true) {
                 return Service.START_NOT_STICKY;
             }
+        }
+        if (this.getThikrType().contains(MainActivity.DATA_TYPE_ATHAN)){
+            new MyAlarmsManager(this).UpdateAllApplicableAlarms();
         }
         Log.d(TAG,"onStartCommand called"+intent.getExtras().toString());
         initNotification();
@@ -364,7 +370,9 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     private int getStreamType() {
         if (this.getThikrType().equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)) {
             return AudioManager.STREAM_NOTIFICATION;
-        } else {
+        } else if (this.getThikrType().contains(MainActivity.DATA_TYPE_ATHAN)) {
+            return AudioManager.STREAM_ALARM;
+        }else {
             return AudioManager.STREAM_MUSIC;
         }
     }
@@ -395,8 +403,8 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         try {
 
             Log.d(TAG, "file number is " + fileNumber);
-            afd = this.getApplicationContext().getAssets().openFd(this.getThikrType() + "/" + (fileNumber) + ".mp3");
-            Log.d(TAG, "file path  is " + this.getThikrType() + "/" + (fileNumber) + ".mp3");
+            afd = this.getApplicationContext().getAssets().openFd(this.getMediaFolderName() + "/" + (fileNumber) + ".mp3");
+            Log.d(TAG, "file path  is " + this.getMediaFolderName() + "/" + (fileNumber) + ".mp3");
             player.reset();
             player.setAudioStreamType(getStreamType());
             player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
@@ -419,7 +427,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
 
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
         }
     }
@@ -593,6 +601,12 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         return ThikrType;
 
     }
+    private String getMediaFolderName(){
+        if(getThikrType().contains(MainActivity.DATA_TYPE_ATHAN)){
+            return ThikrType=MainActivity.DATA_TYPE_ATHAN;
+        }
+        return getThikrType();
+    }
 
     private void setThikrType(String iThikrType) {
         if (iThikrType != null) {
@@ -602,17 +616,32 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     }
 
     private String getThikrTypeString(String thikTypeConstant) {
-        if (thikTypeConstant.equals(MainActivity.DATA_TYPE_DAY_THIKR)) {
-            return this.getString(R.string.morningThikr);
-        } else if (thikTypeConstant.equals(MainActivity.DATA_TYPE_NIGHT_THIKR)) {
-            return this.getString(R.string.nightThikr);
-        } else if (thikTypeConstant.equals(MainActivity.DATA_TYPE_QURAN_KAHF)) {
-            return this.getString(R.string.surat_alkahf);
-        } else if (thikTypeConstant.contains(MainActivity.DATA_TYPE_QURAN_MULK)) {
-            return this.getString(R.string.surat_almulk);
-        } else {
-            return "تذكير بالله";
+        switch (thikTypeConstant){
+            case MainActivity.DATA_TYPE_ATHAN1:
+                return this.getString(R.string.prayer1);
+
+            case MainActivity.DATA_TYPE_ATHAN2:
+                return this.getString(R.string.prayer2);
+
+            case MainActivity.DATA_TYPE_ATHAN3:
+                return this.getString(R.string.prayer3);
+
+            case MainActivity.DATA_TYPE_ATHAN4:
+                return this.getString(R.string.prayer4);
+            case MainActivity.DATA_TYPE_ATHAN5:
+                return this.getString(R.string.prayer5);
+            case MainActivity.DATA_TYPE_DAY_THIKR:
+                return this.getString(R.string.morningThikr);
+            case MainActivity.DATA_TYPE_NIGHT_THIKR:
+                return this.getString(R.string.nightThikr);
+            case MainActivity.DATA_TYPE_QURAN_KAHF:
+                return this.getString(R.string.surat_alkahf);
+            case MainActivity.DATA_TYPE_QURAN_MULK:
+                return this.getString(R.string.surat_almulk);
+            default:
+                return "تذكير بالله";
         }
+
 
     }
 
@@ -712,14 +741,13 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     }
 
     private void setVolume() {
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-
-        int volumeLevel = sharedPrefs.getInt("volume", 100);
-        int maxVolume = 101;
-        float volume = (float) (1 - Math.log(maxVolume - volumeLevel) / Math.log(maxVolume));
-        player.setVolume(volume, volume);
-
-
+        if (this.getThikrType().contains(MainActivity.DATA_TYPE_GENERAL_THIKR)){
+            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+            int volumeLevel = sharedPrefs.getInt("volume", 100);
+            int maxVolume = 101;
+            float volume = (float) (1 - Math.log(maxVolume - volumeLevel) / Math.log(maxVolume));
+            player.setVolume(volume, volume);
+        }
     }
     private void startPlayerIfAllowed(){
         Log.d(TAG,"startPlayerIfAllowed called");
@@ -739,8 +767,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                     && isRespectMute == true && this.overRideRespectMute==false && isUserAction==false) {
                 if (!this.getThikrType().equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)) {
                     this.pausePlayer();
-                    Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
-                    v.vibrate(500);
+                    vibrate();
                 }
 
             }else{
@@ -750,6 +777,30 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 Log.d(TAG,"player started");
             }
         }
+    }
+    private void vibrate(){
+        // Get instance of Vibrator from current Context
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+// This example will cause the phone to vibrate "SOS" in Morse Code
+// In Morse Code, "s" = "dot-dot-dot", "o" = "dash-dash-dash"
+// There are pauses to separate dots/dashes, letters, and words
+// The following numbers represent millisecond lengths
+        int dot = 200;      // Length of a Morse Code "dot" in milliseconds
+        int dash = 500;     // Length of a Morse Code "dash" in milliseconds
+        int short_gap = 200;    // Length of Gap Between dots/dashes
+        int medium_gap = 500;   // Length of Gap Between Letters
+        int long_gap = 1000;    // Length of Gap Between Words
+        long[] pattern = {
+                0,  // Start immediately
+
+                dash, medium_gap, dash, // o
+                medium_gap,
+        };
+
+// Only perform this pattern one time (-1 means "do not repeat")
+        v.vibrate(pattern, -1);
+
     }
 
     private boolean initMediaPlayer() {

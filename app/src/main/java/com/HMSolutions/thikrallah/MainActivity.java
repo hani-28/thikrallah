@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import com.HMSolutions.thikrallah.Fragments.MainFragment;
 import com.HMSolutions.thikrallah.Fragments.QuranFragment;
 import com.HMSolutions.thikrallah.Fragments.ThikrFragment;
+import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
 import com.HMSolutions.thikrallah.Utilities.AppRater;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
 import com.HMSolutions.thikrallah.Utilities.MyDBHelper;
@@ -71,6 +72,13 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
     public static final String DATA_TYPE_QURAN_KAHF="quran/0";
     public static final String DATA_TYPE_QURAN_MULK="quran/1";
     public static final String DATA_TYPE_QURAN="quran";
+    public static final String DATA_TYPE_ATHAN="athan";
+    public static final String DATA_TYPE_ATHAN1="athan1";
+    public static final String DATA_TYPE_ATHAN2="athan2";
+    public static final String DATA_TYPE_ATHAN3="athan3";
+    public static final String DATA_TYPE_ATHAN4="athan4";
+    public static final String DATA_TYPE_ATHAN5="athan5";
+
 	private InterstitialAd interstitial;
 
 
@@ -246,6 +254,8 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
         Log.d(TAG,"oncreate 1");
+        PreferenceManager.setDefaultValues(this.getApplicationContext(), R.xml.preferences, true);
+        PreferenceManager.setDefaultValues(this.getApplicationContext(), R.xml.preferences_athan, true);
         // Create an instance of GoogleAPIClient.
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -289,7 +299,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 
 
 		setContentView(R.layout.activity_main);
-		PreferenceManager.setDefaultValues(this.getApplicationContext(), R.xml.preferences, false);
+
 		 
 		adsListener=new myAdListener(this);
 		appLink="\n"+this.getResources().getString(R.string.app_link);
@@ -364,7 +374,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
         boolean isFromSettings=intent.getBooleanExtra("FromPreferenceActivity", false);
         if (isFromSettings==true){
             intent = new Intent();
-            intent.setClass(MainActivity.this, SetPreferenceActivity.class);
+            intent.setClass(MainActivity.this, PreferenceActivity.class);
             startActivityForResult(intent, 0);
         }
 
@@ -399,7 +409,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			Intent intent = new Intent();
-			intent.setClass(MainActivity.this, SetPreferenceActivity.class);
+			intent.setClass(MainActivity.this, PreferenceActivity.class);
 			startActivityForResult(intent, 0); 
 			return true;
 		}
@@ -663,15 +673,20 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         if (mLastLocation != null) {
-
+            Log.d(TAG,"mLastLocation is not null");
             PreferenceManager.getDefaultSharedPreferences(this).edit().putString("latitude", Double.toString(mLastLocation.getLatitude())).commit();
             PreferenceManager.getDefaultSharedPreferences(this).edit().putString("longitude", Double.toString(mLastLocation.getLongitude())).commit();
             Log.d(TAG, "latitude is " + Double.toString(mLastLocation.getLatitude()));
             PrayTime.instancePrayTime(this);
+            new MyAlarmsManager(this).UpdateAllApplicableAlarms();
         }else{
+            Log.d(TAG,"mLastLocation is null");
             locationRequest = LocationRequest.create();
             locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
             locationRequest.setInterval(5000);
+            locationRequest.setNumUpdates(3);
+            locationRequest.setExpirationDuration(1000*30);
+            locationRequest.setFastestInterval(1000);
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, this);
         }
     }
@@ -690,6 +705,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 
     @Override
     public void onLocationChanged(Location location) {
+        Log.d("TAG,","onLocationChanged called");
         Log.d(TAG,"latitude is "+Double.toString(location.getLatitude()));
         PreferenceManager.getDefaultSharedPreferences(this).edit().putString("latitude", Double.toString(location.getLatitude())).commit();
         PreferenceManager.getDefaultSharedPreferences(this).edit().putString("longitude", Double.toString(location.getLongitude())).commit();

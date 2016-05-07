@@ -149,7 +149,31 @@
     <string name="kahfThikrSettings">اعدادات تذكير سورة الكهف</string>
     <string name="remindMekahf">ذكرني بقراءة سورة الكهف</string>
     <string name="kahf_reminder_type">طريقة التذكير بسورة الكهف</string>
-    <string name="pref_tab1">setting2</string>
-    <string name="pref_tab2">setting2</string>
+    <string name="pref_tab1">اعدادات التذكير</string>
+    <string name="pref_tab2">اعدادات الاذان</string>
+    <string name="calc_method">طريقة الحساب</string>
+    <string name="calc_method_karachi">جامعة العلوم الإسلامية بكراتشي</string>
+    <string name="calc_method_isna">الاتحاد الإسلامي بأمريكا الشمالية</string>
+    <string name="calc_method_mwl">رابطة العالم الإسلامي</string>
+    <string name="calc_method_mekkah"> لجنة الإشراف على تقويم أم القرى</string>
+    <string name="calc_method_egypt"> الهيئة العامة المصرية للمساحة</string>
+    <string name="asr_calc_method">طريقة حساب وقت العصر</string>
+    <string name="asr_calc_method_standard">شافعي, ملكي, حنبلي</string>
+    <string name="asr_calc_method_hanafi">حنفي</string>
+
+    <string name="fajr_reminder_type">طريقة تنبية صلاة الفجر</string>
+    <string name="duhr_reminder_type">طريقة تنبية صلاة الظهر</string>
+    <string name="asr_reminder_type">طريقة تنبية صلاة العصر</string>
+    <string name="maghrib_reminder_type">طريقة تنبية صلاة المغرب</string>
+    <string name="isha_reminder_type">طريقة تنبية صلاة العشاء</string>
+
+    <string name="prayer_reminder_type_viberate">اهتزاز</string>
+    <string name="prayer_reminder_type_ring">رنة</string>
+    <string name="prayer_reminder_type_athan_mecca">اذان مكة</string>
+
+
+
+
+
 
 </resources>
