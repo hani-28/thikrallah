@@ -193,7 +193,7 @@ public class MyAlarmsManager {
         String[] prayerTimes = prayertimes.getPrayerTimes(context);
         if (prayerPosition==0){
             //TODO:testing only remove before publishing
-           // prayerTimes[0]="22:45";
+           // prayerTimes[0]="10:47";
         }
         boolean isAthanReminder=sharedPrefs.getBoolean(isReminderPreference, true);
         Intent launchIntent=new Intent(context, ThikrAlarmReceiver.class);

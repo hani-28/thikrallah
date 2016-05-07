@@ -371,7 +371,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         if (this.getThikrType().equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)) {
             return AudioManager.STREAM_NOTIFICATION;
         } else if (this.getThikrType().contains(MainActivity.DATA_TYPE_ATHAN)) {
-            return AudioManager.STREAM_ALARM;
+            return AudioManager.STREAM_NOTIFICATION;
         }else {
             return AudioManager.STREAM_MUSIC;
         }
