@@ -172,7 +172,15 @@
     <string name="prayer_reminder_type_athan_mecca">اذان مكة</string>
 
 
+    <string name="high_latitude_adjustment">تعديل الوقت للمناطق الشمالية</string>
 
+    <string name="highlatitudeadjustment_none">لا تعديل</string>
+    <string name="highlatitudeadjustment_midnight">منتصف الليل</string>
+    <string name="highlatitudeadjustment_seventh">سبع (1/7)الليل</string>
+    <string name="highlatitudeadjustment_anglebased">بموجب الزاوية</string>
+    <string name="calcs_method">طريقة حساب الاذان</string>
+
+    <string name="athan_type">طريقة التذكير بالصلاة</string>
 
 
 

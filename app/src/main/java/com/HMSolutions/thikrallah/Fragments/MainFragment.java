@@ -49,7 +49,7 @@ public class MainFragment extends Fragment {
 
         Button button_morning_thikr = (Button) view.findViewById(R.id.button_morning_thikr);
 		Button button_night_thikr = (Button) view.findViewById(R.id.button_night_thikr);
-		Button button_donate = (Button) view.findViewById(R.id.button_support_us);
+		//Button button_donate = (Button) view.findViewById(R.id.button_support_us);
         Button button_my_athkar = (Button) view.findViewById(R.id.button_my_athkar);
         Button button_sadaqa= (Button) view.findViewById(R.id.button_sadaqa);
         Button button_quran= (Button) view.findViewById(R.id.button_quran);
@@ -94,6 +94,7 @@ public class MainFragment extends Fragment {
                 mCallback.share();
             }
         });
+        /*
         button_donate.setOnClickListener(new OnClickListener(){
 
             @Override
@@ -103,7 +104,7 @@ public class MainFragment extends Fragment {
             }
 
         });
-		
+		*/
 		button_remind_me_settings.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {

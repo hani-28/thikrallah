@@ -228,4 +228,16 @@
         <item>3</item>
     </string-array>
 
+    <string-array name="athan_adjustment_methods">
+        <item>@string/highlatitudeadjustment_none</item>
+        <item>@string/highlatitudeadjustment_midnight</item>
+        <item>@string/highlatitudeadjustment_seventh</item>
+        <item>@string/highlatitudeadjustment_anglebased</item>
+    </string-array>
+    <string-array name="athan_adjustment_methods_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
 </resources>

@@ -16,21 +16,25 @@ import com.HMSolutions.thikrallah.ThikrMediaPlayerService;
 import com.HMSolutions.thikrallah.Utilities.MyDBHelper;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
+import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 
@@ -46,6 +50,18 @@ public class ThikrService extends IntentService  {
 	protected void onHandleIntent(Intent intent) {
 		new MyAlarmsManager(this.getApplicationContext()).UpdateAllApplicableAlarms();
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+        String lang=sharedPrefs.getString("language",null);
+
+        if (lang!=null){
+            Locale locale = new Locale(lang);
+            Locale.setDefault(locale);
+            Configuration config = new Configuration();
+            config.locale = locale;
+            getBaseContext().getResources().updateConfiguration(config,
+                    getBaseContext().getResources().getDisplayMetrics());
+        }
+
+
 		Bundle data=intent.getExtras();
 		String thikrType="";
 		thikrType=data.getString("com.HMSolutions.thikrallah.datatype");
@@ -81,13 +97,14 @@ public class ThikrService extends IntentService  {
 			int reminderType=Integer.parseInt(sharedPrefs.getString("remindMeDayThikrType", "1"));
 			if (reminderType==1){
 				NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-				android.support.v4.app.NotificationCompat.Builder mBuilder = new android.support.v4.app.NotificationCompat.Builder(this);
+				NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
 				mBuilder.setContentTitle(this.getString(R.string.app_name))
 				.setContentText(this.getString(R.string.morningThikr))
 				.setSmallIcon(R.drawable.ic_launcher)
 				.setAutoCancel(true);
-
-
+                mBuilder=setVisibilityPublic(mBuilder);
+                Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                mBuilder.setSound(soundUri,AudioManager.STREAM_NOTIFICATION);
 
 				Intent launchAppIntent = new Intent(this, MainActivity.class);
 
@@ -114,13 +131,14 @@ public class ThikrService extends IntentService  {
 			int reminderType=Integer.parseInt(sharedPrefs.getString("remindMeNightThikrType", "1"));
 			if (reminderType==1){
 				NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-				android.support.v4.app.NotificationCompat.Builder mBuilder = new android.support.v4.app.NotificationCompat.Builder(this);
+				NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
 				mBuilder.setContentTitle(this.getString(R.string.app_name))
 				.setContentText(this.getString(R.string.nightThikr))
 				.setSmallIcon(R.drawable.ic_launcher)
 				.setAutoCancel(true);
-
-
+                mBuilder=setVisibilityPublic(mBuilder);
+                Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                mBuilder.setSound(soundUri,AudioManager.STREAM_NOTIFICATION);
 
 				Intent launchAppIntent = new Intent(this, MainActivity.class);
 
@@ -150,14 +168,15 @@ public class ThikrService extends IntentService  {
             int reminderType=Integer.parseInt(sharedPrefs.getString("remindMekahfType", "1"));
             if (reminderType==1){
                 NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                android.support.v4.app.NotificationCompat.Builder mBuilder = new android.support.v4.app.NotificationCompat.Builder(this);
+                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
                 mBuilder.setContentTitle(this.getString(R.string.app_name))
                         .setContentText(this.getString(R.string.surat_alkahf))
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setAutoCancel(true);
 
-
-
+                mBuilder=setVisibilityPublic(mBuilder);
+                Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                mBuilder.setSound(soundUri,AudioManager.STREAM_NOTIFICATION);
                 Intent launchAppIntent = new Intent(this, MainActivity.class);
 
                 launchAppIntent.putExtra("FromNotification",true);
@@ -210,13 +229,13 @@ public class ThikrService extends IntentService  {
 
             if (reminderType==1){//vibrate
                 NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                android.support.v4.app.NotificationCompat.Builder mBuilder = new android.support.v4.app.NotificationCompat.Builder(this);
+                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
                 mBuilder.setContentTitle(this.getString(R.string.app_name))
                         .setContentText(athan )
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setAutoCancel(true);
 
-
+                mBuilder=setVisibilityPublic(mBuilder);
 
                 Intent launchAppIntent = new Intent(this, MainActivity.class);
 
@@ -235,14 +254,14 @@ public class ThikrService extends IntentService  {
                 //Define sound URI
                 Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-                android.support.v4.app.NotificationCompat.Builder mBuilder = new android.support.v4.app.NotificationCompat.Builder(this);
+                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
                 mBuilder.setContentTitle(this.getString(R.string.app_name))
                         .setContentText(athan )
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setAutoCancel(true)
                         .setSound(soundUri,AudioManager.STREAM_NOTIFICATION);
 
-
+                mBuilder=setVisibilityPublic(mBuilder);
 
                 Intent launchAppIntent = new Intent(this, MainActivity.class);
 
@@ -268,7 +287,12 @@ public class ThikrService extends IntentService  {
         }
 
 	}
-
+    private NotificationCompat.Builder setVisibilityPublic(NotificationCompat.Builder inotificationBuilder){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            inotificationBuilder.setVisibility(Notification.VISIBILITY_PUBLIC);
+        }
+        return inotificationBuilder;
+    }
     private void vibrate(){
         // Get instance of Vibrator from current Context
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);

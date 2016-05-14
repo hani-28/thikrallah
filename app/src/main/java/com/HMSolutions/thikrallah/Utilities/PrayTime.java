@@ -93,10 +93,6 @@ public class PrayTime {
 
     public static PrayTime instancePrayTime(Context context){
         Log.d("prayerTimes", "testing");
-        double latitude =  Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("latitude", "0.0"));
-        double longitude = Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("longitude","0.0"));
-        double timezone = getCurrentTimezoneOffset();
-        // Test Prayer times here
         PrayTime prayers = new PrayTime();
 
         prayers.setTimeFormat(PrayTime.TIME_FORMAT_Time12);
@@ -105,7 +101,8 @@ public class PrayTime {
         prayers.setCalcMethod(calc_method);
         int asr_calc_method=Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString("asr_calc_method","0"));
         prayers.setAsrJuristic(asr_calc_method);
-        prayers.setAdjustHighLats(PrayTime.ADJUST_HIGHER_LATITUDE_None);
+        int high_latitude_adjustment=Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString("adjustment_method","0"));
+        prayers.setAdjustHighLats(high_latitude_adjustment);
         int[] offsets = {0, 0, 0, 0, 0, 0, 0}; // {Fajr,Sunrise,Dhuhr,Asr,Sunset,Maghrib,Isha}
         prayers.tune(offsets);
         return prayers;

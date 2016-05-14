@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
 import com.HMSolutions.thikrallah.Notification.ThikrMediaBroadcastReciever;
 
+
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -19,11 +20,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.Configuration;
-import android.graphics.BitmapFactory;
+
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -37,9 +39,6 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.os.Vibrator;
-import android.support.v4.media.MediaMetadataCompat;
-import android.support.v4.media.session.MediaSessionCompat;
-import android.support.v4.media.session.PlaybackStateCompat;
 import android.widget.Toast;
 
 public class ThikrMediaPlayerService extends Service implements OnCompletionListener,
@@ -184,13 +183,19 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setAutoCancel(true)
                 .setContentTitle(getString(R.string.app_name))
-                .setContentText(this.getString(R.string.now_playing) + " " + getThikrTypeString(this.getThikrType()))
+                .setContentText(getThikrTypeString(this.getThikrType()))
 
                 .setContentIntent(launchAppPendingIntent);
-
+        notificationBuilder=setVisibilityPublic(notificationBuilder);
         updateActions();
 
 
+    }
+    private NotificationCompat.Builder setVisibilityPublic(NotificationCompat.Builder inotificationBuilder){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            inotificationBuilder.setVisibility(Notification.VISIBILITY_PUBLIC);
+        }
+        return inotificationBuilder;
     }
 
     private void updateActions() {
@@ -249,6 +254,12 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         } else {
 
             this.setThikrType(intent.getExtras().getString("com.HMSolutions.thikrallah.datatype", null));
+        }
+        if(getThikrType()==null){
+            //TODO:when does this case happen
+            Log.d(TAG,"thikrtype is null... why?");
+            new MyAlarmsManager(this).UpdateAllApplicableAlarms();
+            return Service.START_NOT_STICKY;
         }
         if (this.getThikrType().equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)) {
             new MyAlarmsManager(this).UpdateAllApplicableAlarms();

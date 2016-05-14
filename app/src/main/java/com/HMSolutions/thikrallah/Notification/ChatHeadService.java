@@ -62,7 +62,7 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 			
 			chatHead=new TextView(this);
 			chatHead.setTextAppearance(this.getApplicationContext(), android.R.style.TextAppearance_Large);
-			chatHead.setText(thikr);
+			chatHead.setText(thikr, TextView.BufferType.SPANNABLE);
 			chatHead.setBackgroundResource(R.drawable.chat_head);
 			chatHead.setTextColor(Color.BLACK);
 			chatHead.setGravity(Gravity.CENTER);
