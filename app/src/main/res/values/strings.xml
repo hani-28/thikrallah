@@ -181,7 +181,7 @@
     <string name="calcs_method">طريقة حساب الاذان</string>
 
     <string name="athan_type">طريقة التذكير بالصلاة</string>
-
-
+    <string name="record_audio">سجل صوت الدعاء</string>
+    <string name="ok">تم</string>
 
 </resources>

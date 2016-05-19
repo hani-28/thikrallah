@@ -66,13 +66,16 @@ public class ThikrService extends IntentService  {
 		String thikrType="";
 		thikrType=data.getString("com.HMSolutions.thikrallah.datatype");
 		if (thikrType.equals(MainActivity.DATA_TYPE_GENERAL_THIKR)){
-            int ThikrCount = this.getResources().getStringArray(R.array.GeneralThikr).length;
             MyDBHelper db = new MyDBHelper(this);
             UserThikr thikr=db.getRandomThikr();
             if (thikr==null){
                 return;
             }
-            int fileNumber=Integer.parseInt(thikr.getFile());
+            int fileNumber=-1;
+            if(android.text.TextUtils.isDigitsOnly(thikr.getFile())){
+                fileNumber=Integer.parseInt(thikr.getFile());
+            }
+            Log.d(TAG,"filenumber is"+fileNumber);
 			//fire text chat head service
 			Intent intentChatHead=new Intent(this.getApplicationContext(), ChatHeadService.class);
 			intentChatHead.putExtra("thikr", thikr.getThikrText());
@@ -81,11 +84,12 @@ public class ThikrService extends IntentService  {
 
 			int reminderType=Integer.parseInt(sharedPrefs.getString("RemindmeThroughTheDayType", "1"));
 			boolean isQuietTime=isTimeNowQuietTime();
-			if ((reminderType==1 ||reminderType==2)&&isQuietTime==false&&thikr.isBuiltIn()==true){
+			if ((reminderType==1 ||reminderType==2)&&isQuietTime==false&&(thikr.isBuiltIn()==true||thikr.getFile().length()>2)){
                 sharedPrefs.edit().putString("thikrType", MainActivity.DATA_TYPE_GENERAL_THIKR).commit();
                 data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAY);
                 Log.d(TAG,"fileNumber sent through intent is "+fileNumber);
                 data.putInt("FILE", fileNumber);
+                data.putString("FILE_PATH",thikr.getFile());
                 this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
 			}
             return;

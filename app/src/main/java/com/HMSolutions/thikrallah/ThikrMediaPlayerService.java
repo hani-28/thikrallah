@@ -1,6 +1,8 @@
 package com.HMSolutions.thikrallah;
 
 
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -71,6 +73,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     /** Command to the service to display a message */
     static final int MSG_CURRENT_PLAYING = 100;
     static final int MSG_UNBIND = 99;
+    private String filepath;
 
     /**
      * Handler of incoming messages from clients.
@@ -183,6 +186,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setAutoCancel(true)
                 .setContentTitle(getString(R.string.app_name))
+                .setPriority(Notification.PRIORITY_MAX)
                 .setContentText(getThikrTypeString(this.getThikrType()))
 
                 .setContentIntent(launchAppPendingIntent);
@@ -332,7 +336,11 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 break;
             case MEDIA_PLAYER_PLAY:
 
-                int file = data.getInt("FILE");
+                int file=-1;
+                filepath="null";
+                file = data.getInt("FILE");
+                filepath=data.getString("FILE_PATH");
+
                 Log.d(TAG, "play " + file + " called");
                 //  mediaSession.setPlaybackState(new PlaybackStateCompat.Builder()
                 //        .setState(PlaybackStateCompat.STATE_PLAYING, 0, 0)
@@ -410,31 +418,61 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         this.initMediaPlayer();
         setCurrentPlaying(fileNumber);
         player.setOnCompletionListener(this);
-        AssetFileDescriptor afd;
+
         try {
 
-            Log.d(TAG, "file number is " + fileNumber);
-            afd = this.getApplicationContext().getAssets().openFd(this.getMediaFolderName() + "/" + (fileNumber) + ".mp3");
-            Log.d(TAG, "file path  is " + this.getMediaFolderName() + "/" + (fileNumber) + ".mp3");
-            player.reset();
-            player.setAudioStreamType(getStreamType());
-            player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-            player.prepare();
+            if (fileNumber!=-1){
+                Log.d(TAG, "file number is " + fileNumber);
+                AssetFileDescriptor afd = this.getApplicationContext().getAssets().openFd(this.getMediaFolderName() + "/" + (fileNumber) + ".mp3");
+                Log.d(TAG, "file path  is " + this.getMediaFolderName() + "/" + (fileNumber) + ".mp3");
+                player.reset();
+                player.setAudioStreamType(getStreamType());
+                player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+                player.prepare();
 
-            int ret = am.requestAudioFocus(this,
-                    // Use the music stream.
-                    this.getStreamType(),
-                    // Request permanent focus.
-                    getAudioFocusRequestType());
-            if (ret == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+                int ret = am.requestAudioFocus(this,
+                        // Use the music stream.
+                        this.getStreamType(),
+                        // Request permanent focus.
+                        getAudioFocusRequestType());
+                if (ret == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
 
-                startPlayerIfAllowed();
-                setVolume();
-            } else {
-                //am.abandonAudioFocus(this);
-                //this.stopForeground(true);
-                //this.stopSelf();
+                    startPlayerIfAllowed();
+                    setVolume();
+                } else {
+                    //am.abandonAudioFocus(this);
+                    //this.stopForeground(true);
+                    //this.stopSelf();
+                }
+
+            }else{
+                FileDescriptor afd=null;
+                Log.d(TAG,"filepath="+filepath);
+                FileInputStream fis = new FileInputStream(this.filepath);
+                afd = fis.getFD();
+                player.reset();
+                player.setAudioStreamType(getStreamType());
+                player.setDataSource(afd);
+                player.prepare();
+
+                int ret = am.requestAudioFocus(this,
+                        // Use the music stream.
+                        this.getStreamType(),
+                        // Request permanent focus.
+                        getAudioFocusRequestType());
+                if (ret == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+
+                    startPlayerIfAllowed();
+                    setVolume();
+                } else {
+                    //am.abandonAudioFocus(this);
+                    //this.stopForeground(true);
+                    //this.stopSelf();
+                }
+
             }
+
+
 
 
         } catch (IOException e) {
@@ -779,6 +817,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 if (!this.getThikrType().equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)) {
                     this.pausePlayer();
                     vibrate();
+                    this.stopSelf();
                 }
 
             }else{

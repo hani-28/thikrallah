@@ -4,11 +4,18 @@ import com.HMSolutions.thikrallah.Models.UserThikr;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
 import com.HMSolutions.thikrallah.Utilities.MyDBHelper;
+import com.HMSolutions.thikrallah.Utilities.MyThikrDialogInterface;
+import com.HMSolutions.thikrallah.Utilities.RecordThikrDialog;
 import com.HMSolutions.thikrallah.Utilities.UserThikrArrayAdapter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,11 +24,13 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class MyAthkarFragment extends Fragment {
+public class MyAthkarFragment extends Fragment implements MyThikrDialogInterface {
     private MainInterface mCallback;
     private Button addThikrButton;
     private ListView myAthkarListView;
@@ -30,14 +39,16 @@ public class MyAthkarFragment extends Fragment {
     UserThikrArrayAdapter adapter;
     ArrayList<UserThikr> thickerArray;
     Activity context;
-
+    RecordThikrDialog dialog;
+    String TAG="MyAthkarFragment";
 
     public MyAthkarFragment() {
     }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        context=activity;
+        context = activity;
         try {
             mCallback = (MainInterface) activity;
         } catch (ClassCastException e) {
@@ -53,22 +64,33 @@ public class MyAthkarFragment extends Fragment {
         this.getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
         this.getActivity().getActionBar().setDisplayShowHomeEnabled(true);
         this.setHasOptionsMenu(true);
-        db=new MyDBHelper(this.getActivity());
+        db = new MyDBHelper(this.getActivity());
         View view = inflater.inflate(R.layout.my_athkar, container,
                 false);
         addThikrButton = (Button) view.findViewById(R.id.add_thikr);
         new_thikr_Edittext = (EditText) view.findViewById(R.id.my_new_thikr_edit_text);
-        myAthkarListView= (ListView) view.findViewById(R.id.my_athkar_listview);
-        thickerArray=db.getAllThikrs();
-        adapter = new UserThikrArrayAdapter(getActivity(), R.layout.my_athkar_row_format,thickerArray);
+        myAthkarListView = (ListView) view.findViewById(R.id.my_athkar_listview);
+        thickerArray = db.getAllThikrs();
+        adapter = new UserThikrArrayAdapter(getActivity(), R.layout.my_athkar_row_format, thickerArray);
         myAthkarListView.setAdapter(adapter);
-
-
+        dialog = new RecordThikrDialog();
+        dialog.setTargetFragment(this,0);
 
         addThikrButton.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
+
+                dialog.show(getActivity().getFragmentManager(), "RecordThikrDialog");
+
+
+
+
+            }
+
+            //RecordThikrDialog dialog=new RecordThikrDialog();
+
+                /*
                 String newThikr = new_thikr_Edittext.getText().toString();
                 if (newThikr.equalsIgnoreCase("")==false){
                     db.addThikr(newThikr);
@@ -78,21 +100,23 @@ public class MyAthkarFragment extends Fragment {
                     adapter.addAll(thickerArray);
                 }
                 hideKeyboard(context);
-            }
-
+                */
         });
+
 
         return view;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId()==android.R.id.home) {
+        if (item.getItemId() == android.R.id.home) {
             // Respond to the action bar's Up/Home button
             this.getActivity().onBackPressed();
             return true;
         }
         return false;
     }
+
     private void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         //Find the currently focused view, so we can grab the correct window token from it.
@@ -104,4 +128,25 @@ public class MyAthkarFragment extends Fragment {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    /**
+     * This method will be invoked when the dialog is dismissed.
+     */
+    @Override
+    public void updateList() {
+        Log.d(TAG,"updatelist called");
+
+
+        if (this.getView()!=null){
+            hideKeyboard(this.getActivity());
+            thickerArray = db.getAllThikrs();
+          //  this.getView().invalidate();
+            //TODO:fragement not being redrawn
+            adapter.clear();
+            adapter.addAll(thickerArray);
+            this.adapter.notifyDataSetChanged();
+
+        }
+
+
+    }
 }

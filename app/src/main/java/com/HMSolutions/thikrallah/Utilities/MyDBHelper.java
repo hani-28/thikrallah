@@ -260,8 +260,7 @@ public class MyDBHelper  extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
 
             while (cursor.isAfterLast() == false) {
-                thikr = cursor.getString(cursor
-                        .getColumnIndex(THIKR_COLUMN));
+
 
                 isEnabled = cursor.getInt(cursor.getColumnIndex(ENABLED_COLUMN))==1;
                 isBuiltIn = cursor.getInt(cursor.getColumnIndex(IS_BUILTIN_COLUMN)) == 1;
@@ -272,6 +271,8 @@ public class MyDBHelper  extends SQLiteOpenHelper {
                 if(isBuiltIn==true){
                     //gets thikr in correct locale
                     thikr=this.context.getResources().getStringArray(R.array.GeneralThikr)[Integer.parseInt(file)-1];
+                }else{
+                    thikr = cursor.getString(cursor.getColumnIndex(THIKR_COLUMN));
                 }
                 list.add(new UserThikr(id,thikr,isEnabled,isBuiltIn,file));
                 cursor.moveToNext();
@@ -299,6 +300,33 @@ public class MyDBHelper  extends SQLiteOpenHelper {
         ArrayList<UserThikr> list=new ArrayList<UserThikr>();
 
         Cursor cursor = db.query(TABLE_NAME, null, IS_BUILTIN_COLUMN + " LIKE '%" + 0 + "%'", null, null, null, null);
+
+        if (cursor .moveToFirst()) {
+
+            while (cursor.isAfterLast() == false) {
+                thikr = cursor.getString(cursor
+                        .getColumnIndex(THIKR_COLUMN));
+                isEnabled = cursor.getInt(cursor.getColumnIndex(ENABLED_COLUMN))==1;
+                isBuiltIn = cursor.getInt(cursor.getColumnIndex(IS_BUILTIN_COLUMN)) == 1;
+                id = cursor.getLong(cursor.getColumnIndex(ID_COLUMN));
+                file=cursor.getString(cursor.getColumnIndex(FILE_PATH));
+                list.add(new UserThikr(id,thikr,isEnabled,isBuiltIn,file));
+                cursor.moveToNext();
+            }
+            Log.d("testing123","enabledThikrs count is "+list.size());
+        }
+
+        return list;
+    }
+    public ArrayList<UserThikr> getAllUserThikrs(){
+        String thikr="";
+        boolean isEnabled=true;
+        boolean isBuiltIn;
+        long id=-1;
+        String file="";
+        ArrayList<UserThikr> list=new ArrayList<UserThikr>();
+
+        Cursor cursor = this.getReadableDatabase().query(TABLE_NAME, null, IS_BUILTIN_COLUMN + " LIKE '%" + 0 + "%'", null, null, null, null);
 
         if (cursor .moveToFirst()) {
 

@@ -13,9 +13,12 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 import com.HMSolutions.thikrallah.MainActivity;
+import com.HMSolutions.thikrallah.Models.UserThikr;
+import com.HMSolutions.thikrallah.Notification.ThikrService;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.ThikrMediaPlayerService;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class SeekBarPreference extends Preference implements OnSeekBarChangeListener {
@@ -23,6 +26,7 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
     private TextView summaryTV;
     private int mProgress;
     private TextView volumeValue;
+    private String TAG="SeekBarPreference";
 
     public SeekBarPreference(Context context) {
 
@@ -74,7 +78,8 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-        playRandrom();
+       playRandrom();
+       //playUserFile();
     }
 
     @Override
@@ -110,6 +115,27 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
         data.putInt("FILE", fileNumber);
         data.putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_GENERAL_THIKR);
         sendActionToMediaService(data);
+
+    }
+    public void playUserFile() {
+        /*
+        MyDBHelper db = new MyDBHelper(this.getContext());
+        ArrayList<UserThikr> thikr=db.getAllUserThikrs();
+
+        Bundle data=new Bundle();
+        data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAY);
+        data.putInt("FILE",   -1);
+        data.putString("FILE_PATH",  thikr.get(0).getFile());
+        Log.d(TAG,"file_path="+thikr.get(0).getFile()+thikr.toString());
+        data.putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_GENERAL_THIKR);
+        sendActionToMediaService(data);
+*/
+
+
+        Bundle data1=new Bundle();
+        data1.putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_GENERAL_THIKR);
+        data1.putBoolean("isUserAction",false);
+        this.getContext().startService(new Intent(this.getContext(), ThikrService.class).putExtras(data1));
 
     }
     public void sendActionToMediaService(Bundle data){

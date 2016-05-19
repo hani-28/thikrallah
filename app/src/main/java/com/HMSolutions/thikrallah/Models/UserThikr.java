@@ -43,4 +43,7 @@ public class UserThikr {
     public long getId() {
         return id;
     }
+    public String toString(){
+        return "thikr text="+this.getThikrText()+ "file= "+this.getFile()+"id="+this.getId()+"isenabled="+this.isEnabled()+"isbuiltin"+this.isBuiltIn();
+    }
 }
