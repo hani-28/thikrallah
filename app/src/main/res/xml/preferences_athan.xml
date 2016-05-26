@@ -1,7 +1,9 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="@string/calc_method">
+    <PreferenceCategory
+        android:title="@string/calc_method"
+        android:layout="@layout/preference_catagory">
         <com.HMSolutions.thikrallah.Utilities.MyListPreference
-            android:defaultValue="4"
+
             android:entries="@array/athan_calculation_method"
             android:entryValues="@array/athan_calculation_method_values"
             android:key="calc_method"
@@ -21,7 +23,9 @@
             android:key="adjustment_method"
             android:title="@string/high_latitude_adjustment"/>
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/athan_type">
+    <PreferenceCategory
+        android:title="@string/athan_type"
+        android:layout="@layout/preference_catagory">
     <com.HMSolutions.thikrallah.Utilities.MyListPreference
         android:defaultValue="3"
         android:entries="@array/athan_notification_types"

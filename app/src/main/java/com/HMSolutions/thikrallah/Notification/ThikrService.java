@@ -41,6 +41,7 @@ import android.util.Log;
 public class ThikrService extends IntentService  {
     String TAG = "ThikrService";
 	private final static int NOTIFICATION_ID=0;
+    private AudioManager am;
 
     public ThikrService() {
 		super("service");
@@ -51,7 +52,7 @@ public class ThikrService extends IntentService  {
 		new MyAlarmsManager(this.getApplicationContext()).UpdateAllApplicableAlarms();
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         String lang=sharedPrefs.getString("language",null);
-
+        boolean isRespectMute = sharedPrefs.getBoolean("mute_thikr_when_ringer_mute", true);
         if (lang!=null){
             Locale locale = new Locale(lang);
             Locale.setDefault(locale);
@@ -61,7 +62,7 @@ public class ThikrService extends IntentService  {
                     getBaseContext().getResources().getDisplayMetrics());
         }
 
-
+        am = (AudioManager) this.getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
 		Bundle data=intent.getExtras();
 		String thikrType="";
 		thikrType=data.getString("com.HMSolutions.thikrallah.datatype");
@@ -84,7 +85,7 @@ public class ThikrService extends IntentService  {
 
 			int reminderType=Integer.parseInt(sharedPrefs.getString("RemindmeThroughTheDayType", "1"));
 			boolean isQuietTime=isTimeNowQuietTime();
-			if ((reminderType==1 ||reminderType==2)&&isQuietTime==false&&(thikr.isBuiltIn()==true||thikr.getFile().length()>2)){
+			if (((reminderType==1 ||reminderType==2)&&isQuietTime==false&&(thikr.isBuiltIn()==true||thikr.getFile().length()>2))&&(am.getRingerMode() == AudioManager.RINGER_MODE_NORMAL||isRespectMute==false)){
                 sharedPrefs.edit().putString("thikrType", MainActivity.DATA_TYPE_GENERAL_THIKR).commit();
                 data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAY);
                 Log.d(TAG,"fileNumber sent through intent is "+fileNumber);
@@ -231,7 +232,7 @@ public class ThikrService extends IntentService  {
                     break;
             }
 
-            if (reminderType==1){//vibrate
+            if ((reminderType==1)||(am.getRingerMode() != AudioManager.RINGER_MODE_NORMAL)){//vibrate
                 NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
                 mBuilder.setContentTitle(this.getString(R.string.app_name))

@@ -35,12 +35,14 @@ import android.app.Fragment;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -49,6 +51,7 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
+import android.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -672,6 +675,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
         Log.d(TAG,"onConnected");
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
+
         if (mLastLocation != null) {
             Log.d(TAG,"mLastLocation is not null");
             PreferenceManager.getDefaultSharedPreferences(this).edit().putString("latitude", Double.toString(mLastLocation.getLatitude())).commit();
@@ -680,15 +684,43 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
             PrayTime.instancePrayTime(this);
             new MyAlarmsManager(this).UpdateAllApplicableAlarms();
         }else{
-            Log.d(TAG,"mLastLocation is null");
-            locationRequest = LocationRequest.create();
-            locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-            locationRequest.setInterval(5000);
-            locationRequest.setNumUpdates(3);
-            locationRequest.setExpirationDuration(1000*30);
-            locationRequest.setFastestInterval(1000);
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, this);
+            if(PreferenceManager.getDefaultSharedPreferences(this).getString("latitude","0.0").equalsIgnoreCase("0.0")){
+                Log.d(TAG,"mLastLocation is null");
+                LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+                if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    buildAlertMessageNoGps();
+                }
+
+
+                locationRequest = LocationRequest.create();
+
+                locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+                locationRequest.setInterval(5000);
+                locationRequest.setNumUpdates(3);
+                locationRequest.setExpirationDuration(1000*30);
+                locationRequest.setFastestInterval(1000);
+                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, this);
+            }
+
         }
+    }
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
     protected void stopLocationUpdates() {
         if (mGoogleApiClient.isConnected()){
@@ -705,7 +737,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.d("TAG,","onLocationChanged called");
+        Log.d(TAG,"onLocationChanged called");
         Log.d(TAG,"latitude is "+Double.toString(location.getLatitude()));
         PreferenceManager.getDefaultSharedPreferences(this).edit().putString("latitude", Double.toString(location.getLatitude())).commit();
         PreferenceManager.getDefaultSharedPreferences(this).edit().putString("longitude", Double.toString(location.getLongitude())).commit();

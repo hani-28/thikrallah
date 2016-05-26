@@ -55,8 +55,8 @@ public class RecordThikrDialog extends DialogFragment {
                         String newThikr = thikr_text_edittext_view.getText().toString();
                         if (newThikr.equalsIgnoreCase("")==false){
                             MyDBHelper db = new MyDBHelper(context);
-                            db.addThikr(newThikr,0,context.getExternalCacheDir() + File.separator  +"user"+file_id+".mp3");
-                            Log.d(TAG,"filename is "+context.getExternalCacheDir() + File.separator  +"user"+file_id+".mp3");
+                            db.addThikr(newThikr,0,context.getFilesDir().getPath() + File.separator  +"user"+file_id+".mp3");
+                            Log.d(TAG,"filename is "+context.getFilesDir().getPath() + File.separator  +"user"+file_id+".mp3");
                             my_interface.updateList();
 
                         }
@@ -79,8 +79,8 @@ public class RecordThikrDialog extends DialogFragment {
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-        recorder.setOutputFile(context.getExternalCacheDir()   +File.separator+fileName+".mp3");
-        Log.d(TAG,context.getExternalCacheDir() + File.separator  +fileName+".mp3");
+        recorder.setOutputFile(context.getFilesDir().getPath()  +File.separator+fileName+".mp3");
+        Log.d(TAG,context.getFilesDir().getPath() + File.separator  +fileName+".mp3");
         try {
             recorder.prepare();
         } catch (Exception e){

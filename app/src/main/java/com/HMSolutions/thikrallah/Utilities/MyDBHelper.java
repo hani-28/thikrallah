@@ -10,6 +10,7 @@ import android.util.Log;
 import com.HMSolutions.thikrallah.Models.UserThikr;
 import com.HMSolutions.thikrallah.R;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -18,6 +19,7 @@ import java.util.Random;
  * Created by hani on 3/25/16.
  */
 public class MyDBHelper  extends SQLiteOpenHelper {
+    private static final String TAG="MyDBHelper";
     public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "MyAthkar.db";
     private static final String TEXT_TYPE = " TEXT";
@@ -176,6 +178,11 @@ public class MyDBHelper  extends SQLiteOpenHelper {
         return null;
     }
     public void deleteThikr(long id){
+        UserThikr thikr_to_delete=this.getThikr(id);
+        String filepath=thikr_to_delete.getFile();
+        File file = new File(filepath);
+        boolean deleted = file.delete();
+        Log.d(TAG,"file "+filepath+" deleted="+deleted);
         SQLiteDatabase db = this.getWritableDatabase();
 
 // Define a projection that specifies which columns from the database

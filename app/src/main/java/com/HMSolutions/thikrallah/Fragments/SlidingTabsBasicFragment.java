@@ -87,7 +87,7 @@ public class SlidingTabsBasicFragment extends Fragment {
     }
 
     public static class MyPagerAdapter extends FragmentPagerAdapter {
-        private static int NUM_ITEMS = 2;
+        private static int NUM_ITEMS = 3;
         private Context context;
 
         public MyPagerAdapter(FragmentManager fragmentManager,Activity context) {
@@ -105,12 +105,16 @@ public class SlidingTabsBasicFragment extends Fragment {
         @Override
         public Fragment getItem(int position) {
             switch (position) {
-                case 0: // Fragment # 0 - This will show FirstFragment
+                case 0:
+                    PrefsGeneralFragment fragment0 = new PrefsGeneralFragment();
+                    return fragment0;
+                case 1: // Fragment # 0 - This will show FirstFragment
                     PrefsThikrFragment fragment1 = new PrefsThikrFragment();
                     return fragment1;
-                case 1: // Fragment # 0 - This will show FirstFragment different title
+                case 2: // Fragment # 0 - This will show FirstFragment different title
                     PrefsAthanFragment fragment2 = new PrefsAthanFragment();
                     return fragment2;
+
                 default:
                     return null;
             }
@@ -121,8 +125,10 @@ public class SlidingTabsBasicFragment extends Fragment {
         public CharSequence getPageTitle(int position) {
             switch (position){
                 case 0:
-                    return this.context.getResources().getText(R.string.pref_tab1);
+                    return this.context.getResources().getText(R.string.pref_tab0);
                 case 1:
+                    return this.context.getResources().getText(R.string.pref_tab1);
+                case 2:
                     return this.context.getResources().getText(R.string.pref_tab2);
                 default:
                     return null;

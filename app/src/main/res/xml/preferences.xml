@@ -1,12 +1,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-    <PreferenceCategory android:title="@string/language" >
-        <com.HMSolutions.thikrallah.Utilities.MyListPreference
-            android:entries="@array/languagelist"
-            android:entryValues="@array/languagelistValues"
-            android:key="language"
-            android:title="@string/language" />
-    </PreferenceCategory>
-    <PreferenceCategory android:title="@string/RemindMeSettings" >
+    <PreferenceCategory
+        android:title="@string/RemindMeSettings"
+        android:layout="@layout/preference_catagory">
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="RemindmeThroughTheDay"
@@ -32,7 +27,9 @@
             android:key="mute_thikr_when_ringer_mute"
             android:title="@string/mute_when_ringer_mute" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/quiet_time" >
+    <PreferenceCategory
+        android:title="@string/quiet_time"
+        android:layout="@layout/preference_catagory">
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="quiet_time_choice"
@@ -47,7 +44,9 @@
             android:key="quiet_time_end"
             android:title="@string/quiet_time_end" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/morningThikrSettings" >
+    <PreferenceCategory
+        android:title="@string/morningThikrSettings"
+        android:layout="@layout/preference_catagory">
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="remindMeMorningThikr"
@@ -65,7 +64,9 @@
             android:key="remindMeDayThikrType"
             android:title="@string/general_thikr_reminder_type" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/nightThikrSettings" >
+    <PreferenceCategory
+        android:title="@string/nightThikrSettings"
+        android:layout="@layout/preference_catagory">
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="remindMeNightThikr"
@@ -83,7 +84,9 @@
             android:key="remindMeNightThikrType"
             android:title="@string/general_thikr_reminder_type" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/kahfThikrSettings" >
+    <PreferenceCategory
+        android:title="@string/kahfThikrSettings"
+        android:layout="@layout/preference_catagory">
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="remindMekahf"
@@ -100,35 +103,6 @@
             android:entryValues="@array/RemindmeTypeValues"
             android:key="remindMekahfType"
             android:title="@string/kahf_reminder_type" />
-    </PreferenceCategory>
-    <PreferenceCategory android:title="@string/contactUs" >
-        <com.HMSolutions.thikrallah.Utilities.MyPreference
-            android:key="contactDevKey"
-            android:title="@string/email_Us" >
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="@string/contact_developer_uri" >
-                <extra
-                    android:name="android.intent.extra.SUBJECT"
-                    android:value="@string/email_subject" />
-            </intent>
-        </com.HMSolutions.thikrallah.Utilities.MyPreference>
-        <com.HMSolutions.thikrallah.Utilities.MyPreference
-            android:key="help_translate"
-            android:title="@string/help_translate" >
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="@string/translation_link" >
-            </intent>
-        </com.HMSolutions.thikrallah.Utilities.MyPreference>
-        <com.HMSolutions.thikrallah.Utilities.MyPreference
-            android:key="rateus"
-            android:title="@string/rate" >
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="market://details?id=com.HMSolutions.thikrallah" >
-            </intent>
-        </com.HMSolutions.thikrallah.Utilities.MyPreference>
     </PreferenceCategory>
 
 </PreferenceScreen>

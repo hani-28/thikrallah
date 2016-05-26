@@ -8,8 +8,8 @@
         android:layout_height="wrap_content"
         android:text="@string/add_thikr"
         android:id="@+id/add_thikr"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_weight="1"/>
 
     <ListView
@@ -19,7 +19,7 @@
         android:layout_weight="1"
         android:layout_below="@+id/add_thikr"/>
 
-    <EditText
+    <!--EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/my_new_thikr_edit_text"
@@ -30,5 +30,5 @@
         android:maxLines ="4"
         android:scrollHorizontally="false"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        android:layout_alignParentStart="true"/-->
 </RelativeLayout>

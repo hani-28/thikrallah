@@ -35,7 +35,8 @@ public class MyAthkarFragment extends Fragment implements MyThikrDialogInterface
     private Button addThikrButton;
     private ListView myAthkarListView;
     private MyDBHelper db;
-    private EditText new_thikr_Edittext;
+
+
     UserThikrArrayAdapter adapter;
     ArrayList<UserThikr> thickerArray;
     Activity context;
@@ -68,7 +69,7 @@ public class MyAthkarFragment extends Fragment implements MyThikrDialogInterface
         View view = inflater.inflate(R.layout.my_athkar, container,
                 false);
         addThikrButton = (Button) view.findViewById(R.id.add_thikr);
-        new_thikr_Edittext = (EditText) view.findViewById(R.id.my_new_thikr_edit_text);
+
         myAthkarListView = (ListView) view.findViewById(R.id.my_athkar_listview);
         thickerArray = db.getAllThikrs();
         adapter = new UserThikrArrayAdapter(getActivity(), R.layout.my_athkar_row_format, thickerArray);

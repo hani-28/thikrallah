@@ -24,14 +24,19 @@ PLEASE DO NOT REMOVE THIS COPYRIGHT BLOCK.
 */
 
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
 public class PrayTime {
@@ -88,6 +93,9 @@ public class PrayTime {
      * selector (0 = angle; 1 = minutes after maghrib) iv : isha parameter value
      * (in angle or minutes)
      */
+    public String getInvalidTime(){
+        return InvalidTime;
+    }
     private double[] prayerTimesCurrent;
     private int[] offsets;
 
@@ -96,7 +104,7 @@ public class PrayTime {
         PrayTime prayers = new PrayTime();
 
         prayers.setTimeFormat(PrayTime.TIME_FORMAT_Time12);
-        int calc_method=Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString("calc_method","4"));
+        int calc_method=PrayTime.getCalculationMethod(context);
         Log.d(TAG,"calc_method="+calc_method);
         prayers.setCalcMethod(calc_method);
         int asr_calc_method=Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString("asr_calc_method","0"));
@@ -106,6 +114,86 @@ public class PrayTime {
         int[] offsets = {0, 0, 0, 0, 0, 0, 0}; // {Fajr,Sunrise,Dhuhr,Asr,Sunset,Maghrib,Isha}
         prayers.tune(offsets);
         return prayers;
+    }
+    public static int getCalculationMethod(Context context){
+        Log.d(TAG,"getDefaultCalculationMethod");
+        String user_option=PreferenceManager.getDefaultSharedPreferences(context).getString("calc_method",null);
+        if (user_option!=null){
+            return Integer.parseInt(user_option);
+        }
+
+        double latitude =  Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("latitude", "0.0"));
+        double longitude = Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("longitude","0.0"));
+
+        try {
+            List<Address> addresses = new Geocoder(context, Locale.ENGLISH).getFromLocation(latitude,longitude,1);
+            if (addresses.size() > 0) {
+                int default_method=-100;
+                String countrycode = addresses.get(0).getCountryCode();
+                if (countrycode.equalsIgnoreCase("AF")) default_method= CALC_METHOD_Karachi;
+                if (countrycode.equalsIgnoreCase("DJ")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("DZ")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("EG")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("EH")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("ER")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("ET")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("GH")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("IL")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("KE")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("LB")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("LY")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("MA")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("MG")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("ML")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("MR")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("MW")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("MY")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("MZ")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("NA")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("NE")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("NG")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("PS")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("SD")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("SN")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("SO")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("SS")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("SY")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("TD")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("TN")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("TZ")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("UG")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("ZM")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("ZW")) default_method= CALC_METHOD_Egypt;
+                if (countrycode.equalsIgnoreCase("CA")) default_method= CALC_METHOD_ISNA;
+                if (countrycode.equalsIgnoreCase("UM")) default_method= CALC_METHOD_ISNA;
+                if (countrycode.equalsIgnoreCase("US")) default_method= CALC_METHOD_ISNA;
+                if (countrycode.equalsIgnoreCase("BD")) default_method= CALC_METHOD_Karachi;
+                if (countrycode.equalsIgnoreCase("IN")) default_method= CALC_METHOD_Karachi;
+                if (countrycode.equalsIgnoreCase("PK")) default_method= CALC_METHOD_Karachi;
+                if (countrycode.equalsIgnoreCase("AE")) default_method= CALC_METHOD_Makkah;
+                if (countrycode.equalsIgnoreCase("BH")) default_method= CALC_METHOD_Makkah;
+                if (countrycode.equalsIgnoreCase("IQ")) default_method= CALC_METHOD_Makkah;
+                if (countrycode.equalsIgnoreCase("JO")) default_method= CALC_METHOD_Makkah;
+                if (countrycode.equalsIgnoreCase("KW")) default_method= CALC_METHOD_Makkah;
+                if (countrycode.equalsIgnoreCase("OM")) default_method= CALC_METHOD_Makkah;
+                if (countrycode.equalsIgnoreCase("QA")) default_method= CALC_METHOD_Makkah;
+                if (countrycode.equalsIgnoreCase("SA")) default_method= CALC_METHOD_Makkah;
+                if (countrycode.equalsIgnoreCase("YE")) default_method= CALC_METHOD_Makkah;
+                if (countrycode.equalsIgnoreCase("IR")) default_method= CALC_METHOD_Tehran;
+
+                if (default_method!=-100){
+                    PreferenceManager.getDefaultSharedPreferences(context).edit().putString("calc_method",Integer.toString(default_method)).commit();
+                    return default_method;
+                }
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return CALC_METHOD_MWL;
+        }
+
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString("calc_method",Integer.toString(CALC_METHOD_MWL)).commit();
+        return CALC_METHOD_MWL;
     }
     public String[] getPrayerTimes(Context context){
         double latitude =  Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("latitude", "0.0"));

@@ -135,7 +135,7 @@
     <string name="night_thikr8">لَا إلَه إلّا اللهُ وَحَدُّهُ لَا شَرِيكَ لَهُ، لَهُ الْمَلِكَ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلُّ شَيْءِ قَدِيرِ -10 مرات</string>
     <string name="night_thikr9">اعـوذُبِكَلِمـاتِ اللّهِ التّـامّـاتِ مِنْ شَـرِّ ما خَلَـق -3 مرات</string>
 
-    <string name="language">االلغه</string>
+    <string name="language">اللغه</string>
     <string name="arabic">العربية</string>
     <string name="english">English</string>
     <string name="sadaqa">صدقة جارية</string>
@@ -151,12 +151,15 @@
     <string name="kahf_reminder_type">طريقة التذكير بسورة الكهف</string>
     <string name="pref_tab1">اعدادات التذكير</string>
     <string name="pref_tab2">اعدادات الاذان</string>
+    <string name="pref_tab0">اعدادات عامة</string>
     <string name="calc_method">طريقة الحساب</string>
     <string name="calc_method_karachi">جامعة العلوم الإسلامية بكراتشي</string>
     <string name="calc_method_isna">الاتحاد الإسلامي بأمريكا الشمالية</string>
     <string name="calc_method_mwl">رابطة العالم الإسلامي</string>
     <string name="calc_method_mekkah"> لجنة الإشراف على تقويم أم القرى</string>
     <string name="calc_method_egypt"> الهيئة العامة المصرية للمساحة</string>
+    <string name="calc_method_jafri">الجعفري</string>
+    <string name="calc_method_iran">معهد الجيوفيزياء بجامعة طهران</string>
     <string name="asr_calc_method">طريقة حساب وقت العصر</string>
     <string name="asr_calc_method_standard">شافعي, ملكي, حنبلي</string>
     <string name="asr_calc_method_hanafi">حنفي</string>
@@ -183,5 +186,6 @@
     <string name="athan_type">طريقة التذكير بالصلاة</string>
     <string name="record_audio">سجل صوت الدعاء</string>
     <string name="ok">تم</string>
+    <string name="location_services_not_enabled">خدمة تحديد الموقع غير مفعلها. البرنامج يجتاج معرفة موقعك كي يتم حساب مواقيت الاذان. هل تريد تفعيل خدمة الموقع الان؟</string>
 
 </resources>
