@@ -605,7 +605,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
         Log.d(TAG, "thikrtype is " + this.getThikrType() + " vs " + MainActivity.DATA_TYPE_GENERAL_THIKR);
         currentThikrCounter++;
-        if (this.getThikrType().equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)||this.getThikrType().contains(MainActivity.DATA_TYPE_QURAN)) {
+        if (this.getThikrType().equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)||this.getThikrType().contains(MainActivity.DATA_TYPE_QURAN)||this.getThikrType().contains(MainActivity.DATA_TYPE_ATHAN)) {
             ;
             this.resetPlayer();
 

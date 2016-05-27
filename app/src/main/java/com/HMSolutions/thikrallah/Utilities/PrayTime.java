@@ -119,17 +119,24 @@ public class PrayTime {
         Log.d(TAG,"getDefaultCalculationMethod");
         String user_option=PreferenceManager.getDefaultSharedPreferences(context).getString("calc_method",null);
         if (user_option!=null){
+            Log.d(TAG,"user option is already made. It is "+Integer.parseInt(user_option));
             return Integer.parseInt(user_option);
         }
 
         double latitude =  Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("latitude", "0.0"));
         double longitude = Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("longitude","0.0"));
 
+        if(latitude==0&&longitude==0){
+            return CALC_METHOD_MWL;
+        }
+
         try {
             List<Address> addresses = new Geocoder(context, Locale.ENGLISH).getFromLocation(latitude,longitude,1);
+            Log.d(TAG,"addresses received. size is"+addresses.size());
             if (addresses.size() > 0) {
                 int default_method=-100;
                 String countrycode = addresses.get(0).getCountryCode();
+                Log.d(TAG,"country code is"+countrycode);
                 if (countrycode.equalsIgnoreCase("AF")) default_method= CALC_METHOD_Karachi;
                 if (countrycode.equalsIgnoreCase("DJ")) default_method= CALC_METHOD_Egypt;
                 if (countrycode.equalsIgnoreCase("DZ")) default_method= CALC_METHOD_Egypt;
@@ -182,6 +189,7 @@ public class PrayTime {
                 if (countrycode.equalsIgnoreCase("IR")) default_method= CALC_METHOD_Tehran;
 
                 if (default_method!=-100){
+                    Log.d(TAG,"default method returned is"+default_method);
                     PreferenceManager.getDefaultSharedPreferences(context).edit().putString("calc_method",Integer.toString(default_method)).commit();
                     return default_method;
                 }
@@ -189,10 +197,11 @@ public class PrayTime {
             }
         } catch (IOException e) {
             e.printStackTrace();
+            Log.d(TAG,"exception happenned MWL returned");
             return CALC_METHOD_MWL;
         }
-
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putString("calc_method",Integer.toString(CALC_METHOD_MWL)).commit();
+        Log.d(TAG,"0 addresses receieved.returned");
+        //PreferenceManager.getDefaultSharedPreferences(context).edit().putString("calc_method",Integer.toString(CALC_METHOD_MWL)).commit();
         return CALC_METHOD_MWL;
     }
     public String[] getPrayerTimes(Context context){
