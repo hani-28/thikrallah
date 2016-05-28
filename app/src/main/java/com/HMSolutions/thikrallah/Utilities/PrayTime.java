@@ -685,11 +685,13 @@ public class PrayTime {
         return adjustTimesFormat(times);
     }
     private static double getCurrentTimezoneOffset() {
+
+
         TimeZone tz = TimeZone.getDefault();
-        int offsetInMillis = tz.getOffset(GregorianCalendar.getInstance(tz).getTimeInMillis());
+        double offsetInMillis = tz.getOffset(GregorianCalendar.getInstance(tz).getTimeInMillis());
 
         double offset = offsetInMillis / 3600000;
-
+        Log.d(TAG,"offset is"+offset);
         return offset;
     }
     // adjust times in a prayer time array
