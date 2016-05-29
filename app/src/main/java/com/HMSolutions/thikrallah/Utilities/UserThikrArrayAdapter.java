@@ -78,6 +78,7 @@ public class UserThikrArrayAdapter extends ArrayAdapter<UserThikr> implements Co
             // if not, assign some text!
             if (thikr != null){
                 thikr.setText(i.getThikrText());
+                thikr.setOnClickListener(this);
             }
             if (enabled != null){
                 enabled.setChecked(i.isEnabled());
