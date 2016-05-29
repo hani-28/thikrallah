@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import android.content.ClipData;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,8 @@ public class UserThikrArrayAdapter extends ArrayAdapter<UserThikr> implements Co
     // declaring our ArrayList of items
     private ArrayList<UserThikr> objects;
     private Context context;
+    private String TAG="UserThikrArrayAdapter";
+    private CheckBox enabled;
 
     /* here we must override the constructor for ArrayAdapter
     * the only variable we care about now is ArrayList<Item> objects,
@@ -63,26 +66,30 @@ public class UserThikrArrayAdapter extends ArrayAdapter<UserThikr> implements Co
 		 * Therefore, i refers to the current Item object.
 		 */
         UserThikr i = objects.get(position);
-
+        Log.d(TAG,"position is "+position + " thikr is "+i.getThikrText()+" isbuiltin ="+i.isBuiltIn());
         if (i != null) {
 
             // This is how you obtain a reference to the TextViews.
             // These TextViews are created in the XML files we defined.
 
             TextView thikr = (TextView) v.findViewById(R.id.my_thikr_textview);
-            CheckBox enabled = (CheckBox) v.findViewById(R.id.isThikrEnabledCheckbox);
+            enabled = (CheckBox) v.findViewById(R.id.isThikrEnabledCheckbox);
             ImageButton delete = (ImageButton) v.findViewById(R.id.deleteButton);
 
 
             // check to see if each individual view is null.
             // if not, assign some text!
+            Log.d(TAG,"thikr"+i.toString());
             if (thikr != null){
                 thikr.setText(i.getThikrText());
                 thikr.setOnClickListener(this);
+                thikr.setTag(i.getId());
             }
             if (enabled != null){
+                enabled.setOnCheckedChangeListener(null);
                 enabled.setChecked(i.isEnabled());
                 enabled.setTag(i.getId());
+                Log.d(TAG,"enabled ="+i.isEnabled()+" thikr= "+i.getThikrText());
                 enabled.setOnCheckedChangeListener(this);
             }
             if (delete != null) {
@@ -90,6 +97,8 @@ public class UserThikrArrayAdapter extends ArrayAdapter<UserThikr> implements Co
                 delete.setOnClickListener(this);
                 if(i.isBuiltIn()){
                     delete.setVisibility(View.INVISIBLE);
+                }else{
+                    delete.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -143,11 +152,21 @@ public class UserThikrArrayAdapter extends ArrayAdapter<UserThikr> implements Co
      */
     @Override
     public void onClick(View v) {
-        //delete button clicked
         MyDBHelper db=new MyDBHelper(this.getContext());
-        db.deleteThikr((Long) v.getTag());
-        updateData();
-        this.notifyDataSetChanged();
+        switch (v.getId()){
+            case R.id.deleteButton:
+
+                //delete button clicked
+
+                db.deleteThikr((Long) v.getTag());
+                updateData();
+                this.notifyDataSetChanged();
+                break;
+            case R.id.my_thikr_textview:
+                CheckBox isEnabledCheckbox=(CheckBox)((View)v.getParent()).findViewById(R.id.isThikrEnabledCheckbox);
+                isEnabledCheckbox.setChecked(!isEnabledCheckbox.isChecked());
+                break;
+        }
     }
 
     private void updateData() {
