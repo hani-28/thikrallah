@@ -125,8 +125,6 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 data.putString("com.HMSolutions.thikrallah.datatype",this.getThikrType());
                 msg.setData(data);
                 mClients.get(i).send(msg);
-
-
             }
             catch (RemoteException e) {
                 // The client is dead. Remove it from the list; we are going through the list from back to front so this is safe to do inside the loop.
@@ -251,9 +249,20 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Bundle data = intent.getExtras();
+        this.isUserAction=data.getBoolean("isUserAction",false);
+        int action = data.getInt("ACTION", -1);
+        String type = data.getString("thikrType", null);
+        Log.d(TAG, "action " + action);
 
         if (intent.getExtras().getString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_DAY_THIKR).equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR) && this.isPlaying()) {
             new MyAlarmsManager(this).UpdateAllApplicableAlarms();
+            if (action==MEDIA_PLAYER_RESET){
+                Log.d(TAG, "reset called");
+                this.resetPlayer();
+                this.stopForeground(true);
+                this.stopSelf();
+            }
             return Service.START_NOT_STICKY;
         } else {
 
@@ -280,11 +289,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         }
         Log.d(TAG,"onStartCommand called"+intent.getExtras().toString());
         initNotification();
-        Bundle data = intent.getExtras();
-        this.isUserAction=data.getBoolean("isUserAction",false);
-        int action = data.getInt("ACTION", -1);
-        String type = data.getString("thikrType", null);
-        Log.d(TAG, "action " + action);
+
         switch (action) {
             case MEDIA_PLAYER_PAUSE:
                 Log.d(TAG, "pause called");
@@ -315,7 +320,6 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             case MEDIA_PLAYER_RESET:
                 Log.d(TAG, "reset called");
                 this.resetPlayer();
-
                 this.stopForeground(true);
                 this.stopSelf();
                 break;
@@ -796,6 +800,8 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             int maxVolume = 101;
             float volume = (float) (1 - Math.log(maxVolume - volumeLevel) / Math.log(maxVolume));
             player.setVolume(volume, volume);
+        }else{
+            player.setVolume(1.0f, 1.0f);
         }
     }
     private void startPlayerIfAllowed(){

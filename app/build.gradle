@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "com.HMSolutions.thikrallah"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 46
-        versionName "3.2"
+        versionCode 47
+        versionName "3.3"
     }
     lintOptions {
         disable 'MissingTranslation'
@@ -26,8 +26,9 @@ android {
     }
 }
 dependencies {
-    compile 'com.google.android.gms:play-services-ads:+'
-    compile 'com.google.android.gms:play-services-location:+'
+    compile 'com.google.android.gms:play-services-ads:9.0.2'
+    compile 'com.google.android.gms:play-services-location:9.0.2'
+
     compile 'com.android.support:support-v4:22.2.1'
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:support-v13:+'

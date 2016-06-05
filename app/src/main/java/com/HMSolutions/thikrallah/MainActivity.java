@@ -66,7 +66,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-public class MainActivity extends Activity implements MainInterface,GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,LocationListener {
+public class MainActivity extends Activity implements MainInterface,GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,LocationListener, android.location.LocationListener {
 	private String appLink;
     String TAG = "MainActivity";
 	public static final String DATA_TYPE_NIGHT_THIKR="night";
@@ -96,6 +96,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
     Messenger mServiceThikrMediaPlayerMessenger = null;
     boolean mIsBoundMediaService;
     final Messenger mMessenger = new Messenger(new IncomingHandler());
+    private LocationManager locationManager;
 
     class IncomingHandler extends Handler {
         @Override
@@ -232,12 +233,17 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 
 	}
 	public void sendActionToMediaService(Bundle data){
-		if (data!=null){
+		Log.d(TAG,"sendActionToMediaService called");
+        if (data!=null){
+            Log.d(TAG,"data is not null");
             if(data.getString("com.HMSolutions.thikrallah.datatype","").equalsIgnoreCase("")){
+                Log.d(TAG,"datatype was empty");
                 data.putString("com.HMSolutions.thikrallah.datatype", this.getThikrType());
+                Log.d(TAG,"datatype assigned to "+this.getThikrType());
             }
 
             data.putBoolean("isUserAction", true);
+            Log.d(TAG,"service to start");
             this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
             bindtoMediaService();
             this.requestMediaServiceStatus();
@@ -252,31 +258,30 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 
 	}
 
-	
+    @Override
+	public void requestLocationUpdate(){
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)&&!locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+            buildAlertMessageNoGps();
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,  this);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+
+
+
+    }
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
         Log.d(TAG,"oncreate 1");
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         PreferenceManager.setDefaultValues(this.getApplicationContext(), R.xml.preferences, true);
         PreferenceManager.setDefaultValues(this.getApplicationContext(), R.xml.preferences_athan, true);
-        // Create an instance of GoogleAPIClient.
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-        }
-        Log.d(TAG,"oncreate 2");
-
-        base64RSAPublicKey=getResources().getText(R.string.base64RSAPublicKey).toString();
-        deviceId = "AC73D67B1C23A45BBDFCAF3F4040A0AA";//md5(android_id).toUpperCase();
-
-
+        PreferenceManager.setDefaultValues(this.getApplicationContext(), R.xml.preferences_general, true);
         mcontext=this.getApplicationContext();
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         String lang=mPrefs.getString("language",null);
-        Log.d(TAG,"oncreate 3");
+        Log.d(TAG,"oncreate 2");
+
         if (lang!=null){
             Locale locale = new Locale(lang);
             Locale.setDefault(locale);
@@ -284,9 +289,30 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
             config.locale = locale;
             getBaseContext().getResources().updateConfiguration(config,
                     getBaseContext().getResources().getDisplayMetrics());
-            Log.d(TAG,"oncreate 4");
+            Log.d(TAG,"oncreate 3");
         }
+
+        Log.d(TAG,"oncreate 4");
+
+        // Create an instance of GoogleAPIClient.
+        if (mGoogleApiClient == null) {
+            Log.d(TAG,"mGoogleApiClient is null");
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+            // mGoogleApiClient.reconnect();
+        }else{
+            Log.d(TAG,"mGoogleApiClient is not null");
+        }
+
         Log.d(TAG,"oncreate 5");
+
+        base64RSAPublicKey=getResources().getText(R.string.base64RSAPublicKey).toString();
+        deviceId = "AC73D67B1C23A45BBDFCAF3F4040A0AA";//md5(android_id).toUpperCase();
+
+
 
 
         Intent serviceIntent =
@@ -370,7 +396,8 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
                 Log.d(TAG,"quran thikr notification");
                 Bundle  data=new Bundle();
                 data.putString("DataType",intent.getExtras().getString("DataType"));
-                data.putInt("surat", this.getResources().getIntArray(R.array.surat_values)[0]);
+                data.putInt("surat", Integer.parseInt(intent.getExtras().getString("DataType").split("/")[1]));
+                //data.putInt("surat", this.getResources().getIntArray(R.array.surat_values)[0]);
                 launchFragment(new QuranFragment(), data, "QuranFragment");
             }
 		}
@@ -559,10 +586,11 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
         sendActionToMediaService(data);
 	}
 	@Override
-	public void pausePlayer() {
+	public void pausePlayer(String thikrtype) {
         Log.d(TAG,"pauseplayer called");
 		Bundle data=new Bundle();
 		data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PAUSE);
+        data.putString("com.HMSolutions.thikrallah.datatype", thikrtype);
 		sendActionToMediaService(data);
 
 	}
@@ -575,6 +603,16 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 		sendActionToMediaService(data);
 
 	}
+    @Override
+    public void play(String path) {
+        Bundle data=new Bundle();
+        data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAY);
+        data.putInt("FILE", -1);
+        data.putString("com.HMSolutions.thikrallah.datatype", DATA_TYPE_GENERAL_THIKR);
+        data.putString("FILE_PATH",path);
+        sendActionToMediaService(data);
+
+    }
 	@Override
 	public boolean isPlaying() {
 		//hanihani
@@ -586,9 +624,10 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 
 	}
 	@Override
-	public void resetPlayer() {
+	public void resetPlayer(String thikrtype) {
 		Bundle data=new Bundle();
 		data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_RESET);
+        data.putString("com.HMSolutions.thikrallah.datatype", thikrtype);
 		sendActionToMediaService(data);
 
 
@@ -686,7 +725,8 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
         }else{
             if(PreferenceManager.getDefaultSharedPreferences(this).getString("latitude","0.0").equalsIgnoreCase("0.0")){
                 Log.d(TAG,"mLastLocation is null");
-                LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
 
                 if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     buildAlertMessageNoGps();
@@ -701,13 +741,16 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
                 locationRequest.setExpirationDuration(1000*30);
                 locationRequest.setFastestInterval(1000);
                 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, this);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,  this);
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+
             }
 
         }
     }
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+        builder.setMessage(R.string.location_services_not_enabled)
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
@@ -727,6 +770,9 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
             LocationServices.FusedLocationApi.removeLocationUpdates(
                     mGoogleApiClient, this);
         }
+        if(locationManager!=null){
+            locationManager.removeUpdates(this);
+        }
 
     }
     @Override
@@ -743,6 +789,22 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
         PreferenceManager.getDefaultSharedPreferences(this).edit().putString("longitude", Double.toString(location.getLongitude())).commit();
         stopLocationUpdates();
         PrayTime.instancePrayTime(this);
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        Log.d(TAG,"onStatusChanged called");
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
 
     }
 

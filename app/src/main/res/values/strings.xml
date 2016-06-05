@@ -12,7 +12,7 @@
     <string name="help_translate">ساعدنا بترجمة البرنامج</string>
     <string name="app_name">أذكر الله</string>
     <string name="share">شارك</string>
-      <string name="volume_level">مستوى صوت التذكير</string>
+    <string name="volume_level">مستوى صوت التذكير</string>
 
     <string name="mute_when_ringer_mute">كتم التذكير اذا الجهاز في وضع الصامت</string>
     <string name="morningThikr">أذكار الصباح</string>
@@ -51,8 +51,7 @@
     <string name="rate">قيم البرنامج</string>
     <string name="remind_later">ذكرني مره اخرى</string>
     <string name="dont_rate">لا اريد تقييم البرنامج</string>
-    <string name="quiet_time_endvalue">06:00</string>
-    <string name="next_prayer">الصلاة القادمة</string>
+    <string name="quiet_time_endvalue" translatable="false" >06:00</string>
     <string name="athan">الاذان</string>
     <string name="sunrise">شروق الشمس</string>
     <string name="prayer1">صلاة الفجر</string>
@@ -124,7 +123,6 @@
     <string name="thikr_salah">اللهم صل وسلم على نبينا محمد -10 مرات</string>
 
 
-
     <string name="night_thikr1">أَمْسَيْـنا وَأَمْسـى المـلكُ لله وَالحَمدُ لله ، لا إلهَ إلاّ اللّهُ وَحدَهُ لا شَريكَ لهُ، لهُ المُـلكُ ولهُ الحَمْـد، وهُوَ على كلّ شَيءٍ قدير ، رَبِّ أسْـأَلُـكَ خَـيرَ ما في هـذهِ اللَّـيْلَةِ وَخَـيرَ ما بَعْـدَهـا ، وَأَعـوذُ بِكَ مِنْ شَـرِّ ما في هـذهِ اللَّـيْلَةِ وَشَرِّ ما بَعْـدَهـا ، رَبِّ أَعـوذُبِكَ مِنَ الْكَسَـلِ وَسـوءِ الْكِـبَر ، رَبِّ أَعـوذُبِكَ مِنْ عَـذابٍ في النّـارِ وَعَـذابٍ في القَـبْر</string>
     <string name="night_thikr2">اللّهُـمَّ بِكَ أَمْسَـينا، وَبِكَ أَصْـبَحْنا، وَبِكَ نَحْـيا، وَبِكَ نَمـوتُ وَإِلَـيْكَ النُّـشُور</string>
     <string name="night_thikr3">اللّهُـمَّ إِنِّـي أَمسيتُ أَُشْـهِدُك ، وَأُشْـهِدُ حَمَلَـةَ عَـرْشِـك ، وَمَلائِكَتِك ، وَجَمـيعَ خَلْـقِك ، أَنَّـكَ أَنْـتَ اللهُ لا إلهَ إلاّ أَنْـتَ وَحْـدَكَ لا شَريكَ لَـك ، وَأَنَّ ُ مُحَمّـداً عَبْـدُكَ وَرَسـولُـك -4 مرات</string>
@@ -136,8 +134,9 @@
     <string name="night_thikr9">اعـوذُبِكَلِمـاتِ اللّهِ التّـامّـاتِ مِنْ شَـرِّ ما خَلَـق -3 مرات</string>
 
     <string name="language">اللغه</string>
-    <string name="arabic">العربية</string>
-    <string name="english">English</string>
+    <string name="arabic" translatable="false">العربية</string>
+    <string name="english" translatable="false">English</string>
+    <string name="urdu" translatable="false">اردو (جزوی ترجمہ)</string>
     <string name="sadaqa">صدقة جارية</string>
     <string name="quranic_verses">قرءان</string>
     <string name="share_text">اذكر الله\nهذا البرنامج يقوم باظهار الأذكار والأدعية على شاشة الهاتف ، وايضا تذكير صوتي بقوله سبحان الله, الحمدلله, اللهم صلى على نبينا محمد, وغيرها من الأدعية الرائعة بدون أن تحتاج إلى أن تفتح البرنامج.\n\nيقول الله في كتابه الكريم: (وَالذَّاكِرِينَ اللَّهَ كَثِيرًا وَالذَّاكِرَاتِ أَعَدَّ اللَّهُ لَهُم مَّغْفِرَةً وَأَجْرًا عَظِيمًا)\n\nويقول ابن القيم:\nحاجة العبد للمعوذات أشد من حاجته للطعام والشراب واللباس!\nداوموا على اذكاركم لتدركوا معنى: احفظ الله يحفظك. تحصنوا كل صباح ومساء فالدنيا مخيفة وفي جوفها مفاجئات والله هو الحافظ لعبادة. جعلكم الله في حفظه ورعايته.\n\nجزى الله تعالى خيرا من اعان على نشر هذا البرنامج.\n\nفقد قال رسول الله صلى الله علية وسلم (من دل على خير فله مثل أجر فاعله.) \nاعن على نشر هذه الرسالة لتصبح لك كصدقة جارية.\n\n للتحميل:\n\nاندرويد: https://play.google.com/store/apps/details?id=com.HMSolutions.thikrallah \n\n ايفون: https://itunes.apple.com/app/id1004470625</string>
@@ -187,5 +186,16 @@
     <string name="record_audio">سجل صوت الدعاء</string>
     <string name="ok">تم</string>
     <string name="location_services_not_enabled">خدمة تحديد الموقع غير مفعلها. البرنامج يجتاج معرفة موقعك كي يتم حساب مواقيت الاذان. هل تريد تفعيل خدمة الموقع الان؟</string>
+
+    <string name="latitude_adjustment_method_chosen">انت تسكن في منطقة شمالية في الكرة الارضية. تم تعديل وقت الفجر والعشاء بحساب الزاوية. </string>
+    <string name="choose_audio_file">اختر ملف صوتي</string>
+    <string name="mulkThikrSettings">اعدادات تذكير سورة الملك</string>
+    <string name="remindMemulk">ذكرني بقراءة سورة الملك</string>
+    <string name="mulk_reminder_type">طريقة التذكير بسورة الملك</string>
+
+
+    <string name="stop_recording">اوقف التسجيل</string>
+    <string name="thikr_text_required">نص الذكر لا يحتوي على اي ذكر. يرجى اضافة نص الدعاء</string>
+    <string name="recording">جاري التسجيل</string>
 
 </resources>

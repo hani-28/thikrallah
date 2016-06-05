@@ -50,7 +50,8 @@ public class ThikrService extends IntentService  {
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		new MyAlarmsManager(this.getApplicationContext()).UpdateAllApplicableAlarms();
-		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+		Log.d(TAG,"onhandleintnet called");
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         String lang=sharedPrefs.getString("language",null);
         boolean isRespectMute = sharedPrefs.getBoolean("mute_thikr_when_ringer_mute", true);
         if (lang!=null){
@@ -167,6 +168,42 @@ public class ThikrService extends IntentService  {
 
 
 		}
+        if (thikrType.equals(MainActivity.DATA_TYPE_QURAN_MULK)){
+
+            int reminderType=Integer.parseInt(sharedPrefs.getString("remindMemulkType", "1"));
+            if (reminderType==1){
+                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+                mBuilder.setContentTitle(this.getString(R.string.app_name))
+                        .setContentText(this.getString(R.string.surat_almulk))
+                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setAutoCancel(true);
+
+                mBuilder=setVisibilityPublic(mBuilder);
+                Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                mBuilder.setSound(soundUri,AudioManager.STREAM_NOTIFICATION);
+                Intent launchAppIntent = new Intent(this, MainActivity.class);
+
+                launchAppIntent.putExtra("FromNotification",true);
+                launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_QURAN);
+                launchAppIntent.putExtra("surat", 1);
+                PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
+                        0, launchAppIntent, PendingIntent.FLAG_CANCEL_CURRENT
+                );
+
+                mBuilder.setContentIntent(launchAppPendingIntent);
+
+                mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+            }else{
+                //new here
+
+                sharedPrefs.edit().putString("thikrType", MainActivity.DATA_TYPE_QURAN_MULK).commit();
+
+                data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAYALL);
+                this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+            }
+            return;
+        }
         if (thikrType.equals(MainActivity.DATA_TYPE_QURAN_KAHF)){
             sharedPrefs.edit().putInt("", Calendar.getInstance().get(Calendar.DAY_OF_MONTH)).commit();
 

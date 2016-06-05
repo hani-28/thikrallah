@@ -35,8 +35,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PreferenceActivity"
+            android:name="com.HMSolutions.thikrallah.PreferenceActivity"
             android:theme="@style/AppTheme"
+            >
+        </activity>
+        <activity
+            android:name="com.HMSolutions.thikrallah.MediaBrowser"
+            android:theme="@style/Theme.AppCompat"
             >
         </activity>
 /home/hani/AndroidStudioProjects/ThikrAllah/app/build

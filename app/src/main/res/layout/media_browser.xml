@@ -1,0 +1,27 @@
+<LinearLayout   xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:textSize="21sp"
+        android:typeface="monospace"
+        android:id="@+id/path"
+        android:layout_width="fill_parent"
+        android:layout_height="100dp"
+        android:layout_margin="10dp"
+        android:gravity="bottom"
+        android:text="PATH : " />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:background="#111111" />
+
+    <ListView android:id="@+id/pathlist"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+    </ListView>
+
+</LinearLayout>

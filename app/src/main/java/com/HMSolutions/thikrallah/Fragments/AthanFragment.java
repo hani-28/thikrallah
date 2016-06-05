@@ -21,7 +21,7 @@ import com.HMSolutions.thikrallah.Utilities.MainInterface;
 
 import com.HMSolutions.thikrallah.Utilities.PrayTime;
 
-public class AthanFragment extends Fragment {
+public class AthanFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 
 
@@ -41,16 +41,33 @@ public class AthanFragment extends Fragment {
     private Switch maghrib_switch;
     private Switch ishaa_switch;
     private SharedPreferences mPrefs;
+    private SharedPreferences.OnSharedPreferenceChangeListener prefListener;
 
 
     public AthanFragment() {
 	}
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if(key.equalsIgnoreCase("latitude")||key.equalsIgnoreCase("longitude")){
+            updateprayerTimes();
+        }
+
+
+
+    }
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		
 		try {
-			mCallback = (MainInterface) activity;
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+
+            prefListener = this;
+            prefs.registerOnSharedPreferenceChangeListener(prefListener);
+
+            mCallback = (MainInterface) activity;
+            mCallback.requestLocationUpdate();
+
 		} catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString()
 					+ " must implement MainInterface");
@@ -61,6 +78,7 @@ public class AthanFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+
 		this.getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 		this.getActivity().getActionBar().setDisplayShowHomeEnabled(true);
 		this.setHasOptionsMenu(true);

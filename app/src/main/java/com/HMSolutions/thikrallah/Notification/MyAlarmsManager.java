@@ -19,6 +19,7 @@ import com.HMSolutions.thikrallah.Utilities.PrayTime;
 public class MyAlarmsManager {
     String TAG = "MyAlarmsManager";
 	public static final int requestCodeMorningAlarm=8;
+    public static final int requestCodeMulkAlarm=26;
 	public static final int requestCodeNightAlarm=20;
 	public static final int requestCodeRandomAlarm=1;
     public static final int requestCodeKahfAlarm=25;
@@ -42,11 +43,13 @@ public class MyAlarmsManager {
         String[] MorningReminderTime=sharedPrefs.getString("daytReminderTime", "8:00").split(":");
 		String[] NightReminderTime=sharedPrefs.getString("nightReminderTime", "20:00").split(":");
         String[] kahfReminderTime=sharedPrefs.getString("kahfReminderTime", "10:00").split(":");
+        String[] mulkReminderTime=sharedPrefs.getString("mulkReminderTime", "10:00").split(":");
 		String RandomReminderInterval= sharedPrefs.getString("RemindMeEvery", "60");
 		boolean remindMeMorningThikr=sharedPrefs.getBoolean("remindMeMorningThikr", true);
 		boolean remindMeNightThikr=sharedPrefs.getBoolean("remindMeNightThikr", true);
 		boolean RemindmeThroughTheDay=sharedPrefs.getBoolean("RemindmeThroughTheDay", true);
         boolean Remindmekahf=sharedPrefs.getBoolean("remindMekahf", true);
+        boolean Remindmemulk=sharedPrefs.getBoolean("remindMemulk", true);
 		Intent launchIntent=new Intent(context, ThikrAlarmReceiver.class);
 
 
@@ -55,7 +58,38 @@ public class MyAlarmsManager {
         now.setTime(dat);
         //now.add(Calendar.SECOND,10);
 
-		//Morning Reminder
+
+        //Morning Reminder
+        PendingIntent pendingIntentMulk =PendingIntent.getBroadcast(context, requestCodeMulkAlarm,launchIntent.putExtra("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_QURAN_MULK), PendingIntent.FLAG_UPDATE_CURRENT);
+        if (Remindmemulk){
+
+            // Set the alarm to start at approximately 2:00 p.m.
+            Calendar calendar0 = Calendar.getInstance();
+            //calendar.setTimeInMillis(System.currentTimeMillis());
+            calendar0.set(Calendar.HOUR_OF_DAY, Integer.parseInt(mulkReminderTime[0]));
+            calendar0.set(Calendar.MINUTE, Integer.parseInt(mulkReminderTime[1]));
+            calendar0.set(Calendar.SECOND, 0);
+
+
+            setAlarm(calendar0,pendingIntentMulk);
+
+
+            if(calendar0.after(now)){
+                setAlarm(calendar0, pendingIntentMulk);
+                Log.d(TAG,"mulk reminder set"+calendar0.getTime());
+            }else{
+                calendar0.add(Calendar.HOUR,24);
+                Log.d(TAG,"mulk reminder time in past. 1 day added. alarm set on "+calendar0.getTime());
+                setAlarm(calendar0, pendingIntentMulk);
+            }
+
+
+        }else{
+            alarmMgr.cancel(pendingIntentMulk);
+
+        }
+
+        //Morning Reminder
 		PendingIntent pendingIntentMorningThikr =PendingIntent.getBroadcast(context, requestCodeMorningAlarm, launchIntent.putExtra("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_DAY_THIKR), PendingIntent.FLAG_UPDATE_CURRENT);		
 		if (remindMeMorningThikr){
 			
@@ -187,10 +221,10 @@ public class MyAlarmsManager {
         if(calendar1.after(now)){
             alarmmnager.setRepeating(AlarmManager.RTC_WAKEUP,
                     calendar1.getTimeInMillis(), 12*60*60*1000, intent);
-            Log.d(TAG,"alarms refresh time set on"+calendar1.getTime());
+           // Log.d(TAG,"alarms refresh time set on"+calendar1.getTime());
         }else{
             calendar1.add(Calendar.HOUR,24);
-            Log.d(TAG,"alarms refresh time in past. 1 days added. alarm set on "+calendar1.getTime());
+           // Log.d(TAG,"alarms refresh time in past. 1 days added. alarm set on "+calendar1.getTime());
             alarmmnager.setRepeating(AlarmManager.RTC_WAKEUP,
                     calendar1.getTimeInMillis(), 12*60*60*1000, intent);
         }
@@ -248,10 +282,10 @@ public class MyAlarmsManager {
 
             if(calendar0.after(now)){
                 setAlarm(calendar0, pendingIntentAthan);
-                Log.d(TAG,"athan reminder set"+calendar0.getTime());
+               // Log.d(TAG,"athan reminder set"+calendar0.getTime());
             }else{
                 calendar0.add(Calendar.HOUR,24);
-                Log.d(TAG,"athan reminder time in past. 1 day added. alarm set on "+calendar0.getTime());
+               // Log.d(TAG,"athan reminder time in past. 1 day added. alarm set on "+calendar0.getTime());
                 setAlarm(calendar0, pendingIntentAthan);
             }
 

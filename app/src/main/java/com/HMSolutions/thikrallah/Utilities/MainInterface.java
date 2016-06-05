@@ -10,11 +10,13 @@ public interface MainInterface {
         void upgrade();
 		void playAll(String AssetFolder);
 		void incrementCurrentPlaying(String AssetFolder,int i);
-		void pausePlayer();
+		void pausePlayer(String DataType);
 		void play(String AssetFolder,int fileNumber);
+		void play(String path);
 		boolean isPlaying();
-		void resetPlayer();
+		void resetPlayer(String thikrtype);
 		void setCurrentPlaying(String AssetFolder,int currentPlaying);
 		int getCurrentPlaying();
 		void setThikrType(String thikrType);
+		void requestLocationUpdate();
 }

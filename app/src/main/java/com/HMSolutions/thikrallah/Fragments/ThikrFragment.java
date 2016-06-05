@@ -105,14 +105,14 @@ public class ThikrFragment extends ListFragment implements OnClickListener {
 	public void onListItemClick(ListView l, View v, int position, long id) {  
 		if (this.mCallback.isPlaying()) {
 			if (mCallback.getCurrentPlaying()==position+1){
-				mCallback.pausePlayer();
+				mCallback.pausePlayer(this.thikrType);
 			}else{
-				mCallback.resetPlayer();
+				mCallback.resetPlayer(this.thikrType);
 				mCallback.setCurrentPlaying(this.thikrType,position + 1);
                 setCurrentlyPlaying(position+1);
 				mCallback.play(this.thikrType,mCallback.getCurrentPlaying());
 			}
-			mCallback.pausePlayer();
+			mCallback.pausePlayer(this.thikrType);
 		} else {
 			mCallback.play(this.thikrType,position + 1);
             setCurrentlyPlaying(position+1);
@@ -136,11 +136,11 @@ public class ThikrFragment extends ListFragment implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		if (v==this.stop){
-			this.mCallback.resetPlayer();;
+			this.mCallback.resetPlayer(this.thikrType);;
 		}
 		if (v==this.pause){
 			//player.pause();
-			this.mCallback.pausePlayer();
+			this.mCallback.pausePlayer(this.thikrType);
 			
 		}
 		if (v==this.play && this.mCallback.isPlaying()==false){

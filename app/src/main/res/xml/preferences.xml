@@ -105,4 +105,25 @@
             android:title="@string/kahf_reminder_type" />
     </PreferenceCategory>
 
+
+    <PreferenceCategory
+        android:title="@string/mulkThikrSettings"
+        android:layout="@layout/preference_catagory">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/remindMemulk"
+            android:title="@string/remindMemulk" />
+
+        <com.HMSolutions.thikrallah.Utilities.TimePreference
+            android:defaultValue="21:00"
+            android:key="mulkReminderTime"
+            android:title="@string/changeReminderTime" />
+
+        <com.HMSolutions.thikrallah.Utilities.MyListPreference
+            android:defaultValue="1"
+            android:entries="@array/RemindmeType"
+            android:entryValues="@array/RemindmeTypeValues"
+            android:key="remindMemulkType"
+            android:title="@string/mulk_reminder_type" />
+    </PreferenceCategory>
 </PreferenceScreen>

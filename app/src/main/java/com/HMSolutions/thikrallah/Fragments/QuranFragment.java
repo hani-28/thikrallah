@@ -126,11 +126,11 @@ public class QuranFragment extends ListFragment implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		if (v==this.stop){
-			this.mCallback.resetPlayer();;
+			this.mCallback.resetPlayer(this.thikrType);;
 		}
 		if (v==this.pause){
 			//player.pause();
-			this.mCallback.pausePlayer();
+			this.mCallback.pausePlayer(this.thikrType);
 			
 		}
 		if (v==this.play && this.mCallback.isPlaying()==false){

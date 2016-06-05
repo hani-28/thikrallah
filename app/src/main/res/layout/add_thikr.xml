@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:layout_gravity="center"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="center"
     >
 
     <EditText
@@ -15,12 +15,34 @@
         android:hint="@string/add_thikr_hint"
         android:inputType="textMultiLine"/>
 
-    <Button
-        android:id="@+id/record"
-        android:layout_width="wrap_content"
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="@string/record_audio"/>
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        >
+
+
+        <Button
+            android:id="@+id/record"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/record_audio"/>
+
+
+        <Button
+            android:id="@+id/select_audio_file"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/choose_audio_file"/>
+
+
+    </LinearLayout>
+
 
 
 </LinearLayout>

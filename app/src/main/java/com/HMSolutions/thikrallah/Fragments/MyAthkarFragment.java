@@ -140,8 +140,6 @@ public class MyAthkarFragment extends Fragment implements MyThikrDialogInterface
         if (this.getView()!=null){
             hideKeyboard(this.getActivity());
             thickerArray = db.getAllThikrs();
-          //  this.getView().invalidate();
-            //TODO:fragement not being redrawn
             adapter.clear();
             adapter.addAll(thickerArray);
             this.adapter.notifyDataSetChanged();

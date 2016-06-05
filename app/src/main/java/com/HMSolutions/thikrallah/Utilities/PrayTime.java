@@ -28,6 +28,9 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.HMSolutions.thikrallah.R;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -100,12 +103,12 @@ public class PrayTime {
     private int[] offsets;
 
     public static PrayTime instancePrayTime(Context context){
-        Log.d("prayerTimes", "testing");
+        //Log.d("prayerTimes", "testing");
         PrayTime prayers = new PrayTime();
 
         prayers.setTimeFormat(PrayTime.TIME_FORMAT_Time12);
         int calc_method=PrayTime.getCalculationMethod(context);
-        Log.d(TAG,"calc_method="+calc_method);
+       // Log.d(TAG,"calc_method="+calc_method);
         prayers.setCalcMethod(calc_method);
         int asr_calc_method=PrayTime.getJuristicMethod(context);
         prayers.setAsrJuristic(asr_calc_method);
@@ -116,10 +119,10 @@ public class PrayTime {
         return prayers;
     }
     public static int getCalculationMethod(Context context){
-        Log.d(TAG,"getCalculationMethod");
+      //  Log.d(TAG,"getCalculationMethod");
         String user_option=PreferenceManager.getDefaultSharedPreferences(context).getString("calc_method",null);
         if (user_option!=null){
-            Log.d(TAG,"user option is already made. It is "+Integer.parseInt(user_option));
+         //   Log.d(TAG,"user option is already made. It is "+Integer.parseInt(user_option));
             return Integer.parseInt(user_option);
         }
 
@@ -217,7 +220,7 @@ public class PrayTime {
 
 
                 if (default_method!=-100){
-                    Log.d(TAG,"default method returned is"+default_method);
+                  //  Log.d(TAG,"default method returned is"+default_method);
                     PreferenceManager.getDefaultSharedPreferences(context).edit().putString("calc_method",Integer.toString(default_method)).commit();
                     return default_method;
                 }
@@ -225,19 +228,19 @@ public class PrayTime {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            Log.d(TAG,"exception happenned MWL returned");
+        //    Log.d(TAG,"exception happenned MWL returned");
             return CALC_METHOD_MWL;
         }
-        Log.d(TAG,"0 addresses receieved.returned");
+       // Log.d(TAG,"0 addresses receieved.returned");
         //PreferenceManager.getDefaultSharedPreferences(context).edit().putString("calc_method",Integer.toString(CALC_METHOD_MWL)).commit();
         return CALC_METHOD_MWL;
     }
 
     public static int getJuristicMethod(Context context){
-        Log.d(TAG,"getJuristicMethod");
+      //  Log.d(TAG,"getJuristicMethod");
         String user_option=PreferenceManager.getDefaultSharedPreferences(context).getString("asr_calc_method",null);
         if (user_option!=null){
-            Log.d(TAG,"user option is already made. It is "+Integer.parseInt(user_option));
+          //  Log.d(TAG,"user option is already made. It is "+Integer.parseInt(user_option));
             return Integer.parseInt(user_option);
         }
 
@@ -250,11 +253,11 @@ public class PrayTime {
 
         try {
             List<Address> addresses = new Geocoder(context, Locale.ENGLISH).getFromLocation(latitude,longitude,1);
-            Log.d(TAG,"addresses received. size is"+addresses.size());
+           // Log.d(TAG,"addresses received. size is"+addresses.size());
             if (addresses.size() > 0) {
                 int default_juristic_method=-100;
                 String countrycode = addresses.get(0).getCountryCode();
-                Log.d(TAG,"country code is"+countrycode);
+             //   Log.d(TAG,"country code is"+countrycode);
                 if (countrycode.equalsIgnoreCase("AF")) default_juristic_method= JURISTIC_METHOD_Hanafi;
                 if (countrycode.equalsIgnoreCase("AZ")) default_juristic_method= JURISTIC_METHOD_Hanafi;
                 if (countrycode.equalsIgnoreCase("BD")) default_juristic_method= JURISTIC_METHOD_Hanafi;
@@ -282,10 +285,10 @@ public class PrayTime {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            Log.d(TAG,"exception happenned MWL returned");
+          //  Log.d(TAG,"exception happenned MWL returned");
             return JURISTIC_METHOD_Shafii;
         }
-        Log.d(TAG,"0 addresses receieved.returned");
+       // Log.d(TAG,"0 addresses receieved.returned");
         //PreferenceManager.getDefaultSharedPreferences(context).edit().putString("calc_method",Integer.toString(CALC_METHOD_MWL)).commit();
         return JURISTIC_METHOD_Shafii;
     }
@@ -293,7 +296,7 @@ public class PrayTime {
         double latitude =  Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("latitude", "0.0"));
         double longitude = Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("longitude","0.0"));
         double timezone = getCurrentTimezoneOffset();
-        Log.d(TAG,"longitude is"+longitude);
+      //  Log.d(TAG,"longitude is"+longitude);
         Log.d(TAG,"latitude is"+latitude);
         Date now = new Date();
         Calendar cal = Calendar.getInstance();
@@ -301,6 +304,20 @@ public class PrayTime {
 
         String[] prayerTimes = this.getPrayerTimes(cal,
                 latitude, longitude, timezone);
+        //check for invalid isha or fajr times
+        if (prayerTimes[0].equalsIgnoreCase(getInvalidTime())){
+            String high_latitude_adjustment=(PreferenceManager.getDefaultSharedPreferences(context).getString("adjustment_method",null));
+            if (high_latitude_adjustment == null ||high_latitude_adjustment.equalsIgnoreCase("0")) {
+
+                PreferenceManager.getDefaultSharedPreferences(context).edit().putString("adjustment_method","3").commit();
+               // Toast.makeText(context, R.string.latitude_adjustment_method_chosen,Toast.LENGTH_LONG).show();
+                this.setAdjustHighLats(3);
+                prayerTimes = this.getPrayerTimes(cal,
+                        latitude, longitude, timezone);
+            }
+
+
+        }
         return prayerTimes;
     }
     public PrayTime() {
@@ -776,7 +793,7 @@ public class PrayTime {
         double offsetInMillis = tz.getOffset(GregorianCalendar.getInstance(tz).getTimeInMillis());
 
         double offset = offsetInMillis / 3600000;
-        Log.d(TAG,"offset is"+offset);
+      //  Log.d(TAG,"offset is"+offset);
         return offset;
     }
     // adjust times in a prayer time array

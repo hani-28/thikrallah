@@ -180,9 +180,14 @@ public class MyDBHelper  extends SQLiteOpenHelper {
     public void deleteThikr(long id){
         UserThikr thikr_to_delete=this.getThikr(id);
         String filepath=thikr_to_delete.getFile();
-        File file = new File(filepath);
-        boolean deleted = file.delete();
-        Log.d(TAG,"file "+filepath+" deleted="+deleted);
+
+        if (filepath.contains("user")){
+            File file = new File(filepath);
+            boolean deleted = file.delete();
+
+            Log.d(TAG,"file "+filepath+" deleted="+deleted);
+        }
+
         SQLiteDatabase db = this.getWritableDatabase();
 
 // Define a projection that specifies which columns from the database
