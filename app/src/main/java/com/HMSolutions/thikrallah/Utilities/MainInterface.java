@@ -19,4 +19,5 @@ public interface MainInterface {
 		int getCurrentPlaying();
 		void setThikrType(String thikrType);
 		void requestLocationUpdate();
+		void requestMediaServiceStatus();
 }

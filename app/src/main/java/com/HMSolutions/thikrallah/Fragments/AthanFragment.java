@@ -3,6 +3,8 @@ package com.HMSolutions.thikrallah.Fragments;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.SharedPreferences;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -20,6 +22,10 @@ import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
 
 import com.HMSolutions.thikrallah.Utilities.PrayTime;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 public class AthanFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -42,19 +48,23 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
     private Switch ishaa_switch;
     private SharedPreferences mPrefs;
     private SharedPreferences.OnSharedPreferenceChangeListener prefListener;
+  //  private TextView locationDescription;
 
 
     public AthanFragment() {
 	}
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if(key.equalsIgnoreCase("latitude")||key.equalsIgnoreCase("longitude")){
+        if (key.equalsIgnoreCase("latitude") || key.equalsIgnoreCase("longitude")) {
             updateprayerTimes();
         }
+       /* if (key.equalsIgnoreCase("location")){
+            locationDescription.setText(PreferenceManager.getDefaultSharedPreferences(this.getActivity()).getString("location",""));
 
-
-
+        }*/
     }
+
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -68,12 +78,14 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
             mCallback = (MainInterface) activity;
             mCallback.requestLocationUpdate();
 
+
 		} catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString()
 					+ " must implement MainInterface");
 		}
 		 
 	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -85,6 +97,8 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
 		
 		View view = inflater.inflate(R.layout.athan_fragment, container,
 				false);
+
+        //locationDescription=(TextView)  view.findViewById(R.id.textView_location);
 
         prayer1_time=(TextView) view.findViewById(R.id.athan_timing1);
         prayer2_time=(TextView) view.findViewById(R.id.athan_timing2);
@@ -183,14 +197,22 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
 	}
 
     private void updateprayerTimes() {
-        prayers=getPrayersArray();
-        prayer1_time.setText(prayers[0].getTime());
-        sunrise_time.setText(prayers[1].getTime());
-        prayer2_time.setText(prayers[2].getTime());
-        prayer3_time.setText(prayers[3].getTime());
-        prayer4_time.setText(prayers[5].getTime());
-        prayer5_time.setText(prayers[6].getTime());
-        updateAthanAlarms();
+            prayers=getPrayersArray();
+            try{
+                //locationDescription.setText(PreferenceManager.getDefaultSharedPreferences(this.getActivity()).getString("location",""));
+                prayer1_time.setText(prayers[0].getTime());
+                sunrise_time.setText(prayers[1].getTime());
+                prayer2_time.setText(prayers[2].getTime());
+                prayer3_time.setText(prayers[3].getTime());
+                prayer4_time.setText(prayers[5].getTime());
+                prayer5_time.setText(prayers[6].getTime());
+            }catch(NullPointerException e){
+
+            }
+
+            updateAthanAlarms();
+
+
     }
     private void updateAthanAlarms(){
         new MyAlarmsManager(this.getActivity()).UpdateAllApplicableAlarms();
@@ -221,6 +243,8 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
 
 	@Override
 	public void onPause(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+        prefs.unregisterOnSharedPreferenceChangeListener(this);
 		super.onPause();
 	}
     @Override

@@ -202,6 +202,7 @@ public class MyAlarmsManager {
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
 			alarmMgr.set(AlarmManager.RTC_WAKEUP, timeInMilliseconds, pendingIntent);
 		} else{
+            
 			alarmMgr.setExact(AlarmManager.RTC_WAKEUP,timeInMilliseconds, pendingIntent);
 		}
 	}

@@ -120,6 +120,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         for (int i=mClients.size()-1; i>=0; i--) {
             try {
                 // Send data as an Integer
+                Log.d(TAG,"sendmessagetoUI called with what="+what+ " value="+intvaluetosend);
                 Message msg = Message.obtain(null, what, intvaluetosend, 0);
                 Bundle data=new Bundle();
                 data.putString("com.HMSolutions.thikrallah.datatype",this.getThikrType());
@@ -128,7 +129,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             }
             catch (RemoteException e) {
                 // The client is dead. Remove it from the list; we are going through the list from back to front so this is safe to do inside the loop.
-                mClients.remove(i);
+                //mClients.remove(i);
             }
         }
     }
@@ -380,7 +381,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
      */
     public void setCurrentPlaying(int icurrentPlaying) {
         currentPlaying = icurrentPlaying;
-        //sendMessageToUI(MSG_CURRENT_PLAYING,currentPlaying);
+        sendMessageToUI(MSG_CURRENT_PLAYING,currentPlaying);
     }
 
     public int getAudioFocusRequestType() {

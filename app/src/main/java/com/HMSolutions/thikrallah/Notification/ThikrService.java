@@ -74,7 +74,7 @@ public class ThikrService extends IntentService  {
                 return;
             }
             int fileNumber=-1;
-            if(android.text.TextUtils.isDigitsOnly(thikr.getFile())){
+            if(android.text.TextUtils.isDigitsOnly(thikr.getFile()) && !thikr.getFile().equalsIgnoreCase("")){
                 fileNumber=Integer.parseInt(thikr.getFile());
             }
             Log.d(TAG,"filenumber is"+fileNumber);
@@ -185,7 +185,7 @@ public class ThikrService extends IntentService  {
                 Intent launchAppIntent = new Intent(this, MainActivity.class);
 
                 launchAppIntent.putExtra("FromNotification",true);
-                launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_QURAN);
+                launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_QURAN_MULK);
                 launchAppIntent.putExtra("surat", 1);
                 PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
                         0, launchAppIntent, PendingIntent.FLAG_CANCEL_CURRENT
@@ -222,7 +222,7 @@ public class ThikrService extends IntentService  {
                 Intent launchAppIntent = new Intent(this, MainActivity.class);
 
                 launchAppIntent.putExtra("FromNotification",true);
-                launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_QURAN);
+                launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_QURAN_KAHF);
                 launchAppIntent.putExtra("surat", 0);
                 PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
                         0, launchAppIntent, PendingIntent.FLAG_CANCEL_CURRENT

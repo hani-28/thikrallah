@@ -6,17 +6,28 @@
     android:padding="15dip" >
 
 
+    <!--TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/textView_location" /-->
+
+
     <GridLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
+       android:layout_alignParentTop="true"
 
         android:gravity="right"
         android:rowCount="6"
-        android:columnCount="3"
+        android:columnCount="4"
         android:verticalSpacing="@dimen/grid_vertical_spacing"
         android:horizontalSpacing="@dimen/grid_vertical_spacing"
         android:id="@+id/gridview_athan">
+
 
 
         <TextView
@@ -189,5 +200,6 @@
 
 
     </GridLayout>
+
 
 </RelativeLayout>

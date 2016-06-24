@@ -5,10 +5,8 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 
 
 import org.json.JSONException;
@@ -41,6 +39,8 @@ import android.content.IntentSender;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
@@ -52,7 +52,6 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.app.AlertDialog;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -66,7 +65,9 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-public class MainActivity extends Activity implements MainInterface,GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,LocationListener, android.location.LocationListener {
+public class MainActivity extends Activity implements MainInterface,GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,LocationListener, android.location.LocationListener ,
+        SharedPreferences.OnSharedPreferenceChangeListener{
 	private String appLink;
     String TAG = "MainActivity";
 	public static final String DATA_TYPE_NIGHT_THIKR="night";
@@ -97,6 +98,15 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
     boolean mIsBoundMediaService;
     final Messenger mMessenger = new Messenger(new IncomingHandler());
     private LocationManager locationManager;
+    private SharedPreferences.OnSharedPreferenceChangeListener prefListener;
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equalsIgnoreCase("latitude") || key.equalsIgnoreCase("longitude")) {
+           // new updateLocationDiscription().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,this);
+
+        }
+    }
 
     class IncomingHandler extends Handler {
         @Override
@@ -178,10 +188,12 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
             isPremiumPurchasedAsync();
         }
     };
-    private void requestMediaServiceStatus(){
+    @Override
+    public void requestMediaServiceStatus(){
         if (mIsBoundMediaService) {
             if (mServiceThikrMediaPlayerMessenger != null) {
                 try {
+                    Log.d(TAG,"requestMediaServiceStatus called to request message status");
                     Message msg = Message.obtain(null, ThikrMediaPlayerService.MSG_CURRENT_PLAYING, 0, 0);
                     msg.replyTo = mMessenger;
                     mServiceThikrMediaPlayerMessenger.send(msg);
@@ -189,6 +201,8 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
                 catch (RemoteException e) {
                 }
             }
+        }else{
+            Log.d(TAG,"mIsBoundMediaService is false to send message");
         }
     }
 
@@ -205,7 +219,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
     }
     private void bindtoMediaService(){
         // Bind to the service
-        if (mIsBoundMediaService==false){
+        if (!mIsBoundMediaService){
             try{
                 mIsBoundMediaService=bindService(new Intent(this, ThikrMediaPlayerService.class), mConnectionMediaServer,
                         Context.BIND_ABOVE_CLIENT);
@@ -232,6 +246,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
         bindtoMediaService();
 
 	}
+
 	public void sendActionToMediaService(Bundle data){
 		Log.d(TAG,"sendActionToMediaService called");
         if (data!=null){
@@ -260,11 +275,53 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 
     @Override
 	public void requestLocationUpdate(){
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)&&!locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)&&
+                !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+                &&PreferenceManager.getDefaultSharedPreferences(this).getString("latitude","0.0").equalsIgnoreCase("0.0")) {
             buildAlertMessageNoGps();
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,  this);
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+       if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+           Log.d(TAG,"requesting gps");
+           locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,  this);
+           try{
+               Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+               if (location!=null){
+                   PreferenceManager.getDefaultSharedPreferences(this).edit().putString("latitude", Double.toString(location.getLatitude())).commit();
+                   PreferenceManager.getDefaultSharedPreferences(this).edit().putString("longitude", Double.toString(location.getLongitude())).commit();
+               }
+
+           }catch(IllegalArgumentException e){
+
+           }
+
+       }
+        if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+            Log.d(TAG,"requesting network");
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+            try{
+                Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                if (location!=null){
+                    PreferenceManager.getDefaultSharedPreferences(this).edit().putString("latitude", Double.toString(location.getLatitude())).commit();
+                    PreferenceManager.getDefaultSharedPreferences(this).edit().putString("longitude", Double.toString(location.getLongitude())).commit();
+                }
+            }catch(IllegalArgumentException e){
+
+            }
+        }
+        if (locationManager.isProviderEnabled(LocationManager.PASSIVE_PROVIDER)){
+            Log.d(TAG,"requesting passive");
+            locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 0, 0, this);
+            try{
+                Location location = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+                if (location!=null){
+                    PreferenceManager.getDefaultSharedPreferences(this).edit().putString("latitude", Double.toString(location.getLatitude())).commit();
+                    PreferenceManager.getDefaultSharedPreferences(this).edit().putString("longitude", Double.toString(location.getLongitude())).commit();
+                }
+            }catch(IllegalArgumentException e){
+
+            }
+        }
+
 
 
 
@@ -545,12 +602,19 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 	public void onPause(){
         stopLocationUpdates();
         unbindtoMediaService();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.unregisterOnSharedPreferenceChangeListener(this);
+
 		super.onPause();
 
 	}
     @Override
     protected void onResume() {
-        unbindtoMediaService();
+        bindtoMediaService();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        prefListener = this;
+        prefs.registerOnSharedPreferenceChangeListener(prefListener);
         super.onResume();
 
     }
@@ -783,12 +847,47 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.d(TAG,"onLocationChanged called");
+        Log.d(TAG,"onLocationChanged called requesting with provider ="+location.getProvider().toString());
         Log.d(TAG,"latitude is "+Double.toString(location.getLatitude()));
         PreferenceManager.getDefaultSharedPreferences(this).edit().putString("latitude", Double.toString(location.getLatitude())).commit();
         PreferenceManager.getDefaultSharedPreferences(this).edit().putString("longitude", Double.toString(location.getLongitude())).commit();
         stopLocationUpdates();
-        PrayTime.instancePrayTime(this);
+
+    }
+    private class updateLocationDiscription extends AsyncTask<Context, String, String> {
+
+
+        protected String doInBackground(Context... context) {
+            return updateCity(context[0]);
+        }
+
+        private String updateCity(Context context){
+
+            double latitude=Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("latitude","0.0"));
+            double longitude=Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("longitude","0.0"));
+            Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+            List<Address> addresses;
+            String locationDiscription="";
+            try {
+                addresses = geocoder.getFromLocation(latitude, longitude, 1);
+//                String cityName = addresses.get(0).getAddressLine(0);
+                //un hg              String stateName = addresses.get(0).getAddressLine(1);
+                //       String countryName = addresses.get(0).getAddressLine(2);
+                if (addresses.size()>0) {
+                    String country=addresses.get(0).getCountryName();
+                    String city=addresses.get(0).getLocality();
+                    locationDiscription = country+"  "+city;// nbn  khjbmn countryName+" "+stateName + "" + cityName;
+                    PreferenceManager.getDefaultSharedPreferences(context).edit().putString("location", locationDiscription).commit();
+                }else{
+                   // locationDiscription = latitude + ", "+longitude;
+                   // PreferenceManager.getDefaultSharedPreferences(context).edit().putString("location", locationDiscription).commit();
+
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return locationDiscription;
+        }
 
     }
 

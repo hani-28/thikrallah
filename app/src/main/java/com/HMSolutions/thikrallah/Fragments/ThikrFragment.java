@@ -118,7 +118,13 @@ public class ThikrFragment extends ListFragment implements OnClickListener {
             setCurrentlyPlaying(position+1);
 		}
 	}
-	
+
+	@Override
+	public void onResume() {
+		mCallback.requestMediaServiceStatus();
+		super.onResume();
+	}
+
 	private String[] getThikrArray(){
 		String[] numbers_text = null;
 		if (this.thikrType.equals(MainActivity.DATA_TYPE_DAY_THIKR)){
