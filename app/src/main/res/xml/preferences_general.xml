@@ -39,6 +39,7 @@
                 android:data="market://details?id=com.HMSolutions.thikrallah" >
             </intent>
         </com.HMSolutions.thikrallah.Utilities.MyPreference>
+
     </PreferenceCategory>
 
 </PreferenceScreen>

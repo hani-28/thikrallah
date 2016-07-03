@@ -861,10 +861,13 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     }
 
     private boolean initMediaPlayer() {
-        if (this.isPlaying()) {
-            Log.d(TAG, "initiMediaPlayer is called and player is not null");
-            this.resetPlayer();
+        if (player!=null){
+            //if (this.isPlaying()) {
+                Log.d(TAG, "initiMediaPlayer is called and player is not null");
+                this.resetPlayer();
+            //}
         }
+
         //this.setCurrentPlaying(1);
         if (player == null) {
             Log.d(TAG, "initiMediaPlayer is called and player is null");

@@ -120,7 +120,7 @@ He knows what lies before them and what is after them, And they comprehend not a
     <string name="language">Language</string>
     <string name="help_translate">Help Us Translate To Other Languages</string>
     <string name="share_text">I advise you to install this app called Remember Allah.\n\n It\'s a way to remember Allah throughout the day by providing you with notification reminders of Allah as well as audio reminders. I advise you to also share this message with other Muslims. It will benefit you with the ongoing reward of spreading it and it benefits them as well.\n\nAndroid: https://play.google.com/store/apps/details?id=com.HMSolutions.thikrallah  \n\nIphone: By a different developer but does same thing https://itunes.apple.com/app/id1004470625 \n</string>
-    <string name="sadaqa">Ceaseless Charity</string>
+    <string name="sadaqa">Spread Allah\'s Name</string>
     <string name="quranic_verses">Quran</string>
     <string name="kahfThikrSettings">Surat Alkahf Reminders Settings</string>
     <string name="remindMekahf">Remind Me Of Surat Alkahf on Fridays</string>
@@ -182,5 +182,8 @@ He knows what lies before them and what is after them, And they comprehend not a
     <string name="stop_recording">Stop Recording</string>
     <string name="thikr_text_required">Supplication text is required. Please add text.</string>
     <string name="recording">Recording</string>
+    <string name="next">Next</string>
+    <string name="remove_ads">Remove Ads</string>
+
 
 </resources>

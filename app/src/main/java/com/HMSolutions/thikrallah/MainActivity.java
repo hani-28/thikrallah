@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import com.HMSolutions.thikrallah.Fragments.MainFragment;
 import com.HMSolutions.thikrallah.Fragments.QuranFragment;
 import com.HMSolutions.thikrallah.Fragments.ThikrFragment;
+import com.HMSolutions.thikrallah.Fragments.TutorialFragment;
 import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
 import com.HMSolutions.thikrallah.Utilities.AppRater;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
@@ -53,6 +54,7 @@ import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.app.AlertDialog;
 import android.util.Log;
+import android.util.TimingLogger;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -99,6 +101,9 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
     final Messenger mMessenger = new Messenger(new IncomingHandler());
     private LocationManager locationManager;
     private SharedPreferences.OnSharedPreferenceChangeListener prefListener;
+
+    private long endnow;
+    private long startnow=0;
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -241,9 +246,14 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 
     @Override
 	protected void onStart() {
+        timeOperation("timing","onstart called");
+        Log.d(TAG,"onStart called");
         mGoogleApiClient.connect();
-        super.onStart();
+
         bindtoMediaService();
+        timeOperation("timing","onstart finished");
+        super.onStart();
+
 
 	}
 
@@ -275,6 +285,9 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 
     @Override
 	public void requestLocationUpdate(){
+        if (locationManager==null){
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        }
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)&&
                 !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
                 &&PreferenceManager.getDefaultSharedPreferences(this).getString("latitude","0.0").equalsIgnoreCase("0.0")) {
@@ -329,6 +342,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        timeOperation("timing","oncreate_started");
         Log.d(TAG,"oncreate 1");
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         PreferenceManager.setDefaultValues(this.getApplicationContext(), R.xml.preferences, true);
@@ -338,7 +352,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         String lang=mPrefs.getString("language",null);
         Log.d(TAG,"oncreate 2");
-
+        timeOperation("timing","minor_setups");
         if (lang!=null){
             Locale locale = new Locale(lang);
             Locale.setDefault(locale);
@@ -347,8 +361,9 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
             getBaseContext().getResources().updateConfiguration(config,
                     getBaseContext().getResources().getDisplayMetrics());
             Log.d(TAG,"oncreate 3");
-        }
 
+        }
+        timeOperation("timing","locale_setup_if_needed");
         Log.d(TAG,"oncreate 4");
 
         // Create an instance of GoogleAPIClient.
@@ -363,28 +378,18 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
         }else{
             Log.d(TAG,"mGoogleApiClient is not null");
         }
-
-        Log.d(TAG,"oncreate 5");
-
+        timeOperation("timing","defined_mgoogleApiClient");
         base64RSAPublicKey=getResources().getText(R.string.base64RSAPublicKey).toString();
         deviceId = "AC73D67B1C23A45BBDFCAF3F4040A0AA";//md5(android_id).toUpperCase();
 
 
 
 
-        Intent serviceIntent =
-                new Intent("com.android.vending.billing.InAppBillingService.BIND");
-        serviceIntent.setPackage("com.android.vending");
-        bindService(serviceIntent, mServiceInAppBillingConn, Context.BIND_AUTO_CREATE);
-        Log.d(TAG,"oncreate 6");
 
 
 
 
 
-
-
-		setContentView(R.layout.activity_main);
 
 		 
 		adsListener=new myAdListener(this);
@@ -393,25 +398,46 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 
 
         populateBuiltinDatabase();
+        timeOperation("timing","populating builtin database");
+
 
         Log.d(TAG,"oncreate 7");
 
 		Intent intent1 = new Intent("com.HMSolutions.thikrallah.Notification.ThikrBootReceiver.android.action.broadcast");
 
-		new WhatsNewScreen(this).show();
+
+
+
+
+        //new WhatsNewScreen(this).show();
+
+        timeOperation("timing","showing what's new screen");
+
         Log.d(TAG,"oncreate 8");
 		AppRater.app_launched(this);
-		if (mPrefs.getBoolean("isFirstLaunch", true)){
+        timeOperation("timing","launching apprater if applicable");
+        setContentView(R.layout.activity_main);
+        timeOperation("timing","setting content");
+        if (savedInstanceState == null) {
+            getFragmentManager().beginTransaction().add(R.id.container, new MainFragment()).commit();
+        }
+        timeOperation("timing","replacing with main fragment");
+
+        if (mPrefs.getBoolean("isFirstLaunch", true)){
 			Log.d(TAG, "first launch. calling boot recbiever");
 			sendBroadcast(intent1);
-			mPrefs.edit().putBoolean("isFirstLaunch", false).commit();
 			mPrefs.edit().putLong("time_at_last_ad",System.currentTimeMillis()).commit();
+            launchFragment(new TutorialFragment(), null, "TutorialFragment");
+            timeOperation("timing","launching tutorial freagment");
+
 		}
+
 
 		interstitial = new InterstitialAd(this);
 		interstitial.setAdUnitId(getResources().getText(R.string.ad_unit_id_interstital).toString());
 		interstitial.setAdListener(adsListener);
 
+        timeOperation("timing","defining intersittal ad");
 
 
 		if (mPrefs.getBoolean("isPremium", false)==true||doesAdShowBasedOnClicks()==false){
@@ -419,27 +445,38 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 			hideAd();
 		}else{
 			//show banner ad
-			showAd();
-			//load interstital ad
-			Log.d(TAG, "ad show");
-			// Create the interstitial.
-			//String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    showAd();
+                    timeOperation("timing","ad showed");
 
-			// Create ad request.
-			AdRequest adRequest = new AdRequest.Builder()
-			.addTestDevice(deviceId)
-			.build();
+                    //load interstital ad
+                    Log.d(TAG, "ad show");
+                    // Create the interstitial.
+                    //String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
 
-			// Begin loading your interstitial.
-			interstitial.loadAd(adRequest);
+                    // Create ad request.
+                    AdRequest adRequest = new AdRequest.Builder()
+                            .addTestDevice(deviceId)
+                            .build();
+                    timeOperation("timing","add built");
 
-		}
+                    // Begin loading your interstitial.
+                    interstitial.loadAd(adRequest);
+                    timeOperation("timing","ad loaded");
+                }
+            }, 3000);
 
 
 
-		if (savedInstanceState == null) {
-			getFragmentManager().beginTransaction().add(R.id.container, new MainFragment()).commit();
-		}
+        }
+
+
+
+
+
 		Intent intent=this.getIntent();
 		boolean isNotification=intent.getBooleanExtra("FromNotification", false);
 		if (isNotification==true){
@@ -464,8 +501,15 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
             intent.setClass(MainActivity.this, PreferenceActivity.class);
             startActivityForResult(intent, 0);
         }
+        timeOperation("timing","remainder of oncreate ");
 
 	}
+    private void timeOperation(String tag,String operation){
+        endnow = android.os.SystemClock.elapsedRealtime();
+        Log.d(tag, "Execution time: " + (endnow - startnow) + " ms for "+operation);
+        //Log.d(tag,operation);
+        startnow = android.os.SystemClock.elapsedRealtime();
+    }
     private void isPremiumPurchasedAsync(){
         new isPremiumPurchased().execute();
 
@@ -521,8 +565,12 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
 		.addTestDevice(deviceId)
 		//.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
 		.build();
-		adView.loadAd(adRequest);
-	}
+        timeOperation("timing","banner ad set");
+
+        adView.loadAd(adRequest);
+        timeOperation("timing","banner ad loaded");
+
+    }
 	// Invoke displayInterstitial() when you are ready to display an interstitial.
 	public void displayInterstitial() {  
 		if (interstitial.isLoaded()&&(mPrefs.getBoolean("isPremium", false)==false)) {
@@ -604,17 +652,34 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
         unbindtoMediaService();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.unregisterOnSharedPreferenceChangeListener(this);
-
+        //if (mServiceInAppBilling != null) {
+        try{
+            unbindService(mServiceInAppBillingConn);
+        }catch (Exception e){
+            Log.d(TAG,"exception caught. null service");
+        }
 		super.onPause();
 
 	}
     @Override
     protected void onResume() {
+        timeOperation("timing","onresume started");
         bindtoMediaService();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         prefListener = this;
         prefs.registerOnSharedPreferenceChangeListener(prefListener);
+
+
+
+        Intent serviceIntent =
+                new Intent("com.android.vending.billing.InAppBillingService.BIND");
+        serviceIntent.setPackage("com.android.vending");
+        bindService(serviceIntent, mServiceInAppBillingConn, Context.BIND_AUTO_CREATE);
+        Log.d(TAG,"oncreate 6");
+        timeOperation("timing","onresume finished");
+
+
         super.onResume();
 
     }
@@ -622,9 +687,7 @@ public class MainActivity extends Activity implements MainInterface,GoogleApiCli
     protected void onDestroy() {
 
         unbindtoMediaService();
-        if (mServiceInAppBilling != null) {
-            unbindService(mServiceInAppBillingConn);
-        }
+
         super.onDestroy();
 
     }

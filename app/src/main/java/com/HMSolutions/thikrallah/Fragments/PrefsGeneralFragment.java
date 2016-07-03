@@ -18,22 +18,16 @@ import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Utilities.TimePreference;
 
 public class PrefsGeneralFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener{
-
-
-
     @Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.preferences_general);
 		initSummary(getPreferenceScreen());
 	}
-	
 	private void updatePrefSummary(Preference pref) {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getApplicationContext());
 		if (pref instanceof ListPreference) {
-			
 			Log.d("prefs","pref is instance of listpreference");
 			ListPreference listPref = (ListPreference) pref;
 			pref.setSummary(listPref.getEntry());
@@ -66,18 +60,6 @@ public class PrefsGeneralFragment extends PreferenceFragment implements OnShared
 			pref.setSummary(hourString+":"+minutesString+" "+AMPM);
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	private void initSummary(PreferenceScreen p) {
 		if (p instanceof PreferenceGroup) {
 			PreferenceGroup pGrp = (PreferenceGroup) p;
@@ -87,7 +69,6 @@ public class PrefsGeneralFragment extends PreferenceFragment implements OnShared
 		} else {
 			updatePrefSummary(p);
 		}
-
 	}
 	private void initSummary(Preference p) {
         if (p instanceof PreferenceGroup) {
@@ -99,13 +80,10 @@ public class PrefsGeneralFragment extends PreferenceFragment implements OnShared
             updatePrefSummary(p);
         }
     }
-
-	
 	@Override
 	public void onResume() {
 		super.onResume();
 		getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-
 	}
 	@Override
 	public void onPause() {
@@ -117,10 +95,8 @@ public class PrefsGeneralFragment extends PreferenceFragment implements OnShared
 			String key) {
 		MyAlarmsManager manager=new MyAlarmsManager(this.getActivity().getApplicationContext());
 		manager.UpdateAllApplicableAlarms();
-
 		Preference pref = findPreference(key);
 		updatePrefSummary(pref);
-
         if (key.equalsIgnoreCase("language")){
             Intent intent=new Intent();
             intent.setClass(this.getActivity(), MainActivity.class);
@@ -128,10 +104,6 @@ public class PrefsGeneralFragment extends PreferenceFragment implements OnShared
             intent.putExtra("FromPreferenceActivity",true);
             this.startActivity(intent);
         }
-	
 
 	}
-	
-
-
 }

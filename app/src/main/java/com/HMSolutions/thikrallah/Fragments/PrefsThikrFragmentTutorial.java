@@ -17,12 +17,15 @@ import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Utilities.TimePreference;
 
-public class PrefsAthanFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener{
-	@Override
+public class PrefsThikrFragmentTutorial extends PreferenceFragment implements OnSharedPreferenceChangeListener{
+	public static String PREF_XML_FILE="PREF_XML_FILE";
+    @Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// Load the preferences from an XML resource
-		addPreferencesFromResource(R.xml.preferences_athan);
+		Bundle data=this.getArguments();
+		int xml_file=data.getInt(PREF_XML_FILE);
+		addPreferencesFromResource(xml_file);
 		initSummary(getPreferenceScreen());
 	}
 	private void updatePrefSummary(Preference pref) {
@@ -101,7 +104,7 @@ public class PrefsAthanFragment extends PreferenceFragment implements OnSharedPr
             Intent intent=new Intent();
             intent.setClass(this.getActivity(), MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            intent.putExtra("FromPreferenceActivity",true);
+           // intent.putExtra("FromPreferenceActivity",true);
             this.startActivity(intent);
         }
 	}

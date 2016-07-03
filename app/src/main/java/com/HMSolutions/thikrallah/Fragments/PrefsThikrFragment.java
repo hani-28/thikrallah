@@ -19,22 +19,16 @@ import android.preference.PreferenceScreen;
 import android.util.Log;
 
 public class PrefsThikrFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener{
-
-
-
-    @Override
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.preferences);
 		initSummary(getPreferenceScreen());
 	}
-	
 	private void updatePrefSummary(Preference pref) {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getApplicationContext());
 		if (pref instanceof ListPreference) {
-			
 			Log.d("prefs","pref is instance of listpreference");
 			ListPreference listPref = (ListPreference) pref;
 			pref.setSummary(listPref.getEntry());
@@ -67,18 +61,6 @@ public class PrefsThikrFragment extends PreferenceFragment implements OnSharedPr
 			pref.setSummary(hourString+":"+minutesString+" "+AMPM);
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	private void initSummary(PreferenceScreen p) {
 		if (p instanceof PreferenceGroup) {
 			PreferenceGroup pGrp = (PreferenceGroup) p;
@@ -88,7 +70,6 @@ public class PrefsThikrFragment extends PreferenceFragment implements OnSharedPr
 		} else {
 			updatePrefSummary(p);
 		}
-
 	}
 	private void initSummary(Preference p) {
         if (p instanceof PreferenceGroup) {
@@ -100,13 +81,10 @@ public class PrefsThikrFragment extends PreferenceFragment implements OnSharedPr
             updatePrefSummary(p);
         }
     }
-
-	
 	@Override
 	public void onResume() {
 		super.onResume();
 		getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-
 	}
 	@Override
 	public void onPause() {
@@ -118,10 +96,8 @@ public class PrefsThikrFragment extends PreferenceFragment implements OnSharedPr
 			String key) {
 		MyAlarmsManager manager=new MyAlarmsManager(this.getActivity().getApplicationContext());
 		manager.UpdateAllApplicableAlarms();
-
 		Preference pref = findPreference(key);
 		updatePrefSummary(pref);
-
         if (key.equalsIgnoreCase("language")){
             Intent intent=new Intent();
             intent.setClass(this.getActivity(), MainActivity.class);
@@ -129,10 +105,5 @@ public class PrefsThikrFragment extends PreferenceFragment implements OnSharedPr
             intent.putExtra("FromPreferenceActivity",true);
             this.startActivity(intent);
         }
-	
-
 	}
-	
-
-
 }

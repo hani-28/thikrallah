@@ -1,0 +1,11 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <PreferenceCategory
+        android:title="@string/language"
+        android:layout="@layout/preference_catagory">
+        <com.HMSolutions.thikrallah.Utilities.MyListPreference
+            android:entries="@array/languagelist"
+            android:entryValues="@array/languagelistValues"
+            android:key="language"
+            android:title="@string/language" />
+    </PreferenceCategory>
+</PreferenceScreen>

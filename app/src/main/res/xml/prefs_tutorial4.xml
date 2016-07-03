@@ -1,0 +1,61 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/calc_method"
+        android:layout="@layout/preference_catagory">
+        <com.HMSolutions.thikrallah.Utilities.MyListPreference
+
+            android:entries="@array/athan_calculation_method"
+            android:entryValues="@array/athan_calculation_method_values"
+            android:key="calc_method"
+            android:title="@string/calc_method"/>
+
+        <com.HMSolutions.thikrallah.Utilities.MyListPreference
+            android:defaultValue="0"
+            android:entries="@array/asr_calculation_method"
+            android:entryValues="@array/asr_calculation_method_values"
+            android:key="asr_calc_method"
+            android:title="@string/asr_calc_method"/>
+
+        <com.HMSolutions.thikrallah.Utilities.MyListPreference
+            android:defaultValue="0"
+            android:entries="@array/athan_adjustment_methods"
+            android:entryValues="@array/athan_adjustment_methods_values"
+            android:key="adjustment_method"
+            android:title="@string/high_latitude_adjustment"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/athan_type"
+        android:layout="@layout/preference_catagory">
+        <com.HMSolutions.thikrallah.Utilities.MyListPreference
+            android:defaultValue="3"
+            android:entries="@array/athan_notification_types"
+            android:entryValues="@array/athan_notification_types_values"
+            android:key="fajr_reminder_type"
+            android:title="@string/fajr_reminder_type"/>
+        <com.HMSolutions.thikrallah.Utilities.MyListPreference
+            android:defaultValue="3"
+            android:entries="@array/athan_notification_types"
+            android:entryValues="@array/athan_notification_types_values"
+            android:key="duhr_reminder_type"
+            android:title="@string/duhr_reminder_type"/>
+        <com.HMSolutions.thikrallah.Utilities.MyListPreference
+            android:defaultValue="3"
+            android:entries="@array/athan_notification_types"
+            android:entryValues="@array/athan_notification_types_values"
+            android:key="asr_reminder_type"
+            android:title="@string/asr_reminder_type"/>
+        <com.HMSolutions.thikrallah.Utilities.MyListPreference
+            android:defaultValue="3"
+            android:entries="@array/athan_notification_types"
+            android:entryValues="@array/athan_notification_types_values"
+            android:key="maghrib_reminder_type"
+            android:title="@string/maghrib_reminder_type"/>
+        <com.HMSolutions.thikrallah.Utilities.MyListPreference
+            android:defaultValue="3"
+            android:entries="@array/athan_notification_types"
+            android:entryValues="@array/athan_notification_types_values"
+            android:key="isha_reminder_type"
+            android:title="@string/isha_reminder_type"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

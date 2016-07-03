@@ -59,10 +59,20 @@ public class MainFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-                mCallback.launchFragment(new AthanFragment(), new Bundle(),"AthanFragment");	;
+                mCallback.launchFragment(new AthanFragment(), new Bundle(),"AthanFragment");
 				
 			}
 			
+		});
+		Button button_upgrade = (Button) view.findViewById(R.id.button_upgrade);
+		button_upgrade.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				mCallback.upgrade();
+
+			}
+
 		});
 
 

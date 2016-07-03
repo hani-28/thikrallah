@@ -201,8 +201,9 @@ public class MyAlarmsManager {
 		Long timeInMilliseconds=getFutureTimeIfTimeInPast(time.getTimeInMillis());
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
 			alarmMgr.set(AlarmManager.RTC_WAKEUP, timeInMilliseconds, pendingIntent);
-		} else{
-            
+		} else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.){
+
+        }else{
 			alarmMgr.setExact(AlarmManager.RTC_WAKEUP,timeInMilliseconds, pendingIntent);
 		}
 	}
