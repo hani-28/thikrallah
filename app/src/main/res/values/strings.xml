@@ -199,5 +199,6 @@
     <string name="recording">جاري التسجيل</string>
     <string name="next">التالي</string>
     <string name="remove_ads">احذف الدعايات</string>
+    <string name="time_adjustment">تعديل وقت الاذان</string>
 
 </resources>

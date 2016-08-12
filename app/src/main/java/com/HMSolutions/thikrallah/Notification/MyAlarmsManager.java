@@ -201,11 +201,11 @@ public class MyAlarmsManager {
 		Long timeInMilliseconds=getFutureTimeIfTimeInPast(time.getTimeInMillis());
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
 			alarmMgr.set(AlarmManager.RTC_WAKEUP, timeInMilliseconds, pendingIntent);
-		} else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.){
-
-        }else{
+		} else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
 			alarmMgr.setExact(AlarmManager.RTC_WAKEUP,timeInMilliseconds, pendingIntent);
-		}
+		}else{
+            alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,timeInMilliseconds, pendingIntent);
+        }
 	}
     void setPeriodicAlarmManagerUpdates(AlarmManager alarmmnager){
         Intent launchIntent=new Intent(context, ThikrBootReceiver.class);

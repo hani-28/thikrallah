@@ -1,5 +1,6 @@
 package com.HMSolutions.thikrallah.Utilities;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -9,10 +10,15 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.media.MediaRecorder;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +30,7 @@ import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.MediaBrowser;
 import com.HMSolutions.thikrallah.PreferenceActivity;
 import com.HMSolutions.thikrallah.R;
+import com.google.android.gms.location.LocationServices;
 
 import java.io.File;
 import java.util.Random;
@@ -32,6 +39,8 @@ import java.util.Random;
  * Created by hani on 5/14/16.
  */
 public class RecordThikrDialog extends DialogFragment {
+    private static final  int MY_PERMISSIONS_REQUEST_RECORD_AUDIO = 4367;
+    private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE =8754 ;
     private EditText thikr_text_edittext_view;
     private Context context;
     private Button record_button;
@@ -68,7 +77,16 @@ public class RecordThikrDialog extends DialogFragment {
         record_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recordAudio();
+                int permissionCheck = ContextCompat.checkSelfPermission(context,
+                        android.Manifest.permission.RECORD_AUDIO);
+                if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        requestPermissions(new String[]{android.Manifest.permission.RECORD_AUDIO},
+                                MY_PERMISSIONS_REQUEST_RECORD_AUDIO);
+                    }
+                } else {
+                    recordAudio();
+                }
             }
         });
         builder.setMessage(R.string.add_thikr)
@@ -98,8 +116,19 @@ public class RecordThikrDialog extends DialogFragment {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), MediaBrowser.class);
-                startActivityForResult(intent, 0);
+                int permissionCheck = ContextCompat.checkSelfPermission(context,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+                    }
+                } else {
+                    Intent intent = new Intent(getActivity(), MediaBrowser.class);
+                    startActivityForResult(intent, 0);
+                }
+
+
             }
         });
         // Create the AlertDialog object and return it
@@ -148,6 +177,50 @@ public class RecordThikrDialog extends DialogFragment {
         recorder.start();
 
         mProgressDialog.show();
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+
+        Log.e("DialogPermission","Ho! Ho! Ho!");  // Log printed
+
+
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_RECORD_AUDIO: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && (ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED )) {
+                    recordAudio();
+                    // permission was granted, yay! Do the
+                    // location-related task you need to do.
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+            case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && (ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED )) {
+                    Intent intent = new Intent(getActivity(), MediaBrowser.class);
+                    startActivityForResult(intent, 0);
+                    // permission was granted, yay! Do the
+                    // location-related task you need to do.
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 0) {

@@ -42,6 +42,7 @@ public class ThikrService extends IntentService  {
     String TAG = "ThikrService";
 	private final static int NOTIFICATION_ID=0;
     private AudioManager am;
+    private Intent calling_intent;
 
     public ThikrService() {
 		super("service");
@@ -49,7 +50,8 @@ public class ThikrService extends IntentService  {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		new MyAlarmsManager(this.getApplicationContext()).UpdateAllApplicableAlarms();
+        calling_intent=intent;
+        new MyAlarmsManager(this.getApplicationContext()).UpdateAllApplicableAlarms();
 		Log.d(TAG,"onhandleintnet called");
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         String lang=sharedPrefs.getString("language",null);
@@ -403,6 +405,7 @@ public class ThikrService extends IntentService  {
 
     @Override
     public void onDestroy(){
+        ThikrAlarmReceiver.completeWakefulIntent(calling_intent);
         super.onDestroy();
 
     }

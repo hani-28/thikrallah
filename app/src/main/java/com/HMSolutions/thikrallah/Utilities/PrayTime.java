@@ -296,6 +296,12 @@ public class PrayTime {
         double latitude =  Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("latitude", "0.0"));
         double longitude = Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("longitude","0.0"));
         double timezone = getCurrentTimezoneOffset();
+        int adjustment=PreferenceManager.getDefaultSharedPreferences(context).getInt("time_adjustment",0);
+        offsets=new int[]{adjustment,adjustment,adjustment,adjustment,adjustment,adjustment,adjustment};
+        Log.d(TAG,"detectDaylightSaving() "+detectDaylightSaving());
+        //timezone=timezone+detectDaylightSaving();
+        Log.d(TAG,"DLS time is "+timezone);
+        Log.d(TAG,"Time zone is "+TimeZone.getDefault().getDisplayName());
       //  Log.d(TAG,"longitude is"+longitude);
         Log.d(TAG,"latitude is"+latitude);
         Date now = new Date();
@@ -304,6 +310,7 @@ public class PrayTime {
 
         String[] prayerTimes = this.getPrayerTimes(cal,
                 latitude, longitude, timezone);
+
         //check for invalid isha or fajr times
         if (prayerTimes[0].equalsIgnoreCase(getInvalidTime())){
             String high_latitude_adjustment=(PreferenceManager.getDefaultSharedPreferences(context).getString("adjustment_method",null));

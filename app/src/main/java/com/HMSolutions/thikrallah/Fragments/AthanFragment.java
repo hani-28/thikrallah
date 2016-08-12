@@ -7,12 +7,14 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -27,7 +29,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-public class AthanFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class AthanFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener, NumberPicker.OnValueChangeListener {
 
 
 
@@ -48,7 +50,11 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
     private Switch ishaa_switch;
     private SharedPreferences mPrefs;
     private SharedPreferences.OnSharedPreferenceChangeListener prefListener;
-  //  private TextView locationDescription;
+    private NumberPicker adjuster_sign;
+    private NumberPicker minutes_adjustments;
+    private NumberPicker hours_adjustments;
+
+    //  private TextView locationDescription;
 
 
     public AthanFragment() {
@@ -118,6 +124,35 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
         asr_switch.setChecked(mPrefs.getBoolean("isAsrReminder",true));
         maghrib_switch.setChecked(mPrefs.getBoolean("isMaghribReminder",true));
         ishaa_switch.setChecked(mPrefs.getBoolean("isIshaaReminder",true));
+
+
+        adjuster_sign=(NumberPicker) view.findViewById(R.id.adjuster_sign);
+        hours_adjustments=(NumberPicker) view.findViewById(R.id.hourPicker);
+        minutes_adjustments=(NumberPicker) view.findViewById(R.id.minutePicker);
+        hours_adjustments.setMinValue(0);
+        hours_adjustments.setMaxValue(1);
+        minutes_adjustments.setMinValue(0);
+        minutes_adjustments.setMaxValue(59);
+        adjuster_sign.setMinValue(0);
+        adjuster_sign.setMaxValue(1);
+
+        adjuster_sign.setDisplayedValues( new String[] { "+", "-" } );
+       int adjustments=mPrefs.getInt("time_adjustment",0);
+        if(adjustments==0){
+            hours_adjustments.setValue(0);
+            minutes_adjustments.setValue(0);
+            adjuster_sign.setValue(0);
+        }else{
+            hours_adjustments.setValue(adjustments/3600);
+            minutes_adjustments.setValue(adjustments-adjustments/3600);
+
+        }
+
+        adjuster_sign.setOnValueChangedListener(this);
+        hours_adjustments.setOnValueChangedListener(this);
+        minutes_adjustments.setOnValueChangedListener(this);
+
+
 
 
         fajr_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -258,4 +293,21 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
 	}
 
 
+    @Override
+    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+        int hours=hours_adjustments.getValue();
+        int minutes=minutes_adjustments.getValue();
+        int sign=adjuster_sign.getValue();
+        int multiplier=1;
+        if (sign==0){
+            multiplier=1;
+        }else{
+            multiplier=-1;
+        }
+        int adjustment_in_minutes=(hours*60+minutes)*multiplier;
+        mPrefs.edit().putInt("time_adjustment",adjustment_in_minutes).commit();
+        Log.d("adjustment","adjustment is "+adjustment_in_minutes);
+        updateprayerTimes();
+
+    }
 }

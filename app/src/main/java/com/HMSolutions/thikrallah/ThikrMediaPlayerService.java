@@ -74,6 +74,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     static final int MSG_CURRENT_PLAYING = 100;
     static final int MSG_UNBIND = 99;
     private String filepath;
+    private PowerManager.WakeLock wakeLock;
 
     /**
      * Handler of incoming messages from clients.
@@ -146,6 +147,14 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     @Override
     public void onCreate() {
         super.onCreate();
+
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                TAG);
+        wakeLock.acquire();
+
+
+
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         String lang=mPrefs.getString("language",null);
 
@@ -202,26 +211,30 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     }
 
     private void updateActions() {
+        boolean isHuawei = (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1 ||
+                android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP)
+                && Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei");
+
         if (notificationBuilder != null) {
-            notificationBuilder.mActions.clear();
-            if (this.isPlaying()) {
-                Log.d(TAG, "show pause & stop");
-                addAction(notificationBuilder, "pause", R.drawable.ic_media_pause);
-                addAction(notificationBuilder, "stop", R.drawable.ic_media_stop);
-                notificationBuilder.setStyle(new NotificationCompat.MediaStyle()
-                        .setShowActionsInCompactView(new int[]{0,1})
-                        .setMediaSession(mediaSession.getSessionToken()));
-            } else {
-                Log.d(TAG, "show play");
-                addAction(notificationBuilder, "play", R.drawable.ic_media_play);
-                addAction(notificationBuilder, "stop", R.drawable.ic_media_stop);
-                notificationBuilder.setStyle(new NotificationCompat.MediaStyle()
-                        .setShowActionsInCompactView(new int[]{0})
-                        .setMediaSession(mediaSession.getSessionToken()));
-
-
+            if (!isHuawei){//known issue with huawei devices
+                notificationBuilder.mActions.clear();
+                if (this.isPlaying()) {
+                    Log.d(TAG, "show pause & stop");
+                    addAction(notificationBuilder, "pause", R.drawable.ic_media_pause);
+                    addAction(notificationBuilder, "stop", R.drawable.ic_media_stop);
+                    notificationBuilder.setStyle(new NotificationCompat.MediaStyle()
+                            .setShowActionsInCompactView(new int[]{0,1})
+                            .setMediaSession(mediaSession.getSessionToken()));
+                } else {
+                    Log.d(TAG, "show play");
+                    addAction(notificationBuilder, "play", R.drawable.ic_media_play);
+                    addAction(notificationBuilder, "stop", R.drawable.ic_media_stop);
+                    notificationBuilder.setStyle(new NotificationCompat.MediaStyle()
+                            .setShowActionsInCompactView(new int[]{0})
+                            .setMediaSession(mediaSession.getSessionToken()));
+                }
+                mediaSession.setActive(true);
             }
-            mediaSession.setActive(true);
             startForeground(NOTIFICATION_ID, notificationBuilder.build());
 
         }
@@ -574,6 +587,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             player = null;
         }
         am.abandonAudioFocus(this);
+        wakeLock.release();
         this.sendMessageToUI(MSG_CURRENT_PLAYING,-99);
         this.sendMessageToUI(MSG_UNBIND,MSG_UNBIND);
         this.stopForeground(true);

@@ -2,15 +2,20 @@ package com.HMSolutions.thikrallah.Notification;
 
 import com.HMSolutions.thikrallah.R;
 
+import android.Manifest;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
+import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -83,14 +88,31 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 
 
 			chatHead.setOnTouchListener(this);
-			windowManager.addView(chatHead, params);
-			new Handler().postDelayed(new Runnable() {
-				@Override
-				    public void run() {
-				        stopSelf();
-				    }
+			int permissionCheck = ContextCompat.checkSelfPermission(this,
+					Manifest.permission.ACCESS_FINE_LOCATION);
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+				if (Settings.canDrawOverlays(this)) {
+                    windowManager.addView(chatHead, params);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            stopSelf();
+                        }
+                    }, 10000);    //will stop service after 10 seconds
+                }else{
+                    //permission not defined
+                }
+			}else{
+				windowManager.addView(chatHead, params);
+				new Handler().postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						stopSelf();
+					}
 				}, 10000);    //will stop service after 10 seconds
-		    return START_NOT_STICKY;
+			}
+			return START_NOT_STICKY;
+
 	    }else{
 	    	this.stopSelf();
 	    	return START_NOT_STICKY;

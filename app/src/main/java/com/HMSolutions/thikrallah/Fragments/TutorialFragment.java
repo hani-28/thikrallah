@@ -99,6 +99,11 @@ public class TutorialFragment extends Fragment {
             ft.replace(R.id.preference_container, fragment);
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commit();
+        }else{
+            PreferenceManager.getDefaultSharedPreferences(this.getActivity()).edit().putBoolean("isFirstLaunch", false).commit();
+            this.getActivity().onBackPressed();
+            count++;
+            return;
         }
         count++;
 		if (count>final_count){
