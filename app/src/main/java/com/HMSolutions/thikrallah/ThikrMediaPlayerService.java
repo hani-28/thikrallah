@@ -213,10 +213,13 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     private void updateActions() {
         boolean isHuawei = (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1 ||
                 android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP)
-                && Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei");
+                && (Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei")&&
+                (Build.MODEL.toLowerCase().contains("u6582")
+                ||Build.MODEL.toLowerCase().contains("l6753")));
+
 
         if (notificationBuilder != null) {
-            if (!isHuawei){//known issue with huawei devices
+            if (!isHuawei){//known issue with huawei devices.
                 notificationBuilder.mActions.clear();
                 if (this.isPlaying()) {
                     Log.d(TAG, "show pause & stop");
