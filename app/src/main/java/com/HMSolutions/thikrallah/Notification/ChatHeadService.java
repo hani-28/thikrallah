@@ -60,8 +60,14 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 		    // We want this service to continue running until it is explicitly
 		    // stopped, so return sticky.
 			windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-			if (chatHead!=null){
-				windowManager.removeView(chatHead);
+			if (chatHead!=null ){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    if(chatHead.isAttachedToWindow()){
+                        windowManager.removeView(chatHead);
+                    }
+                }else{
+                    windowManager.removeView(chatHead);
+                }
 			}
 			//chatHead = new ImageView(this);
 			

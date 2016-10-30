@@ -71,8 +71,14 @@ public class TutorialFragment extends Fragment {
 	}
 
     private void showNextScreen(int i){
-        FragmentTransaction ft = getFragmentManager()
-                .beginTransaction();
+        FragmentTransaction ft = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            ft = this.getChildFragmentManager()
+                    .beginTransaction();
+        }else{
+            ft = this.getFragmentManager()
+                    .beginTransaction();
+        }
         PrefsThikrFragmentTutorial fragment = new PrefsThikrFragmentTutorial();
         Log.d("testing321",""+i);
         Bundle data = new Bundle();
@@ -98,7 +104,7 @@ public class TutorialFragment extends Fragment {
             fragment.setArguments(data);
             ft.replace(R.id.preference_container, fragment);
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-            ft.commit();
+            ft.commitAllowingStateLoss();
         }else{
             PreferenceManager.getDefaultSharedPreferences(this.getActivity()).edit().putBoolean("isFirstLaunch", false).commit();
             this.getActivity().onBackPressed();

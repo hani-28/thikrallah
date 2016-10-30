@@ -18,6 +18,7 @@ import android.widget.NumberPicker;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.Models.Prayer;
 import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
 import com.HMSolutions.thikrallah.R;
@@ -95,7 +96,7 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getApplicationContext());
 
 		this.getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 		this.getActivity().getActionBar().setDisplayShowHomeEnabled(true);
@@ -250,7 +251,7 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
 
     }
     private void updateAthanAlarms(){
-        new MyAlarmsManager(this.getActivity()).UpdateAllApplicableAlarms();
+        new MyAlarmsManager(this.getActivity().getApplicationContext()).UpdateAllApplicableAlarms();
     }
 
     @Override
@@ -265,8 +266,8 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
 
 	
 	private Prayer[] getPrayersArray(){
-		PrayTime prayersObject=PrayTime.instancePrayTime(this.getActivity());
-        String[] times=prayersObject.getPrayerTimes(this.getActivity());
+		PrayTime prayersObject=PrayTime.instancePrayTime(this.getActivity().getApplicationContext());
+        String[] times=prayersObject.getPrayerTimes(this.getActivity().getApplicationContext());
         String[] names=prayersObject.getTimeNames();
         Prayer[] prayers=new Prayer[7];
         for (int i=0;i<7;i++){
@@ -278,7 +279,7 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
 
 	@Override
 	public void onPause(){
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getApplicationContext());
         prefs.unregisterOnSharedPreferenceChangeListener(this);
 		super.onPause();
 	}

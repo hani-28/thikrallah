@@ -671,7 +671,10 @@ public class MainActivity extends Activity implements MainInterface, GoogleApiCl
         fragmentTransaction1.commit();
 
     }
-
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        //No call for super(). Bug on API Level > 11.
+    }
     @Override
     public void share() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);

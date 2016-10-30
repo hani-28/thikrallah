@@ -36,7 +36,7 @@ public class MyDBHelper  extends SQLiteOpenHelper {
                     ENABLED_COLUMN+" INTEGER DEFAULT 1"+COMMA_SEP+
                     IS_BUILTIN_COLUMN+" INTEGER DEFAULT 0"+COMMA_SEP+
                     FILE_PATH+TEXT_TYPE+" DEFAULT 1"+
-            " )";
+                    " )";
 
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + TABLE_NAME;
@@ -179,26 +179,30 @@ public class MyDBHelper  extends SQLiteOpenHelper {
     }
     public void deleteThikr(long id){
         UserThikr thikr_to_delete=this.getThikr(id);
-        String filepath=thikr_to_delete.getFile();
+        if (thikr_to_delete != null) {
+            String filepath=thikr_to_delete.getFile();
 
-        if (filepath.contains("user")){
-            File file = new File(filepath);
-            boolean deleted = file.delete();
+            if (filepath.contains("user")){
+                File file = new File(filepath);
+                boolean deleted = file.delete();
 
-            Log.d(TAG,"file "+filepath+" deleted="+deleted);
-        }
+                Log.d(TAG,"file "+filepath+" deleted="+deleted);
+            }
 
-        SQLiteDatabase db = this.getWritableDatabase();
+            SQLiteDatabase db = this.getWritableDatabase();
 
 // Define a projection that specifies which columns from the database
 // you will actually use after this query.
 // Define 'where' part of query.
-        String selection = ID_COLUMN+" LIKE ?";
+            String selection = ID_COLUMN+" LIKE ?";
 // Specify arguments in placeholder order.
-        String[] selectionArgs = { String.valueOf(id) };
+            String[] selectionArgs = { String.valueOf(id) };
 // Issue SQL statement.
-        db.delete(TABLE_NAME, selection, selectionArgs);
-        db.close();
+            db.delete(TABLE_NAME, selection, selectionArgs);
+            db.close();
+
+        }
+
     }
     public ArrayList<UserThikr> getAllThikrs(){
         String thikr="";
@@ -297,7 +301,7 @@ public class MyDBHelper  extends SQLiteOpenHelper {
                 this.updateIsEnabled(list.get(i).getId(),true);
             }
             list.clear();
-            list=getAllEnabledThikrs();
+            list=getAllBuiltinThikrs();
 
         }
         Log.d("testing123", "enabledThikrs count is " + list.size());
