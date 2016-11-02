@@ -4,6 +4,7 @@ import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.PreferenceActivity;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
+import com.HMSolutions.thikrallah.hisnulmuslim.DuaGroupActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -53,7 +54,7 @@ public class MainFragment extends Fragment {
         Button button_my_athkar = (Button) view.findViewById(R.id.button_my_athkar);
         Button button_sadaqa= (Button) view.findViewById(R.id.button_sadaqa);
         Button button_quran= (Button) view.findViewById(R.id.button_quran);
-
+        Button button_hisn_almuslim=(Button) view.findViewById(R.id.hisn_almuslim);
         Button button_athan = (Button) view.findViewById(R.id.button_athan);
         button_athan.setOnClickListener(new OnClickListener(){
 
@@ -122,6 +123,14 @@ public class MainFragment extends Fragment {
 				intent.setClass(v.getContext(), PreferenceActivity.class);
 				startActivityForResult(intent, 0); 
 			}});
+
+        button_hisn_almuslim.setOnClickListener(new OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(v.getContext(), DuaGroupActivity.class);
+                startActivityForResult(intent, 0);
+            }});
 		
 		button_morning_thikr.setOnClickListener(new OnClickListener(){
 			@Override

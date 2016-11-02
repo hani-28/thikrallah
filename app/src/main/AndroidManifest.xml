@@ -36,6 +36,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
         <activity
             android:name="com.HMSolutions.thikrallah.PreferenceActivity"
             android:theme="@style/AppTheme"
@@ -46,6 +48,47 @@
             android:theme="@style/Theme.AppCompat"
             >
         </activity>
+        <activity
+            android:name="com.HMSolutions.thikrallah.hisnulmuslim.DuaGroupActivity"
+            android:theme="@style/AppTheme.Base"
+            android:label="@string/title_activity_dua_list"
+            android:launchMode="singleTop">
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+        <activity
+            android:name="com.HMSolutions.thikrallah.hisnulmuslim.DuaDetailActivity"
+            android:label="@string/title_activity_dua_detail"
+            android:theme="@style/AppTheme.Base"
+            android:parentActivityName="com.HMSolutions.thikrallah.hisnulmuslim.DuaGroupActivity"></activity>
+        <activity
+            android:name="com.HMSolutions.thikrallah.hisnulmuslim.AboutActivity"
+            android:label="@string/title_activity_about"
+            android:theme="@style/AppTheme.Base"
+            android:parentActivityName="com.HMSolutions.thikrallah.hisnulmuslim.DuaGroupActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.HMSolutions.thikrallah.hisnulmuslim.DuaGroupActivity" />
+        </activity>
+        <activity
+            android:name="com.HMSolutions.thikrallah.hisnulmuslim.BookmarksGroupActivity"
+            android:label="@string/title_activity_bookmarks"
+            android:theme="@style/AppTheme.Base"
+            android:parentActivityName="com.HMSolutions.thikrallah.hisnulmuslim.DuaGroupActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.HMSolutions.thikrallah.hisnulmuslim.DuaGroupActivity" />
+        </activity>
+        <activity
+            android:name="com.HMSolutions.thikrallah.hisnulmuslim.BookmarksDetailActivity"
+            android:label="@string/title_activity_dua_detail"
+            android:theme="@style/AppTheme.Base"
+            android:parentActivityName="com.HMSolutions.thikrallah.hisnulmuslim.BookmarksGroupActivity"></activity>
+        <activity
+            android:name="com.HMSolutions.thikrallah.hisnulmuslim.PreferencesActivity"
+            android:theme="@style/AppTheme.Base"
+            android:label="@string/title_activity_preferences"></activity>
 /home/hani/AndroidStudioProjects/ThikrAllah/app/build
         <service
             android:name="com.HMSolutions.thikrallah.Notification.ThikrService"

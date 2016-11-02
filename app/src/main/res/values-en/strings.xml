@@ -186,4 +186,75 @@ He knows what lies before them and what is after them, And they comprehend not a
     <string name="remove_ads">Remove Ads</string>
     <string name="time_adjustment">Adjust Prayer Times</string>
 
+
+
+
+
+    <string name="pref_category_font">Fonts</string>
+
+    <string name="pref_font_arabic_size">pref_font_arabic_size</string>
+    <string name="pref_font_arabic_size_title">Arabic Font Size</string>
+    <string name="pref_font_arabic_size_summary">Font size of Arabic in dua\'</string>
+    <integer name="pref_font_arabic_size_default">24</integer>
+    <integer name="pref_font_arabic_size_max">30</integer>
+    <integer name="pref_font_arabic_size_min">20</integer>
+
+    <string name="pref_font_arabic_typeface">pref_font_arabic_typeface</string>
+    <string name="pref_font_directory">fonts_2</string>
+    <string name="pref_font_arabic_typeface_title">Arabic Font</string>
+    <string name="pref_font_arabic_typeface_summary">Font used for Arabic dua\'</string>
+    <string name="pref_font_arabic_typeface_default">fonts_2/UthmanTN1 Ver09.otf</string>
+    <string name="pref_font_arabic_typeface_preview">بِسْمِ اللهِ</string>
+
+    <string name="pref_font_other_size">pref_font_other_size</string>
+    <string name="pref_font_other_size_title">Translation and Reference Font Size</string>
+    <string name="pref_font_other_size_summary">Font size of translations and references</string>
+    <integer name="pref_font_other_size_default">14</integer>
+    <integer name="pref_font_other_size_max">24</integer>
+    <integer name="pref_font_other_size_min">12</integer>
+
+    <string name="app_name_about">Hisnul Muslim App</string>
+    <string name="version_name">Version 0.1.1</string>
+    <string name="beta_version">0.06 - RecyclerView</string>
+
+    <string name="duaDetailFragment">Dua Detail Fragment</string>
+
+    <string name="title_activity_dua_detail">DuaDetail</string>
+
+    <string name="hello_world">Hello world!</string>
+
+    <string name="about_us">
+        <![CDATA[
+            Hisnul Muslim is a collection of supplications for various occasions compiled by Dr. Sa\'eed bin Ali bin Wahaf Al-Qahtani. The author is from amongst the senior students of the former Grand Mufti of Saudi Arabia, Shaykh Abdul Aziz bin Abdullah bin Baz (May Allah have mercy on him).
+            <br/><br/>
+            <big><b>Contributors</b></big><br/>
+            Ahmed El-Helw (<a href="http://twitter.com/ahmedre">@ahmedre</a>)<br/>
+            Azhar Ali (<a href="https://www.linkedin.com/pub/md-azhar-ali/90/251/140">LinkedIn</a>)<br/>
+            Abdul Majed Ahmed (<a href="https://twitter.com/AbdulMajed19">@AbdulMajed19</a>)<br/>
+            Hussaini Zulkifli (<a href="https://twitter.com/HussainiZul">@HussainiZul</a>)<br/>
+            Mohammad Khalid Hussain (<a href="https://www.github.com/khalid.hussain">GitHub</a>)
+            <br/><br/>
+
+            <big><b>OpenSource Projects</b></big><br/>
+            AutoFitTextView (<a href="https://github.com/grantland/android-autofittextview">GitHub</a>)<br/>
+            VNTNumberPicker Preference (<a href="https://github.com/vanniktech/VNTNumberPickerPreference"/>GitHub</a>)<br/>
+            VNTFontList Preference (<a href="https://github.com/vanniktech/VNTFontListPreference"/>GitHub</a>)
+            <br/><br/>
+
+            <big><b>Special Thanks</b></big><br/>
+            Ahmad Sabree (<a href="https://twitter.com/sabree01">@sabree01</a>)<br/>
+        ]]>
+    </string>
+
+    <string name="bookmarks_none">You have no bookmarks yet.</string>
+    <string name="action_share_title">Share Dua</string>
+    <string name="action_share_credit">via @HisnulMuslimApp</string>
+
+    <string name="button_share_icon"></string>
+    <string name="button_fav_icon">{faw-star}</string>
+    <string name="button_fav_icon_no">{faw-star-o}</string>
+    <string name="snackbar_text_begin">Removed Dua #</string>
+    <string name="snackbar_text_end">" from bookmarks"</string>
+    <string name="snackbar_action">undo</string>
+
 </resources>

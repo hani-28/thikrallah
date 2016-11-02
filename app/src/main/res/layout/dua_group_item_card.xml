@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:background="?android:attr/selectableItemBackground"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/txtReference"
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:text="1"
+        android:textColor="@android:color/white"
+        android:background="@drawable/circle"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="16dp"
+        android:layout_height="fill_parent" />
+
+    <TextView
+        android:id="@+id/txtDuaName"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="sans-serif"
+        android:gravity="center_vertical"
+        android:text="Entering the Bathroom"
+        android:textSize="16sp" />
+
+</LinearLayout>
