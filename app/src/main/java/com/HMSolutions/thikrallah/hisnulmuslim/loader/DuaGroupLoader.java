@@ -1,8 +1,12 @@
 package com.HMSolutions.thikrallah.hisnulmuslim.loader;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.HMSolutions.thikrallah.hisnulmuslim.database.HisnDatabaseInfo;
 import com.HMSolutions.thikrallah.hisnulmuslim.model.Dua;
@@ -12,24 +16,32 @@ import java.util.List;
 import java.util.Locale;
 
 public class DuaGroupLoader extends AbstractQueryLoader<List<Dua>> {
-
+    Context mcontext;
     public DuaGroupLoader(Context context) {
         super(context);
+        mcontext=context;
     }
     public Locale deviceLocale;
     public String groupTitleLanguage;
 
     @Override
     public List<Dua> loadInBackground() {
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(mcontext);
+        String lang = mPrefs.getString("language", null);
+        if (lang != null) {
+            if(lang.equals("en")){
+                groupTitleLanguage = HisnDatabaseInfo.DuaGroupTable.ENGLISH_TITLE;
+            }else{
+                groupTitleLanguage = HisnDatabaseInfo.DuaGroupTable.ARABIC_TITLE;
+            }
+        }else{
+            deviceLocale = mcontext.getResources().getSystem().getConfiguration().locale;
+            if (deviceLocale.equals(Locale.ENGLISH))
+                groupTitleLanguage = HisnDatabaseInfo.DuaGroupTable.ENGLISH_TITLE;
+            else
+                groupTitleLanguage = HisnDatabaseInfo.DuaGroupTable.ARABIC_TITLE;
+        }
 
-        /*Locale mArabicLocale = new Locale("ar_EG", "ar_IL");
-
-        deviceLocale = Resources.getSystem().getConfiguration().locale;
-
-        if (deviceLocale.equals(Locale.ENGLISH))
-            groupTitleLanguage = HisnDatabaseInfo.DuaGroupTable.ENGLISH_TITLE;
-        else if (deviceLocale.equals(mArabicLocale))
-            groupTitleLanguage = HisnDatabaseInfo.DuaGroupTable.ARABIC_TITLE;*/
 
         List<Dua> results = null;
         Cursor duaGroupCursor = null;
@@ -37,7 +49,7 @@ public class DuaGroupLoader extends AbstractQueryLoader<List<Dua>> {
             final SQLiteDatabase database = mDbHelper.getDb();
             duaGroupCursor = database.query(HisnDatabaseInfo.DuaGroupTable.TABLE_NAME,
                     new String[]{HisnDatabaseInfo.DuaGroupTable._ID,
-                            HisnDatabaseInfo.DuaGroupTable.ENGLISH_TITLE},
+                            groupTitleLanguage},
                     null,
                     null,
                     null,

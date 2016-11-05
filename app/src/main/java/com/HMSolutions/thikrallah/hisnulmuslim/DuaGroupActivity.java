@@ -67,7 +67,7 @@ public class DuaGroupActivity extends AppCompatActivity implements
         // For Beta Testing
         Resources resource = getResources();
         String beta_version = resource.getString(R.string.beta_version);
-        Toast.makeText(this, "Beta Version: " + beta_version, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Beta Version: " + beta_version, Toast.LENGTH_SHORT).show();
         // End of Beta Testing
 
         getSupportLoaderManager().initLoader(0, null, this);

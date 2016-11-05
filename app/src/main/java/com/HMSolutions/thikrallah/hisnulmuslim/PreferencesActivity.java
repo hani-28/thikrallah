@@ -39,7 +39,7 @@ public class PreferencesActivity extends AppCompatActivity {
         @Override
         public void onCreate(Bundle paramBundle) {
             super.onCreate(paramBundle);
-            addPreferencesFromResource(R.xml.preferences);
+            addPreferencesFromResource(R.xml.preferences_hisn_almuslim);
         }
     }
 
