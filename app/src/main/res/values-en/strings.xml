@@ -213,6 +213,8 @@ He knows what lies before them and what is after them, And they comprehend not a
     <integer name="pref_font_other_size_max">24</integer>
     <integer name="pref_font_other_size_min">12</integer>
 
+    <string name="hisn_almuslim">Hisnul Muslim</string>
+
     <string name="app_name_about">Hisnul Muslim App</string>
     <string name="version_name">Version 0.1.1</string>
     <string name="beta_version">0.06 - RecyclerView</string>

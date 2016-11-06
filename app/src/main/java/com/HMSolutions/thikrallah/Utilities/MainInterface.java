@@ -20,4 +20,5 @@ public interface MainInterface {
 		void setThikrType(String thikrType);
 		void requestLocationUpdate();
 		void requestMediaServiceStatus();
+	void displayInterstitial();
 }

@@ -249,6 +249,9 @@
         ]]>
     </string>
 
+    <string name="click_on_ads_to_remove_ads">اريد ان يتم اخفاء الدعايات لمدة ١٤ يومابعد ان اقوم  بالظغط على دعاية واحدة</string>
+    <string name="donate_to_remove_ads">اريد ان اتبرع بمبلغ بسيط ليتم حذف الدعايات نهائيا</string>
+    <string name="remove_ads_for_free">اريد ان يتم اخفاء الدعايات بدون ان اضغط على اي دعاية وبدون ان اتبرع باي مبلغ</string>
     <string name="bookmarks_none">You have no bookmarks yet.</string>
     <string name="action_share_title">Share Dua</string>
     <string name="action_share_credit">via @HisnulMuslimApp</string>

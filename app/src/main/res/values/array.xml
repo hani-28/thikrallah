@@ -7,6 +7,11 @@
         <item>@string/notification_sound_only</item>
         <item>@string/notification_text_only</item>
     </string-array>
+    <string-array name="remove_ads_options">
+        <item>@string/click_on_ads_to_remove_ads</item>
+        <item>@string/donate_to_remove_ads</item>
+        <item>@string/remove_ads_for_free</item>
+    </string-array>
     <string-array name="RemindmeThroughTheDayTypeValues">
         <item>1</item>
         <item>2</item>

@@ -655,7 +655,7 @@ public class MainActivity extends Activity implements MainInterface, GoogleApiCl
             return false;
         }
         long timeAtLastAd = mPrefs.getLong("time_at_last_click", 0);
-        if ((System.currentTimeMillis() - timeAtLastAd) < 7 * 24 * 60 * 60 * 1000) {
+        if ((System.currentTimeMillis() - timeAtLastAd) < 14 * 24 * 60 * 60 * 1000) {
             Log.d(TAG, "time since last ad=" + (System.currentTimeMillis() - timeAtLastAd));
             return false;
         }
@@ -895,6 +895,7 @@ public class MainActivity extends Activity implements MainInterface, GoogleApiCl
                     if (Security.verifyPurchase(base64RSAPublicKey, dataSignature, String.valueOf(RC_REQUEST)) && sku.equalsIgnoreCase(SKU_PREMIUM)) {
 
                         mPrefs.edit().putBoolean("isPremium", true).commit();
+                        Log.d(TAG,"premium true");
                         this.hideAd();
                     }
                     //alert("You have bought the " + sku + ". Excellent choice,adventurer!");

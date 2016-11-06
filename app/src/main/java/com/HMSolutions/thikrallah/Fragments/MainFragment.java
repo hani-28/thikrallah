@@ -12,7 +12,9 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,6 +24,8 @@ import android.widget.Button;
 public class MainFragment extends Fragment {
 	private MainInterface mCallback;
     private Context mContext;
+	SharedPreferences mPrefs;
+
 
 	public MainFragment() {
 	}
@@ -50,7 +54,7 @@ public class MainFragment extends Fragment {
 
         Button button_morning_thikr = (Button) view.findViewById(R.id.button_morning_thikr);
 		Button button_night_thikr = (Button) view.findViewById(R.id.button_night_thikr);
-		//Button button_donate = (Button) view.findViewById(R.id.button_support_us);
+		//Button button_donate = (Button) view.findViewById(R.id.butt);
         Button button_my_athkar = (Button) view.findViewById(R.id.button_my_athkar);
         Button button_sadaqa= (Button) view.findViewById(R.id.button_sadaqa);
         Button button_quran= (Button) view.findViewById(R.id.button_quran);
@@ -65,12 +69,34 @@ public class MainFragment extends Fragment {
 			}
 			
 		});
+		mPrefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
 		Button button_upgrade = (Button) view.findViewById(R.id.button_upgrade);
 		button_upgrade.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
-				mCallback.upgrade();
+				AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+				b.setTitle(R.string.remove_ads);
+				String[] types = mContext.getResources().getStringArray(R.array.remove_ads_options);
+				b.setItems(types, new AlertDialog.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int choice) {
+						dialog.dismiss();
+						switch(choice){
+							case 0:
+								mCallback.displayInterstitial();
+							case 1:
+								mCallback.upgrade();
+							case 2:
+								mPrefs.edit().putBoolean("isPremium", true).commit();
+						}
+					}
+
+				});
+
+				b.show();
+				//mCallback.upgrade();
 
 			}
 

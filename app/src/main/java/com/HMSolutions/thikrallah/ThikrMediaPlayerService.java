@@ -31,6 +31,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.PowerManager;
@@ -75,6 +76,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     static final int MSG_UNBIND = 99;
     private String filepath;
     private PowerManager.WakeLock wakeLock;
+    private Context mcontext;
 
     /**
      * Handler of incoming messages from clients.
@@ -135,6 +137,15 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         }
     }
 
+    private void updateAllAlarms(){
+
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                new MyAlarmsManager(mcontext).UpdateAllApplicableAlarms();
+            }
+        }, 5000);
+    }
     /**
      * When binding to the service, we return an interface to our messenger
      * for sending messages to the service.
@@ -267,13 +278,14 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle data = intent.getExtras();
+        mcontext=this.getApplicationContext();
         this.isUserAction=data.getBoolean("isUserAction",false);
         int action = data.getInt("ACTION", -1);
         String type = data.getString("thikrType", null);
         Log.d(TAG, "action " + action);
 
         if (intent.getExtras().getString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_DAY_THIKR).equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR) && this.isPlaying()) {
-            new MyAlarmsManager(this).UpdateAllApplicableAlarms();
+            this.updateAllAlarms();
             if (action==MEDIA_PLAYER_RESET){
                 Log.d(TAG, "reset called");
                 this.resetPlayer();
@@ -288,11 +300,11 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         if(getThikrType()==null){
             //TODO:when does this case happen
             Log.d(TAG,"thikrtype is null... why?");
-            new MyAlarmsManager(this).UpdateAllApplicableAlarms();
+            this.updateAllAlarms();
             return Service.START_NOT_STICKY;
         }
         if (this.getThikrType().equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)) {
-            new MyAlarmsManager(this).UpdateAllApplicableAlarms();
+            this.updateAllAlarms();
             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
 
             boolean isRespectMute = sharedPrefs.getBoolean("mute_thikr_when_ringer_mute", true);
@@ -302,7 +314,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             }
         }
         if (this.getThikrType().contains(MainActivity.DATA_TYPE_ATHAN)){
-            new MyAlarmsManager(this).UpdateAllApplicableAlarms();
+            this.updateAllAlarms();
         }
         Log.d(TAG,"onStartCommand called"+intent.getExtras().toString());
         initNotification();

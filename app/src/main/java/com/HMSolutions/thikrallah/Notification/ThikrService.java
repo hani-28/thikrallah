@@ -31,6 +31,8 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.PowerManager;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
@@ -43,7 +45,7 @@ public class ThikrService extends IntentService  {
 	private final static int NOTIFICATION_ID=0;
     private AudioManager am;
     private Intent calling_intent;
-
+    Context mcontext;
     public ThikrService() {
 		super("service");
 	}
@@ -51,7 +53,14 @@ public class ThikrService extends IntentService  {
 	@Override
 	protected void onHandleIntent(Intent intent) {
         calling_intent=intent;
-        new MyAlarmsManager(this.getApplicationContext()).UpdateAllApplicableAlarms();
+        mcontext=this.getApplicationContext();
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                new MyAlarmsManager(mcontext).UpdateAllApplicableAlarms();
+            }
+        }, 10000);
+
 		Log.d(TAG,"onhandleintnet called");
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         String lang=sharedPrefs.getString("language",null);
