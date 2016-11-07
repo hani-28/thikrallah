@@ -85,11 +85,17 @@ public class MainFragment extends Fragment {
 						dialog.dismiss();
 						switch(choice){
 							case 0:
-								mCallback.displayInterstitial();
+								mCallback.displayInterstitialForcefully();
+								break;
 							case 1:
 								mCallback.upgrade();
+								break;
 							case 2:
 								mPrefs.edit().putBoolean("isPremium", true).commit();
+								mCallback.hideAd();
+								break;
+							default:
+								break;
 						}
 					}
 

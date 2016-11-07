@@ -116,6 +116,7 @@ public class MainActivity extends Activity implements MainInterface, GoogleApiCl
 
     private long endnow;
     private long startnow = 0;
+    private AdRequest adRequest;
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -520,7 +521,7 @@ public class MainActivity extends Activity implements MainInterface, GoogleApiCl
                     //String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
 
                     // Create ad request.
-                    AdRequest adRequest = new AdRequest.Builder()
+                    adRequest = new AdRequest.Builder()
                             .addTestDevice(deviceId)
                             .build();
                     timeOperation("timing", "add built");
@@ -613,7 +614,7 @@ public class MainActivity extends Activity implements MainInterface, GoogleApiCl
         return super.onOptionsItemSelected(item);
     }
 
-    private void hideAd() {
+    public void hideAd() {
         final AdView adLayout = (AdView) findViewById(R.id.adView);
         adLayout.setVisibility(View.GONE);
 
@@ -648,7 +649,17 @@ public class MainActivity extends Activity implements MainInterface, GoogleApiCl
             }
         }
     }
+    public void displayInterstitialForcefully() {
+        if (interstitial.isLoaded()) {
+            mPrefs.edit().putLong("time_at_last_ad", System.currentTimeMillis()).commit();
+            interstitial.show();
+        }else{
+            mPrefs.edit().putLong("time_at_last_ad", System.currentTimeMillis()).commit();
+            interstitial.loadAd(adRequest);
 
+            interstitial.show();
+        }
+    }
     private boolean doesAdShowBasedOnClicks() {
         if (mPrefs.getBoolean("isPremium", false) == true) {
             Log.d(TAG, "user is premium");
