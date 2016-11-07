@@ -1,9 +1,11 @@
 package com.HMSolutions.thikrallah.hisnulmuslim.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.GradientDrawable;
+import android.preference.PreferenceManager;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.view.LayoutInflater;
@@ -46,6 +48,23 @@ public class DuaGroupAdapter extends BaseAdapter implements Filterable {
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
+                SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+                String lang = mPrefs.getString("language", null);
+                String groupTitleLanguage;
+                if (lang != null) {
+                    if(lang.equals("en")){
+                        groupTitleLanguage = HisnDatabaseInfo.DuaGroupTable.ENGLISH_TITLE;
+                    }else{
+                        groupTitleLanguage = HisnDatabaseInfo.DuaGroupTable.ARABIC_TITLE;
+                    }
+                }else{
+                    Locale deviceLocale = mContext.getResources().getSystem().getConfiguration().locale;
+                    if (deviceLocale.equals(Locale.ENGLISH))
+                        groupTitleLanguage = HisnDatabaseInfo.DuaGroupTable.ENGLISH_TITLE;
+                    else
+                        groupTitleLanguage = HisnDatabaseInfo.DuaGroupTable.ARABIC_TITLE;
+                }
+
                 final ExternalDbOpenHelper helper = ExternalDbOpenHelper.getInstance(mContext);
                 final SQLiteDatabase db = helper.openDataBase();
 
@@ -53,11 +72,11 @@ public class DuaGroupAdapter extends BaseAdapter implements Filterable {
                 Cursor c = null;
                 try {
                     c = db.query(HisnDatabaseInfo.DuaGroupTable.TABLE_NAME, null,
-                            HisnDatabaseInfo.DuaGroupTable.ENGLISH_TITLE + " like ?",
+                            groupTitleLanguage + " like ?",
                             new String[]{"%" + constraint + "%"}, null, null, null);
                     if (c != null && c.moveToFirst()) {
                         do {
-                            final Dua dua = new Dua(c.getInt(0), c.getString(2));
+                            final Dua dua = new Dua(c.getInt(0), c.getString(c.getColumnIndex(groupTitleLanguage)));
                             duas.add(dua);
                         } while (c.moveToNext());
                     }
