@@ -116,7 +116,7 @@ public class MainActivity extends Activity implements MainInterface, GoogleApiCl
 
     private long endnow;
     private long startnow = 0;
-    private AdRequest adRequest;
+
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -517,23 +517,27 @@ public class MainActivity extends Activity implements MainInterface, GoogleApiCl
 
                     //load interstital ad
                     Log.d(TAG, "ad show");
-                    // Create the interstitial.
-                    //String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
 
-                    // Create ad request.
-                    adRequest = new AdRequest.Builder()
-                            .addTestDevice(deviceId)
-                            .build();
-                    timeOperation("timing", "add built");
-
-                    // Begin loading your interstitial.
-                    interstitial.loadAd(adRequest);
-                    timeOperation("timing", "ad loaded");
                 }
             }, 3000);
 
 
         }
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                // Create ad request.
+                AdRequest adRequest;
+                adRequest = new AdRequest.Builder()
+                        .addTestDevice(deviceId)
+                        .build();
+
+                // Begin loading your interstitial.
+                interstitial.loadAd(adRequest);
+            }
+        }, 4000);
 
 
         Intent intent = this.getIntent();
@@ -650,13 +654,35 @@ public class MainActivity extends Activity implements MainInterface, GoogleApiCl
         }
     }
     public void displayInterstitialForcefully() {
+        Log.d(TAG,"displayInterstitialForcefully called");
         if (interstitial.isLoaded()) {
+            Log.d(TAG,"ad loaded");
             mPrefs.edit().putLong("time_at_last_ad", System.currentTimeMillis()).commit();
             interstitial.show();
-        }else{
-            mPrefs.edit().putLong("time_at_last_ad", System.currentTimeMillis()).commit();
-            interstitial.loadAd(adRequest);
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
 
+                    // Create ad request.
+                    AdRequest adRequest;
+                    adRequest = new AdRequest.Builder()
+                            .addTestDevice(deviceId)
+                            .build();
+
+                    // Begin loading your interstitial.
+                    interstitial.loadAd(adRequest);
+                }
+            }, 4000);
+        }else{
+            Log.d(TAG,"ad loading");
+            mPrefs.edit().putLong("time_at_last_ad", System.currentTimeMillis()).commit();
+            AdRequest adRequest;
+            adRequest = new AdRequest.Builder()
+                    .addTestDevice(deviceId)
+                    .build();
+            interstitial.loadAd(adRequest);
+            Log.d(TAG,"ad to show");
             interstitial.show();
         }
     }
@@ -1150,6 +1176,21 @@ public class MainActivity extends Activity implements MainInterface, GoogleApiCl
         @Override
         public void onAdClosed(){
             super.onAdClosed();
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    // Create ad request.
+                    AdRequest adRequest;
+                    adRequest = new AdRequest.Builder()
+                            .addTestDevice(deviceId)
+                            .build();
+
+                    // Begin loading your interstitial.
+                    interstitial.loadAd(adRequest);
+                }
+            }, 4000);
         }
         @Override
         public void onAdLeftApplication(){
