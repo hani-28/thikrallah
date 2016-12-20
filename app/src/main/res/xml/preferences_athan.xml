@@ -26,6 +26,10 @@
     <PreferenceCategory
         android:title="@string/athan_type"
         android:layout="@layout/preference_catagory">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="gradual_volume"
+            android:title="@string/gradual_volume" />
     <com.HMSolutions.thikrallah.Utilities.MyListPreference
         android:defaultValue="3"
         android:entries="@array/athan_notification_types"

@@ -54,6 +54,7 @@
     <string name="quiet_time_endvalue" translatable="false" >06:00</string>
     <string name="athan">الاذان</string>
     <string name="sunrise">شروق الشمس</string>
+    <string name="sunset">غروب الشمس</string>
     <string name="prayer1">صلاة الفجر</string>
     <string name="prayer2">صلاة الظهر</string>
     <string name="prayer3">صلاة العصر</string>
@@ -275,4 +276,6 @@
     <string name="snackbar_text_begin">Removed Dua #</string>
     <string name="snackbar_text_end">" from bookmarks"</string>
     <string name="snackbar_action">undo</string>
+
+    <string name="gradual_volume">رفع صوت الاذان تدريجيا</string>
 </resources>

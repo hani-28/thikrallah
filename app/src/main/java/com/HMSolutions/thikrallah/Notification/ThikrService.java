@@ -280,28 +280,17 @@ public class ThikrService extends IntentService  {
                     break;
             }
 
-            if ((reminderType==1)||(am.getRingerMode() != AudioManager.RINGER_MODE_NORMAL)){//vibrate
-                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
-                mBuilder.setContentTitle(this.getString(R.string.app_name))
-                        .setContentText(athan )
-                        .setSmallIcon(R.drawable.ic_launcher)
-                        .setAutoCancel(true);
+            if ((reminderType==1)||(am.getRingerMode() == AudioManager.RINGER_MODE_SILENT)
+                    ||(am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE)){//vibrate
 
-                mBuilder=setVisibilityPublic(mBuilder);
-
-                Intent launchAppIntent = new Intent(this, MainActivity.class);
-
-                launchAppIntent.putExtra("FromNotification",true);
-                launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_ATHAN);
-                PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
-                        0, launchAppIntent, PendingIntent.FLAG_CANCEL_CURRENT
-                );
-
-                mBuilder.setContentIntent(launchAppPendingIntent);
-
-                mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
-                vibrate();
+                Log.d(TAG,"vibrating now");
+                if (am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE){
+                    vibrate();
+                }
+                Intent intentChatHead=new Intent(this.getApplicationContext(), ChatHeadService.class);
+                intentChatHead.putExtra("thikr", athan);
+                intentChatHead.putExtra("isAthan",true);
+                startService(intentChatHead);
 
             }else{
                 sharedPrefs.edit().putString("thikrType", thikrType).commit();
@@ -345,6 +334,7 @@ public class ThikrService extends IntentService  {
 
 // Only perform this pattern one time (-1 means "do not repeat")
         v.vibrate(pattern, -1);
+        Log.d(TAG,"vibrating method here");
 
     }
 	private boolean isTimeNowQuietTime() {

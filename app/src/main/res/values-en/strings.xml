@@ -41,6 +41,7 @@
     <string name="dont_rate">I do not want to rate app</string>
     <string name="athan">Athan</string>
     <string name="sunrise">Sunrise</string>
+    <string name="sunset">Sunset</string>
     <string name="prayer1">Fajr Prayer</string>
     <string name="prayer2">Duhr Prayer</string>
     <string name="prayer3">Asr Prayer</string>
@@ -270,5 +271,6 @@ He knows what lies before them and what is after them, And they comprehend not a
     <string name="snackbar_text_begin">Removed Dua #</string>
     <string name="snackbar_text_end">" from bookmarks"</string>
     <string name="snackbar_action">undo</string>
+    <string name="gradual_volume">Increase volume gradually</string>
 
 </resources>

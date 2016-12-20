@@ -1,9 +1,14 @@
 package com.HMSolutions.thikrallah.Notification;
 
+import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.R;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -16,6 +21,7 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.NotificationCompat;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -29,6 +35,8 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 	private WindowManager windowManager;
 	//private ImageView chatHead;
 	private TextView chatHead;
+    String TAG = "ThikrService";
+    private final static int NOTIFICATION_ID=0;
 	WindowManager.LayoutParams params;
 	private String thikr;
 	@Override 
@@ -56,6 +64,7 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 		int reminderType=Integer.parseInt(sharedPrefs.getString("RemindmeThroughTheDayType", "1"));
 	    if (reminderType==1 ||reminderType==3){
 	    	String thikr=intent.getStringExtra("thikr");
+			boolean isAthan=intent.getBooleanExtra("isAthan",false);
             //thikr=this.getApplicationContext().getResources().getStringArray(R.array.GeneralThikr)[thikrNumber-1];
 		    // We want this service to continue running until it is explicitly
 		    // stopped, so return sticky.
@@ -94,28 +103,61 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 
 
 			chatHead.setOnTouchListener(this);
+
+
+
+            if (isAthan) {
+                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+                mBuilder.setContentTitle(this.getString(R.string.app_name))
+                        .setContentText(thikr)
+                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setAutoCancel(true);
+
+                mBuilder = setVisibilityPublic(mBuilder);
+
+                Intent launchAppIntent = new Intent(this, MainActivity.class);
+
+                launchAppIntent.putExtra("FromNotification", true);
+                launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_ATHAN);
+                PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
+                        0, launchAppIntent, PendingIntent.FLAG_CANCEL_CURRENT
+                );
+
+                mBuilder.setContentIntent(launchAppPendingIntent);
+
+                mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+
+            }
+
+
 			int permissionCheck = ContextCompat.checkSelfPermission(this,
 					Manifest.permission.ACCESS_FINE_LOCATION);
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 				if (Settings.canDrawOverlays(this)) {
                     windowManager.addView(chatHead, params);
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            stopSelf();
-                        }
-                    }, 10000);    //will stop service after 10 seconds
+                    if (!isAthan){
+						new Handler().postDelayed(new Runnable() {
+							@Override
+							public void run() {
+								stopSelf();
+							}
+						}, 10000);    //will stop service after 10 seconds
+					}
+
                 }else{
                     //permission not defined
                 }
 			}else{
 				windowManager.addView(chatHead, params);
-				new Handler().postDelayed(new Runnable() {
-					@Override
-					public void run() {
-						stopSelf();
-					}
-				}, 10000);    //will stop service after 10 seconds
+				if (!isAthan){
+					new Handler().postDelayed(new Runnable() {
+						@Override
+						public void run() {
+							stopSelf();
+						}
+					}, 10000);    //will stop service after 10 seconds
+				}
 			}
 			return START_NOT_STICKY;
 
@@ -125,7 +167,12 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 	    }
 		
 	}
-	
+    private NotificationCompat.Builder setVisibilityPublic(NotificationCompat.Builder inotificationBuilder){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            inotificationBuilder.setVisibility(Notification.VISIBILITY_PUBLIC);
+        }
+        return inotificationBuilder;
+    }
 	@Override 
 	public boolean onTouch(View v, MotionEvent event) {
 		stopSelf();
@@ -134,6 +181,8 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.cancel(NOTIFICATION_ID);
 		if (chatHead != null) ((WindowManager) getSystemService(WINDOW_SERVICE)).removeView(chatHead);
 	}
 }

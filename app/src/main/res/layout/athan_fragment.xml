@@ -135,6 +135,24 @@
             android:layout_row="3"
             android:layout_column="2"/>
 
+        <TextView
+            android:id="@+id/sunset_timing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Large Text"
+            android:layout_row="4"
+            android:layout_column="0"/>
+
+        <TextView
+            android:id="@+id/sunset_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/sunset"
+            android:gravity="right"
+            android:layout_row="4"
+            android:layout_column="2"/>
 
 
         <TextView
@@ -144,7 +162,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Large Text"
             android:gravity="right"
-            android:layout_row="4"
+            android:layout_row="5"
             android:layout_column="0"/>
 
         <Switch
@@ -152,7 +170,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
-            android:layout_row="4"
+            android:layout_row="5"
             android:layout_column="1"
             android:checked="true"/>
 
@@ -163,7 +181,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/prayer4"
             android:gravity="right"
-            android:layout_row="4"
+            android:layout_row="5"
             android:layout_column="2"/>
 
 
@@ -174,7 +192,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Large Text"
-            android:layout_row="5"
+            android:layout_row="6"
             android:layout_column="0"/>
 
         <Switch
@@ -182,7 +200,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
-            android:layout_row="5"
+            android:layout_row="6"
             android:layout_column="1"
             android:checked="true"/>
 
@@ -193,7 +211,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/prayer5"
             android:gravity="right"
-            android:layout_row="5"
+            android:layout_row="6"
             android:layout_column="2"/>
 
     </GridLayout>

@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -310,6 +312,14 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             boolean isRespectMute = sharedPrefs.getBoolean("mute_thikr_when_ringer_mute", true);
             if ((am.getRingerMode() == AudioManager.RINGER_MODE_SILENT || am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE)
                     && isRespectMute == true) {
+                if (this.getThikrType().contains(MainActivity.DATA_TYPE_ATHAN)){//show pop up for athan
+                    if (am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE){
+                        vibrate();
+                        Log.d(TAG,"ringer mode vibrate. now vibrating");
+                    }
+                    this.stopForeground(true);
+                    this.stopSelf();
+                }
                 return Service.START_NOT_STICKY;
             }
         }
@@ -448,6 +458,16 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     }
 
     public void play(int fileNumber) {
+        int fadeDuration=0;
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+        boolean isGradual = sharedPrefs.getBoolean("gradual_volume", true);
+        if (getThikrType().contains(MainActivity.DATA_TYPE_ATHAN)){
+
+            if (isGradual){
+                fadeDuration=10000;
+            }
+        }
+
         this.initMediaPlayer();
         setCurrentPlaying(fileNumber);
         player.setOnCompletionListener(this);
@@ -471,7 +491,38 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 if (ret == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
 
                     startPlayerIfAllowed();
-                    setVolume();
+                    //Start increasing volume in increments
+                    if(fadeDuration > 0)
+                    {
+                        final Timer timer = new Timer(true);
+                        TimerTask timerTask = new TimerTask()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                if (player == null) {
+                                    timer.cancel();
+                                    timer.purge();
+                                }else{
+                                    updateVolume(1);
+                                }
+
+
+
+                                if (iVolume == INT_VOLUME_MAX)
+                                {
+                                    timer.cancel();
+                                    timer.purge();
+                                }
+                            }
+                        };
+
+                        // calculate delay, cannot be zero, set to 1 if zero
+                        int delay = fadeDuration/INT_VOLUME_MAX;
+                        if (delay == 0) delay = 1;
+
+                        timer.schedule(timerTask, delay, delay);
+                    }
                 } else {
                     //am.abandonAudioFocus(this);
                     //this.stopForeground(true);
@@ -830,8 +881,10 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             int maxVolume = 101;
             float volume = (float) (1 - Math.log(maxVolume - volumeLevel) / Math.log(maxVolume));
             player.setVolume(volume, volume);
+        }else if (this.getThikrType().contains(MainActivity.DATA_TYPE_ATHAN)){
+            this.updateVolume(0);
         }else{
-            player.setVolume(1.0f, 1.0f);
+            player.setVolume(1.0f,1.0f);
         }
     }
     private void startPlayerIfAllowed(){
@@ -979,5 +1032,35 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
     }
 
+    private int iVolume;
+
+    private final static int INT_VOLUME_MAX = 100;
+    private final static int INT_VOLUME_MIN = 0;
+    private final static float FLOAT_VOLUME_MAX = 1;
+    private final static float FLOAT_VOLUME_MIN = 0;
+    private void updateVolume(int change)
+    {
+        //increment or decrement depending on type of fade
+        iVolume = iVolume + change;
+
+        //ensure iVolume within boundaries
+        if (iVolume < INT_VOLUME_MIN)
+            iVolume = INT_VOLUME_MIN;
+        else if (iVolume > INT_VOLUME_MAX)
+            iVolume = INT_VOLUME_MAX;
+
+        //convert to float value
+        float fVolume = 1 - ((float) Math.log(INT_VOLUME_MAX - iVolume) / (float) Math.log(INT_VOLUME_MAX));
+
+        //ensure fVolume within boundaries
+        if (fVolume < FLOAT_VOLUME_MIN)
+            fVolume = FLOAT_VOLUME_MIN;
+        else if (fVolume > FLOAT_VOLUME_MAX)
+            fVolume = FLOAT_VOLUME_MAX;
+
+        if (player!=null){
+            player.setVolume(fVolume, fVolume);
+        }
+    }
 
 }

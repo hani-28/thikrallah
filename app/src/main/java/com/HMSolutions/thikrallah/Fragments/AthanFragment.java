@@ -44,6 +44,7 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
     private TextView prayer4_time;
     private TextView prayer5_time;
     private TextView sunrise_time;
+    private TextView sunset_time;
     private Switch fajr_switch;
     private Switch duhr_switch;
     private Switch asr_switch;
@@ -113,6 +114,7 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
         prayer4_time=(TextView) view.findViewById(R.id.athan_timing4);
         prayer5_time=(TextView) view.findViewById(R.id.athan_timing5);
         sunrise_time=(TextView) view.findViewById(R.id.sunrise_timing1);
+        sunset_time=(TextView) view.findViewById(R.id.sunset_timing);
 
         fajr_switch=(Switch) view.findViewById(R.id.switch1);
         duhr_switch=(Switch) view.findViewById(R.id.switch2);
@@ -240,8 +242,10 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
                 sunrise_time.setText(prayers[1].getTime());
                 prayer2_time.setText(prayers[2].getTime());
                 prayer3_time.setText(prayers[3].getTime());
+                sunset_time.setText(prayers[4].getTime());
                 prayer4_time.setText(prayers[5].getTime());
                 prayer5_time.setText(prayers[6].getTime());
+
             }catch(NullPointerException e){
 
             }
