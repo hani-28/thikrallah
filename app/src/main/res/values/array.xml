@@ -207,6 +207,7 @@
         <item>@string/calc_method_egypt</item>
         <item>@string/calc_method_jafri</item>
         <item>@string/calc_method_iran</item>
+        <item>@string/calc_method_oman</item>
     </string-array>
     <string-array name="athan_calculation_method_values">
         <item>1</item>
@@ -216,6 +217,7 @@
         <item>5</item>
         <item>0</item>
         <item>6</item>
+        <item>8</item>
     </string-array>
 
 
@@ -231,12 +233,33 @@
     <string-array name="athan_notification_types">
         <item>@string/prayer_reminder_type_viberate</item>
         <item>@string/prayer_reminder_type_ring</item>
-        <item>@string/prayer_reminder_type_athan_mecca</item>
+        <item>@string/prayer_reminder_type_athan_1</item>
+        <item>@string/prayer_reminder_type_athan_2</item>
+        <item>@string/prayer_reminder_type_athan_3</item>
+        <item>@string/prayer_reminder_type_athan_4</item>
+        <item>@string/prayer_reminder_type_athan_5</item>
+        <item>@string/prayer_reminder_type_athan_6</item>
+        <item>@string/prayer_reminder_type_athan_7</item>
+        <item>@string/prayer_reminder_type_athan_8</item>
+        <item>@string/prayer_reminder_type_athan_9</item>
+        <item>@string/prayer_reminder_type_athan_10</item>
+        <item>@string/prayer_reminder_type_athan_11</item>
     </string-array>
     <string-array name="athan_notification_types_values">
         <item>1</item>
         <item>2</item>
         <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+
     </string-array>
 
     <string-array name="athan_adjustment_methods">

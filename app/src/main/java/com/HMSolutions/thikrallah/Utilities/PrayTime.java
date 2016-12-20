@@ -64,6 +64,7 @@ public class PrayTime {
     public static final int CALC_METHOD_Egypt=5; // Egyptian General Authority of Survey
     public static final int CALC_METHOD_Custom=7; // Custom Setting
     public static final int CALC_METHOD_Tehran=6; // Institute of Geophysics, University of Tehran
+    public static final int CALC_METHOD_OMAN=8; //same as Karachi except +5 minutes for duhr/asr/maghrib
     // Juristic Methods
     public static final int JURISTIC_METHOD_Shafii=0; // Shafii (standard)
     public static final int JURISTIC_METHOD_Hanafi=1; // Hanafi
@@ -115,6 +116,7 @@ public class PrayTime {
         int high_latitude_adjustment=Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString("adjustment_method","0"));
         prayers.setAdjustHighLats(high_latitude_adjustment);
         int[] offsets = {0, 0, 0, 0, 0, 0, 0}; // {Fajr,Sunrise,Dhuhr,Asr,Sunset,Maghrib,Isha}
+
         prayers.tune(offsets);
         return prayers;
     }
@@ -151,7 +153,7 @@ public class PrayTime {
                 if (countrycode.equalsIgnoreCase("IQ")) default_method= CALC_METHOD_Makkah;
                 if (countrycode.equalsIgnoreCase("JO")) default_method= CALC_METHOD_Makkah;
                 if (countrycode.equalsIgnoreCase("KW")) default_method= CALC_METHOD_Makkah;
-                if (countrycode.equalsIgnoreCase("OM")) default_method= CALC_METHOD_Makkah;
+                if (countrycode.equalsIgnoreCase("OM")) default_method= CALC_METHOD_OMAN;
                 if (countrycode.equalsIgnoreCase("QA")) default_method= CALC_METHOD_Makkah;
                 if (countrycode.equalsIgnoreCase("SA")) default_method= CALC_METHOD_Makkah;
                 if (countrycode.equalsIgnoreCase("AE")) default_method= CALC_METHOD_Makkah;
@@ -298,6 +300,11 @@ public class PrayTime {
         double timezone = getCurrentTimezoneOffset();
         int adjustment=PreferenceManager.getDefaultSharedPreferences(context).getInt("time_adjustment",0);
         offsets=new int[]{adjustment,adjustment,adjustment,adjustment,adjustment,adjustment,adjustment};
+        if(getCalcMethod()==CALC_METHOD_OMAN){
+            offsets[2]= offsets[2]+5;
+            offsets[3]= offsets[3]+5;
+            offsets[5]= offsets[5]+5;
+        }
         Log.d(TAG,"detectDaylightSaving() "+detectDaylightSaving());
         //timezone=timezone+detectDaylightSaving();
         Log.d(TAG,"DLS time is "+timezone);
@@ -381,6 +388,10 @@ public class PrayTime {
         // Karachi
         double[] Kvalues = {18,1,0,0,18};
         methodParams.put(Integer.valueOf(this.getKarachi()), Kvalues);
+
+        // Karachi
+        double[] Ovalues = {18,1,0,0,18};
+        methodParams.put(Integer.valueOf(this.getOman()), Ovalues);
 
         // ISNA
         double[] Ivalues = {15,1,0,0,15};
@@ -1005,6 +1016,9 @@ public class PrayTime {
         return CALC_METHOD_Karachi;
     }
 
+    private int getOman(){
+        return CALC_METHOD_OMAN;
+    }
 
 
     private int getISNA() {

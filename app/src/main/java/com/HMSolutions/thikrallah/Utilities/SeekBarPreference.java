@@ -27,6 +27,7 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
     private int mProgress;
     private TextView volumeValue;
     private String TAG="SeekBarPreference";
+    private int uncommittedProgress;
 
     public SeekBarPreference(Context context) {
 
@@ -64,11 +65,12 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         Log.d("1thikr1", "onProgressChanged called");
+        this.uncommittedProgress=progress;
         if (!fromUser)
             return;
        // this.summaryTV.setText(progress);
         //volumeValue.setText(progress);
-        setValue(progress);
+
     }
 
     @Override
@@ -78,7 +80,8 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-       playRandrom();
+        setValue(uncommittedProgress);
+        playRandrom();
        //playUserFile();
     }
 
@@ -96,10 +99,11 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 
         if (value != mProgress) {
             mProgress = value;
+
             notifyChanged();
         }
         Log.d("1thikr1", "summary is " + value);
-       // this.setSummary(value);
+        //this.setSummary(value);
     }
 
     @Override

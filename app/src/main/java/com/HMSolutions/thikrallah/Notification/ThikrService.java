@@ -302,36 +302,13 @@ public class ThikrService extends IntentService  {
 
                 mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
                 vibrate();
-            }else if (reminderType==2){
-                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                //Define sound URI
-                Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
-                mBuilder.setContentTitle(this.getString(R.string.app_name))
-                        .setContentText(athan )
-                        .setSmallIcon(R.drawable.ic_launcher)
-                        .setAutoCancel(true)
-                        .setSound(soundUri,AudioManager.STREAM_NOTIFICATION);
-
-                mBuilder=setVisibilityPublic(mBuilder);
-
-                Intent launchAppIntent = new Intent(this, MainActivity.class);
-
-                launchAppIntent.putExtra("FromNotification",true);
-                launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_ATHAN);
-                PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
-                        0, launchAppIntent, PendingIntent.FLAG_CANCEL_CURRENT
-                );
-
-                mBuilder.setContentIntent(launchAppPendingIntent);
-
-                mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
             }else{
                 sharedPrefs.edit().putString("thikrType", thikrType).commit();
                 data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAY);
-                Log.d(TAG,"fileNumber sent through intent is "+1);
-                data.putInt("FILE", 1);
+                int file=reminderType;
+                Log.d(TAG,"fileNumber sent through intent is "+file);
+                data.putInt("FILE", file);
                 data.putInt("reminderType",reminderType);
                 this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
             }

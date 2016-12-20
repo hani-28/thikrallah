@@ -255,10 +255,7 @@ public class MyAlarmsManager {
         PrayTime prayers = PrayTime.instancePrayTime(context);
         prayers.setTimeFormat(PrayTime.TIME_FORMAT_Time24);
         String[] prayerTimes = prayers.getPrayerTimes(context);
-        if (prayerPosition==0){
-            //TODO:testing only remove before publishing
-            //prayerTimes[0]="06:43";
-        }
+
         if (prayerTimes[prayerPosition].equalsIgnoreCase(prayers.getInvalidTime())){
             return;
         }

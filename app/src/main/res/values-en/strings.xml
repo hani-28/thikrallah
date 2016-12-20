@@ -145,6 +145,7 @@ He knows what lies before them and what is after them, And they comprehend not a
     <string name="calc_method_egypt">Egyptian General Authority of Survey</string>
     <string name="calc_method_jafri">Jafri</string>
     <string name="calc_method_iran">Institute of Geophysics, University of Tehran</string>
+    <string name="calc_method_oman">Ministry of Endowments and religious affairs, Oman</string>
     <string name="asr_calc_method">Asr Time Calculation Method</string>
     <string name="asr_calc_method_standard">Shafi, Malki, Hanbli</string>
     <string name="asr_calc_method_hanafi">Hanafi</string>
@@ -156,8 +157,19 @@ He knows what lies before them and what is after them, And they comprehend not a
     <string name="isha_reminder_type">Isha Reminder Type</string>
 
     <string name="prayer_reminder_type_viberate">Vibrate</string>
-    <string name="prayer_reminder_type_ring">Notification Ring</string>
-    <string name="prayer_reminder_type_athan_mecca">Mecca Athan</string>
+    <string name="prayer_reminder_type_ring">Phone Ring</string>
+    <string name="prayer_reminder_type_athan_1">Athan 1</string>
+    <string name="prayer_reminder_type_athan_2">Athan 2</string>
+    <string name="prayer_reminder_type_athan_3">Athan 3</string>
+    <string name="prayer_reminder_type_athan_4">Athan 4</string>
+    <string name="prayer_reminder_type_athan_5">Athan 5</string>
+    <string name="prayer_reminder_type_athan_6">Athan 6</string>
+    <string name="prayer_reminder_type_athan_7">Athan 7</string>
+    <string name="prayer_reminder_type_athan_8">Athan 8</string>
+    <string name="prayer_reminder_type_athan_9">Athan 9</string>
+    <string name="prayer_reminder_type_athan_10">Athan 10</string>
+    <string name="prayer_reminder_type_athan_11">Athan 11</string>
+
 
 
     <string name="high_latitude_adjustment">High Latitude Adjustment Method</string>

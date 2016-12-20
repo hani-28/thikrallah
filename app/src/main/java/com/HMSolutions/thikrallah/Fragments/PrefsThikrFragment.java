@@ -94,6 +94,9 @@ public class PrefsThikrFragment extends PreferenceFragment implements OnSharedPr
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
+		if (key.equalsIgnoreCase("volume")){
+			return;
+		}
 		MyAlarmsManager manager=new MyAlarmsManager(this.getActivity().getApplicationContext());
 		manager.UpdateAllApplicableAlarms();
 		Preference pref = findPreference(key);
