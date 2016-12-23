@@ -492,7 +492,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
                     startPlayerIfAllowed();
                     //Start increasing volume in increments
-                    if(fadeDuration > 0)
+                    if(fadeDuration > 0 && getThikrType().contains(MainActivity.DATA_TYPE_ATHAN))
                     {
                         final Timer timer = new Timer(true);
                         TimerTask timerTask = new TimerTask()
@@ -500,7 +500,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                             @Override
                             public void run()
                             {
-                                if (player == null) {
+                                if (player == null ) {
                                     timer.cancel();
                                     timer.purge();
                                 }else{
@@ -522,6 +522,8 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                         if (delay == 0) delay = 1;
 
                         timer.schedule(timerTask, delay, delay);
+                    }else{
+                        this.setVolume();
                     }
                 } else {
                     //am.abandonAudioFocus(this);
@@ -875,16 +877,18 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     }
 
     private void setVolume() {
-        if (this.getThikrType().contains(MainActivity.DATA_TYPE_GENERAL_THIKR)){
-            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+        boolean isGradual = sharedPrefs.getBoolean("gradual_volume", true);
+        if (!this.getThikrType().contains(MainActivity.DATA_TYPE_ATHAN)|| !isGradual){
+            Log.d(TAG,"setVolume 1");
             int volumeLevel = sharedPrefs.getInt("volume", 100);
             int maxVolume = 101;
             float volume = (float) (1 - Math.log(maxVolume - volumeLevel) / Math.log(maxVolume));
             player.setVolume(volume, volume);
-        }else if (this.getThikrType().contains(MainActivity.DATA_TYPE_ATHAN)){
-            this.updateVolume(0);
+
         }else{
-            player.setVolume(1.0f,1.0f);
+            updateVolume(1);
+            Log.d(TAG,"setVolume 3");
         }
     }
     private void startPlayerIfAllowed(){
@@ -1040,6 +1044,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     private final static float FLOAT_VOLUME_MIN = 0;
     private void updateVolume(int change)
     {
+        Log.d(TAG,"updateVolume called");
         //increment or decrement depending on type of fade
         iVolume = iVolume + change;
 
