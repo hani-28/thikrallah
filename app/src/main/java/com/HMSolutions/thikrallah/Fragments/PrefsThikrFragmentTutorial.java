@@ -15,6 +15,7 @@ import android.util.Log;
 import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
 import com.HMSolutions.thikrallah.R;
+import com.HMSolutions.thikrallah.ThikrMediaPlayerService;
 import com.HMSolutions.thikrallah.Utilities.TimePreference;
 
 public class PrefsThikrFragmentTutorial extends PreferenceFragment implements OnSharedPreferenceChangeListener{
@@ -110,5 +111,40 @@ public class PrefsThikrFragmentTutorial extends PreferenceFragment implements On
            // intent.putExtra("FromPreferenceActivity",true);
             this.startActivity(intent);
         }
+		if (key.contains("_reminder_type")){//athan type changed
+			play_athan(key);
+		}
+	}
+	private void play_athan(String key) {
+		Bundle data=new Bundle();
+		data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAY);
+		switch (key){
+			case "fajr_reminder_type":
+				data.putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_ATHAN1);
+				break;
+			case "duhr_reminder_type":
+				data.putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_ATHAN2);
+				break;
+			case "asr_reminder_type":
+				data.putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_ATHAN3);
+				break;
+			case "maghrib_reminder_type":
+				data.putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_ATHAN4);
+				break;
+			case "isha_reminder_type":
+				data.putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_ATHAN5);
+				break;
+		}
+		data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAY);
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getApplicationContext());
+		int file=Integer.parseInt(sharedPreferences.getString(key,"3"));
+		data.putInt("FILE", file);
+		sendActionToMediaService(data);
+	}
+	public void sendActionToMediaService(Bundle data){
+		if (data!=null){
+			this.getActivity().startService(new Intent(this.getActivity(), ThikrMediaPlayerService.class).putExtras(data));
+		}
+
 	}
 }

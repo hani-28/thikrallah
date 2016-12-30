@@ -374,17 +374,16 @@ public class MainActivity extends Activity implements MainInterface, GoogleApiCl
         int mediacontrolPermission = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.MEDIA_CONTENT_CONTROL);
 
-        int writePermission = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+       // int writePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         List<String> listPermissionsNeeded = new ArrayList<>();
 
         if (mediacontrolPermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.MEDIA_CONTENT_CONTROL);
         }
-        if (writePermission != PackageManager.PERMISSION_GRANTED) {
+       /* if (writePermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
-
+*/
         if (!listPermissionsNeeded.isEmpty()) {
             ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),REQUEST_ID_MULTIPLE_PERMISSIONS);
         }

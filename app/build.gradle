@@ -8,8 +8,8 @@ android {
         applicationId "com.HMSolutions.thikrallah"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 67
-        versionName "4.0.9"
+        versionCode 69
+        versionName "4.1.1"
     }
     lintOptions {
         disable 'MissingTranslation'
