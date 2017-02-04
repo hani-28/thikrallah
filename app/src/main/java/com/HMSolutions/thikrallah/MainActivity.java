@@ -33,6 +33,7 @@ import android.*;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
@@ -44,6 +45,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.location.Address;
+import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
@@ -56,11 +58,13 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.app.AlertDialog;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.TimingLogger;
 import android.view.Menu;
@@ -69,18 +73,19 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.*;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-public class MainActivity extends Activity implements MainInterface, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener, android.location.LocationListener,
+public class MainActivity extends Activity implements MainInterface, LocationListener, android.location.LocationListener,
         SharedPreferences.OnSharedPreferenceChangeListener {
-    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 2334;
-    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION_FOR_LOCATION_UPDATES = 5678;
-    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION_FOR_STOP_LOCATION_UPDATES = 7896;
+    private static final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 2334;
+    private static final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION_FOR_LOCATION_UPDATES = 5678;
     private static final int REQUEST_ID_MULTIPLE_PERMISSIONS =7051 ;
     private String appLink;
     String TAG = "MainActivity";
@@ -106,6 +111,7 @@ public class MainActivity extends Activity implements MainInterface, GoogleApiCl
     private final static String SKU_PREMIUM = "premiumupgrade";
     private String base64RSAPublicKey = "";
     static final int RC_REQUEST = 9648253;
+    static  final int RC_ENABLE_LOCATION_SETTINGS=7866755;
     private Context mcontext;
 
     Messenger mServiceThikrMediaPlayerMessenger = null;
@@ -124,6 +130,22 @@ public class MainActivity extends Activity implements MainInterface, GoogleApiCl
             // new updateLocationDiscription().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,this);
 
         }
+    }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Main Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
     }
 
     class IncomingHandler extends Handler {
@@ -261,7 +283,7 @@ public class MainActivity extends Activity implements MainInterface, GoogleApiCl
     protected void onStart() {
         timeOperation("timing", "onstart called");
         Log.d(TAG, "onStart called");
-        mGoogleApiClient.connect();
+
 
         bindtoMediaService();
         timeOperation("timing", "onstart finished");
@@ -292,75 +314,68 @@ public class MainActivity extends Activity implements MainInterface, GoogleApiCl
 
     @Override
     protected void onStop() {
-        mGoogleApiClient.disconnect();
-        super.onStop();
+        super.onStop();// ATTENTION: This was auto-generated to implement the App Indexing API.
+
 
     }
 
     @Override
     public void requestLocationUpdate() {
+        Log.d(TAG,"requestLocationUpdate");
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+        criteria.setPowerRequirement(Criteria.POWER_LOW);
+        String provider = locationManager.getBestProvider(criteria, true);
         int permissionCheck = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION);
+                Manifest.permission.ACCESS_COARSE_LOCATION);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION_FOR_LOCATION_UPDATES);
+                    MY_PERMISSIONS_REQUEST_ACCESS_LOCATION_FOR_LOCATION_UPDATES);
         } else {
             if (locationManager == null) {
                 locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             }
-            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) &&
-                    !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-                    && PreferenceManager.getDefaultSharedPreferences(this).getString("latitude", "0.0").equalsIgnoreCase("0.0")) {
+            Location location = locationManager.getLastKnownLocation(provider);
+            locationManager.requestLocationUpdates(provider, 0, 0, this);
+            Log.d(TAG,"requesting best provider: "+provider);
+
+            if (location != null) {
+
+                PreferenceManager.getDefaultSharedPreferences(this).edit().putString("latitude", Double.toString(location.getLatitude())).commit();
+                PreferenceManager.getDefaultSharedPreferences(this).edit().putString("longitude", Double.toString(location.getLongitude())).commit();
+            }
+            Log.d(TAG,"isproviderenabled"+locationManager.isProviderEnabled(provider));
+            if ((!locationManager.isProviderEnabled(provider)||!isLocationEnabled(this))&&
+                    PreferenceManager.getDefaultSharedPreferences(this).getString("latitude", "0.0").equalsIgnoreCase("0.0")) {
                 buildAlertMessageNoGps();
             }
-            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                Log.d(TAG, "requesting gps");
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-                try {
-                    Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    if (location != null) {
-                        PreferenceManager.getDefaultSharedPreferences(this).edit().putString("latitude", Double.toString(location.getLatitude())).commit();
-                        PreferenceManager.getDefaultSharedPreferences(this).edit().putString("longitude", Double.toString(location.getLongitude())).commit();
-                    }
-
-                } catch (IllegalArgumentException e) {
-
-                }
-
-            }
-            if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-                Log.d(TAG, "requesting network");
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-                try {
-                    Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                    if (location != null) {
-                        PreferenceManager.getDefaultSharedPreferences(this).edit().putString("latitude", Double.toString(location.getLatitude())).commit();
-                        PreferenceManager.getDefaultSharedPreferences(this).edit().putString("longitude", Double.toString(location.getLongitude())).commit();
-                    }
-                } catch (IllegalArgumentException e) {
-
-                }
-            }
-            if (locationManager.isProviderEnabled(LocationManager.PASSIVE_PROVIDER)) {
-                Log.d(TAG, "requesting passive");
-                locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 0, 0, this);
-                try {
-                    Location location = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-                    if (location != null) {
-                        PreferenceManager.getDefaultSharedPreferences(this).edit().putString("latitude", Double.toString(location.getLatitude())).commit();
-                        PreferenceManager.getDefaultSharedPreferences(this).edit().putString("longitude", Double.toString(location.getLongitude())).commit();
-                    }
-                } catch (IllegalArgumentException e) {
-
-                }
-            }
-
         }
 
 
     }
+    public static boolean isLocationEnabled(Context context) {
+        int locationMode = 0;
+        String locationProviders;
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+            try {
+                locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
+
+            } catch (Settings.SettingNotFoundException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            return locationMode != Settings.Secure.LOCATION_MODE_OFF;
+
+        }else{
+            locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+            return !TextUtils.isEmpty(locationProviders);
+        }
+
+
+    }
     private void requestPermissions(){
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -374,16 +389,23 @@ public class MainActivity extends Activity implements MainInterface, GoogleApiCl
         int mediacontrolPermission = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.MEDIA_CONTENT_CONTROL);
 
+        int locationPermission = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+        //ask for this when needed and not here
        // int writePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         List<String> listPermissionsNeeded = new ArrayList<>();
 
         if (mediacontrolPermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.MEDIA_CONTENT_CONTROL);
         }
+        if (locationPermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
        /* if (writePermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
 */
+
         if (!listPermissionsNeeded.isEmpty()) {
             ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),REQUEST_ID_MULTIPLE_PERMISSIONS);
         }
@@ -441,18 +463,7 @@ public class MainActivity extends Activity implements MainInterface, GoogleApiCl
         timeOperation("timing", "locale_setup_if_needed");
         Log.d(TAG, "oncreate 4");
 
-        // Create an instance of GoogleAPIClient.
-        if (mGoogleApiClient == null) {
-            Log.d(TAG, "mGoogleApiClient is null");
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-            // mGoogleApiClient.reconnect();
-        } else {
-            Log.d(TAG, "mGoogleApiClient is not null");
-        }
+
         timeOperation("timing", "defined_mgoogleApiClient");
         base64RSAPublicKey = getResources().getText(R.string.base64RSAPublicKey).toString();
         deviceId = "AC73D67B1C23A45BBDFCAF3F4040A0AA";//md5(android_id).toUpperCase();
@@ -568,10 +579,10 @@ public class MainActivity extends Activity implements MainInterface, GoogleApiCl
     }
 
     private void timeOperation(String tag, String operation) {
-        endnow = android.os.SystemClock.elapsedRealtime();
+        endnow = SystemClock.elapsedRealtime();
         Log.d(tag, "Execution time: " + (endnow - startnow) + " ms for " + operation);
         //Log.d(tag,operation);
-        startnow = android.os.SystemClock.elapsedRealtime();
+        startnow = SystemClock.elapsedRealtime();
     }
 
     private void isPremiumPurchasedAsync() {
@@ -701,7 +712,7 @@ public class MainActivity extends Activity implements MainInterface, GoogleApiCl
     @Override
     public void launchFragment(Fragment iFragment, Bundle args, String tag) {
         iFragment.setArguments(args);
-        android.app.FragmentTransaction fragmentTransaction1 = this.getFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction1 = this.getFragmentManager().beginTransaction();
         fragmentTransaction1.replace(R.id.container, iFragment, tag);
         fragmentTransaction1.addToBackStack(null);
         fragmentTransaction1.commit();
@@ -898,7 +909,7 @@ public class MainActivity extends Activity implements MainInterface, GoogleApiCl
     public String md5(String s) {
         try {
             // Create MD5 Hash
-            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
+            MessageDigest digest = MessageDigest.getInstance("MD5");
             digest.update(s.getBytes());
             byte messageDigest[] = digest.digest();
 
@@ -942,78 +953,26 @@ public class MainActivity extends Activity implements MainInterface, GoogleApiCl
             }
 
         }
+        if (requestCode==RC_ENABLE_LOCATION_SETTINGS){
+            Log.d(TAG,"requestLocationUpdate. Settings enabled");
+            this.requestLocationUpdate();
+        }
 
     }
 
     private Location mLastLocation;
-    private GoogleApiClient mGoogleApiClient;
     private LocationRequest locationRequest;
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.d(TAG, "onConnectionFailed " + connectionResult.toString());
-    }
-
-    @Override
-    public void onConnected(Bundle connectionHint) {
-        Log.d(TAG, "onConnected");
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
-
-        if (mLastLocation != null) {
-            Log.d(TAG, "mLastLocation is not null");
-            PreferenceManager.getDefaultSharedPreferences(this).edit().putString("latitude", Double.toString(mLastLocation.getLatitude())).commit();
-            PreferenceManager.getDefaultSharedPreferences(this).edit().putString("longitude", Double.toString(mLastLocation.getLongitude())).commit();
-            Log.d(TAG, "latitude is " + Double.toString(mLastLocation.getLatitude()));
-            PrayTime.instancePrayTime(this);
-            new MyAlarmsManager(this).UpdateAllApplicableAlarms();
-        } else {
-            if (PreferenceManager.getDefaultSharedPreferences(this).getString("latitude", "0.0").equalsIgnoreCase("0.0")) {
-                Log.d(TAG, "mLastLocation is null");
-                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-
-                if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    buildAlertMessageNoGps();
-                }
-
-
-                locationRequest = LocationRequest.create();
-
-                locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-                locationRequest.setInterval(5000);
-                locationRequest.setNumUpdates(3);
-                locationRequest.setExpirationDuration(1000 * 30);
-                locationRequest.setFastestInterval(1000);
-                int permissionCheck = ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.ACCESS_FINE_LOCATION);
-                if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                            MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-                } else {
-                    LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, this);
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-                }
-
-
-            }
-
-        }
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
+            case REQUEST_ID_MULTIPLE_PERMISSIONS:{
                 if (grantResults.length > 0
                         && (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED )) {
-                    //LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, this);
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,  this);
-                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+                    Log.d(TAG,"requestLocationUpdate. permissions granted");
+
+                    this.requestLocationUpdate();
                     // permission was granted, yay! Do the
                     // location-related task you need to do.
                 } else {
@@ -1023,9 +982,27 @@ public class MainActivity extends Activity implements MainInterface, GoogleApiCl
                 }
                 return;
             }
-            case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION_FOR_LOCATION_UPDATES:{
+            case MY_PERMISSIONS_REQUEST_ACCESS_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED )) {
+                    Log.d(TAG,"requestLocationUpdate. permissions granted");
+
+                    this.requestLocationUpdate();
+                    // permission was granted, yay! Do the
+                    // location-related task you need to do.
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+            case MY_PERMISSIONS_REQUEST_ACCESS_LOCATION_FOR_LOCATION_UPDATES:{
+                if (grantResults.length > 0
+                        && (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED )) {
+                    Log.d(TAG,"requestLocationUpdate. permissions granted");
+
                     this.requestLocationUpdate();
                     // permission was granted, yay! Do the
                     // location-related task you need to do.
@@ -1035,18 +1012,8 @@ public class MainActivity extends Activity implements MainInterface, GoogleApiCl
                     // functionality that depends on this permission.
                 }
             }
-            case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION_FOR_STOP_LOCATION_UPDATES:{
-                if (grantResults.length > 0
-                        && (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED )) {
-                    this.stopLocationUpdates();
-                    // permission was granted, yay! Do the
-                    // location-related task you need to do.
-                } else {
 
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-            }
+
 
             // other 'case' lines to check for other
             // permissions this app might request
@@ -1059,7 +1026,7 @@ public class MainActivity extends Activity implements MainInterface, GoogleApiCl
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS),RC_ENABLE_LOCATION_SETTINGS);
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -1080,20 +1047,12 @@ public class MainActivity extends Activity implements MainInterface, GoogleApiCl
                     MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION_FOR_STOP_LOCATION_UPDATES);
             */
         } else {
-            if (mGoogleApiClient.isConnected()){
-                LocationServices.FusedLocationApi.removeLocationUpdates(
-                        mGoogleApiClient, this);
-            }
             if(locationManager!=null){
                 locationManager.removeUpdates(this);
             }
         }
 
 
-    }
-    @Override
-    public void onConnectionSuspended(int i) {
-        Log.d(TAG, "onConnectionSuspended");
     }
 
 
@@ -1159,7 +1118,7 @@ public class MainActivity extends Activity implements MainInterface, GoogleApiCl
 
     }
 
-    class myAdListener extends com.google.android.gms.ads.AdListener{
+    class myAdListener extends AdListener{
         MainActivity myActivity;
         public myAdListener(MainActivity context){
             super();

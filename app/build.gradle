@@ -8,8 +8,8 @@ android {
         applicationId "com.HMSolutions.thikrallah"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 69
-        versionName "4.1.1"
+        versionCode 70
+        versionName "4.1.2"
     }
     lintOptions {
         disable 'MissingTranslation'
@@ -52,4 +52,5 @@ dependencies {
     compile 'com.vanniktech:vntfontlistpreference:1.0.1-SNAPSHOT'
     compile 'me.grantland:autofittextview:0.2.+'
 
+    compile 'com.google.android.gms:play-services-appindexing:9.2.1'
 }
