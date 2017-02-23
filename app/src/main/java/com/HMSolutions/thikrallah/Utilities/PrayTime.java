@@ -26,6 +26,7 @@ PLEASE DO NOT REMOVE THIS COPYRIGHT BLOCK.
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.ConnectivityManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -120,6 +121,13 @@ public class PrayTime {
         prayers.tune(offsets);
         return prayers;
     }
+    private static  boolean isNetworkConnected(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null;
+    }
+
+
     public static int getCalculationMethod(Context context){
       //  Log.d(TAG,"getCalculationMethod");
         String user_option=PreferenceManager.getDefaultSharedPreferences(context).getString("calc_method",null);
@@ -130,8 +138,10 @@ public class PrayTime {
 
         double latitude =  Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("latitude", "0.0"));
         double longitude = Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("longitude","0.0"));
-
         if(latitude==0&&longitude==0){
+            return CALC_METHOD_MWL;
+        }
+        if (isNetworkConnected(context)==false){
             return CALC_METHOD_MWL;
         }
 

@@ -59,7 +59,7 @@ public class MyAlarmsManager {
         //now.add(Calendar.SECOND,10);
 
 
-        //Morning Reminder
+        //mulk Reminder
         PendingIntent pendingIntentMulk =PendingIntent.getBroadcast(context, requestCodeMulkAlarm,launchIntent.putExtra("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_QURAN_MULK), PendingIntent.FLAG_UPDATE_CURRENT);
         if (Remindmemulk){
 
@@ -165,7 +165,7 @@ public class MyAlarmsManager {
 
         PendingIntent pendingIntentKahf =PendingIntent.getBroadcast(context, requestCodeKahfAlarm,launchIntent.putExtra("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_QURAN_KAHF), PendingIntent.FLAG_UPDATE_CURRENT);
 
-        if (Remindmekahf && sharedPrefs.getInt("lastKahfPlayed",-1)!=Calendar.getInstance().get(Calendar.DAY_OF_MONTH)){
+        if (Remindmekahf && Calendar.getInstance().get(Calendar.DAY_OF_MONTH)!=sharedPrefs.getInt("lastKahfPlayed",-1)){
 
 
 

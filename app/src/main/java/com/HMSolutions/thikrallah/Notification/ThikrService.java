@@ -54,13 +54,16 @@ public class ThikrService extends IntentService  {
 	protected void onHandleIntent(Intent intent) {
         calling_intent=intent;
         mcontext=this.getApplicationContext();
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+        //update all alarms
+        Intent boot_reciever = new Intent("com.HMSolutions.thikrallah.Notification.ThikrBootReceiver.android.action.broadcast");
+        this.sendBroadcast(boot_reciever);
+        /*new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
                 new MyAlarmsManager(mcontext).UpdateAllApplicableAlarms();
             }
         }, 10000);
-
+        */
 		Log.d(TAG,"onhandleintnet called");
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         String lang=sharedPrefs.getString("language",null);

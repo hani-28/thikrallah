@@ -325,7 +325,7 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
         Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_COARSE);
         criteria.setPowerRequirement(Criteria.POWER_LOW);
-        String provider = locationManager.getBestProvider(criteria, true);
+
         int permissionCheck = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
@@ -336,19 +336,30 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
             if (locationManager == null) {
                 locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             }
-            Location location = locationManager.getLastKnownLocation(provider);
-            locationManager.requestLocationUpdates(provider, 0, 0, this);
-            Log.d(TAG,"requesting best provider: "+provider);
+            String provider = locationManager.getBestProvider(criteria, true);
+            if (provider==null){
+                if (PreferenceManager.getDefaultSharedPreferences(this).getString("latitude", "0.0").equalsIgnoreCase("0.0")){
+                    buildAlertMessageNoGps();
+                }
 
-            if (location != null) {
+                return;
+            }else {
 
-                PreferenceManager.getDefaultSharedPreferences(this).edit().putString("latitude", Double.toString(location.getLatitude())).commit();
-                PreferenceManager.getDefaultSharedPreferences(this).edit().putString("longitude", Double.toString(location.getLongitude())).commit();
-            }
-            Log.d(TAG,"isproviderenabled"+locationManager.isProviderEnabled(provider));
-            if ((!locationManager.isProviderEnabled(provider)||!isLocationEnabled(this))&&
-                    PreferenceManager.getDefaultSharedPreferences(this).getString("latitude", "0.0").equalsIgnoreCase("0.0")) {
-                buildAlertMessageNoGps();
+
+                Location location = locationManager.getLastKnownLocation(provider);
+                locationManager.requestLocationUpdates(provider, 0, 0, this);
+                Log.d(TAG, "requesting best provider: " + provider);
+
+                if (location != null) {
+
+                    PreferenceManager.getDefaultSharedPreferences(this).edit().putString("latitude", Double.toString(location.getLatitude())).commit();
+                    PreferenceManager.getDefaultSharedPreferences(this).edit().putString("longitude", Double.toString(location.getLongitude())).commit();
+                }
+                Log.d(TAG, "isproviderenabled" + locationManager.isProviderEnabled(provider));
+                if ((!locationManager.isProviderEnabled(provider) || !isLocationEnabled(this)) &&
+                        PreferenceManager.getDefaultSharedPreferences(this).getString("latitude", "0.0").equalsIgnoreCase("0.0")) {
+                    buildAlertMessageNoGps();
+                }
             }
         }
 
