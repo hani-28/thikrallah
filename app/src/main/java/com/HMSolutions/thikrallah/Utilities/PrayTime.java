@@ -25,13 +25,14 @@ PLEASE DO NOT REMOVE THIS COPYRIGHT BLOCK.
 
 import android.content.Context;
 import android.location.Address;
-import android.location.Geocoder;
+//import android.location.Geocoder;
 import android.net.ConnectivityManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.HMSolutions.thikrallah.R;
+import com.HMSolutions.thikrallah.Utilities.reversegeocode.GeocodeListBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -121,18 +122,11 @@ public class PrayTime {
         prayers.tune(offsets);
         return prayers;
     }
-    private static  boolean isNetworkConnected(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        return cm.getActiveNetworkInfo() != null;
-    }
-
-
     public static int getCalculationMethod(Context context){
       //  Log.d(TAG,"getCalculationMethod");
         String user_option=PreferenceManager.getDefaultSharedPreferences(context).getString("calc_method",null);
         if (user_option!=null){
-         //   Log.d(TAG,"user option is already made. It is "+Integer.parseInt(user_option));
+            Log.d(TAG,"user option is already made. It is "+Integer.parseInt(user_option));
             return Integer.parseInt(user_option);
         }
 
@@ -141,108 +135,105 @@ public class PrayTime {
         if(latitude==0&&longitude==0){
             return CALC_METHOD_MWL;
         }
-        if (isNetworkConnected(context)==false){
-            return CALC_METHOD_MWL;
-        }
 
-        try {
-            List<Address> addresses = new Geocoder(context, Locale.ENGLISH).getFromLocation(latitude,longitude,1);
-            Log.d(TAG,"addresses received. size is"+addresses.size());
-            if (addresses.size() > 0) {
-                int default_method=-100;
-                String countrycode = addresses.get(0).getCountryCode();
-                Log.d(TAG,"country code is"+countrycode);
-                if (countrycode.equalsIgnoreCase("CA")) default_method= CALC_METHOD_ISNA;
-                if (countrycode.equalsIgnoreCase("US")) default_method= CALC_METHOD_ISNA;
-                if (countrycode.equalsIgnoreCase("UM")) default_method= CALC_METHOD_ISNA;
-                if (countrycode.equalsIgnoreCase("BD")) default_method= CALC_METHOD_Karachi;
-                if (countrycode.equalsIgnoreCase("IN")) default_method= CALC_METHOD_Karachi;
-                if (countrycode.equalsIgnoreCase("PK")) default_method= CALC_METHOD_Karachi;
-                if (countrycode.equalsIgnoreCase("AF")) default_method= CALC_METHOD_Karachi;
-                if (countrycode.equalsIgnoreCase("BH")) default_method= CALC_METHOD_Makkah;
-                if (countrycode.equalsIgnoreCase("IQ")) default_method= CALC_METHOD_Makkah;
-                if (countrycode.equalsIgnoreCase("JO")) default_method= CALC_METHOD_Makkah;
-                if (countrycode.equalsIgnoreCase("KW")) default_method= CALC_METHOD_Makkah;
-                if (countrycode.equalsIgnoreCase("OM")) default_method= CALC_METHOD_OMAN;
-                if (countrycode.equalsIgnoreCase("QA")) default_method= CALC_METHOD_Makkah;
-                if (countrycode.equalsIgnoreCase("SA")) default_method= CALC_METHOD_Makkah;
-                if (countrycode.equalsIgnoreCase("AE")) default_method= CALC_METHOD_Makkah;
-                if (countrycode.equalsIgnoreCase("YE")) default_method= CALC_METHOD_Makkah;
-                if (countrycode.equalsIgnoreCase("IR")) default_method= CALC_METHOD_Tehran;
-                if (countrycode.equalsIgnoreCase("EG")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("DZ")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("AO")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("BJ")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("BW")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("BF")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("BI")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("CM")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("CV")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("CF")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("TD")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("KM")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("CG")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("CD")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("CI")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("DJ")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("GQ")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("ER")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("ET")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("GA")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("GM")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("GH")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("GN")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("GW")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("IL")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("KE")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("LB")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("LS")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("LR")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("LY")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("MG")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("MW")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("MY")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("ML")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("MR")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("MU")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("MA")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("MZ")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("NA")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("NE")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("NG")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("PS")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("RW")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("ST")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("SN")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("SC")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("SL")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("SO")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("SS")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("SD")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("SZ")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("SY")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("TZ")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("TG")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("TN")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("UG")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("EH")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("ZM")) default_method= CALC_METHOD_Egypt;
-                if (countrycode.equalsIgnoreCase("ZW")) default_method= CALC_METHOD_Egypt;
+        String countrycode = GeocodeListBuilder.getCountryId(context, latitude, longitude);
+        //List<Address> addresses = new Geocoder(context, Locale.ENGLISH).getFromLocation(latitude,longitude,1);
+        Log.d(TAG,"calc method: addresses received. code is"+countrycode);
+        if (countrycode!=null) {
+            int default_method=-100;
+            //String countrycode = addresses.get(0).getCountryCode();
+            Log.d(TAG,"country code is"+countrycode);
+            if (countrycode.equalsIgnoreCase("CAN")) default_method= CALC_METHOD_ISNA;
+            if (countrycode.equalsIgnoreCase("USA")) default_method= CALC_METHOD_ISNA;
+            if (countrycode.equalsIgnoreCase("UMI")) default_method= CALC_METHOD_ISNA;
+            if (countrycode.equalsIgnoreCase("BGD")) default_method= CALC_METHOD_Karachi;
+            if (countrycode.equalsIgnoreCase("IND")) default_method= CALC_METHOD_Karachi;
+            if (countrycode.equalsIgnoreCase("PAK")) default_method= CALC_METHOD_Karachi;
+            if (countrycode.equalsIgnoreCase("AFG")) default_method= CALC_METHOD_Karachi;
+            if (countrycode.equalsIgnoreCase("BHR")) default_method= CALC_METHOD_Makkah;
+            if (countrycode.equalsIgnoreCase("IRQ")) default_method= CALC_METHOD_Makkah;
+            if (countrycode.equalsIgnoreCase("JOR")) default_method= CALC_METHOD_Makkah;
+            if (countrycode.equalsIgnoreCase("KWT")) default_method= CALC_METHOD_Makkah;
+            if (countrycode.equalsIgnoreCase("OMN")) default_method= CALC_METHOD_OMAN;
+            if (countrycode.equalsIgnoreCase("QAT")) default_method= CALC_METHOD_Makkah;
+            if (countrycode.equalsIgnoreCase("SAU")) default_method= CALC_METHOD_Makkah;
+            if (countrycode.equalsIgnoreCase("ARE")) default_method= CALC_METHOD_Makkah;
+            if (countrycode.equalsIgnoreCase("YEM")) default_method= CALC_METHOD_Makkah;
+            if (countrycode.equalsIgnoreCase("IRN")) default_method= CALC_METHOD_Tehran;
+            if (countrycode.equalsIgnoreCase("EGY")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("DZA")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("AGO")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("BEN")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("BWA")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("BFA")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("BDI")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("CMR")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("CPV")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("CAF")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("TCD")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("COM")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("COG")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("COD")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("CIV")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("DJI")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("GNQ")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("ERI")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("ETH")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("GAB")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("GMB")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("GHA")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("GIN")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("GNB")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("ISR")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("KEN")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("LBN")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("LSO")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("LBR")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("LBY")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("MDG")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("MWI")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("MLI")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("MRT")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("MUS")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("MAR")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("MOZ")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("NAM")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("NER")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("NGA")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("PSE")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("RWA")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("STP")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("SEN")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("SYC")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("SLE")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("SOM")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("SSD")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("SDN")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("SWZ")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("SYR")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("TZA")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("TGO")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("TUN")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("UGA")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("ESH")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("ZMB")) default_method= CALC_METHOD_Egypt;
+            if (countrycode.equalsIgnoreCase("ZWE")) default_method= CALC_METHOD_Egypt;
 
 
 
-                if (default_method!=-100){
-                  //  Log.d(TAG,"default method returned is"+default_method);
-                    PreferenceManager.getDefaultSharedPreferences(context).edit().putString("calc_method",Integer.toString(default_method)).commit();
-                    return default_method;
-                }
-
+            if (default_method!=-100){
+              //  Log.d(TAG,"default method returned is"+default_method);
+                PreferenceManager.getDefaultSharedPreferences(context).edit().putString("calc_method",Integer.toString(default_method)).commit();
+                Log.d(TAG,"calc method: committed");
+                return default_method;
+            }else{
+                PreferenceManager.getDefaultSharedPreferences(context).edit().putString("calc_method",Integer.toString(CALC_METHOD_MWL)).commit();
+                Log.d(TAG,"calc method: committed");
+                return default_method;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        //    Log.d(TAG,"exception happenned MWL returned");
-            return CALC_METHOD_MWL;
+
         }
+
        // Log.d(TAG,"0 addresses receieved.returned");
         //PreferenceManager.getDefaultSharedPreferences(context).edit().putString("calc_method",Integer.toString(CALC_METHOD_MWL)).commit();
         return CALC_METHOD_MWL;
@@ -263,46 +254,61 @@ public class PrayTime {
             return JURISTIC_METHOD_Shafii;
         }
 
-        try {
-            List<Address> addresses = new Geocoder(context, Locale.ENGLISH).getFromLocation(latitude,longitude,1);
-           // Log.d(TAG,"addresses received. size is"+addresses.size());
-            if (addresses.size() > 0) {
-                int default_juristic_method=-100;
-                String countrycode = addresses.get(0).getCountryCode();
-             //   Log.d(TAG,"country code is"+countrycode);
-                if (countrycode.equalsIgnoreCase("AF")) default_juristic_method= JURISTIC_METHOD_Hanafi;
-                if (countrycode.equalsIgnoreCase("AZ")) default_juristic_method= JURISTIC_METHOD_Hanafi;
-                if (countrycode.equalsIgnoreCase("BD")) default_juristic_method= JURISTIC_METHOD_Hanafi;
-                if (countrycode.equalsIgnoreCase("EG")) default_juristic_method= JURISTIC_METHOD_Hanafi;
-                if (countrycode.equalsIgnoreCase("JO")) default_juristic_method= JURISTIC_METHOD_Hanafi;
-                if (countrycode.equalsIgnoreCase("KZ")) default_juristic_method= JURISTIC_METHOD_Hanafi;
-                if (countrycode.equalsIgnoreCase("KG")) default_juristic_method= JURISTIC_METHOD_Hanafi;
-                if (countrycode.equalsIgnoreCase("MV")) default_juristic_method= JURISTIC_METHOD_Hanafi;
-                if (countrycode.equalsIgnoreCase("PK")) default_juristic_method= JURISTIC_METHOD_Hanafi;
-                if (countrycode.equalsIgnoreCase("SY")) default_juristic_method= JURISTIC_METHOD_Hanafi;
-                if (countrycode.equalsIgnoreCase("TJ")) default_juristic_method= JURISTIC_METHOD_Hanafi;
-                if (countrycode.equalsIgnoreCase("TR")) default_juristic_method= JURISTIC_METHOD_Hanafi;
-                if (countrycode.equalsIgnoreCase("TM")) default_juristic_method= JURISTIC_METHOD_Hanafi;
-                if (countrycode.equalsIgnoreCase("UZ")) default_juristic_method= JURISTIC_METHOD_Hanafi;
+        String countrycode = GeocodeListBuilder.getCountryId(context, latitude, longitude);
+
+
+       // List<Address> addresses = new Geocoder(context, Locale.ENGLISH).getFromLocation(latitude,longitude,1);
+        Log.d(TAG,"jurist method: addresses received. code is"+countrycode);
+        if (countrycode !=null) {
+            int default_juristic_method=-100;
+         //   Log.d(TAG,"country code is"+countrycode);
+            if (countrycode.equalsIgnoreCase("AFG")) default_juristic_method= JURISTIC_METHOD_Hanafi;
+            if (countrycode.equalsIgnoreCase("AZE")) default_juristic_method= JURISTIC_METHOD_Hanafi;
+            if (countrycode.equalsIgnoreCase("BGD")) default_juristic_method= JURISTIC_METHOD_Hanafi;
+            if (countrycode.equalsIgnoreCase("EGY")) default_juristic_method= JURISTIC_METHOD_Hanafi;
+            if (countrycode.equalsIgnoreCase("JOR")) default_juristic_method= JURISTIC_METHOD_Hanafi;
+            if (countrycode.equalsIgnoreCase("KAZ")) default_juristic_method= JURISTIC_METHOD_Hanafi;
+            if (countrycode.equalsIgnoreCase("KGZ")) default_juristic_method= JURISTIC_METHOD_Hanafi;
+            if (countrycode.equalsIgnoreCase("MDV")) default_juristic_method= JURISTIC_METHOD_Hanafi;
+            if (countrycode.equalsIgnoreCase("PAK")) default_juristic_method= JURISTIC_METHOD_Hanafi;
+            if (countrycode.equalsIgnoreCase("SYR")) default_juristic_method= JURISTIC_METHOD_Hanafi;
+            if (countrycode.equalsIgnoreCase("TJK")) default_juristic_method= JURISTIC_METHOD_Hanafi;
+            if (countrycode.equalsIgnoreCase("TUR")) default_juristic_method= JURISTIC_METHOD_Hanafi;
+            if (countrycode.equalsIgnoreCase("TKM")) default_juristic_method= JURISTIC_METHOD_Hanafi;
+            if (countrycode.equalsIgnoreCase("UZB")) default_juristic_method= JURISTIC_METHOD_Hanafi;
 
 
 
 
-                if (default_juristic_method!=-100){
-                    Log.d(TAG,"default juristic method returned is"+default_juristic_method);
-                    PreferenceManager.getDefaultSharedPreferences(context).edit().putString("asr_calc_method",Integer.toString(default_juristic_method)).commit();
-                    return default_juristic_method;
-                }
-
+            if (default_juristic_method!=-100){
+                Log.d(TAG,"default juristic method returned is"+default_juristic_method);
+                PreferenceManager.getDefaultSharedPreferences(context).edit().putString("asr_calc_method",Integer.toString(default_juristic_method)).commit();
+                return default_juristic_method;
+            }else{
+                PreferenceManager.getDefaultSharedPreferences(context).edit().putString("asr_calc_method",Integer.toString(JURISTIC_METHOD_Shafii)).commit();
+                return JURISTIC_METHOD_Shafii;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-          //  Log.d(TAG,"exception happenned MWL returned");
-            return JURISTIC_METHOD_Shafii;
+
         }
+
        // Log.d(TAG,"0 addresses receieved.returned");
         //PreferenceManager.getDefaultSharedPreferences(context).edit().putString("calc_method",Integer.toString(CALC_METHOD_MWL)).commit();
         return JURISTIC_METHOD_Shafii;
+    }
+    public final static double AVERAGE_RADIUS_OF_EARTH_KM = 6371;
+    public int calculateDistanceInKilometer(double userLat, double userLng,
+                                            double venueLat, double venueLng) {
+
+        double latDistance = Math.toRadians(userLat - venueLat);
+        double lngDistance = Math.toRadians(userLng - venueLng);
+
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(userLat)) * Math.cos(Math.toRadians(venueLat))
+                * Math.sin(lngDistance / 2) * Math.sin(lngDistance / 2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return (int) (Math.round(AVERAGE_RADIUS_OF_EARTH_KM * c));
     }
     public String[] getPrayerTimes(Context context){
         double latitude =  Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("latitude", "0.0"));
