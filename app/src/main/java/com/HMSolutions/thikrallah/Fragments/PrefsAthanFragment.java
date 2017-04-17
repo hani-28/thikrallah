@@ -13,6 +13,7 @@ import android.preference.PreferenceScreen;
 import android.util.Log;
 
 import com.HMSolutions.thikrallah.MainActivity;
+import com.HMSolutions.thikrallah.Notification.AthanTimerService;
 import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.ThikrMediaPlayerService;
@@ -112,6 +113,9 @@ public class PrefsAthanFragment extends PreferenceFragment implements OnSharedPr
         }
 		if (key.contains("_reminder_type")){//athan type changed
 			play_athan(key);
+		}
+		if (key.equalsIgnoreCase("foreground_athan_timer")){//athan type changed
+			this.getActivity().startService(new Intent(this.getActivity(),AthanTimerService.class));
 		}
 	}
 	private void play_athan(String key) {

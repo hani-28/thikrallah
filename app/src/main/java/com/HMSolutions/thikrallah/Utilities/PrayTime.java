@@ -653,7 +653,7 @@ public class PrayTime {
         int month = date.get(Calendar.MONTH);
         int day = date.get(Calendar.DATE);
 
-        return getDatePrayerTimes(year, month + 1, day, latitude, longitude, tZone);
+         return getDatePrayerTimes(year, month + 1, day, latitude, longitude, tZone);
     }
 
     // set custom values for calculation parameters

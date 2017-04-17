@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.HMSolutions.thikrallah.ThikrMediaPlayerService;
+
 
 public class ThikrBootReceiver extends BroadcastReceiver {
     private String TAG="ThikrBootReceiver";
@@ -15,5 +17,6 @@ public class ThikrBootReceiver extends BroadcastReceiver {
         Log.d(TAG,"ThikrBootReceiver onrecieve called");
 		MyAlarmsManager manager=new MyAlarmsManager(context);
 		manager.UpdateAllApplicableAlarms();
+		context.startService(new Intent(context,AthanTimerService.class));
 	}
 }

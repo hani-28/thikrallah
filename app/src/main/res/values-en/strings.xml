@@ -275,5 +275,10 @@ He knows what lies before them and what is after them, And they comprehend not a
     <string name="snackbar_text_end">" from bookmarks"</string>
     <string name="snackbar_action">undo</string>
     <string name="gradual_volume">Increase volume gradually</string>
-
+    <string name="is_foreground_athan_timer">Show time remaining untill next prayer</string>
+    <string name="untill">untill</string>
+    <string name="hours">hours</string>
+    <string name="hour">hour</string>
+    <string name="minutes">minutes</string>
+    <string name="minute">minute</string>
 </resources>

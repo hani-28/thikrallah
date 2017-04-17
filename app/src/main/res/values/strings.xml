@@ -282,4 +282,10 @@
     <string name="snackbar_action">undo</string>
 
     <string name="gradual_volume">رفع صوت الاذان تدريجيا</string>
+    <string name="is_foreground_athan_timer">اظهار الوقت المتبقي للصلاةدائما</string>
+    <string name="untill">حتى</string>
+    <string name="hour">ساعة</string>
+    <string name="hours">ساعات</string>
+    <string name="minutes">دقائق</string>
+    <string name="minute">دقيقة</string>
 </resources>

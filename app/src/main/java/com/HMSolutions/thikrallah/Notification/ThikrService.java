@@ -77,6 +77,7 @@ public class ThikrService extends IntentService  {
                     getBaseContext().getResources().getDisplayMetrics());
         }
 
+        this.startService(new Intent(this.getApplicationContext(),AthanTimerService.class));
         am = (AudioManager) this.getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
 		Bundle data=intent.getExtras();
 		String thikrType="";

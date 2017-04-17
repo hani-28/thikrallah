@@ -13,7 +13,7 @@ import com.HMSolutions.thikrallah.ThikrMediaPlayerService;
 
 public class ThikrMediaBroadcastReciever extends BroadcastReceiver {
         private Context context;
-    String TAG = "ThikrMediaBroadcastReciever";
+    String TAG = "ThikrMediaBroadcastRcvr";
     private Bundle data;
 
     // Constructor is mandatory

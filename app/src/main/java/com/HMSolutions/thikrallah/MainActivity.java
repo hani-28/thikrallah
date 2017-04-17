@@ -16,6 +16,7 @@ import com.HMSolutions.thikrallah.Fragments.MainFragment;
 import com.HMSolutions.thikrallah.Fragments.QuranFragment;
 import com.HMSolutions.thikrallah.Fragments.ThikrFragment;
 import com.HMSolutions.thikrallah.Fragments.TutorialFragment;
+import com.HMSolutions.thikrallah.Notification.AthanTimerService;
 import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
 import com.HMSolutions.thikrallah.Utilities.AppRater;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
@@ -516,7 +517,7 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
 
         }
 
-
+        this.startService(new Intent(this,AthanTimerService.class));
         interstitial = new InterstitialAd(this);
         interstitial.setAdUnitId(getResources().getText(R.string.ad_unit_id_interstital).toString());
         interstitial.setAdListener(adsListener);

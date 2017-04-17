@@ -30,6 +30,10 @@
             android:defaultValue="true"
             android:key="gradual_volume"
             android:title="@string/gradual_volume" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="foreground_athan_timer"
+            android:title="@string/is_foreground_athan_timer" />
         <com.HMSolutions.thikrallah.Utilities.MyListPreference
             android:defaultValue="3"
             android:entries="@array/athan_notification_types"
