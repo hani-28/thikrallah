@@ -5,6 +5,7 @@ import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -15,6 +16,8 @@ import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
 import com.HMSolutions.thikrallah.Notification.ThikrMediaBroadcastReciever;
 
 
+import android.*;
+import android.Manifest;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -22,6 +25,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.Configuration;
 
@@ -39,9 +43,13 @@ import android.os.Messenger;
 import android.os.PowerManager;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v7.app.NotificationCompat;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.os.Vibrator;
 import android.widget.Toast;
@@ -79,6 +87,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     private String filepath;
     private PowerManager.WakeLock wakeLock;
     private Context mcontext;
+    private PhoneStateListener phoneStateListener;
 
     /**
      * Handler of incoming messages from clients.
@@ -166,7 +175,40 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 TAG);
         wakeLock.acquire();
 
+        phoneStateListener = new PhoneStateListener() {
+            @Override
+            public void onCallStateChanged(int state, String incomingNumber) {
+                if (state == TelephonyManager.CALL_STATE_RINGING) {
+                    Log.d(TAG, "transient loss of  focus- PHONE RINGING");
+                    if (isPlaying()) player.pause();
+                } else if(state == TelephonyManager.CALL_STATE_IDLE) {
+                    // resume playback
+                    Log.d(TAG, "gained focus");
+                    mediaSession.setActive(true);
+                    if (player == null) {
+                        initMediaPlayer();
+                    } else if (!isPlaying()) {
 
+                        startPlayerIfAllowed();
+                    }
+                    setVolume();
+                } else if(state == TelephonyManager.CALL_STATE_OFFHOOK) {
+                    //A call is dialing, active or on hold
+                    Log.d(TAG, "transient loss of  focus-  call is dialing, active or on hold");
+                    if (isPlaying()) player.pause();
+                }
+                super.onCallStateChanged(state, incomingNumber);
+            }
+        };
+        TelephonyManager mgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+        if(mgr != null) {
+            int PhoneStatePermission = ContextCompat.checkSelfPermission(this,
+                    android.Manifest.permission.READ_PHONE_STATE);
+            if (PhoneStatePermission != PackageManager.PERMISSION_GRANTED) {
+                mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+            }
+
+        }
 
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         String lang=mPrefs.getString("language",null);
@@ -656,6 +698,10 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         }
         am.abandonAudioFocus(this);
         wakeLock.release();
+        TelephonyManager mgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+        if(mgr != null) {
+            mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);
+        }
         this.sendMessageToUI(MSG_CURRENT_PLAYING,-99);
         this.sendMessageToUI(MSG_UNBIND,MSG_UNBIND);
         this.stopForeground(true);
@@ -677,10 +723,13 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         }
         Pattern pattern = Pattern.compile("[\\d]+");
         Matcher matcher = pattern.matcher(currentThikr);
+        Log.d(TAG,"current thikr is: "+currentThikr);
         if (matcher.find()) {
            repeat = Integer.parseInt(matcher.group(0));
+            Log.d(TAG,"repeat number found"+repeat);
         } else {
             repeat = 1;
+            Log.d(TAG,"no repeat number found"+repeat);
         }
         return repeat;
     }
