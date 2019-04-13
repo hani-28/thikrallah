@@ -249,7 +249,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 0, resultIntent, PendingIntent.FLAG_CANCEL_CURRENT
         );
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String NOTIFICATION_CHANNEL_ID = "ThikrMediaPlayerService";
             String channelName = this.getResources().getString(R.string.remember_notification);
             NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
@@ -1136,7 +1136,15 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             fVolume = FLOAT_VOLUME_MAX;
 
         if (player!=null){
-            player.setVolume(fVolume, fVolume);
+            try{
+                if (player.isPlaying()){
+                    player.setVolume(fVolume, fVolume);
+                }
+            }catch(IllegalStateException e){
+                e.printStackTrace();
+            }
+
+
         }
     }
 

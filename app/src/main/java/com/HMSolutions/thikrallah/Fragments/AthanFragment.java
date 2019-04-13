@@ -141,14 +141,21 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
 
         adjuster_sign.setDisplayedValues( new String[] { "+", "-" } );
        int adjustments=mPrefs.getInt("time_adjustment",0);
+        Log.d("adjustment","adjustment was "+adjustments);
         if(adjustments==0){
             hours_adjustments.setValue(0);
             minutes_adjustments.setValue(0);
             adjuster_sign.setValue(0);
-        }else{
-            hours_adjustments.setValue(adjustments/3600);
-            minutes_adjustments.setValue(adjustments-adjustments/3600);
+        }else if(adjustments<0){
+            adjuster_sign.setValue(1);
+            hours_adjustments.setValue(adjustments/60*-1);
+            minutes_adjustments.setValue((adjustments-(adjustments/60)*60)*-1);
 
+        }else if (adjustments>0){
+            Log.d("adjustment","hour is "+(int)(adjustments/60));
+            adjuster_sign.setValue(0);
+            hours_adjustments.setValue(adjustments/60);
+            minutes_adjustments.setValue(adjustments-(adjustments/60)*60);
         }
 
         adjuster_sign.setOnValueChangedListener(this);

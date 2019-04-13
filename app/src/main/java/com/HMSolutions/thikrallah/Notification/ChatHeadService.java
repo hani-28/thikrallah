@@ -121,7 +121,7 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
                 NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 				NotificationCompat.Builder mBuilder;
 
-				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 					String NOTIFICATION_CHANNEL_ID = "com.HMSolutions.thikrallah.Notification.AthanTimerService";
 					String channelName = this.getResources().getString(R.string.athan_timer_notifiaction);
 					NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
