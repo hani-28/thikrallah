@@ -3,6 +3,7 @@ package com.HMSolutions.thikrallah.Fragments;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -143,7 +144,11 @@ public class PrefsThikrFragmentTutorial extends PreferenceFragment implements On
 	}
 	public void sendActionToMediaService(Bundle data){
 		if (data!=null){
-			this.getActivity().startService(new Intent(this.getActivity(), ThikrMediaPlayerService.class).putExtras(data));
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+				this.getActivity().startForegroundService(new Intent(this.getActivity(), ThikrMediaPlayerService.class).putExtras(data));
+			} else {
+				this.getActivity().startService(new Intent(this.getActivity(), ThikrMediaPlayerService.class).putExtras(data));
+			}
 		}
 
 	}

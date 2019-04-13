@@ -3,6 +3,7 @@ package com.HMSolutions.thikrallah.Utilities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.util.AttributeSet;
@@ -136,15 +137,20 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 */
 
 
-        Bundle data1=new Bundle();
+        /*Bundle data1=new Bundle();
         data1.putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_GENERAL_THIKR);
         data1.putBoolean("isUserAction",false);
         this.getContext().startService(new Intent(this.getContext(), ThikrService.class).putExtras(data1));
+        */
 
     }
     public void sendActionToMediaService(Bundle data){
         if (data!=null){
-            this.getContext().startService(new Intent(this.getContext(), ThikrMediaPlayerService.class).putExtras(data));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                this.getContext().startForegroundService(new Intent(this.getContext(), ThikrMediaPlayerService.class).putExtras(data));
+            } else {
+                this.getContext().startService(new Intent(this.getContext(), ThikrMediaPlayerService.class).putExtras(data));
+            }
         }
 
     }

@@ -5,6 +5,7 @@ import com.HMSolutions.thikrallah.R;
 
 import android.Manifest;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -21,7 +22,8 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -35,7 +37,7 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 	private WindowManager windowManager;
 	//private ImageView chatHead;
 	private TextView chatHead;
-    String TAG = "ThikrService";
+    String TAG = "ChatHeadService";
     private final static int NOTIFICATION_ID=0;
 	WindowManager.LayoutParams params;
 	private String thikr;
@@ -48,7 +50,7 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 	public int onStartCommand(Intent intent, int flags, int startId) {
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         String lang=mPrefs.getString("language",null);
-
+        Log.d(TAG,"chatheadservice started");
         if (lang!=null){
             Locale locale = new Locale(lang);
             Locale.setDefault(locale);
@@ -89,13 +91,22 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 			chatHead.setGravity(Gravity.CENTER);
 			
 			//chatHead.setImageResource(R.drawable.chat_head);
+			if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+				params = new WindowManager.LayoutParams(
+						WindowManager.LayoutParams.WRAP_CONTENT,
+						WindowManager.LayoutParams.WRAP_CONTENT,
+						WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+						WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+						PixelFormat.TRANSLUCENT);
+			} else {
+				params = new WindowManager.LayoutParams(
+						WindowManager.LayoutParams.WRAP_CONTENT,
+						WindowManager.LayoutParams.WRAP_CONTENT,
+						WindowManager.LayoutParams.TYPE_PHONE,
+						WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+						PixelFormat.TRANSLUCENT);
+			}
 
-			params = new WindowManager.LayoutParams(
-					WindowManager.LayoutParams.WRAP_CONTENT,
-					WindowManager.LayoutParams.WRAP_CONTENT,
-					WindowManager.LayoutParams.TYPE_PHONE,
-					WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-					PixelFormat.TRANSLUCENT);
 
 			params.gravity = Gravity.CENTER | Gravity.CENTER;
 			params.x = 0;
@@ -108,7 +119,25 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 
             if (isAthan) {
                 NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+				NotificationCompat.Builder mBuilder;
+
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+					String NOTIFICATION_CHANNEL_ID = "com.HMSolutions.thikrallah.Notification.AthanTimerService";
+					String channelName = this.getResources().getString(R.string.athan_timer_notifiaction);
+					NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+					chan.setSound(null,null);
+					chan.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+					NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+					assert manager != null;
+					manager.createNotificationChannel(chan);
+					mBuilder = new NotificationCompat.Builder(this,NOTIFICATION_CHANNEL_ID);
+				}else{
+					mBuilder = new NotificationCompat.Builder(this);
+				}
+
+
+
+
                 mBuilder.setContentTitle(this.getString(R.string.app_name))
                         .setContentText(thikr)
                         .setSmallIcon(R.drawable.ic_launcher)
@@ -125,7 +154,7 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
                 );
 
                 mBuilder.setContentIntent(launchAppPendingIntent);
-
+				//TODO:ADD CHANNEL TO THE NOTIFICATION
                 mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
 
             }

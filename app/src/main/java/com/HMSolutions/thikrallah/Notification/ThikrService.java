@@ -36,7 +36,7 @@ import android.os.Looper;
 import android.os.PowerManager;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
-import android.support.v7.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 
@@ -53,6 +53,7 @@ public class ThikrService extends IntentService  {
 	@Override
 	protected void onHandleIntent(Intent intent) {
         calling_intent=intent;
+        //TODO: Add channels here
         mcontext=this.getApplicationContext();
         //update all alarms
         Intent boot_reciever = new Intent("com.HMSolutions.thikrallah.Notification.ThikrBootReceiver.android.action.broadcast");
@@ -77,7 +78,17 @@ public class ThikrService extends IntentService  {
                     getBaseContext().getResources().getDisplayMetrics());
         }
 
-        this.startService(new Intent(this.getApplicationContext(),AthanTimerService.class));
+        boolean isTimer=sharedPrefs.getBoolean("foreground_athan_timer",true);
+
+        if(isTimer){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(new Intent(this.getApplicationContext(),AthanTimerService.class));
+            } else {
+                this.startService(new Intent(this.getApplicationContext(),AthanTimerService.class));
+            }
+        }
+
+        //AthanTimerService.enqueueWork(this.getApplicationContext(), new Intent(this.getApplicationContext(),AthanTimerService.class));
         am = (AudioManager) this.getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
 		Bundle data=intent.getExtras();
 		String thikrType="";
@@ -94,10 +105,14 @@ public class ThikrService extends IntentService  {
             }
             Log.d(TAG,"filenumber is"+fileNumber);
 			//fire text chat head service
+            Log.d(TAG,"calling chatheadservice");
 			Intent intentChatHead=new Intent(this.getApplicationContext(), ChatHeadService.class);
 			intentChatHead.putExtra("thikr", thikr.getThikrText());
-			startService(intentChatHead);
-
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(intentChatHead);
+            } else {
+                startService(intentChatHead);
+            }
 
 			int reminderType=Integer.parseInt(sharedPrefs.getString("RemindmeThroughTheDayType", "1"));
 			boolean isQuietTime=isTimeNowQuietTime();
@@ -107,7 +122,12 @@ public class ThikrService extends IntentService  {
                 Log.d(TAG,"fileNumber sent through intent is "+fileNumber);
                 data.putInt("FILE", fileNumber);
                 data.putString("FILE_PATH",thikr.getFile());
-                this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    this.startForegroundService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+                } else {
+                    this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+                }
+
 			}
             return;
 
@@ -144,7 +164,11 @@ public class ThikrService extends IntentService  {
 				sharedPrefs.edit().putString("thikrType", MainActivity.DATA_TYPE_DAY_THIKR).commit();
 
 				data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAYALL);
-				this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    this.startForegroundService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+                } else {
+                    this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+                }
 			}
             return;
 		}
@@ -176,7 +200,11 @@ public class ThikrService extends IntentService  {
 
 				sharedPrefs.edit().putString("thikrType", MainActivity.DATA_TYPE_NIGHT_THIKR).commit();
 				data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAYALL);
-				this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    this.startForegroundService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+                } else {
+                    this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+                }
 
 			}
             return;
@@ -215,7 +243,11 @@ public class ThikrService extends IntentService  {
                 sharedPrefs.edit().putString("thikrType", MainActivity.DATA_TYPE_QURAN_MULK).commit();
 
                 data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAYALL);
-                this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    this.startForegroundService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+                } else {
+                    this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+                }
             }
             return;
         }
@@ -252,7 +284,11 @@ public class ThikrService extends IntentService  {
                 sharedPrefs.edit().putString("thikrType", MainActivity.DATA_TYPE_QURAN_KAHF).commit();
 
                 data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAYALL);
-                this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    this.startForegroundService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+                } else {
+                    this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+                }
             }
             return;
         }
@@ -291,10 +327,17 @@ public class ThikrService extends IntentService  {
                 if (am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE){
                     vibrate();
                 }
+                Log.d(TAG,"calling chatheadservice");
                 Intent intentChatHead=new Intent(this.getApplicationContext(), ChatHeadService.class);
                 intentChatHead.putExtra("thikr", athan);
                 intentChatHead.putExtra("isAthan",true);
-                startService(intentChatHead);
+                //startService(intentChatHead);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    //startForegroundService(intentChatHead);
+                    startService(intentChatHead);
+                } else {
+                    startService(intentChatHead);
+                }
 
             }else{
                 sharedPrefs.edit().putString("thikrType", thikrType).commit();
@@ -303,7 +346,11 @@ public class ThikrService extends IntentService  {
                 Log.d(TAG,"fileNumber sent through intent is "+file);
                 data.putInt("FILE", file);
                 data.putInt("reminderType",reminderType);
-                this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    this.startForegroundService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+                } else {
+                    this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+                }
             }
 
 
@@ -385,7 +432,7 @@ public class ThikrService extends IntentService  {
 
     @Override
     public void onDestroy(){
-        ThikrAlarmReceiver.completeWakefulIntent(calling_intent);
+
         super.onDestroy();
 
     }

@@ -50,7 +50,11 @@ public class MyAlarmsManager {
 		boolean RemindmeThroughTheDay=sharedPrefs.getBoolean("RemindmeThroughTheDay", true);
         boolean Remindmekahf=sharedPrefs.getBoolean("remindMekahf", true);
         boolean Remindmemulk=sharedPrefs.getBoolean("remindMemulk", true);
-		Intent launchIntent=new Intent(context, ThikrAlarmReceiver.class);
+
+        Intent launchIntent = new Intent("com.HMSolutions.thikrallah.Notification.ThikrAlarmReceiver");
+        // create an explicit intent by defining a class
+        launchIntent.setClass(context, ThikrAlarmReceiver.class);
+		//Intent launchIntent=new Intent(context, ThikrAlarmReceiver.class);
 
 
         Date dat  = new Date();
@@ -209,6 +213,7 @@ public class MyAlarmsManager {
 	}
     void setPeriodicAlarmManagerUpdates(AlarmManager alarmmnager){
         Intent launchIntent=new Intent(context, ThikrBootReceiver.class);
+
         Date dat  = new Date();
         Calendar now = Calendar.getInstance();
         now.setTime(dat);

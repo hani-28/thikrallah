@@ -1,16 +1,22 @@
 package com.HMSolutions.thikrallah.Notification;
 
+import android.Manifest;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.support.v7.app.NotificationCompat;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.JobIntentService;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -27,18 +33,23 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class AthanTimerService extends Service  {
+public class AthanTimerService extends Service {
 	NotificationCompat.Builder notificationBuilder;
     String TAG = "AthanTimerService";
     private final static int NOTIFICATION_ID=2323;
 	private Context mContext;
-	SharedPreferences sharedPrefs;
+
+
+    public static final int JOB_ID = 0x01;
+
+
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;
 	}
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		mContext=this.getApplicationContext();
 		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
 		boolean isTimer=sharedPrefs.getBoolean("foreground_athan_timer",true);
 
@@ -49,7 +60,7 @@ public class AthanTimerService extends Service  {
 			timer.scheduleAtFixedRate(new TimerTask() {
 				@Override
 				public void run() {
-						initNotification();
+					initNotification();
 
 				}
 			},0,60000);
@@ -62,8 +73,12 @@ public class AthanTimerService extends Service  {
 		}
 
 
-		
+
 	}
+
+
+	SharedPreferences sharedPrefs;
+
 
 	@Override
 	public void onDestroy() {
@@ -73,28 +88,57 @@ public class AthanTimerService extends Service  {
 
 	}
 	private void initNotification() {
-		Intent resultIntent = new Intent(this, MainActivity.class);
+		Log.d(TAG,"initiNotification started");
+		Intent resultIntent = new Intent(mContext, MainActivity.class);
 
 
 
 		resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
+		PendingIntent launchAppPendingIntent = PendingIntent.getActivity(mContext,
 				0, resultIntent, PendingIntent.FLAG_CANCEL_CURRENT
 		);
 
 
-		notificationBuilder = new NotificationCompat.Builder(this);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+			String NOTIFICATION_CHANNEL_ID = "com.HMSolutions.thikrallah.Notification.AthanTimerService";
+			String channelName = this.getResources().getString(R.string.athan_timer_notifiaction);
+			NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+            chan.setSound(null,null);
+			chan.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+			NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+			assert manager != null;
+			manager.createNotificationChannel(chan);
+			notificationBuilder = new NotificationCompat.Builder(mContext,NOTIFICATION_CHANNEL_ID);
+		}else{
+			notificationBuilder = new NotificationCompat.Builder(mContext);
+		}
+
+
+
 
 		notificationBuilder
 				.setSmallIcon(R.drawable.ic_launcher)
 				.setAutoCancel(true)
 				.setContentTitle(getString(R.string.app_name))
-				.setPriority(Notification.PRIORITY_MAX)
+				.setPriority(Notification.PRIORITY_DEFAULT)
 				.setContentText(getNextPrayer())
 
 				.setContentIntent(launchAppPendingIntent);
 		notificationBuilder=setVisibilityPublic(notificationBuilder);
-		startForeground(NOTIFICATION_ID, notificationBuilder.build());
+		Log.d(TAG,"started forground");
+		Log.d(TAG,"context is "+mContext);
+		if (mContext!=null){
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+				if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.FOREGROUND_SERVICE) == PackageManager.PERMISSION_GRANTED){
+					startForeground(NOTIFICATION_ID, notificationBuilder.build());
+				}
+			}else {
+				startForeground(NOTIFICATION_ID, notificationBuilder.build());
+			}
+
+
+		}
+
 
 	}
 	private NotificationCompat.Builder setVisibilityPublic(NotificationCompat.Builder inotificationBuilder){

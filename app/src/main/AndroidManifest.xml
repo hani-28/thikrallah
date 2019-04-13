@@ -3,11 +3,13 @@
     package="com.HMSolutions.thikrallah">
 
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="com.android.vending.BILLING" />
+
     <permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -17,7 +19,8 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
 
@@ -26,11 +29,11 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name="com.HMSolutions.thikrallah.MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,19 +44,15 @@
 
         <activity
             android:name="com.HMSolutions.thikrallah.PreferenceActivity"
-            android:theme="@style/AppTheme"
-            >
-        </activity>
+            android:theme="@style/AppTheme"></activity>
         <activity
             android:name="com.HMSolutions.thikrallah.MediaBrowser"
-            android:theme="@style/Theme.AppCompat"
-            >
-        </activity>
+            android:theme="@style/Theme.AppCompat"></activity>
         <activity
             android:name="com.HMSolutions.thikrallah.hisnulmuslim.DuaGroupActivity"
-            android:theme="@style/AppTheme.Base"
             android:label="@string/title_activity_dua_list"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.Base">
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
@@ -61,13 +60,13 @@
         <activity
             android:name="com.HMSolutions.thikrallah.hisnulmuslim.DuaDetailActivity"
             android:label="@string/title_activity_dua_detail"
-            android:theme="@style/AppTheme.Base"
-            android:parentActivityName="com.HMSolutions.thikrallah.hisnulmuslim.DuaGroupActivity"></activity>
+            android:parentActivityName="com.HMSolutions.thikrallah.hisnulmuslim.DuaGroupActivity"
+            android:theme="@style/AppTheme.Base"></activity>
         <activity
             android:name="com.HMSolutions.thikrallah.hisnulmuslim.AboutActivity"
             android:label="@string/title_activity_about"
-            android:theme="@style/AppTheme.Base"
-            android:parentActivityName="com.HMSolutions.thikrallah.hisnulmuslim.DuaGroupActivity">
+            android:parentActivityName="com.HMSolutions.thikrallah.hisnulmuslim.DuaGroupActivity"
+            android:theme="@style/AppTheme.Base">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.HMSolutions.thikrallah.hisnulmuslim.DuaGroupActivity" />
@@ -75,8 +74,8 @@
         <activity
             android:name="com.HMSolutions.thikrallah.hisnulmuslim.BookmarksGroupActivity"
             android:label="@string/title_activity_bookmarks"
-            android:theme="@style/AppTheme.Base"
-            android:parentActivityName="com.HMSolutions.thikrallah.hisnulmuslim.DuaGroupActivity">
+            android:parentActivityName="com.HMSolutions.thikrallah.hisnulmuslim.DuaGroupActivity"
+            android:theme="@style/AppTheme.Base">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.HMSolutions.thikrallah.hisnulmuslim.DuaGroupActivity" />
@@ -84,29 +83,30 @@
         <activity
             android:name="com.HMSolutions.thikrallah.hisnulmuslim.BookmarksDetailActivity"
             android:label="@string/title_activity_dua_detail"
-            android:theme="@style/AppTheme.Base"
-            android:parentActivityName="com.HMSolutions.thikrallah.hisnulmuslim.BookmarksGroupActivity"></activity>
+            android:parentActivityName="com.HMSolutions.thikrallah.hisnulmuslim.BookmarksGroupActivity"
+            android:theme="@style/AppTheme.Base"></activity>
         <activity
             android:name="com.HMSolutions.thikrallah.hisnulmuslim.PreferencesActivity"
-            android:theme="@style/AppTheme.Base"
-            android:label="@string/title_activity_preferences"></activity>
-/home/hani/AndroidStudioProjects/ThikrAllah/app/build
+            android:label="@string/title_activity_preferences"
+            android:theme="@style/AppTheme.Base"></activity>
+
         <service
             android:name="com.HMSolutions.thikrallah.Notification.ThikrService"
             android:enabled="true" />
-        
+
         <service
             android:name="com.HMSolutions.thikrallah.ThikrMediaPlayerService"
             android:enabled="true" />
-         <service
+        <service
             android:name="com.HMSolutions.thikrallah.Notification.ChatHeadService"
             android:enabled="true" />
         <service
             android:name="com.HMSolutions.thikrallah.Notification.AthanTimerService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
             android:enabled="true" />
 
         <receiver android:name="com.HMSolutions.thikrallah.Notification.ThikrAlarmReceiver" />
-        <receiver android:name="com.HMSolutions.thikrallah.Notification.ThikrBootReceiver" >
+        <receiver android:name="com.HMSolutions.thikrallah.Notification.ThikrBootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="com.HMSolutions.thikrallah.Notification.ThikrBootReceiver.android.action.broadcast" />

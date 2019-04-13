@@ -18,7 +18,10 @@ import com.HMSolutions.thikrallah.Notification.ThikrMediaBroadcastReciever;
 
 import android.*;
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
@@ -29,6 +32,7 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.Configuration;
 
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -43,16 +47,16 @@ import android.os.Messenger;
 import android.os.PowerManager;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
-import android.support.v7.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.os.Vibrator;
 import android.widget.Toast;
+import android.support.v4.media.app.NotificationCompat.MediaStyle;
 
 public class ThikrMediaPlayerService extends Service implements OnCompletionListener,
         AudioManager.OnAudioFocusChangeListener {
@@ -65,6 +69,9 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     public static final int MEDIA_PLAYER_INNCREMENT = 6;
     public static final int MEDIA_PLAYER_CHANGE_VOLUME = 7;
     public static final int MEDIA_PLAYER_RESUME = 8;
+
+
+
     AudioManager am;
     private boolean StayPaused=false;
     int play_count=0;
@@ -242,8 +249,22 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 0, resultIntent, PendingIntent.FLAG_CANCEL_CURRENT
         );
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            String NOTIFICATION_CHANNEL_ID = "ThikrMediaPlayerService";
+            String channelName = this.getResources().getString(R.string.remember_notification);
+            NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+            chan.setSound(null,null);
+            chan.setLightColor(Color.BLUE);
+            chan.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            assert manager != null;
+            manager.createNotificationChannel(chan);
+            notificationBuilder = new NotificationCompat.Builder(this,NOTIFICATION_CHANNEL_ID);
+        }else{
+            notificationBuilder = new NotificationCompat.Builder(this);
+        }
 
-        notificationBuilder = new NotificationCompat.Builder(this);
+
 
         notificationBuilder
                 .setSmallIcon(R.drawable.ic_launcher)
@@ -265,35 +286,35 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         return inotificationBuilder;
     }
 
+    @SuppressLint("RestrictedApi")
     private void updateActions() {
-        boolean isHuawei = (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1 ||
-                android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP)
-                && (Build.MANUFACTURER.toLowerCase(Locale.getDefault()).contains("huawei")&&
-                (Build.MODEL.toLowerCase().contains("u6582")
-                ||Build.MODEL.toLowerCase().contains("l6753")));
-
-
         if (notificationBuilder != null) {
-            if (!isHuawei){//known issue with huawei devices.
-                notificationBuilder.mActions.clear();
-                if (this.isPlaying()) {
-                    Log.d(TAG, "show pause & stop");
-                    addAction(notificationBuilder, "pause", R.drawable.ic_media_pause);
-                    addAction(notificationBuilder, "stop", R.drawable.ic_media_stop);
-                    notificationBuilder.setStyle(new NotificationCompat.MediaStyle()
-                            .setShowActionsInCompactView(new int[]{0,1})
-                            .setMediaSession(mediaSession.getSessionToken()));
-                } else {
-                    Log.d(TAG, "show play");
-                    addAction(notificationBuilder, "play", R.drawable.ic_media_play);
-                    addAction(notificationBuilder, "stop", R.drawable.ic_media_stop);
-                    notificationBuilder.setStyle(new NotificationCompat.MediaStyle()
-                            .setShowActionsInCompactView(new int[]{0})
-                            .setMediaSession(mediaSession.getSessionToken()));
-                }
-                mediaSession.setActive(true);
+
+            notificationBuilder.mActions.clear();
+            if (this.isPlaying()) {
+                Log.d(TAG, "show pause & stop");
+                addAction(notificationBuilder, "pause", R.drawable.ic_media_pause);
+                addAction(notificationBuilder, "stop", R.drawable.ic_media_stop);
+                notificationBuilder.setStyle(new MediaStyle()
+                        .setShowActionsInCompactView(new int[]{0,1})
+                        .setMediaSession(mediaSession.getSessionToken()));
+            } else {
+                Log.d(TAG, "show play");
+                addAction(notificationBuilder, "play", R.drawable.ic_media_play);
+                addAction(notificationBuilder, "stop", R.drawable.ic_media_stop);
+                notificationBuilder.setStyle(new MediaStyle()
+                        .setShowActionsInCompactView(new int[]{0})
+                        .setMediaSession(mediaSession.getSessionToken()));
             }
-            startForeground(NOTIFICATION_ID, notificationBuilder.build());
+            mediaSession.setActive(true);
+
+            if (this!=null){
+                Log.d(TAG,"starting thikrmediaplayerservice notification on foregtound");
+                startForeground(NOTIFICATION_ID, notificationBuilder.build());
+                Log.d(TAG,"Finished starting thikrmediaplayerservice notification on foregtound");
+            }
+
+
 
         }
 
@@ -321,6 +342,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
         Bundle data = intent.getExtras();
         mcontext=this.getApplicationContext();
         this.isUserAction=data.getBoolean("isUserAction",false);
@@ -341,6 +363,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
             this.setThikrType(intent.getExtras().getString("com.HMSolutions.thikrallah.datatype", null));
         }
+        initNotification();
         if(getThikrType()==null){
             //TODO:when does this case happen
             Log.d(TAG,"thikrtype is null... why?");
@@ -369,7 +392,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             this.updateAllAlarms();
         }
         Log.d(TAG,"onStartCommand called"+intent.getExtras().toString());
-        initNotification();
+
 
         switch (action) {
             case MEDIA_PLAYER_PAUSE:

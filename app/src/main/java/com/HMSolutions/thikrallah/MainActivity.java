@@ -105,7 +105,20 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
 
     private InterstitialAd interstitial;
 
-
+    private static final Intent[] POWERMANAGER_INTENTS = {
+            new Intent().setComponent(new ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity")),
+            new Intent().setComponent(new ComponentName("com.letv.android.letvsafe", "com.letv.android.letvsafe.AutobootManageActivity")),
+            new Intent().setComponent(new ComponentName("com.huawei.systemmanager", "com.huawei.systemmanager.optimize.process.ProtectActivity")),
+            new Intent().setComponent(new ComponentName("com.huawei.systemmanager", "com.huawei.systemmanager.appcontrol.activity.StartupAppControlActivity")),
+            new Intent().setComponent(new ComponentName("com.coloros.safecenter", "com.coloros.safecenter.permission.startup.StartupAppListActivity")),
+            new Intent().setComponent(new ComponentName("com.coloros.safecenter", "com.coloros.safecenter.startupapp.StartupAppListActivity")),
+            new Intent().setComponent(new ComponentName("com.oppo.safe", "com.oppo.safe.permission.startup.StartupAppListActivity")),
+            new Intent().setComponent(new ComponentName("com.iqoo.secure", "com.iqoo.secure.ui.phoneoptimize.AddWhiteListActivity")),
+            new Intent().setComponent(new ComponentName("com.iqoo.secure", "com.iqoo.secure.ui.phoneoptimize.BgStartUpManager")),
+            new Intent().setComponent(new ComponentName("com.vivo.permissionmanager", "com.vivo.permissionmanager.activity.BgStartUpManagerActivity")),
+            new Intent().setComponent(new ComponentName("com.samsung.android.lool", "com.samsung.android.sm.ui.battery.BatteryActivity")),
+            new Intent().setComponent(new ComponentName("com.htc.pitroad", "com.htc.pitroad.landingpage.activity.LandingPageActivity")),
+            new Intent().setComponent(new ComponentName("com.asus.mobilemanager", "com.asus.mobilemanager.MainActivity"))};
     SharedPreferences mPrefs;
     Activity activity = this;
     private static boolean mIsPremium = false;
@@ -133,21 +146,7 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
         }
     }
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    public Action getIndexApiAction() {
-        Thing object = new Thing.Builder()
-                .setName("Main Page") // TODO: Define a title for the content shown.
-                // TODO: Make sure this auto-generated URL is correct.
-                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
-                .build();
-        return new Action.Builder(Action.TYPE_VIEW)
-                .setObject(object)
-                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
-                .build();
-    }
+
 
     class IncomingHandler extends Handler {
         @Override
@@ -305,7 +304,12 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
 
             data.putBoolean("isUserAction", true);
             Log.d(TAG, "service to start");
-            this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                this.startForegroundService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+            } else {
+                this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+            }
+
             bindtoMediaService();
             this.requestMediaServiceStatus();
 
@@ -389,7 +393,7 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
 
     }
     private void requestPermissions(){
-
+        List<String> listPermissionsNeeded = new ArrayList<>();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(this)) {
                 Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
@@ -397,6 +401,15 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
                 startActivityForResult(intent, 9999);
             }
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            int foregroundservice_permission = ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.FOREGROUND_SERVICE);
+            if (foregroundservice_permission != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(Manifest.permission.FOREGROUND_SERVICE);
+                Log.d(TAG,"forground_service permission requested");
+            }
+        }
+
 
         int mediacontrolPermission = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.MEDIA_CONTENT_CONTROL);
@@ -406,7 +419,7 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
 
         //ask for this when needed and not here
        // int writePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        List<String> listPermissionsNeeded = new ArrayList<>();
+
 
         if (mediacontrolPermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.MEDIA_CONTENT_CONTROL);
@@ -419,6 +432,7 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
         if (PhoneStatePermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.READ_PHONE_STATE);
         }
+
        /* if (writePermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
@@ -520,10 +534,44 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
             mPrefs.edit().putLong("time_at_last_ad", System.currentTimeMillis()).commit();
             launchFragment(new TutorialFragment(), null, "TutorialFragment");
             timeOperation("timing", "launching tutorial freagment");
+        }
+        if(!mPrefs.getBoolean("protected",false)) {
+            for (final Intent intent : POWERMANAGER_INTENTS)
+                if (getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null) {
 
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(this.getResources().getString(R.string.autostart)).setMessage(this.getResources().getString(R.string.autostart_message))
+                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    startActivity(intent);
+                                    mPrefs.edit().putBoolean("protected", true).apply();
+
+                                }
+                            })
+                            .setCancelable(false)
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            })
+                            .create().show();
+                    break;
+                }
         }
 
-        this.startService(new Intent(this,AthanTimerService.class));
+
+        boolean isTimer=mPrefs.getBoolean("foreground_athan_timer",true);
+
+        if(isTimer){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(new Intent(this,AthanTimerService.class));
+            } else {
+                this.startService(new Intent(this,AthanTimerService.class));
+            }
+        }
+
+
         interstitial = new InterstitialAd(this);
         interstitial.setAdUnitId(getResources().getText(R.string.ad_unit_id_interstital).toString());
         interstitial.setAdListener(adsListener);
@@ -593,6 +641,7 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
             startActivityForResult(intent, 0);
         }
         timeOperation("timing", "remainder of oncreate ");
+
 
     }
 

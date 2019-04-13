@@ -24,7 +24,7 @@ import com.HMSolutions.thikrallah.hisnulmuslim.model.Dua;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
+@SuppressWarnings("unchecked")
 public class DuaGroupAdapter extends BaseAdapter implements Filterable {
     private Context mContext;
     private LayoutInflater mInflater;

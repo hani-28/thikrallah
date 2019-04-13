@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -97,7 +98,11 @@ public class ThikrMediaBroadcastReciever extends BroadcastReceiver {
     public void sendActionToMediaService(Bundle data){
         if (data.getInt("ACTION",-100)!=-100){
             Log.d(TAG,"sendActionToMediaService called with action"+data.getInt("action",-100));
-            context.startService(new Intent(context, ThikrMediaPlayerService.class).putExtras(data));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(new Intent(context, ThikrMediaPlayerService.class).putExtras(data));
+            } else {
+                context.startService(new Intent(context, ThikrMediaPlayerService.class).putExtras(data));
+            }
         }
 
     }

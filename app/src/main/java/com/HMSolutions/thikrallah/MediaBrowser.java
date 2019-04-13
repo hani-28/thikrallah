@@ -5,7 +5,8 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v7.app.ActionBarActivity;
+//import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,7 +22,7 @@ import java.util.List;
 /**
  * Created by hani on 6/4/16.
  */
-public class MediaBrowser extends ActionBarActivity {
+public class MediaBrowser extends AppCompatActivity {
     private File file;
     private List<String> myList;
     private ListView listView;
