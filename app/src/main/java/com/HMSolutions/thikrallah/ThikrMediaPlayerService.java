@@ -79,7 +79,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     //public int counter=0;
     public int currentThikrCounter = 0;
     private boolean isPaused;
-    private int NOTIFICATION_ID = 23;
+    private int NOTIFICATION_ID = 74;
     private int currentPlaying;
     private String ThikrType;
     private MediaSessionCompat mediaSession;

@@ -36,7 +36,7 @@ import java.util.TimerTask;
 public class AthanTimerService extends Service {
 	NotificationCompat.Builder notificationBuilder;
     String TAG = "AthanTimerService";
-    private final static int NOTIFICATION_ID=2323;
+    private final static int NOTIFICATION_ID=54;
 	private Context mContext;
 
 

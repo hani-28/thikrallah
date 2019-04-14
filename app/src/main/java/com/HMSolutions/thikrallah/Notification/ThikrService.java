@@ -42,7 +42,7 @@ import android.util.Log;
 
 public class ThikrService extends IntentService  {
     String TAG = "ThikrService";
-	private final static int NOTIFICATION_ID=0;
+	private final static int NOTIFICATION_ID=4;
     private AudioManager am;
     private Intent calling_intent;
     Context mcontext;
