@@ -229,7 +229,7 @@ public class PrayTime {
             }else{
                 PreferenceManager.getDefaultSharedPreferences(context).edit().putString("calc_method",Integer.toString(CALC_METHOD_MWL)).commit();
                 Log.d(TAG,"calc method: committed");
-                return default_method;
+                return CALC_METHOD_MWL;
             }
 
         }

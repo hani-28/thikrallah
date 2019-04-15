@@ -544,8 +544,15 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
                             .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    startActivity(intent);
-                                    mPrefs.edit().putBoolean("protected", true).apply();
+                                    try{
+                                        startActivity(intent);
+                                    }catch(Exception e){
+                                        e.printStackTrace();
+                                    }finally{
+                                        mPrefs.edit().putBoolean("protected", true).apply();
+                                    }
+
+
 
                                 }
                             })
