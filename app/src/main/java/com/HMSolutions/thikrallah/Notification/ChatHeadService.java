@@ -253,8 +253,10 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 	public void onDestroy() {
 		super.onDestroy();
 		Log.d(TAG,"ondestroy called");
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.cancel(NOTIFICATION_ID);
-		if (chatHead != null) ((WindowManager) getSystemService(WINDOW_SERVICE)).removeView(chatHead);
+		if (chatHead != null){
+			windowManager.removeView(chatHead);
+		}
+		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		mNotificationManager.cancel(NOTIFICATION_ID);
 	}
 }

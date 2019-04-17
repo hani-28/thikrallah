@@ -17,7 +17,7 @@ public class ThikrAlarmReceiver extends BroadcastReceiver {
 	   Intent intent2=new Intent(context, ThikrService.class).putExtras(data);
        //startWakefulService(context,intent2);
        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
+//TODO:change below to use jobservice instead of service and use job scheduler
            context.startService(intent2);
        } else {
            context.startService(intent2);

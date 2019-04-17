@@ -323,26 +323,27 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
     private void addAction(NotificationCompat.Builder builder, String label, int icon) {
 
-        Intent recieverIntent = new Intent(this, ThikrMediaBroadcastReciever.class);
-        recieverIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
+     //   Intent recieverIntent = new Intent(this, ThikrMediaBroadcastReciever.class);
+       // recieverIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Intent intent = new Intent(label).setClass(this.getApplicationContext(), ThikrMediaBroadcastReciever.class);
+        intent.putExtras(callingintent.getExtras());
         PendingIntent RecieverPendingIntent = PendingIntent.getBroadcast(this, 1,
-                new Intent(label).setClass(this.getApplicationContext(), ThikrMediaBroadcastReciever.class), PendingIntent.FLAG_CANCEL_CURRENT);
+                intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-        Log.d(TAG, RecieverPendingIntent.getTargetPackage());
 
-        recieverIntent.setAction(label);
-        PendingIntent mediaPendingIntent = PendingIntent.getActivity(this,
-                0, recieverIntent, PendingIntent.FLAG_CANCEL_CURRENT
-        );
+       // Log.d(TAG, RecieverPendingIntent.getTargetPackage());
+
+       //recieverIntent.setAction(label);
+
+       // PendingIntent mediaPendingIntent = PendingIntent.getActivity(this,0, recieverIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         builder.addAction(new NotificationCompat.Action(icon, label, RecieverPendingIntent));
 
 
     }
-
+    Intent callingintent;
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
+        callingintent=intent;
         Bundle data = intent.getExtras();
         mcontext=this.getApplicationContext();
         this.isUserAction=data.getBoolean("isUserAction",false);
@@ -405,6 +406,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
                 this.pausePlayer();
 
+                updateActions();
                 updateActions();
                 break;
             case MEDIA_PLAYER_INNCREMENT:
@@ -824,31 +826,37 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     }
 
     private String getThikrTypeString(String thikTypeConstant) {
-        switch (thikTypeConstant){
-            case MainActivity.DATA_TYPE_ATHAN1:
-                return this.getString(R.string.prayer1);
+        if (thikTypeConstant!=null){
+            switch (thikTypeConstant){
+                case MainActivity.DATA_TYPE_ATHAN1:
+                    return this.getString(R.string.prayer1);
 
-            case MainActivity.DATA_TYPE_ATHAN2:
-                return this.getString(R.string.prayer2);
+                case MainActivity.DATA_TYPE_ATHAN2:
+                    return this.getString(R.string.prayer2);
 
-            case MainActivity.DATA_TYPE_ATHAN3:
-                return this.getString(R.string.prayer3);
+                case MainActivity.DATA_TYPE_ATHAN3:
+                    return this.getString(R.string.prayer3);
 
-            case MainActivity.DATA_TYPE_ATHAN4:
-                return this.getString(R.string.prayer4);
-            case MainActivity.DATA_TYPE_ATHAN5:
-                return this.getString(R.string.prayer5);
-            case MainActivity.DATA_TYPE_DAY_THIKR:
-                return this.getString(R.string.morningThikr);
-            case MainActivity.DATA_TYPE_NIGHT_THIKR:
-                return this.getString(R.string.nightThikr);
-            case MainActivity.DATA_TYPE_QURAN_KAHF:
-                return this.getString(R.string.surat_alkahf);
-            case MainActivity.DATA_TYPE_QURAN_MULK:
-                return this.getString(R.string.surat_almulk);
-            default:
-                return "تذكير بالله";
+                case MainActivity.DATA_TYPE_ATHAN4:
+                    return this.getString(R.string.prayer4);
+                case MainActivity.DATA_TYPE_ATHAN5:
+                    return this.getString(R.string.prayer5);
+                case MainActivity.DATA_TYPE_DAY_THIKR:
+                    return this.getString(R.string.morningThikr);
+                case MainActivity.DATA_TYPE_NIGHT_THIKR:
+                    return this.getString(R.string.nightThikr);
+                case MainActivity.DATA_TYPE_QURAN_KAHF:
+                    return this.getString(R.string.surat_alkahf);
+                case MainActivity.DATA_TYPE_QURAN_MULK:
+                    return this.getString(R.string.surat_almulk);
+                default:
+                    return this.getString(R.string.remember_notification);
+
+            }
+        }else{
+            return this.getString(R.string.remember_notification);
         }
+
 
 
     }

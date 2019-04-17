@@ -53,7 +53,7 @@ public class ThikrService extends IntentService  {
 	@Override
 	protected void onHandleIntent(Intent intent) {
         calling_intent=intent;
-        //TODO: Add channels here
+        //TODO: Add channels here?
         mcontext=this.getApplicationContext();
         //update all alarms
         Intent boot_reciever = new Intent("com.HMSolutions.thikrallah.Notification.ThikrBootReceiver.android.action.broadcast");
@@ -117,7 +117,7 @@ public class ThikrService extends IntentService  {
 			int reminderType=Integer.parseInt(sharedPrefs.getString("RemindmeThroughTheDayType", "1"));
 			boolean isQuietTime=isTimeNowQuietTime();
 			if (((reminderType==1 ||reminderType==2)&&isQuietTime==false&&(thikr.isBuiltIn()==true||thikr.getFile().length()>2))&&(am.getRingerMode() == AudioManager.RINGER_MODE_NORMAL||isRespectMute==false)){
-                sharedPrefs.edit().putString("thikrType", MainActivity.DATA_TYPE_GENERAL_THIKR).commit();
+                sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_GENERAL_THIKR).commit();
                 data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAY);
                 Log.d(TAG,"fileNumber sent through intent is "+fileNumber);
                 data.putInt("FILE", fileNumber);
@@ -161,7 +161,7 @@ public class ThikrService extends IntentService  {
 			}else{
 				//new here
 
-				sharedPrefs.edit().putString("thikrType", MainActivity.DATA_TYPE_DAY_THIKR).commit();
+				sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_DAY_THIKR).commit();
 
 				data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAYALL);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -198,7 +198,7 @@ public class ThikrService extends IntentService  {
 				mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());	
 			}else{
 
-				sharedPrefs.edit().putString("thikrType", MainActivity.DATA_TYPE_NIGHT_THIKR).commit();
+				sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_NIGHT_THIKR).commit();
 				data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAYALL);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     this.startForegroundService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
@@ -240,7 +240,7 @@ public class ThikrService extends IntentService  {
             }else{
                 //new here
 
-                sharedPrefs.edit().putString("thikrType", MainActivity.DATA_TYPE_QURAN_MULK).commit();
+                sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_QURAN_MULK).commit();
 
                 data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAYALL);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -281,7 +281,7 @@ public class ThikrService extends IntentService  {
             }else{
                 //new here
 
-                sharedPrefs.edit().putString("thikrType", MainActivity.DATA_TYPE_QURAN_KAHF).commit();
+                sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_QURAN_KAHF).commit();
 
                 data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAYALL);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -340,7 +340,7 @@ public class ThikrService extends IntentService  {
                 }
 
             }else{
-                sharedPrefs.edit().putString("thikrType", thikrType).commit();
+                sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", thikrType).commit();
                 data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAY);
                 int file=reminderType;
                 Log.d(TAG,"fileNumber sent through intent is "+file);

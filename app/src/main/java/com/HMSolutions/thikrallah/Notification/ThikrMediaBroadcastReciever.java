@@ -11,7 +11,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import com.HMSolutions.thikrallah.ThikrMediaPlayerService;
 
-
+//TODO:ADD com.HMSolutions.thikrallah.datatype to databundle?
 public class ThikrMediaBroadcastReciever extends BroadcastReceiver {
         private Context context;
     String TAG = "ThikrMediaBroadcastRcvr";
@@ -28,6 +28,7 @@ public class ThikrMediaBroadcastReciever extends BroadcastReceiver {
             String intentAction = intent.getAction();
             data=new Bundle();
             Log.d(TAG,"onReceive called");
+            data.putAll(intent.getExtras());
             data.putBoolean("isUserAction",true);
             Log.i("mediastyle", intentAction.toString() + " happended");
             if (Intent.ACTION_MEDIA_BUTTON.equals(intent.getAction())) {
