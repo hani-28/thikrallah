@@ -1,6 +1,8 @@
 package com.HMSolutions.thikrallah;
 
 
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -470,6 +472,7 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         requestPermissions();
         timeOperation("timing", "oncreate_started");
         Log.d(TAG, "oncreate 1");

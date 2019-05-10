@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+   <issue id="InvalidPackage">
+      <ignore regexp=".*okio.*"/>
+   </issue>
+
+   <issue id="UnusedResources">
+      <ignore regexp="com_crashlytics_export_strings.xml"/>
+   </issue>
+
+   <issue id="TypographyDashes">
+      <ignore regexp="com_crashlytics_export_strings.xml"/>
+   </issue>
+
+   <issue id="MissingTranslation" severity="warning"/>
+
+   <issue id="UnusedAttribute">
+      <ignore regexp="shortcuts.xml"/>
+   </issue>
+</lint>

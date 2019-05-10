@@ -193,7 +193,7 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 			}
 
 
-			params.gravity = Gravity.CENTER | Gravity.CENTER;
+			params.gravity = Gravity.CENTER;
 			params.x = 0;
 			params.y = 100;
 

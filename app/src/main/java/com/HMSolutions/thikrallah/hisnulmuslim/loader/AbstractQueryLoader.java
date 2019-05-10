@@ -1,7 +1,7 @@
 package com.HMSolutions.thikrallah.hisnulmuslim.loader;
 
 import android.content.Context;
-import android.support.v4.content.AsyncTaskLoader;
+import androidx.loader.content.AsyncTaskLoader;
 
 import com.HMSolutions.thikrallah.hisnulmuslim.database.ExternalDbOpenHelper;
 

@@ -1,1 +1,7 @@
 include ':app'
+include ':Libraries:quran_android-master'
+include ':Libraries:quran_android-master:common:data'
+include ':Libraries:quran_android-master:common:networking'
+include ':Libraries:quran_android-master:common:pages'
+include ':Libraries:quran_android-master:common:search'
+include ':Libraries:quran_android-master:pages:madani'

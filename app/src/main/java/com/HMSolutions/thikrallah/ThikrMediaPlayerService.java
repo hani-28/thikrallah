@@ -47,16 +47,17 @@ import android.os.Messenger;
 import android.os.PowerManager;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
-import android.support.v4.app.NotificationCompat;
+import androidx.core.app.NotificationCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.os.Vibrator;
 import android.widget.Toast;
-import android.support.v4.media.app.NotificationCompat.MediaStyle;
+import androidx.media.app.NotificationCompat.MediaStyle;
+//import android.support.v4.media.app.NotificationCompat.MediaStyle;
 
 public class ThikrMediaPlayerService extends Service implements OnCompletionListener,
         AudioManager.OnAudioFocusChangeListener {
@@ -308,11 +309,11 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             }
             mediaSession.setActive(true);
 
-            if (this!=null){
-                Log.d(TAG,"starting thikrmediaplayerservice notification on foregtound");
-                startForeground(NOTIFICATION_ID, notificationBuilder.build());
-                Log.d(TAG,"Finished starting thikrmediaplayerservice notification on foregtound");
-            }
+
+            Log.d(TAG,"starting thikrmediaplayerservice notification on foregtound");
+            startForeground(NOTIFICATION_ID, notificationBuilder.build());
+            Log.d(TAG,"Finished starting thikrmediaplayerservice notification on foregtound");
+
 
 
 
@@ -543,8 +544,8 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
             if (fileNumber!=-1){
                 Log.d(TAG, "file number is " + fileNumber);
-                AssetFileDescriptor afd = this.getApplicationContext().getAssets().openFd(this.getMediaFolderName() + "/" + (fileNumber) + ".mp3");
-                Log.d(TAG, "file path  is " + this.getMediaFolderName() + "/" + (fileNumber) + ".mp3");
+                AssetFileDescriptor afd = this.getApplicationContext().getAssets().openFd(this.getMediaFolderName() + "/" + fileNumber + ".mp3");
+                Log.d(TAG, "file path  is " + this.getMediaFolderName() + "/" + fileNumber + ".mp3");
                 player.reset();
                 player.setAudioStreamType(getStreamType());
                 player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
@@ -629,7 +630,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
 
         } catch (IOException e) {
-
+            Log.e(TAG,e.getMessage());
             e.printStackTrace();
         }
     }
@@ -905,7 +906,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
     }
 
-
+    @Override
     public void onAudioFocusChange(int focusChange) {
         switch (focusChange) {
             case AudioManager.AUDIOFOCUS_GAIN:
@@ -1150,6 +1151,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 }
             }catch(IllegalStateException e){
                 e.printStackTrace();
+                Log.e(TAG,e.getMessage());
             }
 
 

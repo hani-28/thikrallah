@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:orientation="vertical"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+    >
+
+  <ImageView
+      android:id="@+id/preview"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:scaleType="centerCrop"
+      />
+
+  <com.google.android.material.floatingactionbutton.FloatingActionButton
+      android:id="@+id/fab"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom|end"
+      android:layout_marginEnd="16dp"
+      android:layout_marginRight="16dp"
+      android:layout_marginBottom="92dp"
+      android:src="@drawable/ic_done"
+    />
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="120dp"
+      android:padding="16dp"
+      android:orientation="vertical"
+      android:layout_gravity="bottom"
+      android:background="@color/overlay_panel">
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/PageTypeTitle"
+        tools:text="Title"
+        />
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/PageTypeDescription"
+        tools:text="Description"
+        />
+  </LinearLayout>
+</FrameLayout>

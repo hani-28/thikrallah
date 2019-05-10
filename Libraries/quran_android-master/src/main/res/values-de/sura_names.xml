@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string-array name="sura_names">
+    <item>Al-Fātiḥah</item>
+    <item>Al-Baqarah</item>
+    <item>Āl ʿImrān</item>
+    <item>An-Nisāʾ</item>
+    <item>Al-Māʾidah</item>
+    <item>Al-Anʿām</item>
+    <item>Al-Aʿrāf</item>
+    <item>Al-Anfāl</item>
+    <item>At-Tauwbah</item>
+    <item>Yūnus</item>
+    <item>Hūd</item>
+    <item>Yūsuf</item>
+    <item>Ar-Raʿd</item>
+    <item>Ibrāhīm</item>
+    <item>Al-Ḥiǧr</item>
+    <item>An-Naḥl</item>
+    <item>Al-Isrāʾ</item>
+    <item>Al-Kahf</item>
+    <item>Maryam</item>
+    <item>Ṭā-Hā</item>
+    <item>Al-Anbiyāʾ</item>
+    <item>Al-Ḥaǧǧ</item>
+    <item>Al-Muʾminūn</item>
+    <item>An-Nūr</item>
+    <item>Al-Furqān</item>
+    <item>Aš-Šuʿarāʾ</item>
+    <item>An-Naml</item>
+    <item>Al-Qaṣaṣ</item>
+    <item>Al-ʿAnkabūt</item>
+    <item>Ar-Rūm</item>
+    <item>Luqmān</item>
+    <item>As-Saǧdah</item>
+    <item>Al-Aḥzāb</item>
+    <item>Sabaʾ</item>
+    <item>Fāṭir</item>
+    <item>Yā-Sīn</item>
+    <item>Aṣ-Ṣāffāt</item>
+    <item>Ṣād</item>
+    <item>Az-Zumar</item>
+    <item>Ġāfir</item>
+    <item>Fuṣṣilat</item>
+    <item>Aš-Šūrā</item>
+    <item>Az-Zuḫruf</item>
+    <item>Ad-Duḫān</item>
+    <item>Al-Ǧāṯiyah</item>
+    <item>Al-Aḥqāf</item>
+    <item>Muḥammad</item>
+    <item>Al-Fatḥ</item>
+    <item>Al-Ḥuǧurāt</item>
+    <item>Qāf</item>
+    <item>Aḏ-Ḏāriyāt</item>
+    <item>Aṭ-Ṭūr</item>
+    <item>An-Naǧm</item>
+    <item>Al-Qamar</item>
+    <item>Ar-Raḥmān</item>
+    <item>Al-Wāqiʿah</item>
+    <item>Al-Ḥadīd</item>
+    <item>Al-Muǧādalah</item>
+    <item>Al-Ḥašr</item>
+    <item>Al-Mumtaḥinah</item>
+    <item>Aṣ-Ṣaff</item>
+    <item>Al-Ǧumʿah</item>
+    <item>Al-Munāfiqūn</item>
+    <item>At-Taġābun</item>
+    <item>Aṭ-Ṭalāq</item>
+    <item>At-Taḥrīm</item>
+    <item>Al-Mulk</item>
+    <item>Al-Qalam</item>
+    <item>Al-Ḥāqqah</item>
+    <item>Al-Maʿāriǧ</item>
+    <item>Nūḥ</item>
+    <item>Al-Ǧinn</item>
+    <item>Al-Muzzammil</item>
+    <item>Al-Muddaṯṯir</item>
+    <item>Al-Qiyāmah</item>
+    <item>Al-Insān</item>
+    <item>Al-Mursalāt</item>
+    <item>An-Nabaʾ</item>
+    <item>An-Nāziʿāt</item>
+    <item>ʿAbasa</item>
+    <item>At-Takwīr</item>
+    <item>Al-Infiṭār</item>
+    <item>Al-Muṭaffifīn</item>
+    <item>Al-Inšiqāq</item>
+    <item>Al-Burūǧ</item>
+    <item>Aṭ-Ṭāriq</item>
+    <item>Al-Aʿlā</item>
+    <item>Al-Ġāšiyah</item>
+    <item>Al-Faǧr</item>
+    <item>Al-Balad</item>
+    <item>Aš-Šams</item>
+    <item>Al-Layl</item>
+    <item>Aḍ-Ḍuḥā</item>
+    <item>Aš-Šarḥ</item>
+    <item>At-Tīn</item>
+    <item>Al-ʿAlaq</item>
+    <item>Al-Qadr</item>
+    <item>Al-Bayyinah</item>
+    <item>Az-Zalzalah</item>
+    <item>Al-ʿĀdiyāt</item>
+    <item>Al-Qāriʿah</item>
+    <item>At-Takāṯur</item>
+    <item>Al-ʿAṣr</item>
+    <item>Al-Humazah</item>
+    <item>Al-Fīl</item>
+    <item>Qurayš</item>
+    <item>Al-Māʿūn</item>
+    <item>Al-Kauwṯar</item>
+    <item>Al-Kāfirūn</item>
+    <item>An-Naṣr</item>
+    <item>Al-Masad</item>
+    <item>Al-Iḫlāṣ</item>
+    <item>Al-Falaq</item>
+    <item>An-Nās</item>
+  </string-array>
+
+  <string-array name="sura_names_translation">
+    <item>Die Eröffnende</item>
+    <item>Die Kuh</item>
+    <item>Die Sippe ʿImrāns</item>
+    <item>Die Frauen</item>
+    <item>Der Tisch (mit Speisen)</item>
+    <item>Das Vieh</item>
+    <item>Die Höhen</item>
+    <item>Die Kriegsbeute</item>
+    <item>Die Reue</item>
+    <item>Jonas</item>
+    <item>Hūd</item>
+    <item>Josef</item>
+    <item>Der Donner</item>
+    <item>Abraham</item>
+    <item>Das steinige Land</item>
+    <item>Die Bienen</item>
+    <item>Die Nachtreise</item>
+    <item>Die Höhle</item>
+    <item>Maria</item>
+    <item>(Die Buchstaben) Ṭā-Hā</item>
+    <item>Die Propheten</item>
+    <item>Die Pilgerfahrt</item>
+    <item>Die Gläubigen</item>
+    <item>Das Licht</item>
+    <item>Die Unterscheidung</item>
+    <item>Die Dichter</item>
+    <item>Die Ameisen</item>
+    <item>Die Geschichte</item>
+    <item>Die Spinne</item>
+    <item>Die Römer</item>
+    <item>Luqmān</item>
+    <item>Die Niederwerfung</item>
+    <item>Die Verbündeten</item>
+    <item>Saba (Königreich aus der Antike)</item>
+    <item>Der Schöpfer (der Existenz)</item>
+    <item>(Die Buchstaben) Yā-Sīn</item>
+    <item>Die Sich-Reihenden</item>
+    <item>(Der Buchstabe) Ṣād</item>
+    <item>Die Gruppen</item>
+    <item>Der Vergebende</item>
+    <item>Sie sind ausführlich erläutert (die Verse)</item>
+    <item>Die Beratung</item>
+    <item>Die Verzierung</item>
+    <item>Der Rauch</item>
+    <item>Das Knien</item>
+    <item>Die Sanddünen</item>
+    <item>Muḥammad ﷺ</item>
+    <item>Der Sieg</item>
+    <item>Die Gemächer</item>
+    <item>(Der Buchstabe) Qāf </item>
+    <item>Die Zerstreuenden (Winde)</item>
+    <item>Der Berg</item>
+    <item>Der Stern</item>
+    <item>Der Mond</item>
+    <item>Der Allerbarmer</item>
+    <item>Das eintreffende Ereignis</item>
+    <item>Das Eisen</item>
+    <item>Die Diskussion</item>
+    <item>Die Versammlung</item>
+    <item>Die Geprüfte (Frau)</item>
+    <item>Die Reihe; die Einreihung</item>
+    <item>Der Freitag</item>
+    <item>Die Heuchler</item>
+    <item>(Der Tag von) Gewinn und Verlust </item>
+    <item>Die Scheidung</item>
+    <item>Das Verbot</item>
+    <item>Die Herrschaft</item>
+    <item>Das Schreibrohr; der Stift</item>
+    <item>Die unabwendbare Wahrheit</item>
+    <item>Die Aufstiegswege</item>
+    <item>Noah</item>
+    <item>Die Dschinn</item>
+    <item>Der Eingehüllte</item>
+    <item>Der Zugedeckte</item>
+    <item>Die Auferstehung</item>
+    <item>Der Mensch</item>
+    <item>Die Entsandten</item>
+    <item>Die Kunde</item>
+    <item>Die Entreißenden</item>
+    <item>Er runzelte die Stirn</item>
+    <item>Das Umschlingen; das Zusammenrollen</item>
+    <item>Das Zerbrechen (des Himmels)</item>
+    <item>Die das Maß Kürzenden (betrügende Händler)</item>
+    <item>Das Auseinanderspalten (des Himmels)</item>
+    <item>Die Türme</item>
+    <item>Der Pochende (helle Stern)</item>
+    <item>Der Allerhöchste</item>
+    <item>Die Überdeckende (Stunde)</item>
+    <item>Die Morgendämmerung; das Frühlicht</item>
+    <item>Die Ortschaft</item>
+    <item>Die Sonne</item>
+    <item>Die Nacht</item>
+    <item>Die Morgenhelle; der Vormittag</item>
+    <item>Das Auftun; das Weiten (der Brust)</item>
+    <item>Die Feige</item>
+    <item>Das Anhängsel; der Blutklumpen</item>
+    <item>Die (Nacht der) Bestimmung</item>
+    <item>Der klare Beweis</item>
+    <item>Das Beben</item>
+    <item>Die Rennenden (Pferde)</item>
+    <item>Das Verhängnis</item>
+    <item>Die Vermehrung; das Streben nach Mehr</item>
+    <item>Das Zeitalter; die Zeit; der Nachmittag</item>
+    <item>Der Stichler (der mit der Rede verleumdet)</item>
+    <item>Der Elefant</item>
+    <item>Die Quraisch (arab. Stamm)</item>
+    <item>Die Hilfeleistung</item>
+    <item>Die Überfülle; der Überfluss</item>
+    <item>Die Ungläubigen</item>
+    <item>Die Hilfe</item>
+    <item>Die Palmfasern</item>
+    <item>Die Aufrichtigkeit</item>
+    <item>Der Tagesanbruch; das Morgengrauen</item>
+    <item>Die Menschen</item>
+  </string-array>
+</resources>

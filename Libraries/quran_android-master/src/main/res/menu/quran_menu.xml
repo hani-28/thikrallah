@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/favorite_item"
+          android:icon="@drawable/ic_not_favorite"
+          android:title="@string/menu_bookmarks"
+          app:showAsAction="ifRoom" />
+    <item android:id="@+id/goto_translation"
+          android:icon="@drawable/ic_translation"
+          android:title="@string/menu_translation"
+          app:showAsAction="ifRoom" />
+    <item android:id="@+id/goto_quran"
+          android:icon="@drawable/ic_goto_quran"
+          android:title="@string/menu_back_to_page"
+          app:showAsAction="ifRoom" />
+    <item android:id="@+id/search"
+          android:icon="@drawable/ic_ab_search"
+          android:title="@string/menu_search"
+          app:actionViewClass="androidx.appcompat.widget.SearchView"
+          app:showAsAction="ifRoom|collapseActionView" />
+    <item android:id="@+id/night_mode"
+        android:checkable="true"
+        android:icon="@drawable/ic_day_mode"
+        android:title="@string/prefs_night_mode_title"
+        app:showAsAction="ifRoom" />
+    <item android:id="@+id/jump"
+          android:title="@string/menu_jump"
+          app:showAsAction="never" />
+    <item android:id="@+id/settings"
+          android:icon="@drawable/ic_action_settings"
+          android:title="@string/menu_settings"
+          app:showAsAction="ifRoom" />
+    <item android:id="@+id/help"
+          android:title="@string/menu_help"
+          app:showAsAction="never"/>
+</menu>
