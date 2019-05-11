@@ -8,7 +8,7 @@ import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.preference.PreferenceManager;
-import android.support.annotation.UiThread;
+import androidx.annotation.UiThread;
 import androidx.recyclerview.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spannable;

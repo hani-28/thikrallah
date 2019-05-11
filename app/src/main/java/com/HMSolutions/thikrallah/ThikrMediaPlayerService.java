@@ -282,7 +282,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     }
     private NotificationCompat.Builder setVisibilityPublic(NotificationCompat.Builder inotificationBuilder){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            inotificationBuilder.setVisibility(Notification.VISIBILITY_PUBLIC);
+            inotificationBuilder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
         }
         return inotificationBuilder;
     }

@@ -203,31 +203,31 @@ public class QuranActivity extends QuranActionBarActivity
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-      case R.id.settings: {
+
+      if (item.getItemId()== R.id.settings) {
         Intent i = new Intent(this, QuranPreferenceActivity.class);
         startActivity(i);
         return true;
       }
-      case R.id.last_page: {
+      else if (item.getItemId()== R.id.last_page){
         jumpToLastPage();
         return true;
       }
-      case R.id.help: {
+      else if (item.getItemId()==  R.id.help) {
         Intent i = new Intent(this, HelpActivity.class);
         startActivity(i);
         return true;
       }
-      case R.id.about: {
+      else if (item.getItemId()==  R.id.about) {
         Intent i = new Intent(this, AboutUsActivity.class);
         startActivity(i);
         return true;
       }
-      case R.id.jump: {
+      else if (item.getItemId()==  R.id.jump) {
         gotoPageDialog();
         return true;
       }
-      case R.id.other_apps: {
+      else if (item.getItemId()==  R.id.other_apps) {
         Answers.getInstance().logCustom(new CustomEvent("menuOtherApps"));
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse("market://search?q=pub:quran.com"));
@@ -238,10 +238,10 @@ public class QuranActivity extends QuranActionBarActivity
         startActivity(intent);
         return true;
       }
-      default: {
+      else{
         return super.onOptionsItemSelected(item);
       }
-    }
+
   }
 
   @Override

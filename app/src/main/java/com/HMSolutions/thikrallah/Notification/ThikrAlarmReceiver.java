@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 public class ThikrAlarmReceiver extends BroadcastReceiver {
     String TAG = "ThikrAlarmReceiver";

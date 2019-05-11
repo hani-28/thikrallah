@@ -102,11 +102,10 @@ public class AyahPlaybackFragment extends AyahActionFragment {
   }
 
   private View.OnClickListener mOnClickListener = v -> {
-    switch (v.getId()) {
-      case R.id.apply: {
+    if (v.getId()==R.id.apply) {
+
         apply();
-        break;
-      }
+
     }
   };
 

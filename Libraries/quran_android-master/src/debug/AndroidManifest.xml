@@ -7,15 +7,15 @@
   <application
       android:icon="@drawable/debug_icon"
       android:roundIcon="@drawable/debug_icon"
-      android:label="${app_debug_label}"
-      android:name=".DebugApplication"
+      android:label="@string/app_name"
+      android:name=".QuranApplication"
       tools:replace="android:icon,android:roundIcon,android:label,android:name"
       android:allowBackup="true"
       android:fullBackupContent="@xml/backup">
 
     <activity
         android:name=".QuranDataActivity"
-        android:label="${app_debug_label}"
+        android:label="@string/app_name"
         tools:replace="android:label" />
 
       </application>

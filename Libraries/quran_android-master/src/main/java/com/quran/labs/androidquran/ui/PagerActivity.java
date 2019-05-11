@@ -1870,33 +1870,27 @@ public class PagerActivity extends QuranActionBarActivity implements
       if (start == null || end == null) {
         return false;
       }
+      if (item.getItemId() ==R.id.cab_bookmark_ayah){
+        final int startPage = quranInfo.getPageFromSuraAyah(start.sura, start.ayah);
+        toggleBookmark(start.sura, start.ayah, startPage);
 
-      switch (item.getItemId()) {
-        case R.id.cab_bookmark_ayah:
-          final int startPage = quranInfo.getPageFromSuraAyah(start.sura, start.ayah);
-          toggleBookmark(start.sura, start.ayah, startPage);
-          break;
-        case R.id.cab_tag_ayah:
-          sliderPage = slidingPagerAdapter.getPagePosition(TAG_PAGE);
-          break;
-        case R.id.cab_translate_ayah:
-          sliderPage = slidingPagerAdapter.getPagePosition(TRANSLATION_PAGE);
-          break;
-        case R.id.cab_play_from_here:
-          sliderPage = slidingPagerAdapter.getPagePosition(AUDIO_PAGE);
-          break;
-        case R.id.cab_share_ayah_link:
-          shareAyahLink(start, end);
-          break;
-        case R.id.cab_share_ayah_text:
-          shareAyah(start, end, false);
-          break;
-        case R.id.cab_copy_ayah:
-          shareAyah(start, end, true);
-          break;
-        default:
-          return false;
+      }else if (item.getItemId() ==R.id.cab_tag_ayah){
+        sliderPage = slidingPagerAdapter.getPagePosition(TAG_PAGE);
+      }else if (item.getItemId() ==R.id.cab_translate_ayah){
+        sliderPage = slidingPagerAdapter.getPagePosition(TRANSLATION_PAGE);
+      }else if (item.getItemId() ==R.id.cab_play_from_here){
+        sliderPage = slidingPagerAdapter.getPagePosition(AUDIO_PAGE);
+      }else if (item.getItemId() ==R.id.cab_share_ayah_link){
+        shareAyahLink(start, end);
+      }else if (item.getItemId() ==R.id.cab_share_ayah_text){
+        shareAyah(start, end, false);
+
+      }else if (item.getItemId() ==R.id.cab_copy_ayah){
+        shareAyah(start, end, true);
+      }else{
+        return false;
       }
+      
       if (sliderPage < 0) {
         endAyahMode();
       } else {

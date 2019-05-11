@@ -503,40 +503,40 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
     public void onClick(View view) {
       if (audioBarListener != null) {
         int tag = (Integer) view.getTag();
-        switch (tag) {
-          case R.drawable.ic_play:
+
+          if (tag == R.drawable.ic_play) {
             audioBarListener.onPlayPressed();
-            break;
-          case R.drawable.ic_stop:
+
+          }else if (tag == R.drawable.ic_stop) {
             audioBarListener.onStopPressed();
-            break;
-          case R.drawable.ic_pause:
+          }
+          else if (tag ==  R.drawable.ic_pause) {
             audioBarListener.onPausePressed();
-            break;
-          case R.drawable.ic_next:
+          }
+          else if (tag ==  R.drawable.ic_next) {
             audioBarListener.onNextPressed();
-            break;
-          case R.drawable.ic_previous:
+          }
+          else if (tag ==  R.drawable.ic_previous) {
             audioBarListener.onPreviousPressed();
-            break;
-          case R.drawable.ic_repeat:
+          }
+          else if (tag ==  R.drawable.ic_repeat) {
             incrementRepeat();
             audioBarListener.setRepeatCount(repeatValues[currentRepeat]);
-            break;
-          case R.drawable.ic_cancel:
+          }
+          else if (tag ==  R.drawable.ic_cancel) {
             if (haveCriticalError) {
               haveCriticalError = false;
               switchMode(STOPPED_MODE);
             } else {
               audioBarListener.onCancelPressed(currentMode == DOWNLOADING_MODE);
             }
-            break;
-          case R.drawable.ic_accept:
+          }
+          else if (tag ==  R.drawable.ic_accept) {
             audioBarListener.onAcceptPressed();
-            break;
-          case R.drawable.ic_action_settings:
+          }
+          else if (tag ==  R.drawable.ic_action_settings){
             audioBarListener.onAudioSettingsPressed();
-            break;
+
         }
       }
     }

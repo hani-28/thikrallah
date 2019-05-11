@@ -44,8 +44,8 @@ public class TranslationsAdapter extends RecyclerView.Adapter<TranslationsAdapte
   @Override
   public void onBindViewHolder(@NotNull TranslationViewHolder holder, int position) {
     TranslationRowData rowItem = translations.get(position);
-    switch (holder.getItemViewType()) {
-      case R.layout.translation_row:
+
+      if (holder.getItemViewType()== R.layout.translation_row) {
         TranslationItem item = (TranslationItem) rowItem;
         holder.getTranslationTitle().setText(item.name());
         if (TextUtils.isEmpty(item.getTranslation().getTranslatorNameLocalized())) {
@@ -78,10 +78,10 @@ public class TranslationsAdapter extends RecyclerView.Adapter<TranslationsAdapte
           rightImage.setClickable(false);
           rightImage.setContentDescription(null);
         }
-        break;
-      case R.layout.translation_sep:
+
+      }else if (holder.getItemViewType()== R.layout.translation_sep){
         holder.getSeparatorText().setText(rowItem.name());
-        break;
+
     }
   }
 

@@ -6,7 +6,7 @@ apply plugin: 'net.ltgt.errorprone'
 apply plugin: 'kotlin-kapt'
 
 android {
-  compileSdkVersion deps.android.build.compileSdkVersion
+  compileSdkVersion 28
 
   lintOptions {
     checkReleaseBuilds true

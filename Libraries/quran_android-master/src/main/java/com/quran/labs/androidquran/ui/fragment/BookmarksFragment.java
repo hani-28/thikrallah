@@ -110,27 +110,28 @@ public class BookmarksFragment extends Fragment implements QuranListAdapter.Qura
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     int itemId = item.getItemId();
-    switch (itemId) {
-      case R.id.sort_date:
+
+      if (itemId== R.id.sort_date) {
         bookmarkPresenter.setSortOrder(BookmarksDBAdapter.SORT_DATE_ADDED);
         item.setChecked(true);
         return true;
-      case R.id.sort_location: {
+      }
+      else if (itemId== R.id.sort_location){
         bookmarkPresenter.setSortOrder(BookmarksDBAdapter.SORT_LOCATION);
         item.setChecked(true);
         return true;
       }
-      case R.id.group_by_tags: {
+      else if (itemId== R.id.group_by_tags) {
         bookmarkPresenter.toggleGroupByTags();
         item.setChecked(bookmarkPresenter.isGroupedByTags());
         return true;
       }
-      case R.id.show_recents: {
+      else if (itemId== R.id.show_recents) {
         bookmarkPresenter.toggleShowRecents();
         item.setChecked(bookmarkPresenter.isShowingRecents());
         return true;
       }
-    }
+
 
     return super.onOptionsItemSelected(item);
   }
@@ -194,8 +195,8 @@ public class BookmarksFragment extends Fragment implements QuranListAdapter.Qura
     Activity currentActivity = getActivity();
     if (currentActivity instanceof QuranActivity) {
       QuranActivity activity = (QuranActivity) currentActivity;
-      switch (itemId) {
-        case R.id.cab_delete: {
+
+        if (itemId== R.id.cab_delete) {
           final List<QuranRow> selected = bookmarksAdapter.getCheckedItems();
           final int size = selected.size();
           final Resources res = getResources();
@@ -209,19 +210,19 @@ public class BookmarksFragment extends Fragment implements QuranListAdapter.Qura
           snackbar.show();
           return true;
         }
-        case R.id.cab_new_tag: {
+        else if (itemId== R.id.cab_new_tag) {
           activity.addTag();
           return true;
         }
-        case R.id.cab_edit_tag: {
+        else if (itemId== R.id.cab_edit_tag) {
           handleTagEdit(activity, bookmarksAdapter.getCheckedItems());
           return true;
         }
-        case R.id.cab_tag_bookmark: {
+        else if (itemId== R.id.cab_tag_bookmark) {
           handleTagBookmarks(activity, bookmarksAdapter.getCheckedItems());
           return true;
         }
-      }
+
     }
     return false;
   }

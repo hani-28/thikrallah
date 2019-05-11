@@ -20,7 +20,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-
+import com.quran.labs.androidquran.QuranDataActivity;
 public class MainFragment extends Fragment {
 	private MainInterface mCallback;
     private Context mContext;
@@ -70,7 +70,7 @@ public class MainFragment extends Fragment {
 			
 		});
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-		Button button_upgrade = (Button) view.findViewById(R.id.button_upgrade);
+		final Button button_upgrade = (Button) view.findViewById(R.id.button_upgrade);
 		button_upgrade.setOnClickListener(new OnClickListener(){
 
 			@Override
@@ -112,7 +112,10 @@ public class MainFragment extends Fragment {
         button_quran.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+				Intent intent = new Intent();
+				intent.setClass(v.getContext(), QuranDataActivity.class);
+				startActivityForResult(intent, 0);
+               /* AlertDialog.Builder b = new AlertDialog.Builder(mContext);
                 b.setTitle(R.string.choosesura);
                 String[] types = mContext.getResources().getStringArray(R.array.surat_list);
                 b.setItems(types, new AlertDialog.OnClickListener() {
@@ -129,6 +132,7 @@ public class MainFragment extends Fragment {
                 });
 
                 b.show();
+                */
             }
         });
         button_sadaqa.setOnClickListener(new OnClickListener() {

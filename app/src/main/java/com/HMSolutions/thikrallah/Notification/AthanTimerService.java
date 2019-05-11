@@ -14,9 +14,8 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.JobIntentService;
-import android.support.v4.app.NotificationCompat;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -143,7 +142,7 @@ public class AthanTimerService extends Service {
 	}
 	private NotificationCompat.Builder setVisibilityPublic(NotificationCompat.Builder inotificationBuilder){
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			inotificationBuilder.setVisibility(Notification.VISIBILITY_PUBLIC);
+			inotificationBuilder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 		}
 		return inotificationBuilder;
 	}

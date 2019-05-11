@@ -90,16 +90,16 @@ public class AyahTranslationFragment extends AyahActionFragment
     if (activity instanceof PagerActivity) {
       final PagerActivity pagerActivity = (PagerActivity) activity;
 
-      switch (v.getId()) {
-        case R.id.get_translations_button:
+
+        if (v.getId()== R.id.get_translations_button) {
           pagerActivity.startTranslationManager();
-          break;
-        case R.id.next_ayah:
+        }
+        else if (v.getId()== R.id.next_ayah) {
           pagerActivity.nextAyah();
-          break;
-        case R.id.previous_ayah:
+        }
+        else if (v.getId()== R.id.previous_ayah){
           pagerActivity.previousAyah();
-          break;
+
       }
     }
   };

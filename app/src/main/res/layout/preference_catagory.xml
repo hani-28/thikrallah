@@ -6,7 +6,7 @@
     <View
         style="@style/Divider"
         />
-    <TextView android:id="@+android:id/title"
+    <TextView android:id="@android:id/title"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:textSize="28sp"
