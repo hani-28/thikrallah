@@ -40,7 +40,7 @@ public class WhatsNewScreen {
             if (packageInfo.versionCode != lastVersionCode) {
                 Log.i(LOG_TAG, "versionCode " + packageInfo.versionCode + "is different from the last known version " + lastVersionCode);
  
-                final String title = mActivity.getString(R.string.app_name) + " " + packageInfo.versionName;
+                final String title = mActivity.getString(R.string.my_app_name) + " " + packageInfo.versionName;
  
                 final String message = mActivity.getString(R.string.whatsnew);
  

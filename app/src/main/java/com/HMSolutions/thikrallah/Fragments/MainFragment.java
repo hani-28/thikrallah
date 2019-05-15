@@ -70,43 +70,7 @@ public class MainFragment extends Fragment {
 			
 		});
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-		final Button button_upgrade = (Button) view.findViewById(R.id.button_upgrade);
-		button_upgrade.setOnClickListener(new OnClickListener(){
 
-			@Override
-			public void onClick(View v) {
-				AlertDialog.Builder b = new AlertDialog.Builder(mContext);
-				b.setTitle(R.string.remove_ads);
-				String[] types = mContext.getResources().getStringArray(R.array.remove_ads_options);
-				b.setItems(types, new AlertDialog.OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int choice) {
-						dialog.dismiss();
-						switch(choice){
-							case 0:
-								mCallback.displayInterstitialForcefully();
-								break;
-							case 1:
-								mCallback.upgrade();
-								break;
-							case 2:
-								mPrefs.edit().putBoolean("isPremium", true).commit();
-								mCallback.hideAd();
-								break;
-							default:
-								break;
-						}
-					}
-
-				});
-
-				b.show();
-				//mCallback.upgrade();
-
-			}
-
-		});
 
 
         button_quran.setOnClickListener(new OnClickListener() {

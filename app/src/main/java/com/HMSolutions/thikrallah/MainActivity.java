@@ -11,38 +11,25 @@ import java.util.List;
 import java.util.Locale;
 
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.HMSolutions.thikrallah.Fragments.MainFragment;
 import com.HMSolutions.thikrallah.Fragments.QuranFragment;
 import com.HMSolutions.thikrallah.Fragments.ThikrFragment;
 import com.HMSolutions.thikrallah.Fragments.TutorialFragment;
 import com.HMSolutions.thikrallah.Notification.AthanTimerService;
-import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
 import com.HMSolutions.thikrallah.Utilities.AppRater;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
 import com.HMSolutions.thikrallah.Utilities.MyDBHelper;
-import com.HMSolutions.thikrallah.Utilities.PrayTime;
 import com.HMSolutions.thikrallah.Utilities.WhatsNewScreen;
 
-import com.HMSolutions.thikrallah.Utilities.inapp.Security;
-import com.android.vending.billing.IInAppBillingService;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 
-import android.*;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -69,28 +56,20 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
-import android.util.TimingLogger;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.gms.ads.*;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 
 public class MainActivity extends Activity implements MainInterface, LocationListener, android.location.LocationListener,
         SharedPreferences.OnSharedPreferenceChangeListener {
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 2334;
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION_FOR_LOCATION_UPDATES = 5678;
     private static final int REQUEST_ID_MULTIPLE_PERMISSIONS =7051 ;
-    private String appLink;
+
     String TAG = "MainActivity";
     public static final String DATA_TYPE_NIGHT_THIKR = "night";
     public static final String DATA_TYPE_DAY_THIKR = "morning";
@@ -105,7 +84,6 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
     public static final String DATA_TYPE_ATHAN4 = "athan4";
     public static final String DATA_TYPE_ATHAN5 = "athan5";
 
-    private InterstitialAd interstitial;
 
     private static final Intent[] POWERMANAGER_INTENTS = {
             new Intent().setComponent(new ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity")),
@@ -123,8 +101,6 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
             new Intent().setComponent(new ComponentName("com.asus.mobilemanager", "com.asus.mobilemanager.MainActivity"))};
     SharedPreferences mPrefs;
     Activity activity = this;
-    private static boolean mIsPremium = false;
-    private final static String SKU_PREMIUM = "premiumupgrade";
     private String base64RSAPublicKey = "";
     static final int RC_REQUEST = 9648253;
     static  final int RC_ENABLE_LOCATION_SETTINGS=7866755;
@@ -215,22 +191,7 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
             Log.d(TAG, "Disconnected. unbided? mIsBoundMediaService set to false");
         }
     };
-    IInAppBillingService mServiceInAppBilling;
 
-    ServiceConnection mServiceInAppBillingConn = new ServiceConnection() {
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mServiceInAppBilling = null;
-        }
-
-        @Override
-        public void onServiceConnected(ComponentName name,
-                                       IBinder service) {
-            Log.d(TAG, "service connected");
-            mServiceInAppBilling = IInAppBillingService.Stub.asInterface(service);
-            isPremiumPurchasedAsync();
-        }
-    };
 
     @Override
     public void requestMediaServiceStatus() {
@@ -277,8 +238,7 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
     }
 
 
-    private String deviceId;
-    private AdListener adsListener;
+
 
 
     @Override
@@ -500,12 +460,7 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
 
 
         timeOperation("timing", "defined_mgoogleApiClient");
-        base64RSAPublicKey = getResources().getText(R.string.base64RSAPublicKey).toString();
-        deviceId = "AC73D67B1C23A45BBDFCAF3F4040A0AA";//md5(android_id).toUpperCase();
 
-
-        adsListener = new myAdListener(this);
-        appLink = "\n" + this.getResources().getString(R.string.app_link);
 
 
         populateBuiltinDatabase();
@@ -582,48 +537,11 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
         }
 
 
-        interstitial = new InterstitialAd(this);
-        interstitial.setAdUnitId(getResources().getText(R.string.ad_unit_id_interstital).toString());
-        interstitial.setAdListener(adsListener);
+
 
         timeOperation("timing", "defining intersittal ad");
 
 
-        if (mPrefs.getBoolean("isPremium", false) == true || doesAdShowBasedOnClicks() == false) {
-            Log.d(TAG, "ad hide" + doesAdShowBasedOnClicks());
-            hideAd();
-        } else {
-            //show banner ad
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    showAd();
-                    timeOperation("timing", "ad showed");
-
-                    //load interstital ad
-                    Log.d(TAG, "ad show");
-
-                }
-            }, 3000);
-
-
-        }
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                // Create ad request.
-                AdRequest adRequest;
-                adRequest = new AdRequest.Builder()
-                        .addTestDevice(deviceId)
-                        .build();
-
-                // Begin loading your interstitial.
-                interstitial.loadAd(adRequest);
-            }
-        }, 4000);
 
 
         Intent intent = this.getIntent();
@@ -662,10 +580,7 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
         startnow = SystemClock.elapsedRealtime();
     }
 
-    private void isPremiumPurchasedAsync() {
-        new isPremiumPurchased().execute();
 
-    }
 
     private void populateBuiltinDatabase() {
         MyDBHelper db = new MyDBHelper(this);
@@ -705,86 +620,7 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
         return super.onOptionsItemSelected(item);
     }
 
-    public void hideAd() {
-        final AdView adLayout = (AdView) findViewById(R.id.adView);
-        adLayout.setVisibility(View.GONE);
 
-    }
-
-    private void showAd() {
-
-        AdView adView = (AdView) this.findViewById(R.id.adView);
-        adView.setAdListener(adsListener);
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(deviceId)
-                //.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .build();
-        timeOperation("timing", "banner ad set");
-
-        adView.loadAd(adRequest);
-        timeOperation("timing", "banner ad loaded");
-
-    }
-
-    // Invoke displayInterstitial() when you are ready to display an interstitial.
-    public void displayInterstitial() {
-        if (interstitial.isLoaded() && (mPrefs.getBoolean("isPremium", false) == false)) {
-            long timeAtLastAd = mPrefs.getLong("time_at_last_ad", 0);
-            if ((System.currentTimeMillis() - timeAtLastAd) >= 5 * 60 * 1000) {
-                //1 interstital ad no less than 5 minutes apart
-                if (doesAdShowBasedOnClicks() == true) {
-                    mPrefs.edit().putLong("time_at_last_ad", System.currentTimeMillis()).commit();
-                    interstitial.show();
-                }
-
-            }
-        }
-    }
-    public void displayInterstitialForcefully() {
-        Log.d(TAG,"displayInterstitialForcefully called");
-        if (interstitial.isLoaded()) {
-            Log.d(TAG,"ad loaded");
-            mPrefs.edit().putLong("time_at_last_ad", System.currentTimeMillis()).commit();
-            interstitial.show();
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-
-                    // Create ad request.
-                    AdRequest adRequest;
-                    adRequest = new AdRequest.Builder()
-                            .addTestDevice(deviceId)
-                            .build();
-
-                    // Begin loading your interstitial.
-                    interstitial.loadAd(adRequest);
-                }
-            }, 4000);
-        }else{
-            Log.d(TAG,"ad loading");
-            mPrefs.edit().putLong("time_at_last_ad", System.currentTimeMillis()).commit();
-            AdRequest adRequest;
-            adRequest = new AdRequest.Builder()
-                    .addTestDevice(deviceId)
-                    .build();
-            interstitial.loadAd(adRequest);
-            Log.d(TAG,"ad to show");
-            interstitial.show();
-        }
-    }
-    private boolean doesAdShowBasedOnClicks() {
-        if (mPrefs.getBoolean("isPremium", false) == true) {
-            Log.d(TAG, "user is premium");
-            return false;
-        }
-        long timeAtLastAd = mPrefs.getLong("time_at_last_click", 0);
-        if ((System.currentTimeMillis() - timeAtLastAd) < 14 * 24 * 60 * 60 * 1000) {
-            Log.d(TAG, "time since last ad=" + (System.currentTimeMillis() - timeAtLastAd));
-            return false;
-        }
-        return true;
-    }
 
     @Override
     public void launchFragment(Fragment iFragment, Bundle args, String tag) {
@@ -807,34 +643,7 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
         startActivity(Intent.createChooser(shareIntent, this.getResources().getString(R.string.share)));
     }
 
-    @Override
-    public void upgrade() {
-        Bundle buyIntentBundle = null;
-        if (mServiceInAppBilling != null) {
-            try {
-                buyIntentBundle = mServiceInAppBilling.getBuyIntent(3, getPackageName(),
-                        String.valueOf(SKU_PREMIUM), "inapp", String.valueOf(RC_REQUEST));
-                if (buyIntentBundle != null) {
-                    PendingIntent pendingIntent = buyIntentBundle.getParcelable("BUY_INTENT");
-                    if (pendingIntent != null) {
-                        startIntentSenderForResult(pendingIntent.getIntentSender(),
-                                RC_REQUEST, new Intent(), Integer.valueOf(0), Integer.valueOf(0),
-                                Integer.valueOf(0));
-                    }
 
-                }
-
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            } catch (IntentSender.SendIntentException e) {
-                e.printStackTrace();
-            }
-        }
-
-
-        // mHelper.launchPurchaseFlow(this, SKU_PREMIUM, RC_REQUEST, mPurchaseFinishedListener, "");
-
-    }
 
     @Override
     public void onPause() {
@@ -842,12 +651,7 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
         unbindtoMediaService();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.unregisterOnSharedPreferenceChangeListener(this);
-        //if (mServiceInAppBilling != null) {
-        try {
-            unbindService(mServiceInAppBillingConn);
-        } catch (Exception e) {
-            Log.d(TAG, "exception caught. null service");
-        }
+
         super.onPause();
 
     }
@@ -862,11 +666,7 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
         prefs.registerOnSharedPreferenceChangeListener(prefListener);
 
 
-        Intent serviceIntent =
-                new Intent("com.android.vending.billing.InAppBillingService.BIND");
-        serviceIntent.setPackage("com.android.vending");
-        bindService(serviceIntent, mServiceInAppBillingConn, Context.BIND_AUTO_CREATE);
-        Log.d(TAG, "oncreate 6");
+
         timeOperation("timing", "onresume finished");
 
 
@@ -885,7 +685,6 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
 
     @Override
     public void onBackPressed() {
-        this.displayInterstitial();
         super.onBackPressed();
     }
 
@@ -1004,32 +803,7 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, " RC_REQUEST  " + RC_REQUEST + "results ok " + RESULT_OK);
-        // Pass on the activity result to the helper for handling
-        if (requestCode == RC_REQUEST) {
-            int responseCode = data.getIntExtra("RESPONSE_CODE", 0);
-            String purchaseData = data.getStringExtra("INAPP_PURCHASE_DATA");
-            String dataSignature = data.getStringExtra("INAPP_DATA_SIGNATURE");
-            if (resultCode == RESULT_OK && responseCode == 0) {
 
-                try {
-
-                    JSONObject jo = new JSONObject(purchaseData);
-                    String sku = jo.getString("productId");
-                    if (Security.verifyPurchase(base64RSAPublicKey, dataSignature, String.valueOf(RC_REQUEST)) && sku.equalsIgnoreCase(SKU_PREMIUM)) {
-
-                        mPrefs.edit().putBoolean("isPremium", true).commit();
-                        Log.d(TAG,"premium true");
-                        this.hideAd();
-                    }
-                    //alert("You have bought the " + sku + ". Excellent choice,adventurer!");
-                } catch (JSONException e) {
-                    // alert("Failed to parse purchase data.");
-                    e.printStackTrace();
-                }
-            }
-
-        }
         if (requestCode==RC_ENABLE_LOCATION_SETTINGS){
             Log.d(TAG,"requestLocationUpdate. Settings enabled");
             this.requestLocationUpdate();
@@ -1195,150 +969,8 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
 
     }
 
-    class myAdListener extends AdListener{
-        MainActivity myActivity;
-        public myAdListener(MainActivity context){
-            super();
-            myActivity=context;
-        }
-        @Override
-        public void onAdOpened() {
-            // this
-            Log.d(TAG,"ad openned");
-            //mPrefs.edit().putLong("time_at_last_click", System.currentTimeMillis()).commit();
-            super.onAdOpened();
-        }
-        @Override
-        public void onAdClosed(){
-            super.onAdClosed();
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-
-                    // Create ad request.
-                    AdRequest adRequest;
-                    adRequest = new AdRequest.Builder()
-                            .addTestDevice(deviceId)
-                            .build();
-
-                    // Begin loading your interstitial.
-                    interstitial.loadAd(adRequest);
-                }
-            }, 4000);
-        }
-        @Override
-        public void onAdLeftApplication(){
-            Log.d(TAG,"ad left application");
-            myActivity.hideAd();
-            mPrefs.edit().putLong("time_at_last_click", System.currentTimeMillis()).commit();
-            super.onAdLeftApplication();
-
-        }
-    }
 
 
-
-    private class isPremiumPurchased extends AsyncTask<Void, Void, Boolean> {
-        int response;
-
-        /**
-         * Override this method to perform a computation on a background thread. The
-         * specified parameters are the parameters passed to {@link #execute}
-         * by the caller of this task.
-         * <p/>
-         * This method can call {@link #publishProgress} to publish updates
-         * on the UI thread.
-         *
-         * @param params The parameters of the task.
-         * @return A result, defined by the subclass of this task.
-         * @see #onPreExecute()
-         * @see #onPostExecute
-         * @see #publishProgress
-         */
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            try {
-                Log.d(TAG,"isPremiumPurchased called");
-                Bundle ownedItems = mServiceInAppBilling.getPurchases(3, getPackageName(), "inapp", null);
-                response = ownedItems.getInt("RESPONSE_CODE");
-                Log.d(TAG,"response ="+response);
-                if (response == 0) {
-                    ArrayList<String> ownedSkus =
-                            ownedItems.getStringArrayList("INAPP_PURCHASE_ITEM_LIST");
-                    ArrayList<String>  purchaseDataList =
-                            ownedItems.getStringArrayList("INAPP_PURCHASE_DATA_LIST");
-                    ArrayList<String>  signatureList =
-                            ownedItems.getStringArrayList("INAPP_DATA_SIGNATURE_LIST");
-                    String continuationToken =
-                            ownedItems.getString("INAPP_CONTINUATION_TOKEN");
-                    Log.d(TAG,"ownedSkus ="+ownedSkus.size());
-                    for (int i = 0; i < purchaseDataList.size(); ++i) {
-
-                        String purchaseData = purchaseDataList.get(i);
-                        String signature = signatureList.get(i);
-                        String sku = ownedSkus.get(i);
-                        Log.d(TAG,"sku ="+sku);
-                        Log.d(TAG,"base64"+signature);
-                        Log.d(TAG,"base64"+base64RSAPublicKey);
-                        Log.d(TAG,"Is signature valid? "+Security.verifyPurchase(base64RSAPublicKey,String.valueOf(RC_REQUEST),signature));
-                        Log.d(TAG,"Is premium sku? "+sku.equalsIgnoreCase(SKU_PREMIUM));
-                        if(Security.verifyPurchase(base64RSAPublicKey, signature, String.valueOf(RC_REQUEST)) && sku.equalsIgnoreCase(SKU_PREMIUM)) {
-
-                            Log.d(TAG, "ispremium true ");
-                            Log.d(TAG, "base64 matches");
-                            return true;
-
-                        }
-                    }
-
-                }
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-            return false;
-        }
-
-        protected void onProgressUpdate(Void...progress) {
-        }
-
-        protected void onPostExecute(Boolean isPremium) {
-            if (isPremium==true){
-                mPrefs.edit().putBoolean("isPremium", true).commit();
-                hideAd();
-            }else{
-                switch (response){
-                    case 1://BILLING_RESPONSE_RESULT_USER_CANCELED
-                        Toast.makeText(mcontext,"User cancelled",Toast.LENGTH_LONG).show();
-                        break;
-                    case 2:
-                        Toast.makeText(mcontext,"No Internet",Toast.LENGTH_LONG).show();
-                        break;
-                    case 3:
-                        Toast.makeText(mcontext,"Billing API version is not supported for the type requested",Toast.LENGTH_LONG).show();
-                        break;
-                    case 4:
-                        Toast.makeText(mcontext,"Product not available",Toast.LENGTH_LONG).show();
-                        break;
-                    case 5:
-                        Toast.makeText(mcontext,"developer error. App not signed or not properly setup",Toast.LENGTH_LONG).show();
-                        break;
-                    case 6:
-                        Toast.makeText(mcontext,"Fatal error during the API action",Toast.LENGTH_LONG).show();
-                        break;
-                    case 7:
-                        Toast.makeText(mcontext,"Product already owned",Toast.LENGTH_LONG).show();
-                        mPrefs.edit().putBoolean("isPremium", true).commit();
-                        hideAd();
-                        break;
-                    case 8:
-                        Toast.makeText(mcontext,"Failure to consume since item is not owned",Toast.LENGTH_LONG).show();
-                        break;
-                }
-            }
-            return;
-        }
-    }
 
 
 }

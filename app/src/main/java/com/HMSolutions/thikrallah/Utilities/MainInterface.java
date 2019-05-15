@@ -7,7 +7,6 @@ public interface MainInterface {
 
 		void launchFragment(Fragment iFragment,Bundle args,String tag);
 		void share();
-        void upgrade();
 		void playAll(String AssetFolder);
 		void incrementCurrentPlaying(String AssetFolder,int i);
 		void pausePlayer(String DataType);
@@ -20,7 +19,5 @@ public interface MainInterface {
 		void setThikrType(String thikrType);
 		void requestLocationUpdate();
 		void requestMediaServiceStatus();
-	void displayInterstitialForcefully();
 
-	void hideAd();
 }

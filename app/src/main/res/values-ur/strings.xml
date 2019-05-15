@@ -4,7 +4,7 @@
     tools:ignore="MissingTranslation"
 
     <string name="help_translate">پروگرام کے ترجمہ میں ہماری مدد کریں</string>
-    <string name="app_name">اللہ کا ذکر کریں</string>
+    <string name="my_app_name">اللہ کا ذکر کریں</string>
     <string name="share">شرکت کریں</string>
     <string name="volume_level">آواز کی بلندی</string>
     <string name="morningThikr">صبح کے اذکار</string>

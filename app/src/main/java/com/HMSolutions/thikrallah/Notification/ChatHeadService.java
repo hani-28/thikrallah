@@ -68,7 +68,7 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 		if (thikr==null){
 			this.thikr=getResources().getString(R.string.remember_notification);
 		}
-		mBuilder.setContentTitle(this.getString(R.string.app_name))
+		mBuilder.setContentTitle(this.getString(R.string.my_app_name))
 				.setContentText(thikr)
 				.setSmallIcon(R.drawable.ic_launcher)
 				.setAutoCancel(true);
@@ -126,7 +126,7 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 				}else{
 					mBuilder = new NotificationCompat.Builder(this);
 				}
-				mBuilder.setContentTitle(this.getString(R.string.app_name))
+				mBuilder.setContentTitle(this.getString(R.string.my_app_name))
 						.setContentText(thikr)
 						.setSmallIcon(R.drawable.ic_launcher)
 						.setAutoCancel(true);

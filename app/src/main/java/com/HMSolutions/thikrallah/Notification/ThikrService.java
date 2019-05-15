@@ -139,7 +139,7 @@ public class ThikrService extends IntentService  {
 			if (reminderType==1){
 				NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 				NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
-				mBuilder.setContentTitle(this.getString(R.string.app_name))
+				mBuilder.setContentTitle(this.getString(R.string.my_app_name))
 				.setContentText(this.getString(R.string.morningThikr))
 				.setSmallIcon(R.drawable.ic_launcher)
 				.setAutoCancel(true);
@@ -177,7 +177,7 @@ public class ThikrService extends IntentService  {
 			if (reminderType==1){
 				NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 				NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
-				mBuilder.setContentTitle(this.getString(R.string.app_name))
+				mBuilder.setContentTitle(this.getString(R.string.my_app_name))
 				.setContentText(this.getString(R.string.nightThikr))
 				.setSmallIcon(R.drawable.ic_launcher)
 				.setAutoCancel(true);
@@ -217,7 +217,7 @@ public class ThikrService extends IntentService  {
             if (reminderType==1){
                 NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
-                mBuilder.setContentTitle(this.getString(R.string.app_name))
+                mBuilder.setContentTitle(this.getString(R.string.my_app_name))
                         .setContentText(this.getString(R.string.surat_almulk))
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setAutoCancel(true);
@@ -230,6 +230,7 @@ public class ThikrService extends IntentService  {
                 launchAppIntent.putExtra("FromNotification",true);
                 launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_QURAN_MULK);
                 launchAppIntent.putExtra("surat", 1);
+                //TODO: Fix below to use new Quran Functionality
                 PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
                         0, launchAppIntent, PendingIntent.FLAG_CANCEL_CURRENT
                 );
@@ -243,6 +244,7 @@ public class ThikrService extends IntentService  {
                 sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_QURAN_MULK).commit();
 
                 data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAYALL);
+                //TODO: Fix below to use new Quran Functionality
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     this.startForegroundService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
                 } else {
@@ -258,7 +260,7 @@ public class ThikrService extends IntentService  {
             if (reminderType==1){
                 NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
-                mBuilder.setContentTitle(this.getString(R.string.app_name))
+                mBuilder.setContentTitle(this.getString(R.string.my_app_name))
                         .setContentText(this.getString(R.string.surat_alkahf))
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setAutoCancel(true);
@@ -271,6 +273,7 @@ public class ThikrService extends IntentService  {
                 launchAppIntent.putExtra("FromNotification",true);
                 launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_QURAN_KAHF);
                 launchAppIntent.putExtra("surat", 0);
+                //TODO: Fix below to use new Quran Functionality
                 PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
                         0, launchAppIntent, PendingIntent.FLAG_CANCEL_CURRENT
                 );
@@ -282,7 +285,7 @@ public class ThikrService extends IntentService  {
                 //new here
 
                 sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_QURAN_KAHF).commit();
-
+                //TODO: Fix below to use new Quran Functionality
                 data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAYALL);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     this.startForegroundService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
@@ -359,7 +362,7 @@ public class ThikrService extends IntentService  {
 	}
     private NotificationCompat.Builder setVisibilityPublic(NotificationCompat.Builder inotificationBuilder){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            inotificationBuilder.setVisibility(Notification.VISIBILITY_PUBLIC);
+            inotificationBuilder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
         }
         return inotificationBuilder;
     }

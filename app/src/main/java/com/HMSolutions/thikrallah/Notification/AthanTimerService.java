@@ -118,7 +118,7 @@ public class AthanTimerService extends Service {
 		notificationBuilder
 				.setSmallIcon(R.drawable.ic_launcher)
 				.setAutoCancel(true)
-				.setContentTitle(getString(R.string.app_name))
+				.setContentTitle(getString(R.string.my_app_name))
 				.setPriority(Notification.PRIORITY_DEFAULT)
 				.setContentText(getNextPrayer())
 
