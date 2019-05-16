@@ -27,8 +27,8 @@
   <string name="menu_bookmarks_ayah">Ayah Bookmarks</string>
   <string name="menu_sort">Sort</string>
   resValue "string", "file_authority", applicationId + '.fileprovider'
-  <string name="authority">com.quran.labs.androidquran.data.QuranDataProvider</string>
-  <string name="file_authority">com.quran.labs.androidquran.fileprovider</string>
+  <string name="authority">com.thikrallah.quran.labs.androidquran.data.QuranDataProvider</string>
+  <string name="file_authority">com.thikrallah.quran.labs.androidquran.fileprovider</string>
   <string name="menu_sort_date">Date Added</string>
   <string name="menu_sort_location">Location in Quran</string>
   <string name="menu_sort_group_by_tags">Group by Tags</string>

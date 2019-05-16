@@ -16,7 +16,7 @@
       android:title="@string/prefs_export_title"
       app:iconSpaceReserved="false"/>
 
-  <com.quran.labs.androidquran.ui.preference.DataListPreference
+  <com.thikrallah.quran.labs.androidquran.ui.preference.DataListPreference
       android:key="@string/prefs_app_location"
       android:summary="@string/prefs_app_location_summary"
       android:title="@string/prefs_app_location_title"

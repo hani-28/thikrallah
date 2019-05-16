@@ -34,7 +34,7 @@ android {
   flavorDimensions "pageType"
   productFlavors {
     madani {
-      //applicationId "com.quran.labs.androidquran"
+      //applicationId "com.thikrallah.quran.labs.androidquran"
     }
   }
 
