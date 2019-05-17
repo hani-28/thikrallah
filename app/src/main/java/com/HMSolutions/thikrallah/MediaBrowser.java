@@ -183,7 +183,7 @@ public class MediaBrowser extends AppCompatActivity {
 
 
     // class to limit the choices shown when browsing to SD card to media files
-    public class AudioFilter implements FileFilter {
+    public static class AudioFilter implements FileFilter {
 
         // only want to see the following audio file types
         private String[] extension = {".aac", ".mp3", ".wav", ".ogg", ".midi", ".3gp", ".mp4", ".m4a", ".amr", ".flac"};

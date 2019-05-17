@@ -14,10 +14,10 @@ public class UserThikr {
 
     long id=-1;
 
-    public UserThikr(Long _id,String thikrText, boolean isEnabled,boolean isBuiltin,String file) {
-        ThikrText = thikrText;
+    public UserThikr(Long _id,String mythikrText, boolean isEnabled,boolean myisBuiltin,String file) {
+        ThikrText = mythikrText;
         this.isEnabled = isEnabled;
-        this.isBuiltIn=isBuiltin;
+        this.isBuiltIn=myisBuiltin;
         Log.d("testing123","isEnabled: "+isEnabled);
         this.id=_id;
         this.file=file;
@@ -43,6 +43,7 @@ public class UserThikr {
     public long getId() {
         return id;
     }
+    @Override
     public String toString(){
         return "thikr text="+this.getThikrText()+ "file= "+this.getFile()+"id="+this.getId()+"isenabled="+this.isEnabled()+"isbuiltin"+this.isBuiltIn();
     }

@@ -125,6 +125,7 @@ public class BookmarksDetailAdapter extends BaseAdapter {
 
 
             mHolder.shareButton.setOnClickListener(new View.OnClickListener() {
+                @Override
                 public void onClick(View convertView) {
                     Intent intent = new Intent();
                     intent.setAction(Intent.ACTION_SEND);
@@ -147,6 +148,7 @@ public class BookmarksDetailAdapter extends BaseAdapter {
 
             final View finalConvertView = convertView;
             mHolder.favButton.setOnClickListener(new View.OnClickListener() {
+                @Override
                 public void onClick(View v) {
                     boolean isFav = !p.getFav();
 

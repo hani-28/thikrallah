@@ -91,6 +91,7 @@ public class RecordThikrDialog extends DialogFragment {
         });
         builder.setMessage(R.string.add_thikr)
                 .setPositiveButton(R.string.add_thikr, new DialogInterface.OnClickListener() {
+                    @Override
                     public void onClick(DialogInterface dialog, int id) {
                         String newThikr = thikr_text_edittext_view.getText().toString();
 
@@ -106,6 +107,7 @@ public class RecordThikrDialog extends DialogFragment {
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
                     public void onClick(DialogInterface dialog, int id) {
                         mCallback.resetPlayer(MainActivity.DATA_TYPE_GENERAL_THIKR);
                         RecordThikrDialog.this.getDialog().cancel();
@@ -149,6 +151,7 @@ public class RecordThikrDialog extends DialogFragment {
             recorder.prepare();
         } catch (Exception e){
             e.printStackTrace();
+            Log.e(TAG,e.getMessage());
         }
 
         final ProgressDialog mProgressDialog = new ProgressDialog(context);
@@ -156,6 +159,7 @@ public class RecordThikrDialog extends DialogFragment {
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 
         mProgressDialog.setButton(this.getResources().getString(R.string.stop_recording), new DialogInterface.OnClickListener() {
+            @Override
             public void onClick(DialogInterface dialog, int whichButton) {
                 file=context.getFilesDir().getPath()  +File.separator+"user"+file_id+".mp3";
                 mProgressDialog.dismiss();
@@ -169,6 +173,7 @@ public class RecordThikrDialog extends DialogFragment {
         });
 
         mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener(){
+            @Override
             public void onCancel(DialogInterface p1) {
                 recorder.stop();
                 recorder.release();
@@ -222,6 +227,7 @@ public class RecordThikrDialog extends DialogFragment {
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 0) {
             if (resultCode == Activity.RESULT_OK) {

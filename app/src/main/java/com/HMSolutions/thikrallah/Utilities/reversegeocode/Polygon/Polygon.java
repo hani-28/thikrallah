@@ -67,8 +67,8 @@ public class Polygon
 			// add line (edge) to the polygon
 			if (_vertexes.size() > 1)
 			{
-				Line Line = new Line(_vertexes.get(_vertexes.size() - 2), point);
-				_sides.add(Line);
+				Line line = new Line(_vertexes.get(_vertexes.size() - 2), point);
+				_sides.add(line);
 			}
 
 			return this;

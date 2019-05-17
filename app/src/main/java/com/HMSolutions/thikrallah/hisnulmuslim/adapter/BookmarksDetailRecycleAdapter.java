@@ -124,6 +124,7 @@ public class BookmarksDetailRecycleAdapter extends RecyclerView.Adapter<Bookmark
         final ViewHolder finalmHolder = mHolder;
 
         mHolder.shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View convertView) {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_SEND);
@@ -145,6 +146,7 @@ public class BookmarksDetailRecycleAdapter extends RecyclerView.Adapter<Bookmark
         });
 
         finalmHolder.favButton.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 // boolean isFav = !p.getFav();
                 // boolean isFav = !mDuaData.get(finalPosition).getFav();

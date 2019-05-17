@@ -62,7 +62,7 @@ public class TutorialFragment extends Fragment {
 		});
 
 		Tutorial_description = (TextView) view.findViewById(R.id.tutorial_description);
-		Tutorial_description.setText(1+" / "+(this.final_count));
+		Tutorial_description.setText(1+" / "+this.final_count);
         count=0;
         showNextScreen(count);
 
@@ -99,7 +99,7 @@ public class TutorialFragment extends Fragment {
                 data=null;
                 break;
         }
-        Tutorial_description.setText((i+1)+" / "+(final_count));
+        Tutorial_description.setText((i+1)+" / "+final_count);
         if (data != null) {
             fragment.setArguments(data);
             ft.replace(R.id.preference_container, fragment);

@@ -110,6 +110,7 @@ public class DuaDetailAdapter extends BaseAdapter {
 
             final ViewHolder finalHolder = mHolder;
             mHolder.shareButton.setOnClickListener(new View.OnClickListener() {
+                @Override
                 public void onClick(View convertView) {
                     Intent intent = new Intent();
                     intent.setAction(Intent.ACTION_SEND);
@@ -132,6 +133,7 @@ public class DuaDetailAdapter extends BaseAdapter {
 
             final View finalConvertView = convertView;
             mHolder.favButton.setOnClickListener(new View.OnClickListener() {
+                @Override
                 public void onClick(View ConvertView) {
                     boolean isFav = !p.getFav();
 

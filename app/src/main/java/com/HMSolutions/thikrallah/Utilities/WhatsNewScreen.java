@@ -60,7 +60,7 @@ public class WhatsNewScreen {
                 builder.setPositiveButton(R.string.open_settings,new Dialog.OnClickListener()
 
                     {
-
+                        @Override
                         public void onClick (DialogInterface dialogInterface,int i){
                         // Mark this version as read
                         SharedPreferences.Editor editor = prefs.edit();
@@ -83,6 +83,7 @@ public class WhatsNewScreen {
  
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
+            Log.e(LOG_TAG,e.getMessage());
         }
     }
  

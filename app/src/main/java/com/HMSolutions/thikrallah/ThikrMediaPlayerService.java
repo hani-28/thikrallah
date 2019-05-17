@@ -125,6 +125,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                         msg.replyTo.send(msg2);
                     } catch (RemoteException e) {
                         e.printStackTrace();
+                        Log.e(TAG,e.getMessage());
                     }
                     super.handleMessage(msg);
             }
@@ -238,7 +239,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
     private void initNotification() {
         Intent resultIntent = new Intent(this, MainActivity.class);
-        if (getThikrType() != MainActivity.DATA_TYPE_GENERAL_THIKR) {
+        if (getThikrType().equals(MainActivity.DATA_TYPE_GENERAL_THIKR)) {
             resultIntent.putExtra("FromNotification", true);
             resultIntent.putExtra("DataType", this.getThikrType());
 

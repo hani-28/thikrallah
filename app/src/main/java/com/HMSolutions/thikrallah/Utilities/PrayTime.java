@@ -1018,8 +1018,8 @@ public class PrayTime {
         return JDate;
     }
 
-    public void setJDate(double jDate) {
-        JDate = jDate;
+    public void setJDate(double myjDate) {
+        JDate = myjDate;
     }
 
     private int getJafari() {

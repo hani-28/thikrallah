@@ -46,6 +46,7 @@ public class UserThikrArrayAdapter extends ArrayAdapter<UserThikr> implements Co
      * we are overriding the getView method here - this is what defines how each
      * list item will look.
      */
+    @Override
     public View getView(int position, View convertView, ViewGroup parent){
 
         // assign the view we are converting to a local variable

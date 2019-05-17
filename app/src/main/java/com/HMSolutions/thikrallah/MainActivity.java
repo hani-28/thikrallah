@@ -4,22 +4,18 @@ package com.HMSolutions.thikrallah;
 import com.crashlytics.android.Crashlytics;
 import io.fabric.sdk.android.Fabric;
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 
 import com.HMSolutions.thikrallah.Fragments.MainFragment;
-import com.HMSolutions.thikrallah.Fragments.QuranFragment;
 import com.HMSolutions.thikrallah.Fragments.ThikrFragment;
 import com.HMSolutions.thikrallah.Fragments.TutorialFragment;
 import com.HMSolutions.thikrallah.Notification.AthanTimerService;
 import com.HMSolutions.thikrallah.Utilities.AppRater;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
 import com.HMSolutions.thikrallah.Utilities.MyDBHelper;
-import com.HMSolutions.thikrallah.Utilities.WhatsNewScreen;
 
 
 import android.Manifest;
@@ -58,9 +54,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-import com.google.android.gms.ads.*;
+
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 
@@ -152,12 +147,7 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
         }
         if (datatype.contains(DATA_TYPE_QURAN)) {
             Log.d(TAG, "quran");
-            QuranFragment fragment = (QuranFragment) this.getFragmentManager().findFragmentByTag("QuranFragment");
-            if (fragment != null && fragment.isVisible()) {
-                Log.d(TAG, "visible");
-                fragment.setCurrentlyPlaying(position);
-            }
-            return;
+
         } else {
             ThikrFragment fragment = (ThikrFragment) this.getFragmentManager().findFragmentByTag("ThikrFragment");
             if (fragment != null && fragment.isVisible()) {
@@ -168,6 +158,7 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
     }
 
     private ServiceConnection mConnectionMediaServer = new ServiceConnection() {
+        @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
             mServiceThikrMediaPlayerMessenger = new Messenger(service);
             mIsBoundMediaService = true;
@@ -182,7 +173,7 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
 
             }
         }
-
+        @Override
         public void onServiceDisconnected(ComponentName className) {
             // This is called when the connection with the service has been unexpectedly disconnected - process crashed.
             unbindtoMediaService();
@@ -282,8 +273,7 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
     @Override
     protected void onStop() {
         super.onStop();// ATTENTION: This was auto-generated to implement the App Indexing API.
-
-
+        Log.d(TAG,"onstop finished");
     }
 
     @Override
@@ -506,6 +496,7 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
                                         startActivity(intent);
                                     }catch(Exception e){
                                         e.printStackTrace();
+                                        Log.d(TAG,e.getMessage());
                                     }finally{
                                         mPrefs.edit().putBoolean("protected", true).apply();
                                     }
@@ -555,11 +546,11 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
             }
             if (intent.getExtras().getString("DataType").contains(MainActivity.DATA_TYPE_QURAN)) {
                 Log.d(TAG, "quran thikr notification");
-                Bundle data = new Bundle();
-                data.putString("DataType", intent.getExtras().getString("DataType"));
-                data.putInt("surat", Integer.parseInt(intent.getExtras().getString("DataType").split("/")[1]));
+                //Bundle data = new Bundle();
+                //data.putString("DataType", intent.getExtras().getString("DataType"));
+                //data.putInt("surat", Integer.parseInt(intent.getExtras().getString("DataType").split("/")[1]));
                 //data.putInt("surat", this.getResources().getIntArray(R.array.surat_values)[0]);
-                launchFragment(new QuranFragment(), data, "QuranFragment");
+                //launchFragment(new QuranFragment(), data, "QuranFragment");
             }
         }
         boolean isFromSettings = intent.getBooleanExtra("FromPreferenceActivity", false);
@@ -573,9 +564,9 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
 
     }
 
-    private void timeOperation(String tag, String operation) {
+    private void timeOperation(String mytag, String operation) {
         endnow = SystemClock.elapsedRealtime();
-        Log.d(tag, "Execution time: " + (endnow - startnow) + " ms for " + operation);
+        Log.d(mytag, "Execution time: " + (endnow - startnow) + " ms for " + operation);
         //Log.d(tag,operation);
         startnow = SystemClock.elapsedRealtime();
     }
@@ -623,10 +614,10 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
 
 
     @Override
-    public void launchFragment(Fragment iFragment, Bundle args, String tag) {
+    public void launchFragment(Fragment iFragment, Bundle args, String mytag) {
         iFragment.setArguments(args);
         FragmentTransaction fragmentTransaction1 = this.getFragmentManager().beginTransaction();
-        fragmentTransaction1.replace(R.id.container, iFragment, tag);
+        fragmentTransaction1.replace(R.id.container, iFragment, mytag);
         fragmentTransaction1.addToBackStack(null);
         fragmentTransaction1.commit();
 
@@ -647,12 +638,14 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
 
     @Override
     public void onPause() {
+        Log.d(TAG,"on pause started");
         stopLocationUpdates();
         unbindtoMediaService();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.unregisterOnSharedPreferenceChangeListener(this);
-
+        Log.d(TAG,"on pause finished");
         super.onPause();
+        Log.d(TAG,"on pause finished on parent");
 
     }
 
@@ -782,25 +775,6 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
         return this.mPrefs.getString("thikrType", MainActivity.DATA_TYPE_DAY_THIKR);
     }
 
-    public String md5(String s) {
-        try {
-            // Create MD5 Hash
-            MessageDigest digest = MessageDigest.getInstance("MD5");
-            digest.update(s.getBytes());
-            byte messageDigest[] = digest.digest();
-
-            // Create Hex String
-            StringBuffer hexString = new StringBuffer();
-            for (int i = 0; i < messageDigest.length; i++)
-                hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
-            return hexString.toString();
-
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -876,11 +850,13 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
         builder.setMessage(R.string.location_services_not_enabled)
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
                         startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS),RC_ENABLE_LOCATION_SETTINGS);
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
                     public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
                         dialog.cancel();
                     }
@@ -916,9 +892,9 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
         stopLocationUpdates();
 
     }
-    private class updateLocationDiscription extends AsyncTask<Context, String, String> {
-
-
+    private static class updateLocationDiscription extends AsyncTask<Context, String, String> {
+        String TAG = "updateLocationDiscription";
+        @Override
         protected String doInBackground(Context... context) {
             return updateCity(context[0]);
         }
@@ -947,6 +923,7 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+                Log.e(TAG,e.getMessage());
             }
             return locationDiscription;
         }

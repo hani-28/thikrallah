@@ -44,6 +44,7 @@ public class HighlightType implements Comparable<HighlightType> {
   public boolean equals(Object o) {
     return this == o ||
         (o != null && o.getClass() == HighlightType.class && mId.equals(((HighlightType) o).mId));
+
   }
 
   @Override

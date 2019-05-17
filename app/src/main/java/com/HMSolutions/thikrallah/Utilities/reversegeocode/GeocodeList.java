@@ -69,7 +69,7 @@ public class GeocodeList {
         return geocode;
     }
 
-    private class Geocode {
+    private static class Geocode {
         String id;
         String name;
         Geometry geometry;
@@ -115,7 +115,7 @@ public class GeocodeList {
         }
     }
 
-    private class Geometry {
+    private static class Geometry {
 
         String type;
         Coordinates coordinates;
@@ -138,7 +138,7 @@ public class GeocodeList {
     }
 
 
-    private class Coordinates {
+    private static class Coordinates {
 
         @SerializedName("polygonset")
         List<PolygonSet> polygonSetList;
@@ -153,7 +153,7 @@ public class GeocodeList {
     }
 
 
-    private class PolygonSet {
+    private static class PolygonSet {
         @SerializedName("polygon")
         List<LocationPoint> polygonList;
 
@@ -166,7 +166,7 @@ public class GeocodeList {
         }
     }
 
-    private class LocationPoint {
+    private static class LocationPoint {
 
         double latitude;
         double longitude;

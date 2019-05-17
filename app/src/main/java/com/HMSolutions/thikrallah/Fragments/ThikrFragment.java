@@ -134,8 +134,8 @@ public class ThikrFragment extends ListFragment implements OnClickListener {
 			return getResources().getStringArray(R.array.NightThikr);
 		}
         if (this.thikrType.equals(MainActivity.DATA_TYPE_QURAN)){
-            surat=this.getArguments().getInt("surat");
-            return new String[]{this.getActivity().getResources().getStringArray(R.array.surat_text)[surat]};
+         //   surat=this.getArguments().getInt("surat");
+           // return new String[]{this.getActivity().getResources().getStringArray(R.array.surat_text)[surat]};
         }
 		return numbers_text;
 	}

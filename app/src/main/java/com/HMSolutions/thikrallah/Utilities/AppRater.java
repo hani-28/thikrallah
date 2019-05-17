@@ -54,20 +54,21 @@ public class AppRater {
 
 	public static void showRateDialog(final Context mContext, final SharedPreferences.Editor editor) {
 		final Dialog dialog = new Dialog(mContext);
-		dialog.setTitle((context.getString(R.string.rate)));
+		dialog.setTitle(context.getString(R.string.rate));
 
 		LinearLayout ll = new LinearLayout(mContext);
 		ll.setOrientation(LinearLayout.VERTICAL);
 
 		TextView tv = new TextView(mContext);
-		tv.setText((context.getString(R.string.rate_message)));
+		tv.setText(context.getString(R.string.rate_message));
 		tv.setWidth(240);
 		tv.setPadding(4, 0, 4, 10);
 		ll.addView(tv);
 
 		Button b1 = new Button(mContext);
-		b1.setText((context.getString(R.string.rate)));
+		b1.setText(context.getString(R.string.rate));
 		b1.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				if (editor != null) {
 					editor.putBoolean("dontshowagain", true);
@@ -80,8 +81,9 @@ public class AppRater {
 		ll.addView(b1);
 
 		Button b2 = new Button(mContext);
-		b2.setText((context.getString(R.string.remind_later)));
+		b2.setText(context.getString(R.string.remind_later));
 		b2.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				dialog.dismiss();
 			}
@@ -89,8 +91,9 @@ public class AppRater {
 		ll.addView(b2);
 
 		Button b3 = new Button(mContext);
-		b3.setText((context.getString(R.string.dont_rate)));
+		b3.setText(context.getString(R.string.dont_rate));
 		b3.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				if (editor != null) {
 					editor.putBoolean("dontshowagain", true);

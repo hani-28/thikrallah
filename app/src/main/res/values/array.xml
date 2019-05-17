@@ -186,10 +186,6 @@
         <item>@string/surat_alkahf</item>
         <item>@string/surat_almulk</item>
     </string-array>
-    <string-array name="surat_text">
-        <item>@string/surat_alkahf_text</item>
-        <item>@string/surat_almulk_text</item>
-    </string-array>
     <integer-array name="surat_values">
         <item>0</item>
         <item>1</item>

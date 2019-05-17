@@ -62,9 +62,9 @@
     <item>shuraym</item>
     <item>sahl_yaseen</item>
     <item>salah_budair</item>
-    <item>abdul_basit_murattal</item>
-    <item>abdul_basit_mujawwad</item>
-    <item>sudais_murattal</item>
+    <item>abdulbasit_murattal</item>
+    <item>abdulbasit_mujawwad</item>
+    <item>sudais</item>
     <item>abdulrahman_alshahat</item>
     <item>abdurrashid_sufi</item>
     <item>abdulaziz_zahrani</item>
@@ -75,7 +75,7 @@
     <item>mostafa_ismaeel</item>
     <item>qatami</item>
     <item>yasser_dussary</item>
-    <item>ibrahim_walk</item>
+    <item>19</item>
   </string-array>
 
   <string-array translatable="false" name="quran_readers_db_name">
