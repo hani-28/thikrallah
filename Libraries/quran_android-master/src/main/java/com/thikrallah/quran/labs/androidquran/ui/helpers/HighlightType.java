@@ -6,7 +6,7 @@ import androidx.core.content.ContextCompat;
 
 import com.thikrallah.quran.labs.androidquran.R;
 
-public class HighlightType implements Comparable<HighlightType> {
+public final class HighlightType implements Comparable<HighlightType> {
 
   public static final HighlightType SELECTION = new HighlightType(1, false, R.color.selection_highlight);
   public static final HighlightType AUDIO =     new HighlightType(2, false, R.color.audio_highlight);

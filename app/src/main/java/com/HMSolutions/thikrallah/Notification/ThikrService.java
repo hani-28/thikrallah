@@ -14,6 +14,7 @@ import com.HMSolutions.thikrallah.Models.UserThikr;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.ThikrMediaPlayerService;
 import com.HMSolutions.thikrallah.Utilities.MyDBHelper;
+import com.thikrallah.quran.labs.androidquran.ui.PagerActivity;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -225,12 +226,9 @@ public class ThikrService extends IntentService  {
                 mBuilder=setVisibilityPublic(mBuilder);
                 Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                 mBuilder.setSound(soundUri,AudioManager.STREAM_NOTIFICATION);
-                Intent launchAppIntent = new Intent(this, MainActivity.class);
+                Intent launchAppIntent = new Intent(this, PagerActivity.class);
+                launchAppIntent.putExtra("page", 562);
 
-                launchAppIntent.putExtra("FromNotification",true);
-                launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_QURAN_MULK);
-                launchAppIntent.putExtra("surat", 1);
-                //TODO: Fix below to use new Quran Functionality
                 PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
                         0, launchAppIntent, PendingIntent.FLAG_CANCEL_CURRENT
                 );
@@ -268,12 +266,10 @@ public class ThikrService extends IntentService  {
                 mBuilder=setVisibilityPublic(mBuilder);
                 Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                 mBuilder.setSound(soundUri,AudioManager.STREAM_NOTIFICATION);
-                Intent launchAppIntent = new Intent(this, MainActivity.class);
+                Intent launchAppIntent = new Intent(this, PagerActivity.class);
+                launchAppIntent.putExtra("page", 293);
 
-                launchAppIntent.putExtra("FromNotification",true);
-                launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_QURAN_KAHF);
-                launchAppIntent.putExtra("surat", 0);
-                //TODO: Fix below to use new Quran Functionality
+
                 PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
                         0, launchAppIntent, PendingIntent.FLAG_CANCEL_CURRENT
                 );

@@ -21,6 +21,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import com.thikrallah.quran.labs.androidquran.QuranDataActivity;
+import com.thikrallah.quran.labs.androidquran.ui.PagerActivity;
 public class MainFragment extends Fragment {
 	private MainInterface mCallback;
     private Context mContext;
@@ -76,27 +77,13 @@ public class MainFragment extends Fragment {
         button_quran.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
 				Intent intent = new Intent();
 				intent.setClass(v.getContext(), QuranDataActivity.class);
 				startActivityForResult(intent, 0);
-               /* AlertDialog.Builder b = new AlertDialog.Builder(mContext);
-                b.setTitle(R.string.choosesura);
-                String[] types = mContext.getResources().getStringArray(R.array.surat_list);
-                b.setItems(types, new AlertDialog.OnClickListener() {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int choice) {
-                        dialog.dismiss();
-                        Bundle data=new Bundle();
-                        data.putString("DataType", MainActivity.DATA_TYPE_QURAN);
-                        data.putInt("surat", mContext.getResources().getIntArray(R.array.surat_values)[choice]);
-                        mCallback.launchFragment(new QuranFragment(), data, "QuranFragment");
-                    }
 
-                });
-
-                b.show();
-                */
             }
         });
         button_sadaqa.setOnClickListener(new OnClickListener() {
