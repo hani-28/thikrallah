@@ -55,6 +55,7 @@ import android.os.PowerManager;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.util.Log;
 import android.util.SparseIntArray;
 
 import com.crashlytics.android.Crashlytics;
@@ -99,6 +100,7 @@ import timber.log.Timber;
 public class AudioService extends Service implements OnCompletionListener,
     OnPreparedListener, OnErrorListener, AudioFocusable, MediaPlayer.OnSeekCompleteListener {
 
+  private static final String TAG = "AudioService";
   // These are the Intent actions that we are prepared to handle. Notice that
   // the fact these constants exist in our class is a mere convenience: what
   // really defines the actions our service can handle are the <action> tags
@@ -193,7 +195,7 @@ public class AudioService extends Service implements OnCompletionListener,
   // The ID we use for the notification (the onscreen alert that appears
   // at the notification area at the top of the screen as an icon -- and
   // as text as well if the user expands the notification area).
-  final int NOTIFICATION_ID = 4;
+  final int NOTIFICATION_ID = 547;
   private static final String NOTIFICATION_CHANNEL_ID = "quran_audio_playback";
 
   private NotificationManager notificationManager;
@@ -229,14 +231,21 @@ public class AudioService extends Service implements OnCompletionListener,
 
     @Override
     public void handleMessage(Message msg) {
+      Log.d(TAG,"handle message called");
+      Log.d(TAG,"msg is: "+msg.toString());
       if (msg.what == MSG_INCOMING && msg.obj != null) {
         Intent intent = (Intent) msg.obj;
         handleIntent(intent);
+        Log.d(TAG,"message: incoming"+msg.toString());
       } else if (msg.what == MSG_START_AUDIO) {
+        Log.d(TAG,"message: start audio"+msg.toString());
         configAndStartMediaPlayer();
       } else if (msg.what == MSG_UPDATE_AUDIO_POS) {
+        Log.d(TAG,"message: update audio position"+msg.toString());
         updateAudioPlayPosition();
+
       }
+
     }
   }
 
@@ -350,35 +359,46 @@ public class AudioService extends Service implements OnCompletionListener,
 
     @Override
     public void onStop() {
+      Log.d(TAG,"onstop called");
       processStopRequest();
     }
   }
 
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
+    Log.d(TAG,"Onstartcommand called");
     if (intent == null) {
       // handle a crash that occurs where intent comes in as null
       if (State.Stopped == state) {
         serviceHandler.removeCallbacksAndMessages(null);
+        Log.d(TAG,"state is stopped");
         stopSelf();
       }
     } else {
       final String action = intent.getAction();
       if (ACTION_PLAYBACK.equals(action) || Intent.ACTION_MEDIA_BUTTON.equals(action)) {
         // go to the foreground as quickly as possible.
+        Log.d(TAG,"setUpAsForeground");
         setUpAsForeground();
       }
 
       final Message message = serviceHandler.obtainMessage(MSG_INCOMING, intent);
       serviceHandler.sendMessage(message);
+      if(intent.getBooleanExtra("isFromService",false)){
+        final Message message2 = serviceHandler.obtainMessage(MSG_UPDATE_AUDIO_POS, intent);
+        serviceHandler.sendMessage(message2);
+      }
+
     }
     return START_NOT_STICKY;
   }
 
   private void handleIntent(Intent intent) {
     final String action = intent.getAction();
+    Log.d(TAG,"handle intent called with action "+action);
     if (ACTION_CONNECT.equals(action)) {
       if (State.Stopped == state) {
+        Log.d(TAG,"STATE is stopped. calling processstoprequest");
         processStopRequest(true);
       } else {
         int sura = -1;
@@ -409,7 +429,7 @@ public class AudioService extends Service implements OnCompletionListener,
       AudioRequest playInfo = intent.getParcelableExtra(EXTRA_PLAY_INFO);
       if (playInfo != null) {
         audioRequest = playInfo;
-
+        Log.d(TAG,"action playback");
         final SuraAyah start = audioRequest.getStart();
         final boolean basmallah = !playInfo.isGapless() &&
             SuraAyahExtensionKt.requiresBasmallah(start);
@@ -419,6 +439,7 @@ public class AudioService extends Service implements OnCompletionListener,
 
         if (player != null) {
           player.stop();
+          Log.d(TAG,"stopping player");
         }
         state = State.Stopped;
         Crashlytics.log("stop if playing...");
@@ -432,6 +453,7 @@ public class AudioService extends Service implements OnCompletionListener,
     } else if (ACTION_SKIP.equals(action)) {
       processSkipRequest();
     } else if (ACTION_STOP.equals(action)) {
+      Log.d(TAG,"action is stopped. calling processstoprequest");
       processStopRequest();
     } else if (ACTION_REWIND.equals(action)) {
       processRewindRequest();
@@ -573,6 +595,7 @@ public class AudioService extends Service implements OnCompletionListener,
         final int nextSura = audioQueue.getCurrentSura();
         final int nextAyah = audioQueue.getCurrentAyah();
         if (!success) {
+          Log.d(TAG,"playat not successful");;
           processStopRequest();
           return;
         } else if (nextSura != sura || nextAyah != updatedAyah) {
@@ -699,6 +722,7 @@ public class AudioService extends Service implements OnCompletionListener,
       // if we get a pause while we're already stopped, it means we likely woke up because
       // of AudioIntentReceiver, so just stop in this case.
       setState(PlaybackStateCompat.STATE_STOPPED);
+      Log.d(TAG,"state set to  stopped");
       stopSelf();
     }
   }
@@ -763,10 +787,12 @@ public class AudioService extends Service implements OnCompletionListener,
   }
 
   private void processStopRequest() {
+    Log.d(TAG,"processstopRequest called with no arguments. setting force =false");
     processStopRequest(false);
   }
 
   private void processStopRequest(boolean force) {
+    Log.d(TAG,"processstopRequest called with force =false");
     setState(PlaybackStateCompat.STATE_STOPPED);
     serviceHandler.removeMessages(MSG_UPDATE_AUDIO_POS);
 
@@ -777,13 +803,14 @@ public class AudioService extends Service implements OnCompletionListener,
 
     if (force || State.Stopped != state) {
       state = State.Stopped;
-
+      Log.d(TAG,"state is "+state +" and force is "+force);
       // let go of all resources...
       relaxResources(true, true);
       giveUpAudioFocus();
 
       // service is no longer necessary. Will be started again if needed.
       serviceHandler.removeCallbacksAndMessages(null);
+      Log.d(TAG,"service no longer needed?");
       stopSelf();
 
       // stop async task if it's running
@@ -875,7 +902,9 @@ public class AudioService extends Service implements OnCompletionListener,
 
   private void configAndStartMediaPlayer(boolean canSeek) {
     Timber.d("configAndStartMediaPlayer()");
+    Log.d(TAG,"configureandstartmediaplayer is called");
     if (audioFocus == AudioFocus.NoFocusNoDuck) {
+      Log.d(TAG,"audio focus is nofocusnoduck");
       // If we don't have audio focus and can't duck, we have to pause,
       // even if state is State.Playing. But we stay in the Playing state
       // so that we know we have to resume playback once we get focus back.
@@ -884,13 +913,16 @@ public class AudioService extends Service implements OnCompletionListener,
       }
       return;
     } else if (audioFocus == AudioFocus.NoFocusCanDuck) {
+      Log.d(TAG,"audio focus is NoFocusCanDuck");
       // we'll be relatively quiet
       player.setVolume(DUCK_VOLUME, DUCK_VOLUME);
     } else {
+      Log.d(TAG,"audio focus is else");
       player.setVolume(1.0f, 1.0f);
     } // we can be loud
 
     if (shouldStop) {
+      Log.d(TAG,"should stp is true. calling processstoprequest");
       processStopRequest();
       shouldStop = false;
       return;
@@ -898,30 +930,35 @@ public class AudioService extends Service implements OnCompletionListener,
 
     if (playerOverride) {
       if (!player.isPlaying()) {
+        Log.d(TAG,"override player to start");
         player.start();
         state = State.Playing;
       }
       return;
     }
-
+    Log.d(TAG,"checking if playing...");
     Timber.d("checking if playing...");
     if (!player.isPlaying()) {
       if (canSeek && audioRequest.isGapless()) {
+        Log.d(TAG,"canseek is true and isgapless is true");
         int timing = getSeekPosition(false);
         if (timing != -1) {
+          Log.d(TAG,"got timing: "+timing+", seeking and updating later..");
           Timber.d("got timing: %d, seeking and updating later...", timing);
           player.seekTo(timing);
           return;
         } else {
+          Log.d(TAG,"no timing data yet, will try again...");
           Timber.d("no timing data yet, will try again...");
           // try to play again after 200 ms
           serviceHandler.sendEmptyMessageDelayed(MSG_START_AUDIO, 200);
           return;
         }
       } else if (audioRequest.isGapless()) {
+        Log.d(TAG,"sendEmptyMessageDelayed");
         serviceHandler.sendEmptyMessageDelayed(MSG_UPDATE_AUDIO_POS, 200);
       }
-
+      Log.d(TAG,"player starting");
       player.start();
       state = State.Playing;
     }
@@ -963,7 +1000,7 @@ public class AudioService extends Service implements OnCompletionListener,
         Intent updateIntent = new Intent(AudioUpdateIntent.INTENT_NAME);
         updateIntent.putExtra(AudioUpdateIntent.STATUS, AudioUpdateIntent.STOPPED);
         broadcastManager.sendBroadcast(updateIntent);
-
+        Log.d(TAG,"audio request or url is null");
         processStopRequest(true); // stop everything!
         return;
       }
@@ -976,7 +1013,7 @@ public class AudioService extends Service implements OnCompletionListener,
           updateIntent.putExtra(AudioUpdateIntent.STATUS, AudioUpdateIntent.STOPPED);
           updateIntent.putExtra(EXTRA_PLAY_INFO, audioRequest);
           broadcastManager.sendBroadcast(updateIntent);
-
+          Log.d(TAG,"file not exist");
           processStopRequest(true);
           return;
         }
@@ -1231,7 +1268,7 @@ public class AudioService extends Service implements OnCompletionListener,
 
     notificationBuilder.setTicker(audioTitle);
     notificationBuilder.setContentText(audioTitle);
-
+    Log.d(TAG,"starting foregound now");
     startForeground(NOTIFICATION_ID, notificationBuilder.build());
     isSetupAsForeground = true;
   }
@@ -1325,6 +1362,7 @@ public class AudioService extends Service implements OnCompletionListener,
 
   @Override
   public void onDestroy() {
+    Log.d(TAG,"ondestroy called");
     compositeDisposable.clear();
     // Service is being killed, so make sure we release our resources
     serviceHandler.removeCallbacksAndMessages(null);

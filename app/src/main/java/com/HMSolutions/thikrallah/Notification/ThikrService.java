@@ -2,10 +2,13 @@ package com.HMSolutions.thikrallah.Notification;
 
 
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
@@ -14,7 +17,23 @@ import com.HMSolutions.thikrallah.Models.UserThikr;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.ThikrMediaPlayerService;
 import com.HMSolutions.thikrallah.Utilities.MyDBHelper;
+import com.crashlytics.android.Crashlytics;
+import com.thikrallah.quran.data.page.provider.madani.MadaniPageProvider;
+import com.thikrallah.quran.data.source.PageProvider;
+import com.thikrallah.quran.labs.androidquran.BuildConfig;
+import com.thikrallah.quran.labs.androidquran.common.QariItem;
+import com.thikrallah.quran.labs.androidquran.dao.audio.AudioPathInfo;
+import com.thikrallah.quran.labs.androidquran.dao.audio.AudioRequest;
+import com.thikrallah.quran.labs.androidquran.data.Constants;
+import com.thikrallah.quran.labs.androidquran.data.QuranInfo;
+import com.thikrallah.quran.labs.androidquran.data.SuraAyah;
+import com.thikrallah.quran.labs.androidquran.presenter.audio.AudioPresenter;
+import com.thikrallah.quran.labs.androidquran.service.AudioService;
 import com.thikrallah.quran.labs.androidquran.ui.PagerActivity;
+import com.thikrallah.quran.labs.androidquran.util.AudioUtils;
+import com.thikrallah.quran.labs.androidquran.util.QuranFileUtils;
+import com.thikrallah.quran.labs.androidquran.util.QuranSettings;
+import com.thikrallah.quran.labs.androidquran.widgets.AudioStatusBar;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -25,6 +44,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -32,13 +52,20 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.PowerManager;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import android.util.Log;
+
+import javax.inject.Inject;
+
+import timber.log.Timber;
 
 
 public class ThikrService extends IntentService  {
@@ -47,6 +74,13 @@ public class ThikrService extends IntentService  {
     private AudioManager am;
     private Intent calling_intent;
     Context mcontext;
+    @Inject PageProvider quranPageProvider;
+    private static final String QURAN_BASE = "quran_android/";
+    private static final String AUDIO_DIRECTORY="audio";
+    private static final String AUDIO_EXTENSION = ".mp3";
+
+    private static final String DB_EXTENSION = ".db";
+    private static final String  ZIP_EXTENSION = ".zip";
     public ThikrService() {
 		super("service");
 	}
@@ -242,12 +276,27 @@ public class ThikrService extends IntentService  {
                 sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_QURAN_MULK).commit();
 
                 data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAYALL);
+
                 //TODO: Fix below to use new Quran Functionality
+                SuraAyah start = new SuraAyah(67, 1);
+                SuraAyah end = new SuraAyah(67, 30);
+                List<QariItem> qlist = getQariList(this);
+                QariItem qari=qlist.get(0);
+
+                AudioPathInfo audioPathInfo = this.getLocalAudioPathInfo(qari);
+                Log.d(TAG,"ready to play Quran");
+                if (audioPathInfo != null) {
+                    AudioRequest audioRequest = new AudioRequest(start, end, qari, 0, 0, true, false, audioPathInfo);
+                    Log.d(TAG,"calling handlePlayback");
+                    handlePlayback(audioRequest);
+                }
+               /*
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     this.startForegroundService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
                 } else {
                     this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
                 }
+                */
             }
             return;
         }
@@ -356,6 +405,182 @@ public class ThikrService extends IntentService  {
         }
 
 	}
+    private List<QariItem> getQariList( Context context) {
+        Resources resources = context.getResources();
+        String[] shuyookh = resources.getStringArray(R.array.quran_readers_name);
+        String[]paths = resources.getStringArray(R.array.quran_readers_path);
+        String[]urls = resources.getStringArray(R.array.quran_readers_urls);
+        String[]databases = resources.getStringArray(R.array.quran_readers_db_name);
+        int[] hasGaplessEquivalent = resources.getIntArray(R.array.quran_readers_have_gapless_equivalents);
+        List<QariItem> items = new ArrayList<QariItem>();
+
+        for (int i=0;i<shuyookh.length;i++ ) {
+                items.add(new QariItem(i, shuyookh[i], urls[i], paths[i], databases[i]));
+        }
+
+        return items;
+    }
+    public void handlePlayback(AudioRequest request) {
+        boolean needsPermissionToDownloadOver3g = true;
+        final Intent intent = new Intent(this, AudioService.class);
+        intent.setAction(AudioService.ACTION_PLAYBACK);
+
+        if (request != null) {
+            intent.putExtra(AudioService.EXTRA_PLAY_INFO, request);
+            intent.putExtra("isFromService",true);
+        }
+
+        Crashlytics.log("starting service for audio playback");
+        Log.d(TAG,"starting service for audio playback");
+        startService(intent);
+    }
+    private boolean isSDCardMounted() {
+        String state = Environment.getExternalStorageState();
+        return state.equals(Environment.MEDIA_MOUNTED);
+    }
+
+    public String getQuranBaseDirectory(Context context) {
+        String basePath = QuranSettings.getInstance(context).getAppCustomLocation();
+
+        if (!isSDCardMounted()) {
+            // if our best guess suggests that we won't have access to the data due to the sdcard not
+            // being mounted, then set the base path to null for now.
+            if (basePath == null || basePath.equals(
+                    Environment.getExternalStorageDirectory().getAbsolutePath()) ||
+                    (basePath.contains(BuildConfig.APPLICATION_ID) && context.getExternalFilesDir(null) == null)) {
+                basePath = null;
+            }
+        }
+
+        if (basePath != null) {
+            if (!basePath.endsWith(File.separator)) {
+                basePath += File.separator;
+            }
+            return basePath + QURAN_BASE;
+        }
+        return null;
+    }
+    private boolean haveAllFiles(String baseUrl,
+                     String path,
+                     SuraAyah start,
+                     SuraAyah end,
+                     Boolean isGapless) {
+        if (path.isEmpty()) {
+            return false;
+        }
+
+        File f = new File(path);
+        if (!f.exists()) {
+            f.mkdirs();
+            return false;
+        }
+
+        int startSura = start.sura;
+        int startAyah = start.ayah;
+
+        int endSura = end.sura;
+        int endAyah = end.ayah;
+
+        if (endSura < startSura || endSura == startSura && endAyah < startAyah) {
+            throw new IllegalStateException("End isn't larger than the start");
+        }
+        int lastAyah;
+        int firstAyah;
+        for (int i = startSura; i<=endSura;i++) {
+            if (i == endSura) {
+                 lastAyah =endAyah;
+            } else {
+                 lastAyah = getNumAyahs(i) ;
+            }
+           if (i == startSura) {
+                firstAyah = startAyah;
+           } else {
+                firstAyah = 1;
+           }
+
+            if (isGapless) {
+                if (i == endSura && endAyah == 0) {
+                    continue;
+                }
+                String fileName = String.format(Locale.US, baseUrl, i);
+                Timber.d("gapless, checking if we have %s", fileName);
+                f = new File(fileName);
+                if (!f.exists()) {
+                    return false;
+                }
+                continue;
+            }
+
+            Timber.d("not gapless, checking each ayah...");
+            for (int j = firstAyah; j<=lastAyah;j++) {
+                String filename = i + File.separator + j + AUDIO_EXTENSION;
+                f =new File(path + File.separator + filename);
+                if (!f.exists()) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+    public int getNumAyahs(int sura) {
+        if (sura==67){
+            return 30;
+        }else if (sura == 18){
+            return 110;
+        }else{
+            return 1;
+        }
+    }
+    @Nullable
+    private String getQuranAudioDirectory(Context context){
+        String path = getQuranBaseDirectory(context);
+        if (path == null) {
+            return null;
+        }
+        path += AUDIO_DIRECTORY;
+        File dir = new File(path);
+        if (!dir.exists() && !dir.mkdirs()) {
+            return null;
+        }
+        return path + File.separator;
+    }
+    private String getLocalQariUrl(Context context,QariItem item) {
+        String rootDirectory = getQuranAudioDirectory(this);
+        if (rootDirectory == null){
+            return null;
+        } else{
+            return rootDirectory + item.getPath();
+        }
+    }
+    private String getQariDatabasePathIfGapless(Context context,  QariItem item) {
+        String databaseName = item.getDatabaseName();
+        if (databaseName != null) {
+            String path = getLocalQariUrl(context, item);
+            if (path != null) {
+                databaseName = path + File.separator + databaseName + DB_EXTENSION;
+            }
+        }
+        return databaseName;
+    }
+    private AudioPathInfo getLocalAudioPathInfo(QariItem item) {
+        String databaseName = item.getDatabaseName();
+        if (databaseName != null) {
+            String localPath = getLocalQariUrl(this, item);
+            if (localPath != null) {
+                String databasePath = getQariDatabasePathIfGapless(this, item);
+                String urlFormat;
+                if (databasePath == null || databasePath.isEmpty()) {
+                    urlFormat = localPath + File.separator + "%d" + File.separator +
+                            "%d" + AudioUtils.AUDIO_EXTENSION;
+                } else {
+                    urlFormat = localPath + File.separator + "%03d" + AudioUtils.AUDIO_EXTENSION;
+                }
+                return new AudioPathInfo(urlFormat, localPath, databasePath);
+            }
+        }
+        return null;
+    }
     private NotificationCompat.Builder setVisibilityPublic(NotificationCompat.Builder inotificationBuilder){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             inotificationBuilder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
