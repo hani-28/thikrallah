@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+
 import com.thikrallah.quran.labs.androidquran.data.QuranInfo;
 import com.thikrallah.quran.labs.androidquran.ui.PagerActivity;
 

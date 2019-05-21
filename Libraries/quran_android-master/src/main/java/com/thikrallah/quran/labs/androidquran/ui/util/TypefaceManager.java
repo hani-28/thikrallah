@@ -3,9 +3,9 @@ package com.thikrallah.quran.labs.androidquran.ui.util;
 import android.content.Context;
 import android.graphics.Typeface;
 
-import com.thikrallah.quran.labs.androidquran.data.QuranFileConstants;
-
 import androidx.annotation.NonNull;
+
+import com.thikrallah.quran.labs.androidquran.data.QuranFileConstants;
 
 public class TypefaceManager {
   public static final int TYPE_UTHMANI_HAFS = 1;

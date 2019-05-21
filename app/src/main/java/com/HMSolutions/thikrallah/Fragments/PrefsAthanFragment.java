@@ -20,8 +20,6 @@ import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.ThikrMediaPlayerService;
 import com.HMSolutions.thikrallah.Utilities.TimePreference;
 
-import java.util.Random;
-
 public class PrefsAthanFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

@@ -10,10 +10,10 @@ import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 
-import com.thikrallah.quran.labs.androidquran.R;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
+
+import com.thikrallah.quran.labs.androidquran.R;
 
 public class RepeatButton extends AppCompatImageView {
   @NonNull private String text;

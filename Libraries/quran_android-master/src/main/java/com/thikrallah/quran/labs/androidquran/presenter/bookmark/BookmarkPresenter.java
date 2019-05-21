@@ -2,19 +2,20 @@ package com.thikrallah.quran.labs.androidquran.presenter.bookmark;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+
 import androidx.annotation.VisibleForTesting;
-import com.google.android.material.snackbar.Snackbar;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
-import com.thikrallah.quran.labs.androidquran.dao.bookmark.Bookmark;
-import com.thikrallah.quran.labs.androidquran.dao.bookmark.BookmarkData;
+import com.google.android.material.snackbar.Snackbar;
 import com.thikrallah.quran.labs.androidquran.dao.RecentPage;
 import com.thikrallah.quran.labs.androidquran.dao.Tag;
+import com.thikrallah.quran.labs.androidquran.dao.bookmark.Bookmark;
+import com.thikrallah.quran.labs.androidquran.dao.bookmark.BookmarkData;
+import com.thikrallah.quran.labs.androidquran.dao.bookmark.BookmarkResult;
 import com.thikrallah.quran.labs.androidquran.data.Constants;
 import com.thikrallah.quran.labs.androidquran.data.QuranInfo;
 import com.thikrallah.quran.labs.androidquran.model.bookmark.BookmarkModel;
-import com.thikrallah.quran.labs.androidquran.dao.bookmark.BookmarkResult;
 import com.thikrallah.quran.labs.androidquran.model.translation.ArabicDatabaseUtils;
 import com.thikrallah.quran.labs.androidquran.presenter.Presenter;
 import com.thikrallah.quran.labs.androidquran.ui.fragment.BookmarksFragment;

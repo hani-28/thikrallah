@@ -110,6 +110,7 @@
             android:enabled="true" />
 
         <receiver android:name="com.HMSolutions.thikrallah.Notification.ThikrAlarmReceiver" />
+        <receiver android:name="com.HMSolutions.thikrallah.Notification.QuranThikrDownloadNeeds" />
         <receiver android:name="com.HMSolutions.thikrallah.Notification.ThikrBootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -122,13 +123,6 @@
             </intent-filter>
         </receiver>
 
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-
-        <activity
-            android:name="com.google.android.gms.ads.AdActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="538344ba5873c9838593b43901f011a0fb34b24c" />

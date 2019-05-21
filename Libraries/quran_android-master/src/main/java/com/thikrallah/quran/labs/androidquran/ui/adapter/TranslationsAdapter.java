@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.thikrallah.quran.labs.androidquran.R;
 import com.thikrallah.quran.labs.androidquran.dao.translation.TranslationItem;
 import com.thikrallah.quran.labs.androidquran.dao.translation.TranslationRowData;
@@ -17,8 +20,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.Observable;
 import io.reactivex.subjects.UnicastSubject;
 

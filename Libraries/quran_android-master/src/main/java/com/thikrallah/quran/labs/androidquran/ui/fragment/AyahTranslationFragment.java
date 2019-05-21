@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
+
 import com.thikrallah.quran.labs.androidquran.R;
 import com.thikrallah.quran.labs.androidquran.common.LocalTranslation;
 import com.thikrallah.quran.labs.androidquran.common.QuranAyahInfo;
@@ -25,8 +27,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
-
-import androidx.annotation.NonNull;
 
 public class AyahTranslationFragment extends AyahActionFragment
     implements InlineTranslationPresenter.TranslationScreen {

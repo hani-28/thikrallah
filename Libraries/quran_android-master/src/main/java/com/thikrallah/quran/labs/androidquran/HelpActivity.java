@@ -1,10 +1,11 @@
 package com.thikrallah.quran.labs.androidquran;
 
 import android.os.Bundle;
-import androidx.appcompat.app.ActionBar;
 import android.text.Html;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import androidx.appcompat.app.ActionBar;
 
 import com.thikrallah.quran.labs.androidquran.ui.QuranActionBarActivity;
 

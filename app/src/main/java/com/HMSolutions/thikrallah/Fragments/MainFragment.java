@@ -1,16 +1,8 @@
 package com.HMSolutions.thikrallah.Fragments;
 
-import com.HMSolutions.thikrallah.MainActivity;
-import com.HMSolutions.thikrallah.R;
-import com.HMSolutions.thikrallah.PreferenceActivity;
-import com.HMSolutions.thikrallah.Utilities.MainInterface;
-import com.HMSolutions.thikrallah.hisnulmuslim.DuaGroupActivity;
-
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,8 +12,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.HMSolutions.thikrallah.MainActivity;
+import com.HMSolutions.thikrallah.PreferenceActivity;
+import com.HMSolutions.thikrallah.R;
+import com.HMSolutions.thikrallah.Utilities.MainInterface;
+import com.HMSolutions.thikrallah.hisnulmuslim.DuaGroupActivity;
 import com.thikrallah.quran.labs.androidquran.QuranDataActivity;
-import com.thikrallah.quran.labs.androidquran.ui.PagerActivity;
 public class MainFragment extends Fragment {
 	private MainInterface mCallback;
     private Context mContext;

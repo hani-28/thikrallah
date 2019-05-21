@@ -1,16 +1,16 @@
 package com.thikrallah.quran.labs.androidquran.ui.preference;
 
-import com.thikrallah.quran.labs.androidquran.R;
-
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
+import android.util.AttributeSet;
+import android.widget.TextView;
+
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
 
-import android.util.AttributeSet;
-import android.widget.TextView;
+import com.thikrallah.quran.labs.androidquran.R;
 
 public class QuranHeaderPreference extends Preference {
 

@@ -1,6 +1,7 @@
 package com.thikrallah.quran.labs.androidquran.ui.helpers;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 

@@ -2,9 +2,9 @@ package com.thikrallah.quran.labs.androidquran.model.bookmark;
 
 import androidx.annotation.NonNull;
 
-import com.thikrallah.quran.labs.androidquran.dao.bookmark.BookmarkData;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
+import com.thikrallah.quran.labs.androidquran.dao.bookmark.BookmarkData;
 
 import java.io.IOException;
 

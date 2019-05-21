@@ -2,12 +2,12 @@ package com.thikrallah.quran.labs.androidquran.data;
 
 import android.content.Context;
 
+import androidx.annotation.Nullable;
+
 import com.thikrallah.quran.labs.androidquran.di.ActivityScope;
 import com.thikrallah.quran.labs.androidquran.util.QuranFileUtils;
 
 import javax.inject.Inject;
-
-import androidx.annotation.Nullable;
 
 @ActivityScope
 public class AyahInfoDatabaseProvider {

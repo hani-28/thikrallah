@@ -3,6 +3,9 @@ package com.thikrallah.quran.labs.androidquran.model.translation;
 import android.content.Context;
 import android.database.Cursor;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
+
 import com.thikrallah.quran.labs.androidquran.common.QuranText;
 import com.thikrallah.quran.labs.androidquran.dao.bookmark.Bookmark;
 import com.thikrallah.quran.labs.androidquran.data.QuranDataProvider;
@@ -21,8 +24,6 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.VisibleForTesting;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 

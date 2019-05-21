@@ -1,7 +1,7 @@
 package com.thikrallah.quran.labs.androidquran.model.bookmark;
 
-import com.thikrallah.quran.labs.androidquran.dao.bookmark.BookmarkData;
 import com.thikrallah.quran.labs.androidquran.dao.Tag;
+import com.thikrallah.quran.labs.androidquran.dao.bookmark.BookmarkData;
 
 import org.junit.Before;
 import org.junit.Test;

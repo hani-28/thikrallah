@@ -14,12 +14,12 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.thikrallah.quran.labs.androidquran.BuildConfig;
-import com.thikrallah.quran.labs.androidquran.R;
-
 import androidx.annotation.MenuRes;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
+
+import com.thikrallah.quran.labs.androidquran.BuildConfig;
+import com.thikrallah.quran.labs.androidquran.R;
 
 public class AyahToolBar extends ViewGroup implements
     View.OnClickListener, View.OnLongClickListener {

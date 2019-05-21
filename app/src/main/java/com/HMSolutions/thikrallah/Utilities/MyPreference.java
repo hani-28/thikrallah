@@ -1,7 +1,6 @@
 package com.HMSolutions.thikrallah.Utilities;
 
 import android.content.Context;
-import android.os.Build;
 import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.Gravity;

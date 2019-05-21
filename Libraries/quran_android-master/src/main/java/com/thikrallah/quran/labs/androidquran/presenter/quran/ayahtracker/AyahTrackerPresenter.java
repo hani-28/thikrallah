@@ -1,8 +1,9 @@
 package com.thikrallah.quran.labs.androidquran.presenter.quran.ayahtracker;
 
 import android.app.Activity;
-import androidx.annotation.Nullable;
 import android.view.MotionEvent;
+
+import androidx.annotation.Nullable;
 
 import com.thikrallah.quran.labs.androidquran.common.HighlightInfo;
 import com.thikrallah.quran.labs.androidquran.dao.bookmark.Bookmark;

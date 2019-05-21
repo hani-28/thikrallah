@@ -1,11 +1,11 @@
 package com.thikrallah.quran.labs.androidquran.ui.helpers;
 
-import com.thikrallah.quran.labs.androidquran.ui.util.TypefaceManager;
-
 import android.content.Context;
 import android.graphics.Typeface;
 import android.text.TextPaint;
 import android.text.style.MetricAffectingSpan;
+
+import com.thikrallah.quran.labs.androidquran.ui.util.TypefaceManager;
 
 public class UthmaniSpan extends MetricAffectingSpan {
   private Typeface mTypeface;

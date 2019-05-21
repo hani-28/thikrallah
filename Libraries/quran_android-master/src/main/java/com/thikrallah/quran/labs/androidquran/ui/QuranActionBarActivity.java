@@ -1,9 +1,10 @@
 package com.thikrallah.quran.labs.androidquran.ui;
 
 import android.os.Build;
+import android.view.KeyEvent;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import android.view.KeyEvent;
 
 public abstract class QuranActionBarActivity extends AppCompatActivity {
 

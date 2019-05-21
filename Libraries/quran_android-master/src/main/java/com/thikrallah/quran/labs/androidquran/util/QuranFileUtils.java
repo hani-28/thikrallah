@@ -5,6 +5,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.thikrallah.quran.data.source.PageProvider;
 import com.thikrallah.quran.labs.androidquran.BuildConfig;
 import com.thikrallah.quran.labs.androidquran.common.Response;
@@ -24,8 +27,6 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

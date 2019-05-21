@@ -2,8 +2,8 @@ package com.thikrallah.quran.labs.androidquran.presenter.bookmark;
 
 import androidx.core.util.Pair;
 
-import com.thikrallah.quran.labs.androidquran.dao.bookmark.Bookmark;
 import com.thikrallah.quran.labs.androidquran.dao.Tag;
+import com.thikrallah.quran.labs.androidquran.dao.bookmark.Bookmark;
 import com.thikrallah.quran.labs.androidquran.model.bookmark.BookmarkModel;
 import com.thikrallah.quran.labs.androidquran.presenter.Presenter;
 import com.thikrallah.quran.labs.androidquran.ui.fragment.TagBookmarkDialog;

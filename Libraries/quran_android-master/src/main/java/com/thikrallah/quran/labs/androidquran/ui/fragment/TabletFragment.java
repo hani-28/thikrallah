@@ -11,6 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.fragment.app.Fragment;
+
 import com.thikrallah.quran.labs.androidquran.common.LocalTranslation;
 import com.thikrallah.quran.labs.androidquran.common.QuranAyahInfo;
 import com.thikrallah.quran.labs.androidquran.dao.bookmark.Bookmark;
@@ -45,10 +50,6 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.fragment.app.Fragment;
 import dagger.Lazy;
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;

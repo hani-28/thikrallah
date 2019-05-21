@@ -14,6 +14,10 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.core.content.ContextCompat;
+
 import com.thikrallah.quran.labs.androidquran.R;
 import com.thikrallah.quran.labs.androidquran.data.Constants;
 import com.thikrallah.quran.labs.androidquran.ui.helpers.HighlightType;
@@ -28,10 +32,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.core.content.ContextCompat;
 
 public class HighlightingImageView extends AppCompatImageView {
 

@@ -1,6 +1,7 @@
 package com.thikrallah.quran.labs.androidquran.presenter.quran;
 
 import android.graphics.Bitmap;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 

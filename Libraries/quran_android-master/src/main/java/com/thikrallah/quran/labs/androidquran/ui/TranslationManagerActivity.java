@@ -1,13 +1,19 @@
 package com.thikrallah.quran.labs.androidquran.ui;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.SparseIntArray;
 import android.view.MenuItem;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.thikrallah.quran.labs.androidquran.QuranApplication;
 import com.thikrallah.quran.labs.androidquran.R;
 import com.thikrallah.quran.labs.androidquran.dao.translation.Translation;
@@ -31,12 +37,6 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 

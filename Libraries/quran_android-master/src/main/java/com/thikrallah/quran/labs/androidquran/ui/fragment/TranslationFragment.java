@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
 import com.thikrallah.quran.labs.androidquran.common.LocalTranslation;
 import com.thikrallah.quran.labs.androidquran.common.QuranAyahInfo;
 import com.thikrallah.quran.labs.androidquran.data.QuranInfo;
@@ -26,9 +29,6 @@ import com.thikrallah.quran.labs.androidquran.widgets.QuranTranslationPageLayout
 import java.util.List;
 
 import javax.inject.Inject;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 
 public class TranslationFragment extends Fragment implements
     AyahTrackerPresenter.AyahInteractionHandler, QuranPage,

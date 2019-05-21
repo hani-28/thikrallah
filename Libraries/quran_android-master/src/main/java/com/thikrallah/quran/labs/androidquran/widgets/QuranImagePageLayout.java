@@ -1,10 +1,11 @@
 package com.thikrallah.quran.labs.androidquran.widgets;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+
+import androidx.annotation.NonNull;
 
 import com.thikrallah.quran.labs.androidquran.ui.helpers.AyahSelectedListener;
 import com.thikrallah.quran.labs.androidquran.ui.util.PageController;

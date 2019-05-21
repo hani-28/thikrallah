@@ -8,8 +8,6 @@ import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.preference.PreferenceManager;
-import androidx.annotation.UiThread;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -18,6 +16,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.UiThread;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.hisnulmuslim.database.ExternalDbOpenHelper;
 import com.HMSolutions.thikrallah.hisnulmuslim.database.HisnDatabaseInfo;

@@ -19,8 +19,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Function3
 import io.reactivex.schedulers.Schedulers
-import java.util.ArrayList
-import java.util.HashMap
+import java.util.*
 
 internal open class BaseTranslationPresenter<T> internal constructor(
     private val translationModel: TranslationModel,

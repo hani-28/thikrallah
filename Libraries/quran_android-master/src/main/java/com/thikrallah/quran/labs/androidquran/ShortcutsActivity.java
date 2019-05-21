@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.ShortcutManager;
 import android.os.Build;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 

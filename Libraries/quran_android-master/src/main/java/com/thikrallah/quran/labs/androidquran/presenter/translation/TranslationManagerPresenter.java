@@ -4,7 +4,12 @@ import android.content.Context;
 import android.util.Pair;
 import android.util.SparseArray;
 
+import androidx.annotation.VisibleForTesting;
+import androidx.annotation.WorkerThread;
+
 import com.crashlytics.android.Crashlytics;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
 import com.thikrallah.quran.labs.androidquran.common.LocalTranslation;
 import com.thikrallah.quran.labs.androidquran.dao.translation.Translation;
 import com.thikrallah.quran.labs.androidquran.dao.translation.TranslationItem;
@@ -16,8 +21,6 @@ import com.thikrallah.quran.labs.androidquran.presenter.Presenter;
 import com.thikrallah.quran.labs.androidquran.ui.TranslationManagerActivity;
 import com.thikrallah.quran.labs.androidquran.util.QuranFileUtils;
 import com.thikrallah.quran.labs.androidquran.util.QuranSettings;
-import com.squareup.moshi.JsonAdapter;
-import com.squareup.moshi.Moshi;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,8 +30,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import androidx.annotation.VisibleForTesting;
-import androidx.annotation.WorkerThread;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;

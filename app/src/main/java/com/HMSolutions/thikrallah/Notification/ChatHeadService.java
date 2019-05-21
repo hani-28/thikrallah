@@ -1,8 +1,5 @@
 package com.HMSolutions.thikrallah.Notification;
 
-import com.HMSolutions.thikrallah.MainActivity;
-import com.HMSolutions.thikrallah.R;
-
 import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -12,7 +9,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
@@ -21,14 +17,18 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import androidx.core.content.ContextCompat;
-import androidx.core.app.NotificationCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
+
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
+
+import com.HMSolutions.thikrallah.MainActivity;
+import com.HMSolutions.thikrallah.R;
 
 import java.util.Locale;
 

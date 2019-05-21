@@ -1,11 +1,11 @@
 package com.thikrallah.quran.labs.androidquran.ui.translation;
 
-import com.thikrallah.quran.labs.androidquran.common.QuranAyahInfo;
-import com.thikrallah.quran.labs.androidquran.data.SuraAyah;
-
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.thikrallah.quran.labs.androidquran.common.QuranAyahInfo;
+import com.thikrallah.quran.labs.androidquran.data.SuraAyah;
 
 class TranslationViewRow {
 

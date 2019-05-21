@@ -1,9 +1,6 @@
 package com.HMSolutions.thikrallah.Utilities;
 
 
-
-import com.HMSolutions.thikrallah.R;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +11,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.HMSolutions.thikrallah.R;
 
 public class AppRater {
 	

@@ -1,14 +1,15 @@
 package com.thikrallah.quran.labs.androidquran.service.util;
 
-import com.thikrallah.quran.labs.androidquran.util.QuranSettings;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.thikrallah.quran.labs.androidquran.util.QuranSettings;
 
 public class PermissionUtil {
 

@@ -2,14 +2,15 @@ package com.thikrallah.quran.labs.androidquran.ui.util;
 
 import android.graphics.Matrix;
 import android.graphics.RectF;
-import androidx.annotation.NonNull;
 import android.util.SparseArray;
 import android.widget.ImageView;
 
-import com.thikrallah.quran.page.common.data.AyahBounds;
+import androidx.annotation.NonNull;
+
 import com.thikrallah.quran.labs.androidquran.data.SuraAyah;
 import com.thikrallah.quran.labs.androidquran.widgets.AyahToolBar;
 import com.thikrallah.quran.labs.androidquran.widgets.HighlightingImageView;
+import com.thikrallah.quran.page.common.data.AyahBounds;
 
 import java.util.ArrayList;
 import java.util.List;

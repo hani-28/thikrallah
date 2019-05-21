@@ -15,14 +15,14 @@ import android.util.AttributeSet;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.thikrallah.quran.labs.androidquran.R;
-import com.thikrallah.quran.labs.androidquran.data.Constants;
-import com.thikrallah.quran.labs.androidquran.util.QuranUtils;
-
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
+
+import com.thikrallah.quran.labs.androidquran.R;
+import com.thikrallah.quran.labs.androidquran.data.Constants;
+import com.thikrallah.quran.labs.androidquran.util.QuranUtils;
 
 public class SeekBarPreference extends Preference implements SeekBar.OnSeekBarChangeListener {
 

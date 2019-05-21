@@ -1,9 +1,10 @@
 package com.thikrallah.quran.labs.androidquran.ui.helpers;
 
+import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import android.view.ViewGroup;
 
 import com.thikrallah.quran.labs.androidquran.data.Constants;
 import com.thikrallah.quran.labs.androidquran.data.QuranInfo;

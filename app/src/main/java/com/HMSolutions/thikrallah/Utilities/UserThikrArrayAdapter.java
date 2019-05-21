@@ -1,10 +1,6 @@
 package com.HMSolutions.thikrallah.Utilities;
 
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import android.content.ClipData;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +15,9 @@ import android.widget.Toast;
 
 import com.HMSolutions.thikrallah.Models.UserThikr;
 import com.HMSolutions.thikrallah.R;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created by hani on 3/26/16.

@@ -2,8 +2,9 @@ package com.thikrallah.quran.labs.androidquran.util;
 
 import android.content.Context;
 import android.graphics.Point;
-import androidx.annotation.NonNull;
 import android.view.Display;
+
+import androidx.annotation.NonNull;
 
 import com.thikrallah.quran.data.source.PageSizeCalculator;
 

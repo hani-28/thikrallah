@@ -1,6 +1,7 @@
 package com.thikrallah.quran.labs.androidquran.widgets;
 
 import android.content.Context;
+
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;

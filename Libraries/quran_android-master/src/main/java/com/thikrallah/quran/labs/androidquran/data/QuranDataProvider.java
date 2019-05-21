@@ -11,6 +11,8 @@ import android.database.MatrixCursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import androidx.annotation.NonNull;
+
 import com.crashlytics.android.Crashlytics;
 import com.thikrallah.quran.labs.androidquran.BuildConfig;
 import com.thikrallah.quran.labs.androidquran.QuranApplication;
@@ -26,7 +28,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import androidx.annotation.NonNull;
 import timber.log.Timber;
 
 public class QuranDataProvider extends ContentProvider {

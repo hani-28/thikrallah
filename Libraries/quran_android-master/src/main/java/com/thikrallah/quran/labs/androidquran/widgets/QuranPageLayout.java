@@ -12,14 +12,15 @@ import android.graphics.drawable.PaintDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
 import android.os.Build;
+import android.view.Display;
+import android.view.View;
+import android.view.WindowManager;
+
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Px;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
-import android.view.Display;
-import android.view.View;
-import android.view.WindowManager;
 
 import com.thikrallah.quran.labs.androidquran.R;
 import com.thikrallah.quran.labs.androidquran.data.Constants;

@@ -17,23 +17,20 @@ package com.HMSolutions.thikrallah.Fragments;
  */
 
 
-import com.HMSolutions.thikrallah.R;
-import com.HMSolutions.thikrallah.Utilities.SlidingTabLayout;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
-
-
-import androidx.legacy.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
+import androidx.legacy.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.HMSolutions.thikrallah.R;
+import com.HMSolutions.thikrallah.Utilities.SlidingTabLayout;
 
 /**
  * A basic sample which shows how to use {@link com.HMSolutions.thikrallah.Utilities.SlidingTabLayout}

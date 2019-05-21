@@ -8,7 +8,6 @@ import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.preference.PreferenceManager;
-import com.google.android.material.snackbar.Snackbar;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -24,6 +23,7 @@ import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.hisnulmuslim.database.ExternalDbOpenHelper;
 import com.HMSolutions.thikrallah.hisnulmuslim.database.HisnDatabaseInfo;
 import com.HMSolutions.thikrallah.hisnulmuslim.model.Dua;
+import com.google.android.material.snackbar.Snackbar;
 import com.mikepenz.iconics.view.IconicsButton;
 
 import java.util.List;

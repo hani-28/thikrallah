@@ -9,9 +9,10 @@ import android.graphics.drawable.PaintDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
 import android.os.Build;
-import androidx.annotation.NonNull;
 import android.view.Display;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.thikrallah.quran.labs.androidquran.R;
 import com.thikrallah.quran.labs.androidquran.common.Response;

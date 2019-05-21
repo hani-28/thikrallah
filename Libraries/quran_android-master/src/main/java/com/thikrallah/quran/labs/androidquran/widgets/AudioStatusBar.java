@@ -20,6 +20,12 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.DrawableRes;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+import androidx.core.view.ViewCompat;
+
 import com.thikrallah.quran.labs.androidquran.R;
 import com.thikrallah.quran.labs.androidquran.common.QariItem;
 import com.thikrallah.quran.labs.androidquran.data.Constants;
@@ -27,12 +33,6 @@ import com.thikrallah.quran.labs.androidquran.util.QuranSettings;
 import com.thikrallah.quran.labs.androidquran.util.QuranUtils;
 
 import java.util.List;
-
-import androidx.annotation.DrawableRes;
-import androidx.annotation.LayoutRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
-import androidx.core.view.ViewCompat;
 
 public class AudioStatusBar extends LeftToRightLinearLayout {
 

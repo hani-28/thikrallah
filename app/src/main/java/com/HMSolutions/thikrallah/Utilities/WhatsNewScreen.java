@@ -1,10 +1,6 @@
 package com.HMSolutions.thikrallah.Utilities;
 
 
-import com.HMSolutions.thikrallah.MainActivity;
-import com.HMSolutions.thikrallah.PreferenceActivity;
-import com.HMSolutions.thikrallah.R;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -15,6 +11,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
+import com.HMSolutions.thikrallah.PreferenceActivity;
+import com.HMSolutions.thikrallah.R;
 
 public class WhatsNewScreen {
     private static final String LOG_TAG                 = "WhatsNewScreen";

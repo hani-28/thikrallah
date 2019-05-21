@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.SparseArray;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.WorkerThread;
+
 import com.thikrallah.quran.labs.androidquran.common.LocalTranslation;
 import com.thikrallah.quran.labs.androidquran.dao.translation.Translation;
 import com.thikrallah.quran.labs.androidquran.dao.translation.TranslationItem;
@@ -18,8 +21,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.WorkerThread;
 import timber.log.Timber;
 
 import static com.thikrallah.quran.labs.androidquran.database.TranslationsDBHelper.TranslationsTable;

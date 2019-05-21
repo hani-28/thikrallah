@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.RectF;
+
 import androidx.annotation.NonNull;
 
 import com.thikrallah.quran.labs.androidquran.database.DatabaseUtils;

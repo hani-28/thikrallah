@@ -2,6 +2,7 @@ package com.thikrallah.quran.labs.androidquran.model.bookmark;
 
 import android.content.Context;
 import android.net.Uri;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 

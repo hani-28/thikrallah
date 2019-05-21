@@ -1,12 +1,12 @@
 package com.thikrallah.quran.labs.androidquran.widgets;
 
-import com.thikrallah.quran.labs.androidquran.util.QuranSettings;
-import com.thikrallah.quran.labs.androidquran.util.QuranUtils;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.thikrallah.quran.labs.androidquran.util.QuranSettings;
+import com.thikrallah.quran.labs.androidquran.util.QuranUtils;
 
 public class QuranHeaderView extends ViewGroup {
 

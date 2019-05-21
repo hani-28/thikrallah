@@ -17,6 +17,12 @@ import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.thikrallah.quran.labs.androidquran.data.QuranDataProvider;
 import com.thikrallah.quran.labs.androidquran.data.QuranInfo;
 import com.thikrallah.quran.labs.androidquran.service.QuranDownloadService;
@@ -30,12 +36,6 @@ import com.thikrallah.quran.labs.androidquran.util.QuranFileUtils;
 import com.thikrallah.quran.labs.androidquran.util.QuranUtils;
 
 import javax.inject.Inject;
-
-import androidx.annotation.NonNull;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class SearchActivity extends QuranActionBarActivity
     implements DefaultDownloadReceiver.SimpleDownloadListener,

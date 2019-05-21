@@ -1,8 +1,9 @@
 package com.thikrallah.quran.labs.androidquran.util;
 
 
-import androidx.annotation.NonNull;
 import android.util.Pair;
+
+import androidx.annotation.NonNull;
 
 import com.thikrallah.quran.labs.androidquran.common.QariItem;
 import com.thikrallah.quran.labs.androidquran.data.QuranInfo;

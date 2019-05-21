@@ -1,14 +1,7 @@
 package com.HMSolutions.thikrallah.Fragments;
 
-import com.HMSolutions.thikrallah.MainActivity;
-import com.HMSolutions.thikrallah.R;
-import com.HMSolutions.thikrallah.Utilities.CustumThickerAdapter;
-import com.HMSolutions.thikrallah.Utilities.MainInterface;
-
 import android.app.Activity;
 import android.app.ListFragment;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,10 +9,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
+
+import com.HMSolutions.thikrallah.MainActivity;
+import com.HMSolutions.thikrallah.R;
+import com.HMSolutions.thikrallah.Utilities.CustumThickerAdapter;
+import com.HMSolutions.thikrallah.Utilities.MainInterface;
 
 public class ThikrFragment extends ListFragment implements OnClickListener {
 	

@@ -1,10 +1,10 @@
 package com.thikrallah.quran.labs.androidquran.service.util;
 
-import com.thikrallah.quran.labs.androidquran.R;
-import com.thikrallah.quran.labs.androidquran.service.QuranDownloadService;
-
 import android.content.Context;
 import android.content.Intent;
+
+import com.thikrallah.quran.labs.androidquran.R;
+import com.thikrallah.quran.labs.androidquran.service.QuranDownloadService;
 
 public class ServiceIntentHelper {
   private static final String AUDIO_DOWNLOAD_KEY = "AUDIO_DOWNLOAD_KEY";

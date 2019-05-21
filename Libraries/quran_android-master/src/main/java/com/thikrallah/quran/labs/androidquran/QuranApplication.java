@@ -6,6 +6,8 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 
+import androidx.annotation.NonNull;
+
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.thikrallah.quran.labs.androidquran.component.application.ApplicationComponent;
@@ -16,7 +18,6 @@ import com.thikrallah.quran.labs.androidquran.util.RecordingLogTree;
 
 import java.util.Locale;
 
-import androidx.annotation.NonNull;
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 

@@ -1,11 +1,12 @@
 package com.thikrallah.quran.labs.androidquran.ui.helpers;
 
 import android.content.Context;
+
 import androidx.core.content.ContextCompat;
 
 import com.thikrallah.quran.labs.androidquran.R;
-import com.thikrallah.quran.labs.androidquran.dao.bookmark.Bookmark;
 import com.thikrallah.quran.labs.androidquran.dao.Tag;
+import com.thikrallah.quran.labs.androidquran.dao.bookmark.Bookmark;
 import com.thikrallah.quran.labs.androidquran.data.QuranInfo;
 
 import javax.inject.Inject;

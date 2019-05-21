@@ -58,6 +58,13 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 import android.util.SparseIntArray;
 
+import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.media.app.NotificationCompat.MediaStyle;
+import androidx.media.session.MediaButtonReceiver;
+
 import com.crashlytics.android.Crashlytics;
 import com.thikrallah.quran.labs.androidquran.QuranApplication;
 import com.thikrallah.quran.labs.androidquran.R;
@@ -74,18 +81,13 @@ import com.thikrallah.quran.labs.androidquran.service.util.AudioFocusable;
 import com.thikrallah.quran.labs.androidquran.service.util.QuranDownloadNotifier;
 import com.thikrallah.quran.labs.androidquran.ui.PagerActivity;
 import com.thikrallah.quran.labs.androidquran.util.AudioUtils;
+import com.thikrallah.quran.labs.androidquran.util.QuranSettings;
 
 import java.io.File;
 import java.io.IOException;
 
 import javax.inject.Inject;
 
-import androidx.annotation.RequiresApi;
-import androidx.core.app.NotificationCompat;
-import androidx.core.content.ContextCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.media.app.NotificationCompat.MediaStyle;
-import androidx.media.session.MediaButtonReceiver;
 import io.reactivex.Maybe;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -218,7 +220,6 @@ public class AudioService extends Service implements OnCompletionListener,
 
   @Inject QuranInfo quranInfo;
   @Inject AudioUtils audioUtils;
-
   private static final int MSG_INCOMING = 1;
   private static final int MSG_START_AUDIO = 2;
   private static final int MSG_UPDATE_AUDIO_POS = 3;
@@ -683,8 +684,10 @@ public class AudioService extends Service implements OnCompletionListener,
           timingTask.cancel(true);
         }
         String dbPath = audioRequest.getAudioPathInfo().getGaplessDatabase();
+
         timingTask = new ReadGaplessDataTask(dbPath);
         timingTask.execute(audioQueue.getCurrentSura());
+
       }
 
       // If we're stopped, just go ahead to the next file and start playing
@@ -1009,11 +1012,12 @@ public class AudioService extends Service implements OnCompletionListener,
       if (!isStreaming) {
         File f = new File(url);
         if (!f.exists()) {
+
           Intent updateIntent = new Intent(AudioUpdateIntent.INTENT_NAME);
           updateIntent.putExtra(AudioUpdateIntent.STATUS, AudioUpdateIntent.STOPPED);
           updateIntent.putExtra(EXTRA_PLAY_INFO, audioRequest);
           broadcastManager.sendBroadcast(updateIntent);
-          Log.d(TAG,"file not exist");
+          Log.d(TAG,"file not exist"+f.getPath());
           processStopRequest(true);
           return;
         }

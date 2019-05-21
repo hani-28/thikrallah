@@ -3,15 +3,16 @@ package com.HMSolutions.thikrallah.hisnulmuslim;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.hisnulmuslim.adapter.DuaDetailAdapter;

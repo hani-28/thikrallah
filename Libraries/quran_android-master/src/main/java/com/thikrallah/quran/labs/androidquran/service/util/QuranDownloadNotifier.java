@@ -8,14 +8,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
-import com.crashlytics.android.Crashlytics;
-import com.thikrallah.quran.labs.androidquran.QuranDataActivity;
-import com.thikrallah.quran.labs.androidquran.R;
-
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import com.crashlytics.android.Crashlytics;
+import com.thikrallah.quran.labs.androidquran.QuranDataActivity;
+import com.thikrallah.quran.labs.androidquran.R;
 
 public class QuranDownloadNotifier {
   // error messages

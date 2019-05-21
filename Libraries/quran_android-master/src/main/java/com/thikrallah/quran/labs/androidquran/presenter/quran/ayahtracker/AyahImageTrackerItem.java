@@ -3,6 +3,9 @@ package com.thikrallah.quran.labs.androidquran.presenter.quran.ayahtracker;
 import android.content.Context;
 import android.graphics.RectF;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.thikrallah.quran.labs.androidquran.dao.bookmark.Bookmark;
 import com.thikrallah.quran.labs.androidquran.data.QuranInfo;
 import com.thikrallah.quran.labs.androidquran.data.SuraAyah;
@@ -20,9 +23,6 @@ import com.thikrallah.quran.page.common.draw.ImageDrawHelper;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 public class AyahImageTrackerItem extends AyahTrackerItem<HighlightingImageView> {
   private final QuranInfo quranInfo;

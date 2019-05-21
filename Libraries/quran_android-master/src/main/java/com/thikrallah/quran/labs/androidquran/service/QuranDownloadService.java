@@ -13,6 +13,8 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.StatFs;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.crashlytics.android.Crashlytics;
 import com.thikrallah.quran.labs.androidquran.QuranApplication;
 import com.thikrallah.quran.labs.androidquran.data.QuranInfo;
@@ -26,7 +28,6 @@ import com.thikrallah.quran.labs.androidquran.util.QuranUtils;
 import com.thikrallah.quran.labs.androidquran.util.ZipUtils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
@@ -35,7 +36,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.inject.Inject;
 
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

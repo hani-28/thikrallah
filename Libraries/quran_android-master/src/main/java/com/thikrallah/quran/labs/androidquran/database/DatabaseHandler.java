@@ -9,6 +9,10 @@ import android.database.sqlite.SQLiteDatabaseCorruptException;
 import android.provider.BaseColumns;
 import android.util.SparseArray;
 
+import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+
 import com.crashlytics.android.Crashlytics;
 import com.thikrallah.quran.labs.androidquran.R;
 import com.thikrallah.quran.labs.androidquran.common.QuranText;
@@ -27,9 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import androidx.annotation.IntDef;
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import timber.log.Timber;
 
 

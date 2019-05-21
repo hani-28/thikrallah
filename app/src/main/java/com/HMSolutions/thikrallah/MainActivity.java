@@ -1,25 +1,9 @@
 package com.HMSolutions.thikrallah;
 
 
-import com.crashlytics.android.Crashlytics;
-import io.fabric.sdk.android.Fabric;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-
-import com.HMSolutions.thikrallah.Fragments.MainFragment;
-import com.HMSolutions.thikrallah.Fragments.ThikrFragment;
-import com.HMSolutions.thikrallah.Fragments.TutorialFragment;
-import com.HMSolutions.thikrallah.Notification.AthanTimerService;
-import com.HMSolutions.thikrallah.Utilities.AppRater;
-import com.HMSolutions.thikrallah.Utilities.MainInterface;
-import com.HMSolutions.thikrallah.Utilities.MyDBHelper;
-
-
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.ComponentName;
@@ -46,18 +30,32 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.app.AlertDialog;
 import android.provider.Settings;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import com.HMSolutions.thikrallah.Fragments.MainFragment;
+import com.HMSolutions.thikrallah.Fragments.ThikrFragment;
+import com.HMSolutions.thikrallah.Fragments.TutorialFragment;
+import com.HMSolutions.thikrallah.Notification.AthanTimerService;
+import com.HMSolutions.thikrallah.Utilities.AppRater;
+import com.HMSolutions.thikrallah.Utilities.MainInterface;
+import com.HMSolutions.thikrallah.Utilities.MyDBHelper;
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends Activity implements MainInterface, LocationListener, android.location.LocationListener,
         SharedPreferences.OnSharedPreferenceChangeListener {

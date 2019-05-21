@@ -2,8 +2,9 @@ package com.thikrallah.quran.labs.androidquran.widgets;
 
 import android.content.Context;
 import android.graphics.Color;
-import androidx.annotation.NonNull;
 import android.view.View;
+
+import androidx.annotation.NonNull;
 
 import com.thikrallah.quran.labs.androidquran.R;
 import com.thikrallah.quran.labs.androidquran.ui.translation.TranslationView;

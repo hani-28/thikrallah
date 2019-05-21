@@ -1,5 +1,7 @@
 package com.thikrallah.quran.labs.androidquran.presenter.translation;
 
+import androidx.annotation.NonNull;
+
 import com.thikrallah.quran.labs.androidquran.common.LocalTranslation;
 import com.thikrallah.quran.labs.androidquran.common.QuranAyahInfo;
 import com.thikrallah.quran.labs.androidquran.data.QuranInfo;
@@ -13,7 +15,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import androidx.annotation.NonNull;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableSingleObserver;
 

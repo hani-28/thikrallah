@@ -1,8 +1,5 @@
 package com.HMSolutions.thikrallah.Notification;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -15,6 +12,9 @@ import android.util.Log;
 
 import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.Utilities.PrayTime;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class MyAlarmsManager {
     String TAG = "MyAlarmsManager";

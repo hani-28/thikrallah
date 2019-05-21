@@ -1,9 +1,10 @@
 package com.thikrallah.quran.labs.androidquran.widgets;
 
 import android.content.Context;
-import androidx.viewpager.widget.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+
+import androidx.viewpager.widget.ViewPager;
 
 public class QuranViewPager extends ViewPager {
 

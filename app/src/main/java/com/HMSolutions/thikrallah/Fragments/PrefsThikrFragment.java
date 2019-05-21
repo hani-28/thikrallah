@@ -1,11 +1,5 @@
 package com.HMSolutions.thikrallah.Fragments;
 
-import com.HMSolutions.thikrallah.MainActivity;
-import com.HMSolutions.thikrallah.R;
-import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
-import com.HMSolutions.thikrallah.PreferenceActivity;
-import com.HMSolutions.thikrallah.Utilities.TimePreference;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -17,6 +11,11 @@ import android.preference.PreferenceGroup;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.util.Log;
+
+import com.HMSolutions.thikrallah.MainActivity;
+import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
+import com.HMSolutions.thikrallah.R;
+import com.HMSolutions.thikrallah.Utilities.TimePreference;
 
 public class PrefsThikrFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener{
 	@Override

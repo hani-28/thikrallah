@@ -14,12 +14,9 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 import com.HMSolutions.thikrallah.MainActivity;
-import com.HMSolutions.thikrallah.Models.UserThikr;
-import com.HMSolutions.thikrallah.Notification.ThikrService;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.ThikrMediaPlayerService;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class SeekBarPreference extends Preference implements OnSeekBarChangeListener {

@@ -2,6 +2,7 @@ package com.thikrallah.quran.labs.androidquran;
 
 import android.app.Activity;
 import android.content.Context;
+
 import androidx.test.InstrumentationRegistry;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.runner.AndroidJUnit4;

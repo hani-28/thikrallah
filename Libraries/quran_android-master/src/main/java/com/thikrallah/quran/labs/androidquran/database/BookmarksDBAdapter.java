@@ -4,13 +4,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 
-import com.thikrallah.quran.labs.androidquran.dao.bookmark.Bookmark;
-import com.thikrallah.quran.labs.androidquran.dao.bookmark.BookmarkData;
 import com.thikrallah.quran.labs.androidquran.dao.RecentPage;
 import com.thikrallah.quran.labs.androidquran.dao.Tag;
+import com.thikrallah.quran.labs.androidquran.dao.bookmark.Bookmark;
+import com.thikrallah.quran.labs.androidquran.dao.bookmark.BookmarkData;
 import com.thikrallah.quran.labs.androidquran.data.Constants;
 import com.thikrallah.quran.labs.androidquran.database.BookmarksDBHelper.BookmarkTagTable;
 import com.thikrallah.quran.labs.androidquran.database.BookmarksDBHelper.BookmarksTable;

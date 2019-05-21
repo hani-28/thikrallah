@@ -1,9 +1,11 @@
 package com.HMSolutions.thikrallah.Utilities.reversegeocode;
 
 import android.util.Log;
-import com.google.gson.annotations.SerializedName;
+
 import com.HMSolutions.thikrallah.Utilities.reversegeocode.Polygon.Point;
 import com.HMSolutions.thikrallah.Utilities.reversegeocode.Polygon.Polygon;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**

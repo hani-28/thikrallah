@@ -24,25 +24,18 @@ PLEASE DO NOT REMOVE THIS COPYRIGHT BLOCK.
 */
 
 import android.content.Context;
-import android.location.Address;
-//import android.location.Geocoder;
-import android.net.ConnectivityManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Utilities.reversegeocode.GeocodeListBuilder;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.TimeZone;
+
+//import android.location.Geocoder;
 
 public class PrayTime {
     private static final String TAG="PrayTime";

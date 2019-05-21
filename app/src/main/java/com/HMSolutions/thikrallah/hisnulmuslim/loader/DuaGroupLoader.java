@@ -2,11 +2,9 @@ package com.HMSolutions.thikrallah.hisnulmuslim.loader;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.HMSolutions.thikrallah.hisnulmuslim.database.HisnDatabaseInfo;
 import com.HMSolutions.thikrallah.hisnulmuslim.model.Dua;

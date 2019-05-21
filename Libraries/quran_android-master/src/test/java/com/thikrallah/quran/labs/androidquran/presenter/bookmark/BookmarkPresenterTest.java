@@ -4,14 +4,14 @@ import android.content.Context;
 import android.content.res.Resources;
 
 import com.thikrallah.quran.data.page.provider.madani.MadaniPageProvider;
-import com.thikrallah.quran.labs.androidquran.dao.bookmark.Bookmark;
-import com.thikrallah.quran.labs.androidquran.dao.bookmark.BookmarkData;
 import com.thikrallah.quran.labs.androidquran.dao.RecentPage;
 import com.thikrallah.quran.labs.androidquran.dao.Tag;
+import com.thikrallah.quran.labs.androidquran.dao.bookmark.Bookmark;
+import com.thikrallah.quran.labs.androidquran.dao.bookmark.BookmarkData;
+import com.thikrallah.quran.labs.androidquran.dao.bookmark.BookmarkResult;
 import com.thikrallah.quran.labs.androidquran.data.QuranInfo;
 import com.thikrallah.quran.labs.androidquran.database.BookmarksDBAdapter;
 import com.thikrallah.quran.labs.androidquran.model.bookmark.BookmarkModel;
-import com.thikrallah.quran.labs.androidquran.dao.bookmark.BookmarkResult;
 import com.thikrallah.quran.labs.androidquran.model.bookmark.RecentPageModel;
 import com.thikrallah.quran.labs.androidquran.ui.helpers.QuranRowFactory;
 import com.thikrallah.quran.labs.androidquran.util.QuranSettings;

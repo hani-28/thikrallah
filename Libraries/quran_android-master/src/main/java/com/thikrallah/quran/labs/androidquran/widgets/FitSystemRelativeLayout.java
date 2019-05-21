@@ -3,10 +3,11 @@ package com.thikrallah.quran.labs.androidquran.widgets;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Build;
-import androidx.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
+
+import androidx.annotation.NonNull;
 
 import com.thikrallah.quran.labs.androidquran.R;
 

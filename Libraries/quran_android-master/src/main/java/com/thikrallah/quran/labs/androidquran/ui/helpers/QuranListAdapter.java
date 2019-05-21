@@ -2,7 +2,6 @@ package com.thikrallah.quran.labs.androidquran.ui.helpers;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.thikrallah.quran.labs.androidquran.R;
-import com.thikrallah.quran.labs.androidquran.dao.bookmark.Bookmark;
 import com.thikrallah.quran.labs.androidquran.dao.Tag;
+import com.thikrallah.quran.labs.androidquran.dao.bookmark.Bookmark;
 import com.thikrallah.quran.labs.androidquran.ui.QuranActivity;
 import com.thikrallah.quran.labs.androidquran.util.QuranUtils;
 import com.thikrallah.quran.labs.androidquran.widgets.JuzView;

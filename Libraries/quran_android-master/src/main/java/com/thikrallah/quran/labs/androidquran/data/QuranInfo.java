@@ -3,6 +3,9 @@ package com.thikrallah.quran.labs.androidquran.data;
 import android.content.Context;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
+
 import com.crashlytics.android.Crashlytics;
 import com.thikrallah.quran.data.source.PageProvider;
 import com.thikrallah.quran.data.source.QuranDataSource;
@@ -16,9 +19,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.inject.Inject;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.VisibleForTesting;
 
 public class QuranInfo {
   private final int[] suraPageStart;

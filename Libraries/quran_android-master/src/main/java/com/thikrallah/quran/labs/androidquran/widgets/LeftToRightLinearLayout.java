@@ -2,10 +2,11 @@ package com.thikrallah.quran.labs.androidquran.widgets;
 
 import android.content.Context;
 import android.os.Build;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 public class LeftToRightLinearLayout extends LinearLayout {
   public LeftToRightLinearLayout(Context context) {

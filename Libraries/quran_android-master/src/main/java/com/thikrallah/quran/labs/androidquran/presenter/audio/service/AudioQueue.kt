@@ -5,7 +5,7 @@ import com.thikrallah.quran.labs.androidquran.dao.audio.AudioRequest
 import com.thikrallah.quran.labs.androidquran.data.QuranInfo
 import com.thikrallah.quran.labs.androidquran.data.SuraAyah
 import com.thikrallah.quran.labs.androidquran.extension.requiresBasmallah
-import java.util.Locale
+import java.util.*
 
 /**
  * This class maintains a virtual audio queue for playback.

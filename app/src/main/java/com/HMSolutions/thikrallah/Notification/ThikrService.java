@@ -1,16 +1,29 @@
 package com.HMSolutions.thikrallah.Notification;
 
 
+import android.app.IntentService;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.media.AudioManager;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.Vibrator;
+import android.preference.PreferenceManager;
+import android.text.TextUtils;
+import android.util.Log;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Random;
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 
 import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.Models.UserThikr;
@@ -21,47 +34,29 @@ import com.crashlytics.android.Crashlytics;
 import com.thikrallah.quran.data.page.provider.madani.MadaniPageProvider;
 import com.thikrallah.quran.data.source.PageProvider;
 import com.thikrallah.quran.labs.androidquran.BuildConfig;
+import com.thikrallah.quran.labs.androidquran.QuranApplication;
 import com.thikrallah.quran.labs.androidquran.common.QariItem;
 import com.thikrallah.quran.labs.androidquran.dao.audio.AudioPathInfo;
 import com.thikrallah.quran.labs.androidquran.dao.audio.AudioRequest;
 import com.thikrallah.quran.labs.androidquran.data.Constants;
-import com.thikrallah.quran.labs.androidquran.data.QuranInfo;
 import com.thikrallah.quran.labs.androidquran.data.SuraAyah;
-import com.thikrallah.quran.labs.androidquran.presenter.audio.AudioPresenter;
 import com.thikrallah.quran.labs.androidquran.service.AudioService;
+import com.thikrallah.quran.labs.androidquran.service.QuranDownloadService;
+import com.thikrallah.quran.labs.androidquran.service.util.ServiceIntentHelper;
 import com.thikrallah.quran.labs.androidquran.ui.PagerActivity;
 import com.thikrallah.quran.labs.androidquran.util.AudioUtils;
 import com.thikrallah.quran.labs.androidquran.util.QuranFileUtils;
 import com.thikrallah.quran.labs.androidquran.util.QuranSettings;
+import com.thikrallah.quran.labs.androidquran.util.QuranUtils;
 import com.thikrallah.quran.labs.androidquran.widgets.AudioStatusBar;
 
-import android.app.IntentService;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.AssetFileDescriptor;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnCompletionListener;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.PowerManager;
-import android.os.Vibrator;
-import android.preference.PreferenceManager;
-
-import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
-import android.util.Log;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -71,25 +66,33 @@ import timber.log.Timber;
 public class ThikrService extends IntentService  {
     String TAG = "ThikrService";
 	private final static int NOTIFICATION_ID=4;
+    private final static int NOTIFICATION_ID_DOWNLOAD1=5523;
+    private final static int NOTIFICATION_ID_DOWNLOAD2=412;
+    private final static int NOTIFICATION_ID_DOWNLOAD3=9578;
     private AudioManager am;
     private Intent calling_intent;
     Context mcontext;
     @Inject PageProvider quranPageProvider;
+    QuranSettings quransettings;
     private static final String QURAN_BASE = "quran_android/";
-    private static final String AUDIO_DIRECTORY="audio";
+    private static final String AUDIO_DIRECTORY=new MadaniPageProvider().getAudioDirectoryName();
     private static final String AUDIO_EXTENSION = ".mp3";
-
+    private static final String DATABASE_DIRECTORY=new MadaniPageProvider().getDatabaseDirectoryName();
+    private static final String AYAHINFO_DIRECTORY=new MadaniPageProvider().getAyahInfoDirectoryName();
     private static final String DB_EXTENSION = ".db";
     private static final String  ZIP_EXTENSION = ".zip";
+    private static final String DATABASE_BASE_URL =new MadaniPageProvider().getAudioDatabasesBaseUrl();
     public ThikrService() {
 		super("service");
 	}
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
+
         calling_intent=intent;
         //TODO: Add channels here?
         mcontext=this.getApplicationContext();
+        quransettings=QuranSettings.getInstance(mcontext);
         //update all alarms
         Intent boot_reciever = new Intent("com.HMSolutions.thikrallah.Notification.ThikrBootReceiver.android.action.broadcast");
         this.sendBroadcast(boot_reciever);
@@ -281,14 +284,58 @@ public class ThikrService extends IntentService  {
                 SuraAyah start = new SuraAyah(67, 1);
                 SuraAyah end = new SuraAyah(67, 30);
                 List<QariItem> qlist = getQariList(this);
-                QariItem qari=qlist.get(0);
+                QariItem qari=qlist.get(10);
 
                 AudioPathInfo audioPathInfo = this.getLocalAudioPathInfo(qari);
-                Log.d(TAG,"ready to play Quran");
+               /*
+                File databaseFile=new File(audioPathInfo.getGaplessDatabase());
+                if(!databaseFile.exists()){
+
+                    Intent downloadIntent = ServiceIntentHelper.getAudioDownloadIntent(this, getGaplessDatabaseUrl(qari), audioPathInfo.getLocalDirectory(), mcontext.getString(R.string.timing_database));
+                    startService(downloadIntent);
+                }
+
+*/
                 if (audioPathInfo != null) {
-                    AudioRequest audioRequest = new AudioRequest(start, end, qari, 0, 0, true, false, audioPathInfo);
-                    Log.d(TAG,"calling handlePlayback");
-                    handlePlayback(audioRequest);
+                    // override streaming if all the files are already downloaded
+                    boolean stream = false;
+                    if (quransettings.shouldStream()) {
+                        stream = !haveAllFiles(audioPathInfo.getUrlFormat(),audioPathInfo.getLocalDirectory(), start, end,qari.isGapless());
+                    }
+
+                    // if we're still streaming, change the base qari format in audioPathInfo
+                    // to a remote url format (instead of a path to a local directory)
+                    AudioPathInfo audioPath;
+                    if (stream) {
+                        audioPath = audioPathInfo.copy(getQariUrl(qari), audioPathInfo.getLocalDirectory(), audioPathInfo.getGaplessDatabase());
+
+                    } else {
+                        audioPath = audioPathInfo;
+                        //check if the audio files are available
+                        if (!haveAllFiles(audioPathInfo.getUrlFormat(),audioPathInfo.getLocalDirectory(), start, end,qari.isGapless())){
+
+                        }
+                    }
+
+
+                    Log.d(TAG, "ready to play Quran");
+                    if (audioPathInfo != null) {
+                        AudioRequest audioRequest = new AudioRequest(start, end, qari, 0, 0, true, false, audioPath);
+
+                        //TODO:Check for all needed files downloaded yet
+                        ArrayList<Intent> DownloadIntents=DownloadedNeededFiles(this,audioRequest);
+                        Log.d(TAG, "DownloadIntents are "+DownloadIntents.size());
+                        if (DownloadIntents.size()==0){
+                            Log.d(TAG, "calling handlePlayback");
+                            handlePlayback(audioRequest);
+                        }else{
+                            Intent RecieverIntent_=new Intent(mcontext, QuranThikrDownloadNeeds.class);
+                            PendingIntent pendingIntent = PendingIntent.getBroadcast(mcontext, NOTIFICATION_ID_DOWNLOAD1, RecieverIntent_, PendingIntent.FLAG_UPDATE_CURRENT);
+                            handleRequiredDownload(pendingIntent,NOTIFICATION_ID_DOWNLOAD1);
+
+                        }
+
+                    }
                 }
                /*
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -405,6 +452,248 @@ public class ThikrService extends IntentService  {
         }
 
 	}
+    public void handleRequiredDownload(PendingIntent launchAppPendingIntent,int notification_id) {
+
+        if (QuranUtils.isOnWifiNetwork(this)) {
+            Timber.d("on wifi");
+            Crashlytics.log("starting service in handleRequiredDownload");
+           // startService(downloadIntent);
+        }else {
+            Timber.d("on data");
+            Crashlytics.log("starting service in handleRequiredDownload");
+           // startService(downloadIntent);
+        }
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder mBuilder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String NOTIFICATION_CHANNEL_ID = "com.HMSolutions.thikrallah.Notification.DownloadQuran";
+            String channelName = this.getResources().getString(R.string.notification_channel_download);
+
+            NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+            chan.setSound(null,null);
+            chan.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+            assert mNotificationManager != null;
+            mNotificationManager.createNotificationChannel(chan);
+            mBuilder = new NotificationCompat.Builder(mcontext,NOTIFICATION_CHANNEL_ID);
+        }else{
+            mBuilder = new NotificationCompat.Builder(mcontext);
+        }
+
+        mBuilder.setContentTitle(this.getString(R.string.my_app_name))
+                .setContentText("Need to download files")
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setAutoCancel(true);
+        mBuilder=setVisibilityPublic(mBuilder);
+
+        Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        mBuilder.setSound(soundUri,AudioManager.STREAM_NOTIFICATION);
+
+        mBuilder.setContentIntent(launchAppPendingIntent);
+        Log.d(TAG,"showing notifiaction");
+
+
+        mNotificationManager.notify(notification_id, mBuilder.build());
+    }
+    private boolean makeQuranDatabaseDirectory(Context context) {
+        return makeDirectory(getQuranDatabaseDirectory(context));
+    }
+
+    private boolean makeQuranAyahDatabaseDirectory(Context context) {
+        return makeQuranDatabaseDirectory(context) &&
+                makeDirectory(getQuranAyahDatabaseDirectory(context));
+    }
+    public String getQuranAyahDatabaseDirectory(Context context) {
+        String base = getQuranBaseDirectory(context);
+        return base == null ? null : base + File.separator + AYAHINFO_DIRECTORY;
+    }
+    private boolean makeDirectory(String path) {
+        if (path == null) {
+            return false;
+        }
+
+        File directory = new File(path);
+        return (directory.exists() && directory.isDirectory()) || directory.mkdirs();
+    }
+    public String getQuranDatabaseDirectory(Context context) {
+        String base = getQuranBaseDirectory(context);
+        return (base == null) ? null : base + DATABASE_DIRECTORY;
+    }
+
+    private ArrayList<Intent> DownloadedNeededFiles(Context context, AudioRequest request){
+        ArrayList<Intent> downloadIntents=new ArrayList<Intent>();
+        QariItem qari = request.getQari();
+        AudioPathInfo audioPathInfo = request.getAudioPathInfo();
+        String path = audioPathInfo.getLocalDirectory();
+        String gaplessDb = audioPathInfo.getGaplessDatabase();
+        if (gaplessDb != null && !new File(gaplessDb).exists()) {
+
+            Intent DatabaseIntent=getDownloadIntent(context,
+                    getGaplessDatabaseUrl(qari),
+                    path,
+                    context.getString(R.string.timing_database));
+            downloadIntents.add(DatabaseIntent);
+           // handleRequiredDownload(DatabaseIntent);
+        } else if (!request.getShouldStream() &&
+                shouldDownloadBasmallah(path,
+                        request.getStart(),
+                        request.getEnd(),
+                        qari.isGapless())) {
+
+            String title = getNotificationTitle(
+                    context, request.getStart(), request.getStart(), qari.isGapless());
+            Intent beslmalahIntent = getDownloadIntent(context, getQariUrl(qari), path, title);
+
+            beslmalahIntent.putExtra(QuranDownloadService.EXTRA_START_VERSE, request.getStart());
+            beslmalahIntent.putExtra(QuranDownloadService.EXTRA_END_VERSE, request.getStart());
+            downloadIntents.add(beslmalahIntent);
+          //  handleRequiredDownload(beslmalahIntent);
+
+        } else if (!request.getShouldStream() &&
+                !haveAllFiles(audioPathInfo.getUrlFormat(),audioPathInfo.getLocalDirectory(), request.getStart(), request.getEnd(),qari.isGapless())) {
+
+            String title = getNotificationTitle(
+                    context, request.getStart(), request.getEnd(), qari.isGapless());
+            Intent AudioIntent=getDownloadIntent(context, getQariUrl(qari), path, title);
+            AudioIntent.putExtra(QuranDownloadService.EXTRA_START_VERSE, request.getStart());
+            AudioIntent.putExtra(QuranDownloadService.EXTRA_END_VERSE, request.getEnd());
+            AudioIntent.putExtra(QuranDownloadService.EXTRA_IS_GAPLESS, qari.isGapless());
+            downloadIntents.add(AudioIntent);
+         //   handleRequiredDownload(AudioIntent);
+
+        }
+        return downloadIntents;
+    }
+    private boolean shouldDownloadBasmallah( String baseDirectory,
+                                SuraAyah start,
+                                SuraAyah end,
+                                Boolean isGapless)  {
+        if (isGapless) {
+            return false;
+        }
+
+        if (!baseDirectory.isEmpty()) {
+            File f = new File(baseDirectory);
+            if (f.exists()) {
+                String filename = "1" + File.separator + 1 + AUDIO_EXTENSION;
+                f = new File(baseDirectory + File.separator + filename);
+                if (f.exists()) {
+                    Timber.d("already have basmalla...");
+                    return false;
+                }
+            } else {
+                f.mkdirs();
+            }
+        }
+
+        return doesRequireBasmallah(start, end);
+    }
+
+    private boolean doesRequireBasmallah(SuraAyah minAyah, SuraAyah maxAyah) {
+        Timber.d("seeing if need basmalla...");
+
+        for (int i = minAyah.sura; i <= maxAyah.sura; i++) {
+            int firstAyah;
+            if (i == minAyah.sura) {
+                firstAyah = minAyah.ayah;
+            } else {
+                firstAyah = 1;
+            }
+
+            if (firstAyah == 1 && i != 1 && i != 9) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    public String getSuraName(Context context, int sura, boolean wantPrefix, boolean wantTranslation) {
+        if (sura < Constants.SURA_FIRST ||
+                sura > Constants.SURA_LAST) {
+            return "";
+        }
+
+        StringBuilder builder = new StringBuilder();
+        String[] suraNames = context.getResources().getStringArray(com.thikrallah.quran.labs.androidquran.R.array.sura_names);
+        if (wantPrefix) {
+            builder.append(context.getString(com.thikrallah.quran.labs.androidquran.R.string.quran_sura_title, suraNames[sura - 1]));
+        } else {
+            builder.append(suraNames[sura - 1]);
+        }
+        if (wantTranslation) {
+            String translation = context.getResources().getStringArray(com.thikrallah.quran.labs.androidquran.R.array.sura_names_translation)[sura - 1];
+            if (!TextUtils.isEmpty(translation)) {
+                // Some sura names may not have translation
+                builder.append(" (");
+                builder.append(translation);
+                builder.append(")");
+            }
+        }
+
+        return builder.toString();
+    }
+    public String getNotificationTitle(Context context,
+                                       SuraAyah minVerse,
+                                       SuraAyah maxVerse,
+                                       boolean isGapless) {
+        int minSura = minVerse.sura;
+        int maxSura = maxVerse.sura;
+
+        String notificationTitle =
+                getSuraName(context, minSura, true, false);
+        if (isGapless) {
+            // for gapless, don't show the ayah numbers since we're
+            // downloading the entire sura(s).
+            if (minSura == maxSura) {
+                return notificationTitle;
+            } else {
+                return notificationTitle + " - " +
+                        getSuraName(context, maxSura, true, false);
+            }
+        }
+
+        int maxAyah = maxVerse.ayah;
+        if (maxAyah == 0) {
+            maxSura--;
+            maxAyah = getNumAyahs(maxSura);
+        }
+
+        if (minSura == maxSura) {
+            if (minVerse.ayah == maxAyah) {
+                notificationTitle += " (" + maxAyah + ")";
+            } else {
+                notificationTitle += " (" + minVerse.ayah +
+                        "-" + maxAyah + ")";
+            }
+        } else {
+            notificationTitle += " (" + minVerse.ayah +
+                    ") - " + getSuraName(context, maxSura, true, false) +
+                    " (" + maxAyah + ")";
+        }
+
+        return notificationTitle;
+    }
+
+    private Intent getDownloadIntent(Context context,
+                                  String url,
+                                   String destination,
+                                  String title) {
+        return ServiceIntentHelper.getAudioDownloadIntent(context, url, destination, title);
+    }
+    private String getGaplessDatabaseUrl( QariItem qari) {
+        if (!qari.isGapless() || qari.getDatabaseName() == null) {
+            return null;
+        }
+
+        String dbName = qari.getDatabaseName() + ZIP_EXTENSION;
+        return DATABASE_BASE_URL + "/" + dbName;
+    }
+    private String getQariUrl(QariItem item) {
+        if (item.isGapless()) {
+            return item.getUrl() + "%03d" + AudioUtils.AUDIO_EXTENSION;
+        } else {
+            return item.getUrl() + "%03d%03d" + AudioUtils.AUDIO_EXTENSION;
+        }
+    }
     private List<QariItem> getQariList( Context context) {
         Resources resources = context.getResources();
         String[] shuyookh = resources.getStringArray(R.array.quran_readers_name);
@@ -481,7 +770,7 @@ public class ThikrService extends IntentService  {
         int endSura = end.sura;
         int endAyah = end.ayah;
 
-        if (endSura < startSura || endSura == startSura && endAyah < startAyah) {
+        if (endSura < startSura || (endSura == startSura && endAyah < startAyah)) {
             throw new IllegalStateException("End isn't larger than the start");
         }
         int lastAyah;

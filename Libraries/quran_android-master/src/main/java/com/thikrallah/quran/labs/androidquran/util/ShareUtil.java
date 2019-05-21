@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+import androidx.annotation.StringRes;
+
 import com.thikrallah.quran.labs.androidquran.R;
 import com.thikrallah.quran.labs.androidquran.common.LocalTranslation;
 import com.thikrallah.quran.labs.androidquran.common.QuranAyahInfo;
@@ -17,7 +19,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import androidx.annotation.StringRes;
 import dagger.Reusable;
 
 @Reusable

@@ -1,5 +1,6 @@
 package com.thikrallah.quran.labs.androidquran.component.application;
 
+import com.thikrallah.quran.common.networking.NetworkModule;
 import com.thikrallah.quran.data.page.provider.QuranPageModule;
 import com.thikrallah.quran.labs.androidquran.QuranDataActivity;
 import com.thikrallah.quran.labs.androidquran.QuranForwarderActivity;
@@ -10,7 +11,6 @@ import com.thikrallah.quran.labs.androidquran.data.QuranDataModule;
 import com.thikrallah.quran.labs.androidquran.data.QuranDataProvider;
 import com.thikrallah.quran.labs.androidquran.module.application.ApplicationModule;
 import com.thikrallah.quran.labs.androidquran.module.application.DatabaseModule;
-import com.thikrallah.quran.common.networking.NetworkModule;
 import com.thikrallah.quran.labs.androidquran.pageselect.PageSelectActivity;
 import com.thikrallah.quran.labs.androidquran.service.AudioService;
 import com.thikrallah.quran.labs.androidquran.service.QuranDownloadService;
