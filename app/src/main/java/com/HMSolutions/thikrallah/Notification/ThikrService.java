@@ -333,6 +333,26 @@ public class ThikrService extends IntentService  {
                             PendingIntent pendingIntent = PendingIntent.getBroadcast(mcontext, NOTIFICATION_ID_DOWNLOAD1, RecieverIntent_, PendingIntent.FLAG_UPDATE_CURRENT);
                             handleRequiredDownload(pendingIntent,NOTIFICATION_ID_DOWNLOAD1);
 
+                            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+                            mBuilder.setContentTitle(this.getString(R.string.my_app_name))
+                                    .setContentText(this.getString(R.string.surat_almulk))
+                                    .setSmallIcon(R.drawable.ic_launcher)
+                                    .setAutoCancel(true);
+
+                            mBuilder=setVisibilityPublic(mBuilder);
+                            Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                            mBuilder.setSound(soundUri,AudioManager.STREAM_NOTIFICATION);
+                            Intent launchAppIntent = new Intent(this, PagerActivity.class);
+                            launchAppIntent.putExtra("page", 562);
+
+                            PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
+                                    0, launchAppIntent, PendingIntent.FLAG_CANCEL_CURRENT
+                            );
+
+                            mBuilder.setContentIntent(launchAppPendingIntent);
+
+                            mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
                         }
 
                     }

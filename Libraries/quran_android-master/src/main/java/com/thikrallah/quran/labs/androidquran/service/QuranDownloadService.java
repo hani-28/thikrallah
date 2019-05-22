@@ -12,6 +12,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.StatFs;
+import android.util.Log;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -124,12 +125,14 @@ public class QuranDownloadService extends Service implements
 
     @Override
     public void handleMessage(Message msg) {
+      Log.d(TAG,"handleMessage called.");
       if (msg.obj != null) {
         onHandleIntent((Intent) msg.obj);
         if (0 == currentOperations.decrementAndGet()) {
           notifier.stopForeground();
         }
       }
+      Log.d(TAG,"stopself called");
       stopSelf(msg.arg1);
     }
   }
@@ -159,15 +162,16 @@ public class QuranDownloadService extends Service implements
   private void handleOnStartCommand(Intent intent, int startId) {
     if (intent != null) {
       if (ACTION_CANCEL_DOWNLOADS.equals(intent.getAction())) {
+        Log.d(TAG, "handleOnStartCommand called with download intent and startid " + startId);
         serviceHandler.removeCallbacksAndMessages(null);
         isDownloadCanceled = true;
         sendNoOpMessage(startId);
       } else if (ACTION_RECONNECT.equals(intent.getAction())) {
         int type = intent.getIntExtra(EXTRA_DOWNLOAD_TYPE,
-            DOWNLOAD_TYPE_UNDEF);
+                DOWNLOAD_TYPE_UNDEF);
         Intent currentLast = lastSentIntent;
         int lastType = currentLast == null ? -1 :
-            currentLast.getIntExtra(EXTRA_DOWNLOAD_TYPE, DOWNLOAD_TYPE_UNDEF);
+                currentLast.getIntExtra(EXTRA_DOWNLOAD_TYPE, DOWNLOAD_TYPE_UNDEF);
 
         if (type == lastType) {
           if (currentLast != null) {
@@ -177,24 +181,25 @@ public class QuranDownloadService extends Service implements
           Intent progressIntent = new Intent(ProgressIntent.INTENT_NAME);
           progressIntent.putExtra(ProgressIntent.DOWNLOAD_TYPE, type);
           progressIntent.putExtra(ProgressIntent.STATE,
-              ProgressIntent.STATE_DOWNLOADING);
+                  ProgressIntent.STATE_DOWNLOADING);
           broadcastManager.sendBroadcast(progressIntent);
         }
         sendNoOpMessage(startId);
       } else {
         // if we are currently downloading, resend the last broadcast
         // and don't queue anything
-        String download = intent.getStringExtra(EXTRA_DOWNLOAD_KEY);
+        String download = intent.getStringExtra(EXTRA_URL);
         Intent currentLast = lastSentIntent;
         String currentDownload = currentLast == null ? null :
-            currentLast.getStringExtra(ProgressIntent.DOWNLOAD_KEY);
+                currentLast.getStringExtra(EXTRA_URL);
         if (download != null && download.equals(currentDownload)) {
           Timber.d("resending last broadcast...");
+          Log.d(TAG, "resending last broadcast...");
           broadcastManager.sendBroadcast(currentLast);
 
           String state = currentLast.getStringExtra(ProgressIntent.STATE);
           if (!ProgressIntent.STATE_SUCCESS.equals(state) &&
-              !ProgressIntent.STATE_ERROR.equals(state)) {
+                  !ProgressIntent.STATE_ERROR.equals(state)) {
             // re-queue fatal errors and success cases again just in case
             // of a race condition in which we miss the error pref and
             // miss the success/failure notification and this re-play
@@ -234,10 +239,12 @@ public class QuranDownloadService extends Service implements
   public int onStartCommand(Intent intent, int flags, int startId) {
     // if it's a download, it wants to be a foreground service.
     // quickly start as foreground before actually enqueueing the request.
+    Log.d(TAG,"onstartcommand called with startid"+ startId+" with intent"+intent);
     if (ACTION_DOWNLOAD_URL.equals(intent.getAction())) {
+      Log.d(TAG,"calling notifyDownloadStarting"+ startId);
       notifier.notifyDownloadStarting();
     }
-
+    Log.d(TAG,"calling handleOnStartCommand next"+ startId);
     handleOnStartCommand(intent, startId);
     return START_NOT_STICKY;
   }
@@ -256,6 +263,7 @@ public class QuranDownloadService extends Service implements
   }
 
   private void onHandleIntent(Intent intent) {
+    Log.d(TAG,"onHandleIntent called");
     if (ACTION_DOWNLOAD_URL.equals(intent.getAction())) {
       String url = intent.getStringExtra(EXTRA_URL);
       String key = intent.getStringExtra(EXTRA_DOWNLOAD_KEY);
@@ -321,6 +329,7 @@ public class QuranDownloadService extends Service implements
   private boolean download(String urlString, String destination,
       String outputFile,
       NotificationDetails details) {
+    Log.d(TAG,"download called. urlString= "+urlString);
     // make the directory if it doesn't exist
     new File(destination).mkdirs();
     Timber.d("making directory %s", destination);
@@ -342,6 +351,7 @@ public class QuranDownloadService extends Service implements
                                 SuraAyah endVerse,
                                 boolean isGapless,
       NotificationDetails details) {
+    Log.d(TAG,"downloadRange called. urlstring = "+urlString);
     details.setIsGapless(isGapless);
     new File(destination).mkdirs();
 
@@ -458,7 +468,7 @@ public class QuranDownloadService extends Service implements
   private boolean downloadFileWrapper(String urlString, String destination,
       String outputFile, NotificationDetails details) {
     boolean previouslyCorrupted = false;
-
+    Log.d(TAG,"downloadFileWrapper urlstring="+urlString);
     int res = DOWNLOAD_SUCCESS;
     for (int i = 0; i < RETRY_COUNT; i++) {
       if (isDownloadCanceled) {
@@ -511,7 +521,8 @@ public class QuranDownloadService extends Service implements
   }
 
   private int startDownload(String url, String path,
-      String filename, NotificationDetails notificationInfo) {
+                            String filename, NotificationDetails notificationInfo) {
+    Log.d(TAG,"startDownload called: url="+url);
     if (!QuranUtils.haveInternet(this)) {
       notifyError(QuranDownloadNotifier.ERROR_NETWORK,
           false, notificationInfo);
@@ -537,6 +548,7 @@ public class QuranDownloadService extends Service implements
   private int downloadUrl(String url, String path, String filename,
       NotificationDetails notificationInfo) {
     Timber.d("downloading %s", url);
+    Log.d(TAG,"downloading "+ url);
     final Request.Builder builder = new Request.Builder()
         .url(url).tag(DEFAULT_TAG);
     final File partialFile = new File(path, filename + PARTIAL_EXT);

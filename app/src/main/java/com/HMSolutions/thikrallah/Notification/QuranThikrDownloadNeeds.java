@@ -47,6 +47,7 @@ public class QuranThikrDownloadNeeds extends BroadcastReceiver {
     QuranSettings quransettings;
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.d(TAG,"onReceive called");
         mcontext=context;
         quransettings=QuranSettings.getInstance(mcontext);
         SuraAyah start = new SuraAyah(67, 1);
@@ -98,6 +99,8 @@ public class QuranThikrDownloadNeeds extends BroadcastReceiver {
                     handlePlayback(audioRequest);
                 }else{
                     for (int i=0;i<DownloadIntents.size();i++){
+                        Log.d(TAG,"starting intent"+DownloadIntents.get(i));
+                        Log.d(TAG,"starting extras"+DownloadIntents.get(i).getExtras().toString());
                         mcontext.startService(DownloadIntents.get(i));
                     }
                 }
@@ -141,18 +144,20 @@ public class QuranThikrDownloadNeeds extends BroadcastReceiver {
         String path = audioPathInfo.getLocalDirectory();
         String gaplessDb = audioPathInfo.getGaplessDatabase();
         if (gaplessDb != null && !new File(gaplessDb).exists()) {
-
+            Log.d(TAG,"db download needed");
             Intent DatabaseIntent=getDownloadIntent(context,
                     getGaplessDatabaseUrl(qari),
                     path,
                     context.getString(R.string.timing_database));
             downloadIntents.add(DatabaseIntent);
 
-        } else if (!request.getShouldStream() &&
+        }
+        if (!request.getShouldStream() &&
                 shouldDownloadBasmallah(path,
                         request.getStart(),
                         request.getEnd(),
                         qari.isGapless())) {
+             Log.d(TAG,"bismillah download needed");
 
             String title = getNotificationTitle(
                     context, request.getStart(), request.getStart(), qari.isGapless());
@@ -163,9 +168,11 @@ public class QuranThikrDownloadNeeds extends BroadcastReceiver {
             downloadIntents.add(beslmalahIntent);
 
 
-        } else if (!request.getShouldStream() &&
+        }
+        if (!request.getShouldStream() &&
                 !haveAllFiles(audioPathInfo.getUrlFormat(),audioPathInfo.getLocalDirectory(), request.getStart(), request.getEnd(),qari.isGapless())) {
 
+             Log.d(TAG,"audio download needed");
             String title = getNotificationTitle(
                     context, request.getStart(), request.getEnd(), qari.isGapless());
             Intent AudioIntent=getDownloadIntent(context, getQariUrl(qari), path, title);
