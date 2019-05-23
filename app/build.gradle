@@ -17,14 +17,22 @@ apply plugin: 'net.ltgt.errorprone'
 apply plugin: 'kotlin-kapt'
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('/home/hani/AndroidStudioProjects/keystore/keystore')
+            storePassword 'ifte7simsim'
+            keyAlias = 'hani'
+            keyPassword 'ifte7simsim'
+        }
+    }
     compileSdkVersion 28
 
     defaultConfig {
         applicationId "com.HMSolutions.thikrallah"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 90
-        versionName "4.3.4"
+        versionCode 91
+        versionName "5.0.0"
     }
     lintOptions {
         disable 'MissingTranslation'

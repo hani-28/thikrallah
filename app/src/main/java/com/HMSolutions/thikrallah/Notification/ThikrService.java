@@ -284,7 +284,8 @@ public class ThikrService extends IntentService  {
                 SuraAyah start = new SuraAyah(67, 1);
                 SuraAyah end = new SuraAyah(67, 30);
                 List<QariItem> qlist = getQariList(this);
-                QariItem qari=qlist.get(10);
+                int qari_num=Integer.parseInt(sharedPrefs.getString("quran_readers_name","11"));
+                QariItem qari=qlist.get(qari_num);
 
                 AudioPathInfo audioPathInfo = this.getLocalAudioPathInfo(qari);
                /*
@@ -330,8 +331,14 @@ public class ThikrService extends IntentService  {
                             handlePlayback(audioRequest);
                         }else{
                             Intent RecieverIntent_=new Intent(mcontext, QuranThikrDownloadNeeds.class);
+                            RecieverIntent_.putExtra("sura",start.sura);
+                            RecieverIntent_.putExtra("ayah",end.ayah);
+                            RecieverIntent_.putExtra("qari",qari_num);
                             PendingIntent pendingIntent = PendingIntent.getBroadcast(mcontext, NOTIFICATION_ID_DOWNLOAD1, RecieverIntent_, PendingIntent.FLAG_UPDATE_CURRENT);
                             handleRequiredDownload(pendingIntent,NOTIFICATION_ID_DOWNLOAD1);
+
+
+
 
                             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
@@ -394,18 +401,98 @@ public class ThikrService extends IntentService  {
 
                 mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
             }else{
-                //new here
 
-                sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_QURAN_KAHF).commit();
-                //TODO: Fix below to use new Quran Functionality
+                sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_QURAN_MULK).commit();
+
                 data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAYALL);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    this.startForegroundService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
-                } else {
-                    this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+
+                //TODO: Fix below to use new Quran Functionality
+                SuraAyah start = new SuraAyah(18, 1);
+                SuraAyah end = new SuraAyah(18, 110);
+                List<QariItem> qlist = getQariList(this);
+                int qari_num=Integer.parseInt(sharedPrefs.getString("quran_readers_name","11"));
+                QariItem qari=qlist.get(qari_num);
+
+                AudioPathInfo audioPathInfo = this.getLocalAudioPathInfo(qari);
+               /*
+                File databaseFile=new File(audioPathInfo.getGaplessDatabase());
+                if(!databaseFile.exists()){
+
+                    Intent downloadIntent = ServiceIntentHelper.getAudioDownloadIntent(this, getGaplessDatabaseUrl(qari), audioPathInfo.getLocalDirectory(), mcontext.getString(R.string.timing_database));
+                    startService(downloadIntent);
+                }
+
+*/
+                if (audioPathInfo != null) {
+                    // override streaming if all the files are already downloaded
+                    boolean stream = false;
+                    if (quransettings.shouldStream()) {
+                        stream = !haveAllFiles(audioPathInfo.getUrlFormat(),audioPathInfo.getLocalDirectory(), start, end,qari.isGapless());
+                    }
+
+                    // if we're still streaming, change the base qari format in audioPathInfo
+                    // to a remote url format (instead of a path to a local directory)
+                    AudioPathInfo audioPath;
+                    if (stream) {
+                        audioPath = audioPathInfo.copy(getQariUrl(qari), audioPathInfo.getLocalDirectory(), audioPathInfo.getGaplessDatabase());
+
+                    } else {
+                        audioPath = audioPathInfo;
+                        //check if the audio files are available
+                        if (!haveAllFiles(audioPathInfo.getUrlFormat(),audioPathInfo.getLocalDirectory(), start, end,qari.isGapless())){
+
+                        }
+                    }
+
+
+                    Log.d(TAG, "ready to play Quran");
+                    if (audioPathInfo != null) {
+                        AudioRequest audioRequest = new AudioRequest(start, end, qari, 0, 0, true, false, audioPath);
+
+                        //TODO:Check for all needed files downloaded yet
+                        ArrayList<Intent> DownloadIntents=DownloadedNeededFiles(this,audioRequest);
+                        Log.d(TAG, "DownloadIntents are "+DownloadIntents.size());
+                        if (DownloadIntents.size()==0){
+                            Log.d(TAG, "calling handlePlayback");
+                            handlePlayback(audioRequest);
+                        }else{
+                            Intent RecieverIntent_=new Intent(mcontext, QuranThikrDownloadNeeds.class);
+                            RecieverIntent_.putExtra("sura",start.sura);
+                            RecieverIntent_.putExtra("ayah",end.ayah);
+                            RecieverIntent_.putExtra("qari",qari_num);
+                            PendingIntent pendingIntent = PendingIntent.getBroadcast(mcontext, NOTIFICATION_ID_DOWNLOAD1, RecieverIntent_, PendingIntent.FLAG_UPDATE_CURRENT);
+                            handleRequiredDownload(pendingIntent,NOTIFICATION_ID_DOWNLOAD1);
+
+
+
+
+                            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+                            mBuilder.setContentTitle(this.getString(R.string.my_app_name))
+                                    .setContentText(this.getString(R.string.surat_almulk))
+                                    .setSmallIcon(R.drawable.ic_launcher)
+                                    .setAutoCancel(true);
+
+                            mBuilder=setVisibilityPublic(mBuilder);
+                            Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                            mBuilder.setSound(soundUri,AudioManager.STREAM_NOTIFICATION);
+                            Intent launchAppIntent = new Intent(this, PagerActivity.class);
+                            launchAppIntent.putExtra("page", 562);
+
+                            PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
+                                    0, launchAppIntent, PendingIntent.FLAG_CANCEL_CURRENT
+                            );
+
+                            mBuilder.setContentIntent(launchAppPendingIntent);
+
+                            mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+                        }
+
+                    }
                 }
             }
             return;
+
         }
         if (thikrType.contains(MainActivity.DATA_TYPE_ATHAN)){
             int reminderType=3;
@@ -474,15 +561,7 @@ public class ThikrService extends IntentService  {
 	}
     public void handleRequiredDownload(PendingIntent launchAppPendingIntent,int notification_id) {
 
-        if (QuranUtils.isOnWifiNetwork(this)) {
-            Timber.d("on wifi");
-            Crashlytics.log("starting service in handleRequiredDownload");
-           // startService(downloadIntent);
-        }else {
-            Timber.d("on data");
-            Crashlytics.log("starting service in handleRequiredDownload");
-           // startService(downloadIntent);
-        }
+
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder mBuilder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -500,7 +579,7 @@ public class ThikrService extends IntentService  {
         }
 
         mBuilder.setContentTitle(this.getString(R.string.my_app_name))
-                .setContentText("Need to download files")
+                .setContentText(mcontext.getResources().getString(R.string.quran_thikr_need_files))
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setAutoCancel(true);
         mBuilder=setVisibilityPublic(mBuilder);
@@ -552,7 +631,6 @@ public class ThikrService extends IntentService  {
                     path,
                     context.getString(R.string.timing_database));
             downloadIntents.add(DatabaseIntent);
-           // handleRequiredDownload(DatabaseIntent);
         } else if (!request.getShouldStream() &&
                 shouldDownloadBasmallah(path,
                         request.getStart(),
@@ -566,7 +644,6 @@ public class ThikrService extends IntentService  {
             beslmalahIntent.putExtra(QuranDownloadService.EXTRA_START_VERSE, request.getStart());
             beslmalahIntent.putExtra(QuranDownloadService.EXTRA_END_VERSE, request.getStart());
             downloadIntents.add(beslmalahIntent);
-          //  handleRequiredDownload(beslmalahIntent);
 
         } else if (!request.getShouldStream() &&
                 !haveAllFiles(audioPathInfo.getUrlFormat(),audioPathInfo.getLocalDirectory(), request.getStart(), request.getEnd(),qari.isGapless())) {
@@ -578,7 +655,6 @@ public class ThikrService extends IntentService  {
             AudioIntent.putExtra(QuranDownloadService.EXTRA_END_VERSE, request.getEnd());
             AudioIntent.putExtra(QuranDownloadService.EXTRA_IS_GAPLESS, qari.isGapless());
             downloadIntents.add(AudioIntent);
-         //   handleRequiredDownload(AudioIntent);
 
         }
         return downloadIntents;

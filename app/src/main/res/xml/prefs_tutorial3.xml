@@ -1,7 +1,13 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     <PreferenceCategory
-        android:title="@string/kahfThikrSettings"
+        android:title="@string/QuranThikrSettings"
         android:layout="@layout/preference_catagory">
+        <com.HMSolutions.thikrallah.Utilities.MyListPreference
+            android:defaultValue="11"
+            android:entries="@array/quran_readers_name"
+            android:entryValues="@array/quran_readers_value"
+            android:key="quran_readers_name"
+            android:title="@string/favorite_reciter" />
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="remindMekahf"
@@ -18,12 +24,7 @@
             android:entryValues="@array/RemindmeTypeValues"
             android:key="remindMekahfType"
             android:title="@string/kahf_reminder_type" />
-    </PreferenceCategory>
 
-
-    <PreferenceCategory
-        android:title="@string/mulkThikrSettings"
-        android:layout="@layout/preference_catagory">
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="@string/remindMemulk"
@@ -40,5 +41,6 @@
             android:entryValues="@array/RemindmeTypeValues"
             android:key="remindMemulkType"
             android:title="@string/mulk_reminder_type" />
+
     </PreferenceCategory>
 </PreferenceScreen>

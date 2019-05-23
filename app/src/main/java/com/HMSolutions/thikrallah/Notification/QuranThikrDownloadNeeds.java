@@ -50,10 +50,13 @@ public class QuranThikrDownloadNeeds extends BroadcastReceiver {
         Log.d(TAG,"onReceive called");
         mcontext=context;
         quransettings=QuranSettings.getInstance(mcontext);
-        SuraAyah start = new SuraAyah(67, 1);
-        SuraAyah end = new SuraAyah(67, 30);
+        int sura=intent.getIntExtra("sura",1);
+        int ayah=intent.getIntExtra("ayah",1);
+        int qari_num=intent.getIntExtra("qari",1);
+        SuraAyah start = new SuraAyah(sura, 1);
+        SuraAyah end = new SuraAyah(sura, ayah);
         List<QariItem> qlist = getQariList(mcontext);
-        QariItem qari=qlist.get(10);
+        QariItem qari=qlist.get(qari_num);
 
         AudioPathInfo audioPathInfo = this.getLocalAudioPathInfo(qari);
                /*
@@ -101,7 +104,12 @@ public class QuranThikrDownloadNeeds extends BroadcastReceiver {
                     for (int i=0;i<DownloadIntents.size();i++){
                         Log.d(TAG,"starting intent"+DownloadIntents.get(i));
                         Log.d(TAG,"starting extras"+DownloadIntents.get(i).getExtras().toString());
-                        mcontext.startService(DownloadIntents.get(i));
+                        if (i==DownloadIntents.size()-1){
+                            mcontext.startService(DownloadIntents.get(i).putExtra("START_AUDIO_REMINDER_SERVICE",true));
+                        }else{
+                            mcontext.startService(DownloadIntents.get(i));
+                        }
+
                     }
                 }
 

@@ -254,9 +254,15 @@ public class QuranDownloadService extends Service implements
     if (wifiLock.isHeld()) {
       wifiLock.release();
     }
+    if (isRestartQuranReminder){
+    //TODO:THIS CAUSES CIRCULAR DEPENDENCY
+      // Intent intent2=new Intent(this, ThikrService.class).putExtras(data);
+      //this.startService()
+    }
+
     serviceLooper.quit();
   }
-
+  boolean isRestartQuranReminder;
   @Override
   public IBinder onBind(Intent intent) {
     return null;
@@ -264,6 +270,7 @@ public class QuranDownloadService extends Service implements
 
   private void onHandleIntent(Intent intent) {
     Log.d(TAG,"onHandleIntent called");
+    isRestartQuranReminder=intent.getBooleanExtra("START_AUDIO_REMINDER_SERVICE",false);
     if (ACTION_DOWNLOAD_URL.equals(intent.getAction())) {
       String url = intent.getStringExtra(EXTRA_URL);
       String key = intent.getStringExtra(EXTRA_DOWNLOAD_KEY);
