@@ -5,6 +5,7 @@ package com.HMSolutions.thikrallah.Notification;
         import android.content.Context;
         import android.content.Intent;
         import android.content.res.Resources;
+        import android.os.Build;
         import android.os.Environment;
         import android.text.TextUtils;
         import android.util.Log;
@@ -105,9 +106,19 @@ public class QuranThikrDownloadNeeds extends BroadcastReceiver {
                         Log.d(TAG,"starting intent"+DownloadIntents.get(i));
                         Log.d(TAG,"starting extras"+DownloadIntents.get(i).getExtras().toString());
                         if (i==DownloadIntents.size()-1){
-                            mcontext.startService(DownloadIntents.get(i).putExtra("START_AUDIO_REMINDER_SERVICE",true));
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                mcontext.startForegroundService(DownloadIntents.get(i).putExtra("START_AUDIO_REMINDER_SERVICE",true));
+                            } else {
+                                mcontext.startService(DownloadIntents.get(i).putExtra("START_AUDIO_REMINDER_SERVICE",true));
+                            }
+
                         }else{
-                            mcontext.startService(DownloadIntents.get(i));
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                mcontext.startForegroundService(DownloadIntents.get(i));
+                            } else {
+                                mcontext.startService(DownloadIntents.get(i));
+                            }
+
                         }
 
                     }
