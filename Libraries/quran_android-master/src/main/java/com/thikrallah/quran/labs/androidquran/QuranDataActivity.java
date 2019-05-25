@@ -92,7 +92,12 @@ public class QuranDataActivity extends Activity implements
       quranSettings.setAppCustomLocation(quranSettings.getDefaultLocation());
     }
     Intent intent = this.getIntent();
-    if (intent.getExtras().getString("DataType").contains("quran")) {
+    Bundle data = intent.getExtras();
+    boolean isFromNotification=false;
+    if (data!=null){
+      isFromNotification=data.getString("DataType","").contains("quran");
+    }
+    if (isFromNotification==true) {
       Log.d(TAG, "quran thikr notification");
 
       Intent intent2 = new Intent();
