@@ -284,7 +284,7 @@ public class PagerActivity extends QuranActionBarActivity implements
         highlightedSura = extras.getInt(EXTRA_HIGHLIGHT_SURA, -1);
         highlightedAyah = extras.getInt(EXTRA_HIGHLIGHT_AYAH, -1);
 
-        if (extras != null && extras.getString("DataType").contains("quran")) {
+        if (extras != null && extras.getString("DataType","").contains("quran")) {
           SharedPreferences sharedPrefs = PreferenceManager
                   .getDefaultSharedPreferences(this.getApplicationContext());
           int qari_num=Integer.parseInt(sharedPrefs.getString("quran_readers_name","11"));
