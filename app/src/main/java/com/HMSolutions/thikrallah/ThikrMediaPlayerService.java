@@ -121,7 +121,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                         msg.replyTo.send(msg2);
                     } catch (RemoteException e) {
                         e.printStackTrace();
-                        Log.e(TAG,e.getMessage());
+                        Log.e(TAG,""+e.getMessage());
                     }
                     super.handleMessage(msg);
             }
@@ -273,6 +273,8 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
                 .setContentIntent(launchAppPendingIntent);
         notificationBuilder=setVisibilityPublic(notificationBuilder);
+
+        startForeground(NOTIFICATION_ID, notificationBuilder.build());
         updateActions();
 
 
@@ -362,9 +364,9 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
             this.setThikrType(intent.getExtras().getString("com.HMSolutions.thikrallah.datatype", null));
         }
+
         initNotification();
         if(getThikrType()==null){
-            //TODO:when does this case happen
             Log.d(TAG,"thikrtype is null... why?");
             this.updateAllAlarms();
             return Service.START_NOT_STICKY;
@@ -627,7 +629,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
 
         } catch (IOException e) {
-            Log.e(TAG,e.getMessage());
+            Log.e(TAG,""+e.getMessage());
             e.printStackTrace();
         }
     }
@@ -1148,7 +1150,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 }
             }catch(IllegalStateException e){
                 e.printStackTrace();
-                Log.e(TAG,e.getMessage());
+                Log.e(TAG,""+e.getMessage());
             }
 
 

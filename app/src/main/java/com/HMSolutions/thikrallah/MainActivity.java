@@ -495,7 +495,7 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
                                         startActivity(intent);
                                     }catch(Exception e){
                                         e.printStackTrace();
-                                        Log.d(TAG,e.getMessage());
+                                        Log.d(TAG,""+e.getMessage());
                                     }finally{
                                         mPrefs.edit().putBoolean("protected", true).apply();
                                     }
@@ -922,7 +922,7 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.e(TAG,e.getMessage());
+                Log.e(TAG,""+e.getMessage());
             }
             return locationDiscription;
         }

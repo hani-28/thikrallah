@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -66,6 +67,7 @@ import timber.log.Timber;
 public class ThikrService extends IntentService  {
     String TAG = "ThikrService";
 	private final static int NOTIFICATION_ID=4;
+    private final static int NOTIFICATION_ID_BACKGROUND=44;
     private final static int NOTIFICATION_ID_DOWNLOAD1=5523;
     private final static int NOTIFICATION_ID_DOWNLOAD2=412;
     private final static int NOTIFICATION_ID_DOWNLOAD3=9578;
@@ -90,7 +92,6 @@ public class ThikrService extends IntentService  {
 	protected void onHandleIntent(Intent intent) {
 
         calling_intent=intent;
-        //TODO: Add channels here?
         mcontext=this.getApplicationContext();
         quransettings=QuranSettings.getInstance(mcontext);
         //update all alarms
@@ -121,6 +122,7 @@ public class ThikrService extends IntentService  {
         if(isTimer){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 startForegroundService(new Intent(this.getApplicationContext(),AthanTimerService.class));
+                showForegroundNotificationan(NOTIFICATION_ID);
             } else {
                 this.startService(new Intent(this.getApplicationContext(),AthanTimerService.class));
             }
@@ -148,6 +150,7 @@ public class ThikrService extends IntentService  {
 			intentChatHead.putExtra("thikr", thikr.getThikrText());
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 startForegroundService(intentChatHead);
+                showForegroundNotificationan(NOTIFICATION_ID);
             } else {
                 startService(intentChatHead);
             }
@@ -162,6 +165,7 @@ public class ThikrService extends IntentService  {
                 data.putString("FILE_PATH",thikr.getFile());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     this.startForegroundService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+                    showForegroundNotificationan(NOTIFICATION_ID);
                 } else {
                     this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
                 }
@@ -194,8 +198,20 @@ public class ThikrService extends IntentService  {
 						);
 
 				mBuilder.setContentIntent(launchAppPendingIntent);
-
-				mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    String NOTIFICATION_CHANNEL_ID = "ThikrService";
+                    String channelName = this.getResources().getString(R.string.remember_notification);
+                    NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+                    chan.setSound(null,null);
+                    chan.setLightColor(Color.BLUE);
+                    chan.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+                    NotificationManager  manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    assert manager != null;
+                    manager.createNotificationChannel(chan);
+                    mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID);
+                }
+                this.startForeground(NOTIFICATION_ID,mBuilder.build());
+				mNotificationManager.notify(NOTIFICATION_ID_BACKGROUND, mBuilder.build());
 			}else{
 				//new here
 
@@ -204,6 +220,7 @@ public class ThikrService extends IntentService  {
 				data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAYALL);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     this.startForegroundService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+                    showForegroundNotificationan(NOTIFICATION_ID);
                 } else {
                     this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
                 }
@@ -232,14 +249,28 @@ public class ThikrService extends IntentService  {
 						);
 
 				mBuilder.setContentIntent(launchAppPendingIntent);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    String NOTIFICATION_CHANNEL_ID = "ThikrService";
+                    String channelName = this.getResources().getString(R.string.remember_notification);
+                    NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+                    chan.setSound(null,null);
+                    chan.setLightColor(Color.BLUE);
+                    chan.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+                    NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    assert manager != null;
+                    manager.createNotificationChannel(chan);
+                    mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID);
+                }
 
-				mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());	
+                this.startForeground(NOTIFICATION_ID,mBuilder.build());
+				mNotificationManager.notify(NOTIFICATION_ID+55, mBuilder.build());
 			}else{
 
 				sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_NIGHT_THIKR).commit();
 				data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAYALL);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     this.startForegroundService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+                    showForegroundNotificationan(NOTIFICATION_ID);
                 } else {
                     this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
                 }
@@ -271,16 +302,26 @@ public class ThikrService extends IntentService  {
                 );
 
                 mBuilder.setContentIntent(launchAppPendingIntent);
-
-                mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    String NOTIFICATION_CHANNEL_ID = "ThikrService";
+                    String channelName = this.getResources().getString(R.string.remember_notification);
+                    NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+                    chan.setSound(null,null);
+                    chan.setLightColor(Color.BLUE);
+                    chan.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+                    NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    assert manager != null;
+                    manager.createNotificationChannel(chan);
+                    mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID);
+                }
+                this.startForeground(NOTIFICATION_ID,mBuilder.build());
+                mNotificationManager.notify(NOTIFICATION_ID_BACKGROUND, mBuilder.build());
             }else{
                 //new here
 
                 sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_QURAN_MULK).commit();
 
                 data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAYALL);
-
-                //TODO: Fix below to use new Quran Functionality
                 SuraAyah start = new SuraAyah(67, 1);
                 SuraAyah end = new SuraAyah(67, 30);
                 List<QariItem> qlist = getQariList(this);
@@ -323,7 +364,7 @@ public class ThikrService extends IntentService  {
                     if (audioPathInfo != null) {
                         AudioRequest audioRequest = new AudioRequest(start, end, qari, 0, 0, true, false, audioPath);
 
-                        //TODO:Check for all needed files downloaded yet
+
                         ArrayList<Intent> DownloadIntents=DownloadedNeededFiles(this,audioRequest);
                         Log.d(TAG, "DownloadIntents are "+DownloadIntents.size());
                         if (DownloadIntents.size()==0){
@@ -358,8 +399,20 @@ public class ThikrService extends IntentService  {
                             );
 
                             mBuilder.setContentIntent(launchAppPendingIntent);
-
-                            mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                String NOTIFICATION_CHANNEL_ID = "ThikrService";
+                                String channelName = this.getResources().getString(R.string.remember_notification);
+                                NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+                                chan.setSound(null,null);
+                                chan.setLightColor(Color.BLUE);
+                                chan.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+                                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                assert manager != null;
+                                manager.createNotificationChannel(chan);
+                                mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID);
+                            }
+                            this.startForeground(NOTIFICATION_ID,mBuilder.build());
+                            mNotificationManager.notify(NOTIFICATION_ID_BACKGROUND, mBuilder.build());
                         }
 
                     }
@@ -398,15 +451,50 @@ public class ThikrService extends IntentService  {
                 );
 
                 mBuilder.setContentIntent(launchAppPendingIntent);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    String NOTIFICATION_CHANNEL_ID = "ThikrService";
+                    String channelName = this.getResources().getString(R.string.remember_notification);
+                    NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+                    chan.setSound(null,null);
+                    chan.setLightColor(Color.BLUE);
+                    chan.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+                    NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    assert manager != null;
+                    manager.createNotificationChannel(chan);
+                    mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID);
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    String NOTIFICATION_CHANNEL_ID = "ThikrService";
+                    String channelName = this.getResources().getString(R.string.remember_notification);
+                    NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+                    chan.setSound(null,null);
+                    chan.setLightColor(Color.BLUE);
+                    chan.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+                    NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    assert manager != null;
+                    manager.createNotificationChannel(chan);
+                    mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID);
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    String NOTIFICATION_CHANNEL_ID = "ThikrService";
+                    String channelName = this.getResources().getString(R.string.remember_notification);
+                    NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+                    chan.setSound(null,null);
+                    chan.setLightColor(Color.BLUE);
+                    chan.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+                    NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    assert manager != null;
+                    manager.createNotificationChannel(chan);
+                    mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID);
+                }
+                mNotificationManager.notify(NOTIFICATION_ID_BACKGROUND, mBuilder.build());
 
-                mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+                this.startForeground(NOTIFICATION_ID,mBuilder.build());
             }else{
 
                 sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_QURAN_MULK).commit();
 
                 data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAYALL);
-
-                //TODO: Fix below to use new Quran Functionality
                 SuraAyah start = new SuraAyah(18, 1);
                 SuraAyah end = new SuraAyah(18, 110);
                 List<QariItem> qlist = getQariList(this);
@@ -449,7 +537,7 @@ public class ThikrService extends IntentService  {
                     if (audioPathInfo != null) {
                         AudioRequest audioRequest = new AudioRequest(start, end, qari, 0, 0, true, false, audioPath);
 
-                        //TODO:Check for all needed files downloaded yet
+
                         ArrayList<Intent> DownloadIntents=DownloadedNeededFiles(this,audioRequest);
                         Log.d(TAG, "DownloadIntents are "+DownloadIntents.size());
                         if (DownloadIntents.size()==0){
@@ -484,8 +572,20 @@ public class ThikrService extends IntentService  {
                             );
 
                             mBuilder.setContentIntent(launchAppPendingIntent);
-
-                            mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                String NOTIFICATION_CHANNEL_ID = "ThikrService";
+                                String channelName = this.getResources().getString(R.string.remember_notification);
+                                NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+                                chan.setSound(null,null);
+                                chan.setLightColor(Color.BLUE);
+                                chan.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+                                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                assert manager != null;
+                                manager.createNotificationChannel(chan);
+                                mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID);
+                            }
+                            this.startForeground(NOTIFICATION_ID,mBuilder.build());
+                            mNotificationManager.notify(NOTIFICATION_ID_BACKGROUND, mBuilder.build());
                         }
 
                     }
@@ -536,7 +636,8 @@ public class ThikrService extends IntentService  {
                 //startService(intentChatHead);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     //startForegroundService(intentChatHead);
-                    startService(intentChatHead);
+                    startForegroundService(intentChatHead);
+                    showForegroundNotificationan(NOTIFICATION_ID);
                 } else {
                     startService(intentChatHead);
                 }
@@ -550,6 +651,7 @@ public class ThikrService extends IntentService  {
                 data.putInt("reminderType",reminderType);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     this.startForegroundService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+                    showForegroundNotificationan(NOTIFICATION_ID);
                 } else {
                     this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
                 }
@@ -588,10 +690,51 @@ public class ThikrService extends IntentService  {
         mBuilder.setSound(soundUri,AudioManager.STREAM_NOTIFICATION);
 
         mBuilder.setContentIntent(launchAppPendingIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String NOTIFICATION_CHANNEL_ID = "ThikrService";
+            String channelName = this.getResources().getString(R.string.remember_notification);
+            NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+            chan.setSound(null,null);
+            chan.setLightColor(Color.BLUE);
+            chan.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            assert manager != null;
+            manager.createNotificationChannel(chan);
+            mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID);
+        }
         Log.d(TAG,"showing notifiaction");
 
+        this.startForeground(NOTIFICATION_ID,mBuilder.build());
+        mNotificationManager.notify(NOTIFICATION_ID_BACKGROUND, mBuilder.build());
+    }
+    private void showForegroundNotificationan(int ID){
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+        mBuilder.setContentTitle(this.getString(R.string.my_app_name))
+                .setContentText(this.getString(R.string.my_app_name))
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setAutoCancel(true);
+        mBuilder=setVisibilityPublic(mBuilder);
+        mBuilder.setSound(null);
+        Intent launchAppIntent = new Intent(this, MainActivity.class);
+        PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
+                0, launchAppIntent, PendingIntent.FLAG_CANCEL_CURRENT
+        );
+        mBuilder.setContentIntent(launchAppPendingIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String NOTIFICATION_CHANNEL_ID = "ThikrService";
+            String channelName = this.getResources().getString(R.string.remember_notification);
+            NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+            chan.setSound(null,null);
+            chan.setLightColor(Color.BLUE);
+            chan.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            assert manager != null;
+            manager.createNotificationChannel(chan);
+            mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID);
+        }
 
-        mNotificationManager.notify(notification_id, mBuilder.build());
+        this.startForeground(ID,mBuilder.build());
     }
     private boolean makeQuranDatabaseDirectory(Context context) {
         return makeDirectory(getQuranDatabaseDirectory(context));
@@ -817,7 +960,13 @@ public class ThikrService extends IntentService  {
 
         Crashlytics.log("starting service for audio playback");
         Log.d(TAG,"starting service for audio playback");
-        startService(intent);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(intent);
+            showForegroundNotificationan(NOTIFICATION_ID);
+        } else {
+            startService(intent);
+        }
     }
     private boolean isSDCardMounted() {
         String state = Environment.getExternalStorageState();
@@ -1041,7 +1190,7 @@ public class ThikrService extends IntentService  {
 
     @Override
     public void onDestroy(){
-
+Log.d(TAG,"calling on destroy");
         super.onDestroy();
 
     }

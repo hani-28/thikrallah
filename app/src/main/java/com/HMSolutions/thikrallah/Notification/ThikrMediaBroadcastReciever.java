@@ -12,7 +12,7 @@ import android.view.KeyEvent;
 
 import com.HMSolutions.thikrallah.ThikrMediaPlayerService;
 
-//TODO:ADD com.HMSolutions.thikrallah.datatype to databundle?
+
 public class ThikrMediaBroadcastReciever extends BroadcastReceiver {
         private Context context;
     String TAG = "ThikrMediaBroadcastRcvr";

@@ -148,7 +148,7 @@ public class RecordThikrDialog extends DialogFragment {
             recorder.prepare();
         } catch (Exception e){
             e.printStackTrace();
-            Log.e(TAG,e.getMessage());
+            Log.e(TAG,""+e.getMessage());
         }
 
         final ProgressDialog mProgressDialog = new ProgressDialog(context);

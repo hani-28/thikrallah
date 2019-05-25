@@ -82,7 +82,7 @@ public class WhatsNewScreen {
  
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
-            Log.e(LOG_TAG,e.getMessage());
+            Log.e(LOG_TAG,""+e.getMessage());
         }
     }
  
