@@ -283,6 +283,14 @@ public class PagerActivity extends QuranActionBarActivity implements
         showingTranslation = extras.getBoolean(EXTRA_JUMP_TO_TRANSLATION, showingTranslation);
         highlightedSura = extras.getInt(EXTRA_HIGHLIGHT_SURA, -1);
         highlightedAyah = extras.getInt(EXTRA_HIGHLIGHT_AYAH, -1);
+
+        if (extras != null && extras.getString("DataType").contains("quran")) {
+          SharedPreferences sharedPrefs = PreferenceManager
+                  .getDefaultSharedPreferences(this.getApplicationContext());
+          int qari_num=Integer.parseInt(sharedPrefs.getString("quran_readers_name","11"));
+          sharedPrefs.edit().putInt(Constants.PREF_DEFAULT_QARI, qari_num).commit();
+        }
+
       }
     }
 
@@ -305,6 +313,7 @@ public class PagerActivity extends QuranActionBarActivity implements
     audioStatusBar.setIsDualPageMode(quranScreenInfo.isDualPageMode());
     audioStatusBar.setQariList(audioUtils.getQariList(this));
     audioStatusBar.setAudioBarListener(this);
+
     audioBarParams = (ViewGroup.MarginLayoutParams) audioStatusBar.getLayoutParams();
 
     toolBarArea = findViewById(R.id.toolbar_area);

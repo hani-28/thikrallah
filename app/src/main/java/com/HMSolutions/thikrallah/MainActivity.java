@@ -50,6 +50,7 @@ import com.HMSolutions.thikrallah.Utilities.WhatsNewScreen;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.thikrallah.quran.labs.androidquran.QuranDataActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -545,6 +546,11 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
             }
             if (intent.getExtras().getString("DataType").contains(MainActivity.DATA_TYPE_QURAN)) {
                 Log.d(TAG, "quran thikr notification");
+
+                Intent intent2 = new Intent();
+                intent2.setClass(this, QuranDataActivity.class);
+                intent2.putExtras(intent.getExtras());
+                startActivityForResult(intent2, 0);
                 //Bundle data = new Bundle();
                 //data.putString("DataType", intent.getExtras().getString("DataType"));
                 //data.putInt("surat", Integer.parseInt(intent.getExtras().getString("DataType").split("/")[1]));

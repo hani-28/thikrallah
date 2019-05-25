@@ -294,8 +294,10 @@ public class ThikrService extends IntentService  {
                 mBuilder=setVisibilityPublic(mBuilder);
                 Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                 mBuilder.setSound(soundUri,AudioManager.STREAM_NOTIFICATION);
-                Intent launchAppIntent = new Intent(this, PagerActivity.class);
+                Intent launchAppIntent = new Intent(this, MainActivity.class);
                 launchAppIntent.putExtra("page", 562);
+                launchAppIntent.putExtra("FromNotification",true);
+                launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_QURAN);
 
                 PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
                         0, launchAppIntent, PendingIntent.FLAG_CANCEL_CURRENT
@@ -442,39 +444,16 @@ public class ThikrService extends IntentService  {
                 mBuilder=setVisibilityPublic(mBuilder);
                 Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                 mBuilder.setSound(soundUri,AudioManager.STREAM_NOTIFICATION);
-                Intent launchAppIntent = new Intent(this, PagerActivity.class);
+                Intent launchAppIntent = new Intent(this, MainActivity.class);
                 launchAppIntent.putExtra("page", 293);
-
+                launchAppIntent.putExtra("FromNotification",true);
+                launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_QURAN);
 
                 PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
                         0, launchAppIntent, PendingIntent.FLAG_CANCEL_CURRENT
                 );
 
                 mBuilder.setContentIntent(launchAppPendingIntent);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    String NOTIFICATION_CHANNEL_ID = "ThikrService";
-                    String channelName = this.getResources().getString(R.string.remember_notification);
-                    NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
-                    chan.setSound(null,null);
-                    chan.setLightColor(Color.BLUE);
-                    chan.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
-                    NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    assert manager != null;
-                    manager.createNotificationChannel(chan);
-                    mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID);
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    String NOTIFICATION_CHANNEL_ID = "ThikrService";
-                    String channelName = this.getResources().getString(R.string.remember_notification);
-                    NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
-                    chan.setSound(null,null);
-                    chan.setLightColor(Color.BLUE);
-                    chan.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
-                    NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    assert manager != null;
-                    manager.createNotificationChannel(chan);
-                    mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID);
-                }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     String NOTIFICATION_CHANNEL_ID = "ThikrService";
                     String channelName = this.getResources().getString(R.string.remember_notification);
@@ -502,15 +481,6 @@ public class ThikrService extends IntentService  {
                 QariItem qari=qlist.get(qari_num);
 
                 AudioPathInfo audioPathInfo = this.getLocalAudioPathInfo(qari);
-               /*
-                File databaseFile=new File(audioPathInfo.getGaplessDatabase());
-                if(!databaseFile.exists()){
-
-                    Intent downloadIntent = ServiceIntentHelper.getAudioDownloadIntent(this, getGaplessDatabaseUrl(qari), audioPathInfo.getLocalDirectory(), mcontext.getString(R.string.timing_database));
-                    startService(downloadIntent);
-                }
-
-*/
                 if (audioPathInfo != null) {
                     // override streaming if all the files are already downloaded
                     boolean stream = false;

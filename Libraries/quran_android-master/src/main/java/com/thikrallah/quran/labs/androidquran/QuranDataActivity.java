@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,6 +30,7 @@ import com.thikrallah.quran.labs.androidquran.service.util.DefaultDownloadReceiv
 import com.thikrallah.quran.labs.androidquran.service.util.PermissionUtil;
 import com.thikrallah.quran.labs.androidquran.service.util.QuranDownloadNotifier;
 import com.thikrallah.quran.labs.androidquran.service.util.ServiceIntentHelper;
+import com.thikrallah.quran.labs.androidquran.ui.PagerActivity;
 import com.thikrallah.quran.labs.androidquran.ui.QuranActivity;
 import com.thikrallah.quran.labs.androidquran.util.CopyDatabaseUtil;
 import com.thikrallah.quran.labs.androidquran.util.QuranFileUtils;
@@ -62,6 +64,7 @@ public class QuranDataActivity extends Activity implements
   private boolean taskIsRunning;
   private String patchUrl;
   private int fromVersion;
+  private static final String TAG="QuranDataActivity";
 
   @Inject QuranInfo quranInfo;
   @Inject QuranFileUtils quranFileUtils;
@@ -87,6 +90,20 @@ public class QuranDataActivity extends Activity implements
     // retrying to find a suitable location on app startup.
     if (!quranSettings.isAppLocationSet()) {
       quranSettings.setAppCustomLocation(quranSettings.getDefaultLocation());
+    }
+    Intent intent = this.getIntent();
+    if (intent.getExtras().getString("DataType").contains("quran")) {
+      Log.d(TAG, "quran thikr notification");
+
+      Intent intent2 = new Intent();
+      intent2.setClass(this, PagerActivity.class);
+      intent2.putExtras(intent.getExtras());
+      startActivityForResult(intent2, 0);
+      //Bundle data = new Bundle();
+      //data.putString("DataType", intent.getExtras().getString("DataType"));
+      //data.putInt("surat", Integer.parseInt(intent.getExtras().getString("DataType").split("/")[1]));
+      //data.putInt("surat", this.getResources().getIntArray(R.array.surat_values)[0]);
+      //launchFragment(new QuranFragment(), data, "QuranFragment");
     }
   }
 
