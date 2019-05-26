@@ -1,5 +1,7 @@
 package com.HMSolutions.thikrallah.Fragments;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -20,6 +22,7 @@ import com.HMSolutions.thikrallah.Utilities.TimePreference;
 
 public class PrefsThikrFragmentTutorial extends PreferenceFragment implements OnSharedPreferenceChangeListener{
 	public static String PREF_XML_FILE="PREF_XML_FILE";
+	Context mcontext;
     @Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -30,7 +33,7 @@ public class PrefsThikrFragmentTutorial extends PreferenceFragment implements On
 		initSummary(getPreferenceScreen());
 	}
 	private void updatePrefSummary(Preference pref) {
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getApplicationContext());
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mcontext);
 		if (pref instanceof ListPreference) {
 			Log.d("prefs","pref is instance of listpreference");
 			ListPreference listPref = (ListPreference) pref;
@@ -85,6 +88,11 @@ public class PrefsThikrFragmentTutorial extends PreferenceFragment implements On
         }
     }
 	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		this.mcontext=activity.getApplicationContext();
+	}
+	@Override
 	public void onResume() {
 		super.onResume();
 		getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
@@ -100,7 +108,7 @@ public class PrefsThikrFragmentTutorial extends PreferenceFragment implements On
 		if (key.equalsIgnoreCase("volume")){
 			return;
 		}
-		MyAlarmsManager manager=new MyAlarmsManager(this.getActivity().getApplicationContext());
+		MyAlarmsManager manager=new MyAlarmsManager(mcontext);
 		manager.UpdateAllApplicableAlarms();
 		Preference pref = findPreference(key);
 		updatePrefSummary(pref);
@@ -136,7 +144,7 @@ public class PrefsThikrFragmentTutorial extends PreferenceFragment implements On
 				break;
 		}
 		data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAY);
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getApplicationContext());
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mcontext);
 		int file=Integer.parseInt(sharedPreferences.getString(key,"3"));
 		data.putInt("FILE", file);
 		sendActionToMediaService(data);

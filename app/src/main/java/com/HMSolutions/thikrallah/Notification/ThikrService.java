@@ -263,7 +263,7 @@ public class ThikrService extends IntentService  {
                 }
 
                 this.startForeground(NOTIFICATION_ID,mBuilder.build());
-				mNotificationManager.notify(NOTIFICATION_ID+55, mBuilder.build());
+				mNotificationManager.notify(NOTIFICATION_ID_BACKGROUND, mBuilder.build());
 			}else{
 
 				sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_NIGHT_THIKR).commit();
@@ -467,7 +467,6 @@ public class ThikrService extends IntentService  {
                     mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID);
                 }
                 mNotificationManager.notify(NOTIFICATION_ID_BACKGROUND, mBuilder.build());
-
                 this.startForeground(NOTIFICATION_ID,mBuilder.build());
             }else{
 
