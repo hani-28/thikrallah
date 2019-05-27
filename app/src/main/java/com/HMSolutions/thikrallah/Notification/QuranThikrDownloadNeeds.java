@@ -14,18 +14,18 @@ package com.HMSolutions.thikrallah.Notification;
 
         import com.HMSolutions.thikrallah.R;
         import com.crashlytics.android.Crashlytics;
-        import com.thikrallah.quran.data.page.provider.madani.MadaniPageProvider;
-        import com.thikrallah.quran.labs.androidquran.BuildConfig;
-        import com.thikrallah.quran.labs.androidquran.common.QariItem;
-        import com.thikrallah.quran.labs.androidquran.dao.audio.AudioPathInfo;
-        import com.thikrallah.quran.labs.androidquran.dao.audio.AudioRequest;
-        import com.thikrallah.quran.labs.androidquran.data.Constants;
-        import com.thikrallah.quran.labs.androidquran.data.SuraAyah;
-        import com.thikrallah.quran.labs.androidquran.service.AudioService;
-        import com.thikrallah.quran.labs.androidquran.service.QuranDownloadService;
-        import com.thikrallah.quran.labs.androidquran.service.util.ServiceIntentHelper;
-        import com.thikrallah.quran.labs.androidquran.util.AudioUtils;
-        import com.thikrallah.quran.labs.androidquran.util.QuranSettings;
+        import com.HMSolutions.thikrallah.quran.data.page.provider.madani.MadaniPageProvider;
+        import com.HMSolutions.thikrallah.BuildConfig;
+        import com.HMSolutions.thikrallah.quran.labs.androidquran.common.QariItem;
+        import com.HMSolutions.thikrallah.quran.labs.androidquran.dao.audio.AudioPathInfo;
+        import com.HMSolutions.thikrallah.quran.labs.androidquran.dao.audio.AudioRequest;
+        import com.HMSolutions.thikrallah.quran.labs.androidquran.data.Constants;
+        import com.HMSolutions.thikrallah.quran.labs.androidquran.data.SuraAyah;
+        import com.HMSolutions.thikrallah.quran.labs.androidquran.service.AudioService;
+        import com.HMSolutions.thikrallah.quran.labs.androidquran.service.QuranDownloadService;
+        import com.HMSolutions.thikrallah.quran.labs.androidquran.service.util.ServiceIntentHelper;
+        import com.HMSolutions.thikrallah.quran.labs.androidquran.util.AudioUtils;
+        import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranSettings;
 
         import java.io.File;
         import java.util.ArrayList;
@@ -254,14 +254,14 @@ public class QuranThikrDownloadNeeds extends BroadcastReceiver {
         }
 
         StringBuilder builder = new StringBuilder();
-        String[] suraNames = context.getResources().getStringArray(com.thikrallah.quran.labs.androidquran.R.array.sura_names);
+        String[] suraNames = context.getResources().getStringArray(com.HMSolutions.thikrallah.R.array.sura_names);
         if (wantPrefix) {
-            builder.append(context.getString(com.thikrallah.quran.labs.androidquran.R.string.quran_sura_title, suraNames[sura - 1]));
+            builder.append(context.getString(com.HMSolutions.thikrallah.R.string.quran_sura_title, suraNames[sura - 1]));
         } else {
             builder.append(suraNames[sura - 1]);
         }
         if (wantTranslation) {
-            String translation = context.getResources().getStringArray(com.thikrallah.quran.labs.androidquran.R.array.sura_names_translation)[sura - 1];
+            String translation = context.getResources().getStringArray(com.HMSolutions.thikrallah.R.array.sura_names_translation)[sura - 1];
             if (!TextUtils.isEmpty(translation)) {
                 // Some sura names may not have translation
                 builder.append(" (");

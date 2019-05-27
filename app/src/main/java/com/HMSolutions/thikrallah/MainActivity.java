@@ -50,7 +50,7 @@ import com.HMSolutions.thikrallah.Utilities.WhatsNewScreen;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
-import com.thikrallah.quran.labs.androidquran.QuranDataActivity;
+import com.HMSolutions.thikrallah.quran.labs.androidquran.QuranDataActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;

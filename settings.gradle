@@ -1,7 +1,6 @@
-include ':app'
-include ':Libraries:quran_android-master'
-include ':Libraries:quran_android-master:common:data'
-include ':Libraries:quran_android-master:common:networking'
-include ':Libraries:quran_android-master:common:pages'
-include ':Libraries:quran_android-master:common:search'
-include ':Libraries:quran_android-master:pages:madani'
+include ':app', ':data', ':networking', ':pages', ':search', ':madani'
+project(':data').projectDir = new File('app/common/data')
+project(':networking').projectDir = new File('app/common/networking')
+project(':pages').projectDir = new File('app/common/pages')
+project(':search').projectDir = new File('app/common/search')
+project(':madani').projectDir = new File('app/pages/madani')

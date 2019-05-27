@@ -31,8 +31,8 @@ android {
         applicationId "com.HMSolutions.thikrallah"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 96
-        versionName "5.0.5"
+        versionCode 97
+        versionName "5.0.6"
     }
     lintOptions {
         disable 'MissingTranslation'
@@ -46,6 +46,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
+    }
+    androidExtensions {
+        experimental = true
     }
     compileOptions {
         sourceCompatibility = '1.8'
@@ -65,7 +68,6 @@ repositories {
 
 dependencies {
 
-    implementation fileTree(dir: 'Libraries')
     implementation 'androidx.core:core:1.0.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.0.2'
@@ -88,12 +90,11 @@ dependencies {
     //implementation 'com.google.android.gms:play-services-appindexing:9.2.1'
 
 
-
-    implementation project(path: ':Libraries:quran_android-master')
-    implementation project(path: ':Libraries:quran_android-master:common:data')
-    implementation project(path: ':Libraries:quran_android-master:common:networking')
-    implementation project(path: ':Libraries:quran_android-master:common:pages')
-    implementation project(path: ':Libraries:quran_android-master:common:search')
+    implementation project(path: ':data')
+    implementation project(path: '::networking')
+    implementation project(path: ':pages')
+    implementation project(path: ':search')
+    implementation project(path: ':madani')
 
     implementation deps.kotlin.stdlib
     implementation "androidx.appcompat:appcompat:${androidxAppcompatVersion}"
@@ -119,5 +120,5 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-intents:${espressoVersion}"
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.0'
     errorprone 'com.google.errorprone:error_prone_core:2.3.2'
-    compile project(path: ':Libraries:quran_android-master:pages:madani')
+
 }

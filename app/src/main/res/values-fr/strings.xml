@@ -4,4 +4,293 @@
     tools:ignore="MissingTranslation"
     <string name="Settings">paramètres</string>
     <string name="language">La langue </string>
+  <string name="app_name">Coran</string>
+  <string name="downloadPrompt_title">Télécharger les fichiers requis ?</string>
+  <string name="downloadPrompt">Pour des performances optimales, certains fichiers doivent être téléchargés. Si vous ne voulez ne pas faire cela maintenant, chaque page prendra plus de temps à charger. Souhaitez-vous télécharger les fichiers requis maintenant ?   </string>
+  <string name="downloadTabletPrompt">Nous avons récemment ajouté de meilleures images pour les tablettes. Voulez-vous télécharger ces images maintenant ?</string>
+  <string name="downloadImportantPrompt">Il y a une petite mais importante mise à jour pour les images du Coran. Voulez-vous télécharger cette mise à jour maintenant ?</string>
+  <string name="downloadPrompt_ok">Oui</string>
+  <string name="downloadPrompt_no">Non</string>
+  <string name="downloading_title">Téléchargement en cours…</string>
+  <string name="downloading_message">Veuillez patienter jusqu\'à la fin du téléchargement. (Reprise supportée)</string>
+  <string name="extracting_title">Traitement en cours…</string>
+  <string name="menu_about">À propos</string>
+  <string name="menu_other_apps">Autres applications</string>
+  <string name="menu_settings">Paramètres</string>
+  <string name="menu_jump_last_page">Dernière page</string>
+  <string name="menu_bookmarks">Favoris</string>
+  <string name="menu_bookmarks_page">Pages en favoris</string>
+  <string name="menu_bookmarks_ayah">Ayāt en favoris</string>
+  <string name="menu_sort">Trier</string>
+  <string name="menu_sort_date">Par date d\'ajout</string>
+  <string name="menu_sort_location">Selon l\'ordre dans le coran</string>
+  <string name="menu_sort_group_by_tags">Par Tag</string>
+  <string name="menu_translation">Afficher la traduction</string>
+  <string name="menu_back_to_page">Afficher le coran</string>
+  <string name="menu_help">Aide</string>
+  <string name="menu_search">Rechercher</string>
+  <string name="menu_get_translations">Obtenir des traductions</string>
+  <string name="menu_jump">Aller à</string>
+  <string name="gotoPage">Aller à la page</string>
+  <string name="cancel">Annuler</string>
+
+  <!-- about -->
+  <string name="about_description">Quran pour Android est une application Quran gratuite. S\'il vous plaît, n\'oubliez pas les contributeurs dans vos prières.</string>
+  <string name="about_data_sources">Sources de données</string>
+  <string name="about_images">Images</string>
+  <string name="about_madani_images">Les images du Quran sont basées sur les polices d\'écriture du King Fahd Quran Printing Complex</string>
+  <string name="about_naskh_images">Les images du Quran pour l\'application Naskh sont issues (avec leur permission) de SHL Info Systems</string>
+  <string name="about_qaloon_images">Les images Qaloon sont utilisées avec la permission de Nous Memes Editions Et Diffusion (Tunisie)</string>
+  <string name="about_quranicaudio_summary">Récitations mp3 du Quran non espacées</string>
+  <string name="about_quran_ksu">Projet Electronic Moshaf</string>
+  <string name="about_quran_ksu_summary">Le projet King Saud University Electronic Moshaf était la source du Tafsir en langue arabe et des traductions pour de nombreuses langues</string>
+  <string name="about_tanzil_summary">Traductions pour de nombreuses langues</string>
+  <string name="about_noorhidayat_summary">Police Noorehira et traduction de Mufti Taqi</string>
+  <string name="about_open_source">Projets Open Source</string>
+  <string name="about_others">Autres</string>
+  <string name="about_contributors">Contributeurs</string>
+  <string name="about_contributors_summary">Une liste des personnes ayant contribué au développement de Quran pour Android</string>
+
+  <!-- help -->
+  <string name="help_title">FAQ</string>
+  <string name="help">        &lt;b>Comment écouter le Coran ?&lt;/b>
+        &lt;br/>Ouvrez une page du Coran.  Cliquez sur l\'écran une fois.  En bas, vous verrez un bouton de lecture et le nom d\'un qari. Cliquez sur le nom du qari pour en choisir un différent.  Cliquez sur le bouton de lecture pour télécharger et lire la page ou la sourate courante.
+        &lt;br/>
+        &lt;br/>&lt;b>Comment afficher une traduction ?&lt;/b>
+        &lt;br/>Ouvrez une page du Coran.  Cliquez sur l\'écran une fois.  En haut, vous verrez un petit
+        globe (ou, si vous ne le voyez pas, vous verrez un icone avec trois points carrés - cliquez dessus
+        et choisissez une traduction pour la voir).
+        &lt;br/>
+        Si vous n\'avez pas de traduction déjà téléchargée, il vous sera affiché un écran
+        pour en télécharger.  Choisissez et téléchargez une traduction,
+        puis retournez en arrière et cliquez encore sur le petit globe pour voir la traduction.
+        &lt;br/>
+        &lt;br/>&lt;b>Comment marquer une page dans ses favoris ?&lt;/b>
+        &lt;br/>Ouvrez une page du Coran.  Cliquez sur l\'écran une fois.  En haut à droite, vous verrez une petite étoile.
+          Cliquez dessus pour la marquer (l\'icone se remplis de blanc).  Recliquez dessus pour l\'effacer des favoris.
+        &lt;br/>
+        &lt;br/>&lt;b>Comment agrandir le texte ?&lt;/b>
+        &lt;br/>Pour les pages en arabe tenez l\'écran en portrait.
+        Pour les traductions, allez dans paramètres et choisissez la taille de la traduction.
+        &lt;br/>
+        &lt;br/>&lt;b>Comment partager une Aya ?&lt;/b>
+        &lt;br/>Allez à l\'Aya qui vous intéresse dans les pages en arabe, cliquez et maintenez enfoncé sur l\'Aya pour accéder à un menu d\'où vous pourrez ajoutez l\'Aya en favoris, la partager, lire sa traduction/exégèse ou copier l\'Aya dans le presse papier.
+        &lt;br/>
+        &lt;br/>&lt;b>Les polices Malayalm/Tamil/Bangla/Urdu ne fonctionnent pas !&lt;/b>
+        &lt;br/>Malheureusement, Android avant la version 4.0 ne prend pas en charge ces polices, et nous ne pouvons pas faire grand chose pour y remédier.   </string>
+  <string name="search_hint">Rechercher dans le coran</string>
+  <string name="quranSearchType">Ayāt du Coran</string>
+
+  <!-- Search messages -->
+  <string name="found_in_sura">Trouvée dans la sourate %1$s Aya %2$d</string>
+  <string name="no_results">Aucun resultats pour \"%s\"</string>
+  <string name="no_arabic_search_available">Vous n\'avez pas téléchargé le pack de recherche arabe.  S\'il vous plaît veuillez le télécharger et recommencez votre recherche.</string>
+  <string name="get_arabic_search_db">Télécharger la base de données de recherche arabe</string>
+
+  <!-- Quran Preference Activity -->
+  <string name="prefs_volume_key_navigation_title">Navigation avec les touches de son</string>
+  <string name="prefs_volume_key_navigation_summary">Naviguer entre les pages avec les touches du contrôle du volume.</string>
+  <string name="prefs_category_reading">Preférences de lecture</string>
+  <string name="prefs_category_translation">Préférences de traduction</string>
+  <string name="prefs_category_display_settings">Parametres d\'affichage</string>
+  <string name="prefs_use_arabic_title">Mode arabe</string>
+  <string name="prefs_use_arabic_summary_on">L\'application sera traduite en arabe</string>
+  <string name="prefs_new_background_title">Nouvel arrière-plan</string>
+  <string name="prefs_lock_orientation_title">Verrouiller l\'orientation de l\'écran</string>
+  <string name="prefs_lock_orientation_summary_on">L\'affichage du coran ne s\'adaptera pas au changement d\'orientation de l\'écran.</string>
+  <string name="prefs_lock_orientation_summary_off">L\'affichage du coran s\'adaptera au changement d\'orientation de l\'écran.</string>
+  <string name="prefs_landscape_orientation_title">Mode paysage</string>
+  <string name="prefs_landscape_orientation_summary_on">L\'orientation paysage sera utilisé.</string>
+  <string name="prefs_landscape_orientation_summary_off">L\'orientation portrait sera utilisé.</string>
+  <string name="prefs_night_mode_title">Mode nuit</string>
+  <string name="prefs_night_mode_summary">Un fond sombre et des polices lumineuses seront utilisés.</string>
+  <string name="prefs_night_mode_text_brightness_title">Luminosité du texte</string>
+  <string name="prefs_night_mode_text_brightness_summary">Luminosité du texte lorsque le mode nuit est actif</string>
+  <string name="prefs_overlay_page_info_title">Afficher des infos </string>
+  <string name="prefs_overlay_page_info_summary">Affiche le numéro de page, le nom de la sourate et le numéro du juz\' lors la lecture.</string>
+  <string name="prefs_display_marker_title">Montrer un popup de repère</string>
+  <string name="prefs_display_marker_summary">Affiche un popup quand on atteint un juz\', un hizb, etc.</string>
+  <string name="prefs_highlight_bookmarks_title">Surligner les favoris</string>
+  <string name="prefs_highlight_bookmarks_summary">Surligner les Ayāt en favoris durant la lecture</string>
+  <string name="prefs_translation_text_title">Taille du texte traduit</string>
+  <string name="prefs_translations">Traductions</string>
+  <string name="prefs_translations_summary">Télécharger et gérer les traductions</string>
+  <string name="prefs_ayah_before_translation_title">Aya avant la traduction</string>
+  <string name="prefs_ayah_before_translation_summary">Voir l\'Aya en arabe au-dessus de la traduction</string>
+  <string name="prefs_category_download">Options de téléchargement</string>
+  <string name="prefs_streaming_title">Streaming</string>
+  <string name="prefs_streaming_summary">Streaming lorsque cela est possible.</string>
+  <string name="prefs_download_amount_title">Quantité de téléchargement</string>
+  <string name="prefs_download_amount_summary">Quantité du téléchargement préféré pour l\'audio espacé.</string>
+  <string name="prefs_audio_manager">Gestionnaire audio (expérimental)</string>
+  <string name="prefs_audio_manager_summary">Gérer et télécharger les audios coraniques</string>
+  <string name="downloaded_translations">Téléchargées</string>
+  <string name="available_translations">Disponible en téléchargement</string>
+  <string name="remove_button">Supprimer</string>
+  <string name="dialog_ok">Ok</string>
+  <string name="prefs_app_location_summary">Sélectionnez sur quelle sdcard sauvegarder les fichiers</string>
+  <string name="prefs_app_location_title">Location de l\'application</string>
+  <string name="prefs_send_logs_title">Envoyer les logs</string>
+  <string name="prefs_send_logs_summary">Envoyer les logs de debug au développeur.</string>
+  <string name="prefs_app_size">La taille de l\'application est</string>
+  <string name="prefs_calculating_app_size">Calcul de la taille de l\'application</string>
+  <string name="prefs_copying_app_files">Copie des fichier de l\'application</string>
+  <string name="prefs_err_moving_app_files">Echec du déplacement des fichiers de l\'application</string>
+  <string name="prefs_megabytes_int">%1$d Mo</string>
+  <string name="prefs_megabytes_str">%s Mo</string>
+  <string name="prefs_no_enough_space_to_move_files">Espace insuffisant pour déplacer les fichiers de l\'application</string>
+  <string name="prefs_sdcard_internal">Stockage interne</string>
+  <string name="prefs_sdcard_external">Carte SD externe %1$d</string>
+  <string name="prefs_dual_page_mode_title">Mode tablette</string>
+  <string name="prefs_dual_page_mode_enabled">En orientation paysage, deux pages s\'afficheront côte à côte.</string>
+  <string name="prefs_dual_page_mode_disabled">En orientation paysage, seulement une page s\'affichera.</string>
+  <string name="prefs_category_advanced">Options avancées</string>
+  <string name="prefs_export_title">Exporter</string>
+  <string name="prefs_export_summary">Exporter une sauvegarde des marque-pages et des tags.</string>
+
+  <string name="import_data_permissions_error">Impossible de lire le fichier de sauvegarde à cause d\'une erreur de permissions.</string>
+  <string name="import_data_error">Fichier de sauvegarde invalide (ou impossible de lire le fichier de sauvegarde).</string>
+  <string name="import_data">Importer des données</string>
+  <string name="import_data_and_override">Si vous importez ce fichier, cela remplacera tous vos marque-pages par %1$d marque-page(s) et %2$d tag(s). Effectuer l\'importation ?</string>
+  <string name="import_successful">Données importées avec succès</string>
+  <string name="export_data_error">Erreur lors de l\'export des données.</string>
+  <string name="exported_data">Données exportées dans %1$s.</string>
+
+  <string name="warning">Attention</string>
+  <string name="kitkat_external_message">Dû à certaines restrictions d\'Android, si vous choisissez
+      de stocker les données de l\'application sur votre carte SD et que par la suite vous désinstallez
+      ou supprimez les données de Quran Android, toutes les pages et les audios de Quran Android
+      seront supprimés et vous serez contraints de les télécharger de nouveau. Êtes-vous certains de
+      vouloir utiliser la carte SD externe ?</string>
+  <string name="please_grant_permissions">S\'il vous plaît, accordez les permissions dans les paramètres des applicaitons.</string>
+  <!-- Preferences End -->
+
+  <!-- translation updates -->
+  <string name="update_available">Mise à jour disponible</string>
+  <string name="translation_updates_available">Une mise à jour est disponible pour certaines de vos traductions.  Aller maintenant au menu des traductions ?</string>
+  <string name="translation_dialog_yes">Oui</string>
+  <string name="translation_dialog_later">Plus tard
+</string>
+
+  <!-- End Number picker Strings -->
+  <string name="quran_rob3">¼</string>
+  <string name="quran_nos">½</string>
+  <string name="quran_talt_arb3">¾</string>
+  <string name="quran_hizb">Hizb</string>
+  <string name="quran_juz2">Juz\'</string>
+  <string name="quran_page">Page</string>
+  <string name="quran_sura">Sourate</string>
+  <string name="quran_ayah">Aya %1$d</string>
+  <string name="quran_ayah_details">%1$s - Aya %2$s, Juz\' %3$s</string>
+  <string name="quran_sura_title">Sourate %1$s</string>
+  <string name="sura_ayah_notification_str">Sourate %1$s, Aya %2$d</string>
+  <string name="index_loading">Chargement…</string>
+  <string name="canceling">Annulation…</string>
+  <string name="juz2_description">Juz\' %1$s</string>
+  <string name="page_description">page %1$s, Juz\' %2$s</string>
+  <string name="highlighting_database">Fichiers requis</string>
+  <string name="timing_database">Fichiers requis</string>
+
+  <!-- download statuses and errors -->
+  <string name="sdcard_error">Impossible de trouver la carte SD. Insérez-là et réessayez de nouveau.</string>
+  <string name="download_successful">Téléchargement réussi</string>
+  <string name="download_processing">Traitement du téléchargement…</string>
+  <string name="download_error_general">Echec du téléchargement</string>
+  <string name="download_error_disk">Pas assez d\'espace disque pour télécharger</string>
+  <string name="download_error_network">Impossible de télécharger en raison d\'une erreur réseau</string>
+  <string name="download_error_perms">Impossible de télécharger en raison d\'une erreur d\'autorisation</string>
+  <string name="download_error_invalid_download">Le fichier téléchargé a été corrompu</string>
+  <string name="download_error_invalid_download_retry">Fichier corrompu, nouvelle tentative de téléchargement</string>
+  <string name="download_error_network_retry">Erreur réseau, tentative de reprise…</string>
+  <string name="notification_download_canceled">Téléchargement annulé</string>
+  <string name="download_non_wifi_prompt">Vous n\'êtes pas en wifi.  Télécharger les données malgré tout ?</string>
+
+  <!-- downloading dialogs -->
+  <string name="download_progress">Téléchargé %1$s / %2$s</string>
+  <string name="download_sura_progress">Téléchargé %1$s / %2$s de la sourate %3$d</string>
+  <string name="download_sura_ayah_progress">Téléchargement de l\'Aya %2$d de la sourate %1$d</string>
+  <string name="process_progress">Traitement du fichier %1$d / %2$d</string>
+  <string name="download_retry">Réessayer</string>
+  <string name="download_cancel">Annuler</string>
+  <string name="download_extra_data">Nous avons besoin de télécharger un ou deux petits fichiers pour le support du partage et de la traduction.  Télécharger maintenant ?</string>
+
+  <!-- translation database stuff -->
+  <string name="remove_dlg_title">Supprimer la traduction ?</string>
+  <string name="remove_dlg_msg">Êtes-vous sûr de vouloir supprimer les %1$s ?</string>
+  <string name="error_getting_translation_list">Impossible de télécharger la liste des traductions.  Veuillez réessayer plus tard.</string>
+  <string name="search_data">Données de recherche</string>
+  <string name="need_translation">Vous n\'avez encore téléchargé aucune traductions/exégèses .</string>
+  <string name="get_translations">Obtenir des traductions</string>
+
+  <!-- help -->
+  <string name="email_us">Si vous n\'avez pas eu de réponse à votre question, vous pouvez envoyer un email à quranandroid@gmail.com. Notez bien que nous recevons beaucoup d\'emails, nous ne sommes donc pas en mesure de répondre à tous les emails.</string>
+
+  <!-- sura metainfo -->
+  <string name="makki">Makki</string>
+  <string name="madani">Madani</string>
+  <plurals name="verses">
+    <item quantity="one">%s Aya</item>
+    <item quantity="other">%s Ayāt</item>
+  </plurals>
+
+  <!-- ayah action panel -->
+  <string name="play_from">Depuis</string>
+  <string name="play_to">À</string>
+  <string name="play_restrict_range">Écouter uniquement les Ayāt sélectionnés</string>
+  <string name="play_verses_range">Écouter la selection de Ayāt :</string>
+  <string name="play_each_verse">Écouter chaque Aya :</string>
+  <string name="play_apply">Appliquer</string>
+  <string name="play_apply_and_play">Appliquer et Écouter</string>
+  <string name="previous">Précédant</string>
+  <string name="play">Écouter</string>
+  <string name="pause">Pause</string>
+  <string name="stop">Stopper</string>
+  <string name="next">Suivant</string>
+
+  <string-array name="repeatValues">
+    <item>1 fois</item>
+    <item>2 fois</item>
+    <item>3 fois</item>
+    <item>indéfiniment</item>
+  </string-array>
+
+  <!-- long press -->
+  <string name="bookmark_ayah">Ajouter l\'Aya aux favoris</string>
+  <string name="tag_ayah">Étiqueter cette Aya</string>
+  <string name="share_ayah">Partager cette Aya</string>
+  <string name="share_ayah_text">Partager le texte de l\'Aya</string>
+  <string name="translation_ayah">Traduction/exégèse de l\'Aya</string>
+  <string name="play_from_here">Écouter à partir d\'ici</string>
+  <string name="via_string">via @QuranAndroid</string>
+  <string name="search_key">Appuyez sur la touche de recherche pour rechercher une Aya</string>
+  <string name="copy_ayah">Copier l\'Aya</string>
+  <string name="ayah_copied_popup">Aya copiée</string>
+
+  <!-- bookmarks & tags contextual action bar -->
+  <string name="tag_bookmark">Étiqueter le favori</string>
+  <string name="delete_tag">Supprimez l\'étiquette</string>
+  <string name="edit_tag">Modifier l\'étiquette</string>
+  <string name="new_tag">Nouvelle étiquette</string>
+  <string name="not_tagged">Aucune étiquette</string>
+
+  <!-- tag dialog -->
+  <string name="tag_dlg_title">Étiquette</string>
+  <string name="tag_name">Nom</string>
+
+  <!-- bookmark & tag list -->
+  <string name="bookmarks_list_empty">Aucun favori</string>
+
+  <!-- Shown above search results when we receive a search request. -->
+  <plurals name="search_results">
+    <item quantity="one">résultat pour \"%1$s\": </item>
+    <item quantity="other">%2$d résultats pour \"%1$s\": </item>
+  </plurals>
+  <string name="undo">Annuler</string>
+
+  <!-- m permissions stuff -->
+  <string name="storage_permission_rationale">Quran demande la permission de stocker ses données sur un stockage externe. Quran continuera de fonctionner sans cette permission, mais si vous effacez les données, ou désintallez l\'application, toutes les pages téléchargées, les audios, et les données seront supprimés. Accorder la permission à Quran ?</string>
+  <string name="storage_permission_please_restart">Redémarrez l\'application pour que les changements prennent effet.</string>
+
+  <!-- audio manager -->
+  <string name="audio_manager">Gestionnaire audio</string>
 </resources>

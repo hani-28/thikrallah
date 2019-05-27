@@ -18,7 +18,7 @@ import com.HMSolutions.thikrallah.PreferenceActivity;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
 import com.HMSolutions.thikrallah.hisnulmuslim.DuaGroupActivity;
-import com.thikrallah.quran.labs.androidquran.QuranDataActivity;
+import com.HMSolutions.thikrallah.quran.labs.androidquran.QuranDataActivity;
 public class MainFragment extends Fragment {
 	private MainInterface mCallback;
     private Context mContext;
