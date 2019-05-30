@@ -6,13 +6,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
 public class ExternalDbOpenHelper extends SQLiteOpenHelper {
-
+    private static final String TAG="ExternalDbOpenHelper";
     //Path to the device folder with databases
     public static String DB_PATH;
 
@@ -41,8 +43,11 @@ public class ExternalDbOpenHelper extends SQLiteOpenHelper {
         super(context, databaseName, null, 1);
         this.context = context;
         //Write a full path to the databases of your application
-        String packageName = context.getPackageName();
-        DB_PATH = String.format("//data//data//%s//databases//", packageName);
+        DB_PATH = context.getDatabasePath(databaseName).toString();
+        //String packageName = context.getPackageName();
+        //DB_PATH = String.format("//data//data//%s//databases//%s", packageName,databaseName);
+        Crashlytics.log("DBPATH is "+DB_PATH);
+       // Log.d(TAG,"alternate DB_PATH is "+context.getDatabasePath(databaseName));
         openDataBase();
     }
 
@@ -53,11 +58,16 @@ public class ExternalDbOpenHelper extends SQLiteOpenHelper {
     //This piece of code will create a com.HMSolutions.thikrallah.hisnulmuslim.database if it’s not yet created
     public void createDataBase() {
         boolean dbExist = checkDataBase();
+        Crashlytics.log("dbExist is "+dbExist);
         if (!dbExist) {
             this.getReadableDatabase();
+            this.close();
             try {
+                Crashlytics.log("copying database");
                 copyDataBase();
+                Crashlytics.log("Finished copying database");
             } catch (IOException e) {
+                Crashlytics.log("copying database error");
                 Log.e(this.getClass().toString(), "Copying error");
                 throw new Error("Error copying com.HMSolutions.thikrallah.hisnulmuslim.database!");
             }
@@ -70,7 +80,7 @@ public class ExternalDbOpenHelper extends SQLiteOpenHelper {
     private boolean checkDataBase() {
         SQLiteDatabase checkDb = null;
         try {
-            String path = DB_PATH + DB_NAME;
+            String path = DB_PATH;
             checkDb = SQLiteDatabase.openDatabase(path, null,
                     SQLiteDatabase.OPEN_READONLY);
         } catch (SQLException e) {
@@ -81,6 +91,8 @@ public class ExternalDbOpenHelper extends SQLiteOpenHelper {
         if (checkDb != null) {
             checkDb.close();
         }
+        Log.d(TAG,"checdatabase results is checkdb = "+checkDb);
+        Log.d(TAG,"checdatabase return value is = "+(checkDb != null));
         return checkDb != null;
     }
 
@@ -89,9 +101,9 @@ public class ExternalDbOpenHelper extends SQLiteOpenHelper {
         //Open a stream for reading from our ready-made com.HMSolutions.thikrallah.hisnulmuslim.database
         //The stream source is located in the assets
         InputStream externalDbStream = context.getAssets().open(DB_NAME);
-
+        Log.d(TAG,"copying database from asset to database directory");
         //Path to the created empty com.HMSolutions.thikrallah.hisnulmuslim.database on your Android device
-        String outFileName = DB_PATH + DB_NAME;
+        String outFileName = DB_PATH;
 
         //Now create a stream for writing the com.HMSolutions.thikrallah.hisnulmuslim.database byte by byte
         OutputStream localDbStream = new FileOutputStream(outFileName);
@@ -105,10 +117,11 @@ public class ExternalDbOpenHelper extends SQLiteOpenHelper {
         //Don’t forget to close the streams
         localDbStream.close();
         externalDbStream.close();
+        Log.d(TAG,"finished copying database from asset to database directory");
     }
 
     public SQLiteDatabase openDataBase() throws SQLException {
-        String path = DB_PATH + DB_NAME;
+        String path = DB_PATH;
         if (database == null) {
             createDataBase();
             database = SQLiteDatabase.openDatabase(path, null,
