@@ -21,12 +21,15 @@ import androidx.core.app.NotificationCompat;
 import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Utilities.PrayTime;
+import com.crashlytics.android.Crashlytics;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import io.fabric.sdk.android.services.common.Crash;
 
 
 public class AthanTimerService extends Service {
@@ -85,6 +88,7 @@ public class AthanTimerService extends Service {
 	}
 	private void initNotification() {
 		Log.d(TAG,"initiNotification started");
+		Crashlytics.log("AthanTimerService called");
 		Intent resultIntent = new Intent(mContext, MainActivity.class);
 
 
@@ -124,15 +128,7 @@ public class AthanTimerService extends Service {
 		Log.d(TAG,"started forground");
 		Log.d(TAG,"context is "+mContext);
 		if (mContext!=null){
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
-				if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.FOREGROUND_SERVICE) == PackageManager.PERMISSION_GRANTED){
-					startForeground(NOTIFICATION_ID, notificationBuilder.build());
-				}
-			}else {
-				startForeground(NOTIFICATION_ID, notificationBuilder.build());
-			}
-
-
+			startForeground(NOTIFICATION_ID, notificationBuilder.build());
 		}
 
 

@@ -43,6 +43,7 @@ import androidx.media.app.NotificationCompat.MediaStyle;
 
 import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
 import com.HMSolutions.thikrallah.Notification.ThikrMediaBroadcastReciever;
+import com.crashlytics.android.Crashlytics;
 
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
@@ -53,6 +54,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import io.fabric.sdk.android.services.common.Crash;
 //import android.support.v4.media.app.NotificationCompat.MediaStyle;
 
 public class ThikrMediaPlayerService extends Service implements OnCompletionListener,
@@ -174,7 +177,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     @Override
     public void onCreate() {
         super.onCreate();
-
+        Crashlytics.log("ThikrMediaPlayerService onCreate");
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
                 TAG);
@@ -234,6 +237,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     }
 
     private void initNotification() {
+
         Intent resultIntent = new Intent(this, MainActivity.class);
         if (getThikrType().equals(MainActivity.DATA_TYPE_GENERAL_THIKR)) {
             resultIntent.putExtra("FromNotification", true);
@@ -343,6 +347,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     Intent callingintent;
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Crashlytics.log("ThikrMediaPlayerService onStartCommand");
         callingintent=intent;
         Bundle data = intent.getExtras();
         mcontext=this.getApplicationContext();
