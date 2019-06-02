@@ -1,6 +1,14 @@
 # Thikr Allah
 An Android app to remind Muslims to remember Almighty God throughout the day.
-The app is published in [Google's Play Store](https://play.google.com/store/apps/details?id=com.HMSolutions.thikrallah)
+The app is published in [Google's Play Store](https://play.google.com/store/apps/details?id=com.HMSolutions.thikrallah).
+
+App currently contains following:
+* Reminders throughout the day to remember Almighty God and recite some thikrs
+* morning and evening thikr reminders
+* Friday reminder to read Surat Alkahf
+* Nightly reminder to read Surat Almulk
+* Contains thikrs from Hisn Almuslim book (Muslim's fortress)
+* Contains entire quran
 
 ---
 ## Contributing
