@@ -10,4 +10,5 @@ files:
       - pref*
       - quarters.xml
       - booleans.xml
+      - attrs.xml
     translation: /app/src/main/res/values-%two_letters_code%/%original_file_name%
