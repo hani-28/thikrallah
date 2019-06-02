@@ -189,9 +189,10 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 if (state == TelephonyManager.CALL_STATE_RINGING) {
                     Log.d(TAG, "transient loss of  focus- PHONE RINGING");
                     if (isPlaying()) player.pause();
+                    updateActions();
                 } else if(state == TelephonyManager.CALL_STATE_IDLE) {
                     // resume playback
-                    Log.d(TAG, "gained focus");
+                    Log.d(TAG, "gained focus call state idle");
                     mediaSession.setActive(true);
                     if (player == null) {
                         initMediaPlayer();
@@ -200,10 +201,12 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                         startPlayerIfAllowed();
                     }
                     setVolume();
+                    updateActions();
                 } else if(state == TelephonyManager.CALL_STATE_OFFHOOK) {
                     //A call is dialing, active or on hold
                     Log.d(TAG, "transient loss of  focus-  call is dialing, active or on hold");
                     if (isPlaying()) player.pause();
+                    updateActions();
                 }
                 super.onCallStateChanged(state, incomingNumber);
             }
@@ -212,8 +215,11 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         if(mgr != null) {
             int PhoneStatePermission = ContextCompat.checkSelfPermission(this,
                     android.Manifest.permission.READ_PHONE_STATE);
-            if (PhoneStatePermission != PackageManager.PERMISSION_GRANTED) {
+            if (PhoneStatePermission == PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG,"requesting phonestate listener. permission is already granted");
                 mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+            }else{
+                Log.d(TAG," phonestate listener permission not granted. request not made.");
             }
 
         }
@@ -412,7 +418,6 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 this.pausePlayer();
 
                 updateActions();
-                updateActions();
                 break;
             case MEDIA_PLAYER_INNCREMENT:
                 Log.d(TAG, "increment called");
@@ -521,11 +526,14 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 // Request permanent focus.
                 getAudioFocusRequestType());
         if (ret == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-
+            Log.d(TAG,"audiofocus request granted");
             startPlayerIfAllowed();
             setVolume();
-        }
 
+        }else{
+            Log.d(TAG,"audiofocus request denied");
+        }
+        updateActions();
 
     }
 
@@ -561,8 +569,9 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                         // Request permanent focus.
                         getAudioFocusRequestType());
                 if (ret == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-
+                    Log.d(TAG,"audio focus request granted.");
                     startPlayerIfAllowed();
+                    updateActions();
                     //Start increasing volume in increments
                     if(fadeDuration > 0 && getThikrType().contains(MainActivity.DATA_TYPE_ATHAN))
                     {
@@ -598,6 +607,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                         this.setVolume();
                     }
                 } else {
+                    Log.d(TAG,"audio focus request denied.");
                     //am.abandonAudioFocus(this);
                     //this.stopForeground(true);
                     //this.stopSelf();
@@ -637,6 +647,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             Log.e(TAG,""+e.getMessage());
             e.printStackTrace();
         }
+        updateActions();
     }
 
     private String[] getThikrArray() {
