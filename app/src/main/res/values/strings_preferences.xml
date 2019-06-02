@@ -2,21 +2,21 @@
 <resources>
     <string name="pref_category_font">Fonts</string>
 
-    <string name="pref_font_arabic_size">pref_font_arabic_size</string>
+    <string name="pref_font_arabic_size" translatable="false">pref_font_arabic_size</string>
     <string name="pref_font_arabic_size_title">Arabic Font Size</string>
-    <integer name="pref_font_arabic_size_default">24</integer>
-    <integer name="pref_font_arabic_size_max">30</integer>
-    <integer name="pref_font_arabic_size_min">20</integer>
+    <integer name="pref_font_arabic_size_default" translatable="false">24</integer>
+    <integer name="pref_font_arabic_size_max" translatable="false">30</integer>
+    <integer name="pref_font_arabic_size_min" translatable="false">20</integer>
 
-    <string name="pref_font_arabic_typeface">pref_font_arabic_typeface</string>
-    <string name="pref_font_directory">fonts_2</string>
+    <string name="pref_font_arabic_typeface" translatable="false">pref_font_arabic_typeface</string>
+    <string name="pref_font_directory" translatable="false">fonts_2</string>
     <string name="pref_font_arabic_typeface_title">Arabic Font</string>
-    <string name="pref_font_arabic_typeface_default">fonts_2/UthmanTN1 Ver09.otf</string>
-    <string name="pref_font_arabic_typeface_preview">بِسْمِ اللهِ</string>
+    <string name="pref_font_arabic_typeface_default" translatable="false">fonts_2/UthmanTN1 Ver09.otf</string>
+    <string name="pref_font_arabic_typeface_preview" translatable="false">بِسْمِ اللهِ</string>
 
-    <string name="pref_font_other_size">pref_font_other_size</string>
+    <string name="pref_font_other_size" translatable="false">pref_font_other_size</string>
     <string name="pref_font_other_size_title">Translation and Reference Font Size</string>
-    <integer name="pref_font_other_size_default">14</integer>
-    <integer name="pref_font_other_size_max">24</integer>
-    <integer name="pref_font_other_size_min">12</integer>
+    <integer name="pref_font_other_size_default" translatable="false">14</integer>
+    <integer name="pref_font_other_size_max" translatable="false">24</integer>
+    <integer name="pref_font_other_size_min" translatable="false">12</integer>
 </resources>
