@@ -182,12 +182,6 @@ He knows what lies before them and what is after them, And they comprehend not a
     <string name="title_activity_about">about us</string>
     <string name="title_activity_bookmarks">Bookmarks</string>
     <string name="title_activity_preferences">Settings</string>
-    <string name="my_app_name_about">Hisnul Muslim App</string>
-    <string name="action_share_title">Share Dua</string>
-    <string name="action_share_credit">via @HisnulMuslimApp</string>
-    <string name="snackbar_text_begin">Removed Dua #</string>
-    <string name="snackbar_text_end">" from bookmarks"</string>
-    <string name="snackbar_action">undo</string>
     <string name="gradual_volume">Increase volume gradually</string>
     <string name="is_foreground_athan_timer">Show time remaining untill next prayer</string>
     <string name="untill">untill</string>
@@ -455,8 +449,8 @@ He knows what lies before them and what is after them, And they comprehend not a
     <string name="prefs_page_type_title">Page Type (experimental)</string>
     <string name="prefs_page_type_summary">Select the type of reading pages</string>
     <string name="import_data">Import Data</string>
-    <string name="import_data_and_override">"If you import this file, it will replace all your \
-        bookmarks with %1$d bookmark(s) and %2$d tag(s). Import?"</string>
+    <string name="import_data_and_override">"\"If you import this file, it will replace all your \
+        bookmarks with %1$d bookmark(s) and %2$d tag(s). Import?\""</string>
     <string name="import_successful">Import Successful</string>
     <string name="export_data_error">Error exporting data.</string>
     <string name="warning">Warning</string>
@@ -466,38 +460,7 @@ He knows what lies before them and what is after them, And they comprehend not a
         <item quantity="other">Deleted %d items</item>
     </plurals>
     <string name="undo">Undo</string>
-    <string name="about_qaloon_images">Qaloon images used with permission of Nous Memes Editions Et Diffusion (Tunisia)</string>
-    <string name="about_quranicaudio_summary">Gapless mp3 Quran recitations</string>
-    <string name="about_quran_ksu">Electronic Moshaf Project</string>
-    <string name="about_quran_ksu_summary">The King Saud University Electronic Moshaf Project is the app\'s source of Arabic Tafaseer and translations for various languages. It is also the source for Dr. Ayman Suwaid\'s recitation.</string>
-    <string name="about_furqan_summary">Uthmani text and Arabic Tafaseer</string>
-    <string name="about_tanzil_summary">Translations for many languages</string>
-    <string name="about_noorhidayat_summary">Noorehira font and Mufti Taqi Translation</string>
-    <string name="about_open_source">Open Source Projects</string>
-    <string name="about_others">Others</string>
-    <string name="about_contributors">Contributors</string>
-    <string name="about_contributors_summary">A list of people who contributed to the development of Quran for Android</string>
     <!-- m permissions stuff -->
-    <string name="storage_permission_rationale">Quran wants your permission to store its data on
-        external storage. Quran will work without this permission, but if you clear data or
-        uninstall the app, all downloaded pages, audio, and data will be removed. Grant
-        Quran permission?</string>
-    <string name="storage_permission_please_restart">Please restart the app for this to take effect.</string>
-    <string name="more_translations">More Translations</string>
-    <string name="import_data_permissions_error">Unable to read backup file due to permissions error.</string>
-    <string name="import_data_error">Invalid backup file (or unable to read backup file).</string>
-    <string name="exported_data">Data exported to %1$s.</string>
-    <string name="kitkat_external_message">Due to Android limitations, if you choose to place Quran
-        data on your external SD card and later uninstall or clear data for Quran Android, all Quran
-        Android pages and audio will be deleted and you will have to download them again. Are you
-        sure you want to use the external SD card?</string>
-    <string name="please_grant_permissions">Please grant permission in application settings.</string>
-    <string name="playback_prompt_title">Start playback from:</string>
-    <string name="starting_page_label">Beginning of Page</string>
-    <string name="tag_blank_tag_error">Tag names cannot be blank!</string>
-    <string name="tag_duplicate_tag_error">Tag name already exists!</string>
     <!-- format strings -->
     <!-- notification channel names [CHAR LIMIT=40] -->
-    <string name="notification_channel_download">Quran Downloads</string>
-    <string name="notification_channel_audio">Quran Recitation</string>
 </resources>
