@@ -449,8 +449,8 @@ He knows what lies before them and what is after them, And they comprehend not a
     <string name="prefs_page_type_title">Page Type (experimental)</string>
     <string name="prefs_page_type_summary">Select the type of reading pages</string>
     <string name="import_data">Import Data</string>
-    <string name="import_data_and_override">"\"If you import this file, it will replace all your \
-        bookmarks with %1$d bookmark(s) and %2$d tag(s). Import?\""</string>
+    <string name="import_data_and_override">"\"\"If you import this file, it will replace all your \
+        bookmarks with %1$d bookmark(s) and %2$d tag(s). Import?\"\""</string>
     <string name="import_successful">Import Successful</string>
     <string name="export_data_error">Error exporting data.</string>
     <string name="warning">Warning</string>
