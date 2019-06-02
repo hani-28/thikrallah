@@ -305,8 +305,7 @@ Voor de vertaalde pagina\'s (/voor vertalingen): Ga naar instellingen en wijzig 
   <string name="tag_name">Naam</string>
 
   <!-- bookmark & tag list -->
-  <string name="bookmarks_list_empty">Geen Favorieten</string>
 
-  <!-- audio manager -->
+    <!-- audio manager -->
   <string name="audio_manager">Geluid Manager</string>
 </resources>

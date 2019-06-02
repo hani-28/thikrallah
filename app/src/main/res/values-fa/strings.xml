@@ -183,8 +183,7 @@
   <string name="tag_name">نام</string>
 
   <!-- bookmark & tag list -->
-  <string name="bookmarks_list_empty">نشانکی وجود ندارد</string>
-  <string name="about_data_sources">منبع داده‌ها</string>
+    <string name="about_data_sources">منبع داده‌ها</string>
   <string name="about_description">این برنامه مجانی است. تهیه‌کنندگانش را از دعای خود محروم نسازید.</string>
   <string name="about_images">تصاویر</string>
   <string name="about_madani_images">تصاویر صفحه‌های این قرآن متعلق به چاپخانه ملک فهد در مدینه منوره می‌باشد.</string>

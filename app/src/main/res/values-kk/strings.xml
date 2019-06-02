@@ -314,8 +314,7 @@
   <string name="tag_name">Аты</string>
 
   <!-- bookmark & tag list -->
-  <string name="bookmarks_list_empty">Бетбелгі жоқ</string>
 
-  <!-- audio manager -->
+    <!-- audio manager -->
   <string name="audio_manager">Аудио менеджер</string>
 </resources>

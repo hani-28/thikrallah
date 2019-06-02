@@ -324,9 +324,8 @@
   <string name="tag_name">Nom</string>
 
   <!-- bookmark & tag list -->
-  <string name="bookmarks_list_empty">Xatchoʻplar mavjud emas</string>
 
-  <!-- audio manager -->
+    <!-- audio manager -->
   <string name="audio_manager">Audio menejer</string>
 
   <string name="more_translations">Yana tarjimalar</string>

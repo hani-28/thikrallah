@@ -7,11 +7,6 @@
         <item>@string/notification_sound_only</item>
         <item>@string/notification_text_only</item>
     </string-array>
-    <string-array name="remove_ads_options">
-        <item>@string/click_on_ads_to_remove_ads</item>
-        <item>@string/donate_to_remove_ads</item>
-        <item>@string/remove_ads_for_free</item>
-    </string-array>
     <string-array name="RemindmeThroughTheDayTypeValues">
         <item>1</item>
         <item>2</item>
@@ -87,29 +82,6 @@
         <item>@string/thikr_taoba</item>
         <item>@string/thikr_salah</item>
     </string-array>
-    <string-array name="MorningThikrValues">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-        <item>11</item>
-        <item>12</item>
-        <item>13</item>
-        <item>14</item>
-        <item>15</item>
-        <item>16</item>
-        <item>17</item>
-        <item>18</item>
-        <item>19</item>
-        <item>20</item>
-        <item>21</item>
-    </string-array>
     <string-array name="NightThikr">
         <item>@string/thikr_kursi</item>
         <item>@string/thikr_iklhlas</item>
@@ -135,30 +107,6 @@
         <item>@string/thikr_subhan</item>
         <item>@string/thikr_salah</item>
     </string-array>
-    <string-array name="NightThikrValues">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-        <item>11</item>
-        <item>12</item>
-        <item>13</item>
-        <item>14</item>
-        <item>15</item>
-        <item>16</item>
-        <item>17</item>
-        <item>18</item>
-        <item>19</item>
-        <item>20</item>
-        <item>21</item>
-        <item>22</item>
-    </string-array>
     <string-array name="GeneralThikr">
         <item>@string/thikr1</item>
         <item>@string/thikr2</item>
@@ -182,14 +130,6 @@
     </string-array>
 
 
-    <string-array name="surat_list">
-        <item>@string/surat_alkahf</item>
-        <item>@string/surat_almulk</item>
-    </string-array>
-    <integer-array name="surat_values">
-        <item>0</item>
-        <item>1</item>
-    </integer-array>
     <integer-array name="verses_count">
         <item>118</item>
         <item>30</item>

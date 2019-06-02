@@ -191,5 +191,4 @@
   <string name="tag_name">标签名</string>
 
   <!-- bookmark & tag list -->
-  <string name="bookmarks_list_empty">没有收藏</string>
 </resources>

@@ -9,10 +9,8 @@
     <string name="volume_level">آواز کی بلندی</string>
     <string name="morningThikr">صبح کے اذکار</string>
     <string name="nightThikr">شام کے اذکار</string>
-    <string name="now_playing">پروگرام چل رہا ہے</string>
     <string name="morningThikrSettings">صبح کے اذکار کی سیٹنگ</string>
     <string name="nightThikrSettings">شام کے اذکار کی سیٹنگ</string>
-    <string name="RemindMe">مجھے اللہ کا ذکر یاد کرائیں</string>
     <string name="Settings">سیٹنگ</string>
     <string name="remindMeMorningThikr">صبح کے اذکار کی یاد دہانی</string>
     <string name="remindMeNightThikr">شام کے اذکار کی یاد دہانی</string>

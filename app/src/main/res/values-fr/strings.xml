@@ -278,9 +278,8 @@
   <string name="tag_name">Nom</string>
 
   <!-- bookmark & tag list -->
-  <string name="bookmarks_list_empty">Aucun favori</string>
 
-  <!-- Shown above search results when we receive a search request. -->
+    <!-- Shown above search results when we receive a search request. -->
   <plurals name="search_results">
     <item quantity="one">résultat pour \"%1$s\": </item>
     <item quantity="other">%2$d résultats pour \"%1$s\": </item>

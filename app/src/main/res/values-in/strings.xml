@@ -314,7 +314,6 @@
   <string name="tag_name">Nama</string>
 
   <!-- bookmark & tag list -->
-  <string name="bookmarks_list_empty">Tidak ada Penanda</string>
 
   <!-- audio manager -->
   <string name="audio_manager">Pengelola Audio</string>

@@ -313,9 +313,8 @@
   <string name="tag_name">Nama</string>
 
   <!-- penanda & tag list -->
-  <string name="bookmarks_list_empty">Tidak ada Penanda</string>
 
-  <!-- audio manager -->
+    <!-- audio manager -->
   <string name="audio_manager">Pengurus Audio</string>
 
   <!-- notification channel names [CHAR LIMIT=40] -->

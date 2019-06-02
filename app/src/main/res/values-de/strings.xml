@@ -334,8 +334,7 @@
   <string name="tag_name">Name</string>
 
   <!-- bookmark & tag list -->
-  <string name="bookmarks_list_empty">Keine Lesezeichen</string>
 
-  <!-- audio manager -->
+    <!-- audio manager -->
   <string name="audio_manager">Audioverwaltung</string>
 </resources>
