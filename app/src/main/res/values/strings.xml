@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
  <string name="app_package" translatable="false">com.HMSolutions.thikrallah</string>
     <string name="contact_developer_uri" translatable="false">mailto:28.hani@gmail.com</string>
@@ -209,7 +209,7 @@
     <string name="title_activity_bookmarks">المرجعيات</string>
     <string name="title_activity_preferences">الإعدادات</string>
 
-    <string name="my_app_name_about">Hisnul Muslim App</string>
+    <string name="my_app_name_about">برنامج حصن المسلم</string>
     <string name="version_name" translatable="false">Version 0.1.1</string>
     <string name="beta_version" translatable="false">0.06 - RecyclerView</string>
 
@@ -238,12 +238,12 @@
         ]]>
     </string>
 
- <string name="action_share_title">Share Dua</string>
-    <string name="action_share_credit">via @HisnulMuslimApp</string>
+ <string name="action_share_title">انشر دعاء</string>
+    <string name="action_share_credit">عن طريق برنامج اذكر الله</string>
 
- <string name="snackbar_text_begin">Removed Dua #</string>
-    <string name="snackbar_text_end">" from bookmarks"</string>
-    <string name="snackbar_action">undo</string>
+ <string name="snackbar_text_begin">احذف دعاء#</string>
+    <string name="snackbar_text_end">" من المرجعيات"</string>
+    <string name="snackbar_action">تراجع</string>
 
     <string name="gradual_volume">رفع صوت الاذان تدريجيا</string>
     <string name="is_foreground_athan_timer">اظهار الوقت المتبقي للصلاةدائما</string>
@@ -582,42 +582,40 @@
     <string name="about_moshi_url" translatable="false">https://github.com/square/moshi</string>
     <string name="about_sliding_panel" translatable="false">AndroidSlidingUpPanel</string>
     <string name="about_sliding_panel_url" translatable="false">https://github.com/umano/AndroidSlidingUpPanel</string>
-    <string name="about_others">Others</string>
-    <string name="about_contributors">Contributors</string>
-    <string name="about_contributors_summary">A list of people who contributed to the development of Quran for Android</string>
+    <string name="about_others">اخرون</string>
+    <string name="about_contributors">المساهمين</string>
+    <string name="about_contributors_summary">قائمة باسماء الاشخاص الذين ساعدو في برنامج القرءان الكريم</string>
     <string name="about_contributors_url" translatable="false">https://github.com/quran/quran_android/blob/master/CONTRIBUTORS.md</string>
     <!-- m permissions stuff -->
-    <string name="storage_permission_rationale">Quran wants your permission to store its data on
-        external storage. Quran will work without this permission, but if you clear data or
-        uninstall the app, all downloaded pages, audio, and data will be removed. Grant
-        Quran permission?</string>
-    <string name="storage_permission_please_restart">Please restart the app for this to take effect.</string>
+    <string name="storage_permission_rationale">برنامجنا يحتاج لسماحك له بان يخزن المعلومات في ذاكرة التلفون الخارجية. 
+     هذا يستخدم لتخزين صفحات القرءان والملفات الصوتية للقرءان.
+     هل تسمح لبرنامجنا بهذا؟</string>
+    <string name="storage_permission_please_restart">الرجاء قفل البرنامج واعادة فتحة كي ياخذ هذا التغيير مفعولة</string>
     <string name="prefs_megabytes_int"  translatable="false">%1$d MB</string>
     <string name="prefs_megabytes_str" translatable="false">%s MB</string>
     <string name="translations" translatable="false">@string/prefs_translations</string>
-    <string name="more_translations">More Translations</string>
-    <string name="import_data_permissions_error">Unable to read backup file due to permissions error.</string>
-    <string name="import_data_error">Invalid backup file (or unable to read backup file).</string>
-    <string name="exported_data">Data exported to %1$s.</string>
+    <string name="more_translations">ترجمات اخرى</string>
+    <string name="import_data_permissions_error">لم يستطع البرنامج قراءة الملف بسبب عدة امتلاك البرنامج للصلاحيات</string>
+    <string name="import_data_error">غير قادر على قراءة الملف</string>
+    <string name="exported_data">تم تصدير المعلوات الى %1$s.</string>
     <string name="logs_email" translatable="false">quranandroid+logs@gmail.com</string>
-    <string name="kitkat_external_message">Due to Android limitations, if you choose to place Quran
-        data on your external SD card and later uninstall or clear data for Quran Android, all Quran
-        Android pages and audio will be deleted and you will have to download them again. Are you
-        sure you want to use the external SD card?</string>
-    <string name="please_grant_permissions">Please grant permission in application settings.</string>
+    <string name="kitkat_external_message">اذا اخترت ان تخزن بيانات القرءان في الذاكرة الخارجية ومن ثم مسحت البرنامج او مسحت بيانات البرنامج, فان كل بيانات البرنامج ستمسح وتحتاج الى اعادة تحميلها. 
+     هل انت متاكد بانك تريد خزن البيانات في الذاكرة الخارجية؟
+    </string>
+    <string name="please_grant_permissions">الرجاء اعطاء السماح للبرنامج من اعدادات التلفون</string>
     <string name="more_arabic" translatable="false">المزيد…</string>
-    <string name="playback_prompt_title">Start playback from:</string>
-    <string name="starting_page_label">Beginning of Page</string>
+    <string name="playback_prompt_title">ابدأ القراءة من:</string>
+    <string name="starting_page_label">بداية الصفحة</string>
     <plurals name="plural_recent_pages" translatable="false">
         <item quantity="one">@string/menu_jump_last_page</item>
         <item quantity="other">@string/recent_pages</item>
     </plurals>
-    <string name="tag_blank_tag_error">Tag names cannot be blank!</string>
-    <string name="tag_duplicate_tag_error">Tag name already exists!</string>
+    <string name="tag_blank_tag_error">الاسم لا يستطيع ان يكون</string>
+    <string name="tag_duplicate_tag_error">الاسم موجود مسبقا</string>
     <!-- format strings -->
     <string name="sura_ayah" translatable="false">%1$d:%2$d</string>
 
     <!-- notification channel names [CHAR LIMIT=40] -->
-    <string name="notification_channel_download">Quran Downloads</string>
-    <string name="notification_channel_audio">Quran Recitation</string>
+    <string name="notification_channel_download">تحميلات القرءان</string>
+    <string name="notification_channel_audio">تلاوة القرءان</string>
 </resources>
