@@ -248,7 +248,6 @@ Voor de vertaalde pagina\'s (/voor vertalingen): Ga naar instellingen en wijzig 
         <item quantity="one">een item verwijderd</item>
         <item quantity="other">%d items verwijderd</item>
     </plurals>
-    <string name="undo">Ongedaan Maken</string>
     <string name="about_qaloon_images">Qaloon afbeeldingen gebruikt met toestemming van Nous Memes Editions Et Diffusion (Tunisia)</string>
     <string name="about_quran_ksu_summary">The King Saud University Electronic Moshaf Project was the app\'s source of Arabic Tafaseer and translations for various languages</string>
     <string name="about_tanzil_summary">Vertalingen van vele talen</string>

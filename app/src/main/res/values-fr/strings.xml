@@ -237,7 +237,6 @@
     <string name="import_successful">Données importées avec succès</string>
     <string name="export_data_error">Erreur lors de l\'export des données.</string>
     <string name="warning">Attention</string>
-    <string name="undo">Annuler</string>
     <string name="about_qaloon_images">Les images Qaloon sont utilisées avec la permission de Nous Memes Editions Et Diffusion (Tunisie)</string>
     <string name="about_quranicaudio_summary">Récitations mp3 du Quran non espacées</string>
     <string name="about_quran_ksu">Projet Electronic Moshaf</string>
