@@ -511,7 +511,6 @@ He knows what lies before them and what is after them, And they comprehend not a
     <string name="please_grant_permissions">Please grant permission in application settings</string>
     <string name="playback_prompt_title">Start playback from:</string>
     <string name="starting_page_label">Beginning of Page</string>
-    <string name="tag_blank_tag_error">Tag names cannot be blank!</string>
     <string name="tag_duplicate_tag_error">Tag name already exists!</string>
     <!-- format strings -->
     <!-- notification channel names [CHAR LIMIT=40] -->
