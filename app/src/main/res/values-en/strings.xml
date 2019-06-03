@@ -182,6 +182,32 @@ He knows what lies before them and what is after them, And they comprehend not a
     <string name="title_activity_about">about us</string>
     <string name="title_activity_bookmarks">Bookmarks</string>
     <string name="title_activity_preferences">Settings</string>
+    <string name="my_app_name_about">Muslim Fortress App</string>
+    <string name="about_us"><![CDATA[ 
+            Hisnul Muslim is a collection of supplications for various occasions compiled by Dr. Sa\'eed bin Ali bin Wahaf Al-Qahtani. The author is from amongst the senior students of the former Grand Mufti of Saudi Arabia, Shaykh Abdul Aziz bin Abdullah bin Baz (May Allah have mercy on him).
+            <br/><br/>
+            <big><b>Contributors</b></big><br/>
+            Ahmed El-Helw (<a href="http://twitter.com/ahmedre">@ahmedre</a>)<br/>
+            Azhar Ali (<a href="https://www.linkedin.com/pub/md-azhar-ali/90/251/140">LinkedIn</a>)<br/>
+            Abdul Majed Ahmed (<a href="https://twitter.com/AbdulMajed19">@AbdulMajed19</a>)<br/>
+            Hussaini Zulkifli (<a href="https://twitter.com/HussainiZul">@HussainiZul</a>)<br/>
+            Mohammad Khalid Hussain (<a href="https://www.github.com/khalid.hussain">GitHub</a>)
+            <br/><br/>
+
+            <big><b>OpenSource Projects</b></big><br/>
+            AutoFitTextView (<a href="https://github.com/grantland/android-autofittextview">GitHub</a>)<br/>
+            VNTNumberPicker Preference (<a href="https://github.com/vanniktech/VNTNumberPickerPreference"/>GitHub</a>)<br/>
+            VNTFontList Preference (<a href="https://github.com/vanniktech/VNTFontListPreference"/>GitHub</a>)
+            <br/><br/>
+
+            <big><b>Special Thanks</b></big><br/>
+            Ahmad Sabree (<a href="https://twitter.com/sabree01">@sabree01</a>)<br/>
+        ]]></string>
+    <string name="action_share_title">Share Duaa</string>
+    <string name="action_share_credit">Via @ Remember Allah app</string>
+    <string name="snackbar_text_begin">Delete Duaa#</string>
+    <string name="snackbar_text_end">" From bookmarks"</string>
+    <string name="snackbar_action">Undo</string>
     <string name="gradual_volume">Increase volume gradually</string>
     <string name="is_foreground_athan_timer">Show time remaining untill next prayer</string>
     <string name="untill">untill</string>
@@ -459,7 +485,24 @@ He knows what lies before them and what is after them, And they comprehend not a
         <item quantity="one">Deleted one item</item>
         <item quantity="other">Deleted %d items</item>
     </plurals>
+    <string name="undo">Undo</string>
+    <string name="about_qaloon_images">Qaloon images used with permission of Nous Memes Editions Et Diffusion (Tunisia)</string>
+    <string name="about_quranicaudio_summary">Gapless mp3 Quran recitations</string>
+    <string name="about_quran_ksu">Electronic Moshaf Project</string>
+    <string name="about_quran_ksu_summary">The King Saud University Electronic Moshaf Project is the app\'s source of Arabic Tafaseer and translations for various languages. It is also the source for Dr. Ayman Suwaid\'s recitation.</string>
+    <string name="about_furqan_summary">Uthmani text and Arabic Tafaseer</string>
+    <string name="about_noorhidayat_summary">Noorehira font and Mufti Taqi Translation</string>
+    <string name="about_open_source">Open Source Projects</string>
+    <string name="about_others">Others</string>
+    <string name="about_contributors">Contributors</string>
+    <string name="about_contributors_summary">List of people who helped developed Quran app</string>
     <!-- m permissions stuff -->
+    <string name="storage_permission_rationale">App needs your permission to store data in external storage to store quran images and audio files. Do you give the app storage permission?</string>
+    <string name="storage_permission_please_restart">Please restart app for changes to take effect</string>
+    <string name="more_translations">More translations</string>
+    <string name="import_data_permissions_error">App could not read file because of permission issues</string>
+    <string name="import_data_error">Unable to read file</string>
+    <string name="exported_data">Data exported to %1$s.</string>
     <!-- format strings -->
     <!-- notification channel names [CHAR LIMIT=40] -->
 </resources>
