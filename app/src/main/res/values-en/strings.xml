@@ -491,6 +491,7 @@ He knows what lies before them and what is after them, And they comprehend not a
     <string name="about_quran_ksu">Electronic Moshaf Project</string>
     <string name="about_quran_ksu_summary">The King Saud University Electronic Moshaf Project is the app\'s source of Arabic Tafaseer and translations for various languages. It is also the source for Dr. Ayman Suwaid\'s recitation.</string>
     <string name="about_furqan_summary">Uthmani text and Arabic Tafaseer</string>
+    <string name="about_tanzil_summary">Translations for many languages</string>
     <string name="about_noorhidayat_summary">Noorehira font and Mufti Taqi Translation</string>
     <string name="about_open_source">Open Source Projects</string>
     <string name="about_others">Others</string>
@@ -503,6 +504,17 @@ He knows what lies before them and what is after them, And they comprehend not a
     <string name="import_data_permissions_error">App could not read file because of permission issues</string>
     <string name="import_data_error">Unable to read file</string>
     <string name="exported_data">Data exported to %1$s.</string>
+    <string name="kitkat_external_message">Due to Android limitations, if you choose to place Quran
+        data on your external SD card and later uninstall or clear data for Quran Android, all Quran
+        Android pages and audio will be deleted and you will have to download them again. Are you
+        sure you want to use the external SD card?</string>
+    <string name="please_grant_permissions">Please grant permission in application settings</string>
+    <string name="playback_prompt_title">Start playback from:</string>
+    <string name="starting_page_label">Beginning of Page</string>
+    <string name="tag_blank_tag_error">Tag names cannot be blank!</string>
+    <string name="tag_duplicate_tag_error">Tag name already exists!</string>
     <!-- format strings -->
     <!-- notification channel names [CHAR LIMIT=40] -->
+    <string name="notification_channel_download">Quran Downloads</string>
+    <string name="notification_channel_audio">Quran Recitation</string>
 </resources>
