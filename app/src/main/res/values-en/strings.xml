@@ -8,7 +8,7 @@
     <string name="favorite_reciter">Favorite Quran Reciter</string>
     <string name="quran_thikr_need_files">Click here to download files to enable audio reminders of Quran</string>
     <string name="autostart">Enable AutoStart</string>
-    <string name="autostart_message">Please allow AppName to always run in the background,else our services cannot be accessed.</string>
+    <string name="autostart_message">Please allow our app to always run in the background, else our services cannot be accessed.</string>
     <string name="athan_timer_notifiaction">Prayer Time Remaining</string>
     <string name="remember_notification">Remembrance of Allah</string>
     <string name="floating_notification">Remember Allah Floating Reminders</string>
