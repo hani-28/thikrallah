@@ -610,7 +610,7 @@
         <item quantity="one">@string/menu_jump_last_page</item>
         <item quantity="other">@string/recent_pages</item>
     </plurals>
-    <string name="tag_blank_tag_error">الاسم لا يستطيع ان يكون</string>
+    <string name="tag_blank_tag_error">الاسم لا يستطيع ان يكون فارغا</string>
     <string name="tag_duplicate_tag_error">الاسم موجود مسبقا</string>
     <!-- format strings -->
     <string name="sura_ayah" translatable="false">%1$d:%2$d</string>
