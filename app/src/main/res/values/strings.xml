@@ -14,7 +14,7 @@
     <string name="remember_notification">ذكر الله</string>
     <string name="floating_notification">نافذة التذكيرات التلقائية</string>
     <string name="volume_level">مستوى صوت التذكير</string>
-
+   <string name="translation_link" translatable="false">https://crowdin.com/project/thikrallah</string>
     <string name="mute_when_ringer_mute">كتم التذكير اذا الجهاز في وضع الصامت</string>
     <string name="morningThikr">أذكار الصباح</string>
     <string name="nightThikr">أذكار المساء</string>

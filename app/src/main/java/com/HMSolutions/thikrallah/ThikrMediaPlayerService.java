@@ -109,6 +109,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 case MSG_CURRENT_PLAYING:
                     mClients.clear();
                     mClients.add(msg.replyTo);
+                    Log.d(TAG,"msg is "+getCurrentPlaying());
                     sendMessageToUI(MSG_CURRENT_PLAYING, getCurrentPlaying());
                     // Toast.makeText(getApplicationContext(), "hello! 1", Toast.LENGTH_SHORT).show();
                     msg2 = Message.obtain(null, ThikrMediaPlayerService.MSG_CURRENT_PLAYING, 0, 0);
@@ -180,6 +181,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     public void onCreate() {
         super.onCreate();
         Crashlytics.log("ThikrMediaPlayerService onCreate");
+        Log.d(TAG,"ThikrMediaPlayerService onCreate");
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
                 TAG);
@@ -202,15 +204,19 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                         //handle
                     }
                     Log.d(TAG, "gained focus call state idle");
-                    mediaSession.setActive(true);
-                    if (player == null) {
-                        initMediaPlayer();
-                    } else if (!isPlaying()) {
+                    if(getThikrType()!=null){
+                        //do this only if thikrtype has been set (happens once OnStartCommand is called)
+                        mediaSession.setActive(true);
+                        if (player == null) {
+                            initMediaPlayer();
+                        } else if (!isPlaying()) {
 
-                        startPlayerIfAllowed();
+                            startPlayerIfAllowed();
+                        }
+                        updateVolume(100);
+                        updateActions();
                     }
-                    updateVolume(100);
-                    updateActions();
+
                 } else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
                     //A call is dialing, active or on hold
                     Log.d(TAG, "transient loss of  focus-  call is dialing, active or on hold");
@@ -364,12 +370,14 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Crashlytics.log("ThikrMediaPlayerService onStartCommand");
+        Log.d(TAG,"ThikrMediaPlayerService onStartCommand");
         callingintent = intent;
         Bundle data = intent.getExtras();
         mcontext = this.getApplicationContext();
         this.isUserAction = data.getBoolean("isUserAction", false);
         int action = data.getInt("ACTION", -1);
-        String type = data.getString("thikrType", null);
+        this.setThikrType(intent.getExtras().getString("com.HMSolutions.thikrallah.datatype", null));
+
         Log.d(TAG, "action " + action);
 
         if (intent.getExtras().getString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_DAY_THIKR).equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR) && this.isPlaying()) {
@@ -381,17 +389,17 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 this.stopSelf();
             }
             return Service.START_NOT_STICKY;
-        } else {
-
-            this.setThikrType(intent.getExtras().getString("com.HMSolutions.thikrallah.datatype", null));
         }
 
         initNotification();
         if (getThikrType() == null) {
             Log.d(TAG, "thikrtype is null... why?");
             this.updateAllAlarms();
+            this.stopForeground(true);
+            this.stopSelf();
             return Service.START_NOT_STICKY;
         }
+
         if (this.getThikrType().equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)) {
             this.updateAllAlarms();
             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
@@ -504,6 +512,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
      */
     public void setCurrentPlaying(int icurrentPlaying) {
         currentPlaying = icurrentPlaying;
+        Log.d(TAG,"msg is "+currentPlaying);
         sendMessageToUI(MSG_CURRENT_PLAYING, currentPlaying);
     }
 
@@ -515,6 +524,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     }
 
     private int getStreamType() {
+
         if (this.getThikrType().equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)) {
             return AudioManager.STREAM_NOTIFICATION;
         } else if (this.getThikrType().contains(MainActivity.DATA_TYPE_ATHAN)) {
@@ -1019,7 +1029,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 }
 
             } else {
-                Log.d(TAG, "sending message to ui");
+                Log.d(TAG, "sending message to ui "+currentPlaying);
                 sendMessageToUI(MSG_CURRENT_PLAYING, currentPlaying);
                 StayPaused = false;
                 player.start();

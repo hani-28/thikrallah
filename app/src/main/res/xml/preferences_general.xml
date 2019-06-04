@@ -28,10 +28,8 @@
             android:title="@string/help_translate" >
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="@string/contact_developer_uri" >
-                <extra
-                    android:name="android.intent.extra.SUBJECT"
-                    android:value="@string/offer_translate_help" />
+                android:data="@string/translation_link" >
+
             </intent>
         </com.HMSolutions.thikrallah.Utilities.MyPreference>
         <com.HMSolutions.thikrallah.Utilities.MyPreference
