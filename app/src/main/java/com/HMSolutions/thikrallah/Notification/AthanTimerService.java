@@ -37,7 +37,7 @@ public class AthanTimerService extends Service {
     String TAG = "AthanTimerService";
     private final static int NOTIFICATION_ID=54;
 	private Context mContext;
-
+	boolean isStarted=false;
 
     public static final int JOB_ID = 0x01;
 
@@ -48,24 +48,29 @@ public class AthanTimerService extends Service {
 	}
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		mContext=this.getApplicationContext();
+		mContext=this;
 		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
 		boolean isTimer=sharedPrefs.getBoolean("foreground_athan_timer",true);
 
 		if(isTimer){
-			Log.d(TAG,TAG+"started");
-			Timer timer = new Timer();
+			if(!isStarted){
+				Log.d(TAG,TAG+"started");
+				Timer timer = new Timer();
+				isStarted=true;
+				timer.scheduleAtFixedRate(new TimerTask() {
+					@Override
+					public void run() {
+						initNotification();
 
-			timer.scheduleAtFixedRate(new TimerTask() {
-				@Override
-				public void run() {
-					initNotification();
+					}
+				},0,60000);
 
-				}
-			},0,60000);
+			}else{//timer is already running. Just run once to respect the runforeground promise
+				initNotification();
+			}
 
 
-			return START_STICKY;
+			return START_NOT_STICKY;
 		}else{
 			this.stopSelf();
 			return START_NOT_STICKY;

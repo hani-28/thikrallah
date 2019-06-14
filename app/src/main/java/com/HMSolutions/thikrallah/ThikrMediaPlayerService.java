@@ -1003,6 +1003,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     private void startPlayerIfAllowed() {
         Log.d(TAG, "startPlayerIfAllowed called");
         //TODO:WHY IS AUDIOFOCUS REQUEST DENIED AFTER PHONE CALL FINISHES IF THE SERVICE STARTS DURING A CALL?
+        //TODO:Update requestAudioFocus methods to use api 26 methods.
         //stopping thread for a second after phone call finishes seems to resolve issue for some reason
 
         int ret = am.requestAudioFocus(this,

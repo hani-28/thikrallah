@@ -47,6 +47,7 @@ import com.HMSolutions.thikrallah.quran.labs.androidquran.service.util.ServiceIn
 import com.HMSolutions.thikrallah.quran.labs.androidquran.ui.PagerActivity;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.AudioUtils;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranSettings;
+import com.google.gson.TypeAdapterFactory;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -63,11 +64,10 @@ import timber.log.Timber;
 
 public class ThikrService extends IntentService  {
     String TAG = "ThikrService";
-	private final static int NOTIFICATION_ID=4;
-    private final static int NOTIFICATION_ID_BACKGROUND=44;
-    private final static int NOTIFICATION_ID_DOWNLOAD1=5523;
-    private final static int NOTIFICATION_ID_DOWNLOAD2=412;
-    private final static int NOTIFICATION_ID_DOWNLOAD3=9578;
+    private final static int NOTIFICATION_ID_GENERIC_FOREGROUND=50;
+    private final static int NOTIFICATION_ID_MORNING_NIGHT_THIKR=200;
+    private final static int NOTIFICATION_ID_QURAN_THIKR=400;
+    private final static int NOTIFICATION_ID_QURAN_DOWNLOAD_NEEDED=500;
     private AudioManager am;
     private Intent calling_intent;
     Context mcontext;
@@ -90,7 +90,7 @@ public class ThikrService extends IntentService  {
         Crashlytics.log("ThikrService called");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             //workaround androidO limitation on background services
-            showForegroundNotificationan(NOTIFICATION_ID);
+            showForegroundNotificationan(NOTIFICATION_ID_GENERIC_FOREGROUND);
         }
 
         calling_intent=intent;
@@ -209,8 +209,7 @@ public class ThikrService extends IntentService  {
                     manager.createNotificationChannel(chan);
                     mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID);
                 }
-                this.startForeground(NOTIFICATION_ID,mBuilder.build());
-				mNotificationManager.notify(NOTIFICATION_ID_BACKGROUND, mBuilder.build());
+				mNotificationManager.notify(NOTIFICATION_ID_MORNING_NIGHT_THIKR, mBuilder.build());
 			}else{
 				//new here
 
@@ -259,9 +258,7 @@ public class ThikrService extends IntentService  {
                     manager.createNotificationChannel(chan);
                     mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID);
                 }
-
-                this.startForeground(NOTIFICATION_ID,mBuilder.build());
-				mNotificationManager.notify(NOTIFICATION_ID_BACKGROUND, mBuilder.build());
+				mNotificationManager.notify(NOTIFICATION_ID_MORNING_NIGHT_THIKR, mBuilder.build());
 			}else{
 
 				sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_NIGHT_THIKR).commit();
@@ -278,7 +275,7 @@ public class ThikrService extends IntentService  {
 
 		}
         if (thikrType.equals(MainActivity.DATA_TYPE_QURAN_MULK)){
-
+            Log.d(TAG,"Quran Mulk reminder");
             int reminderType=Integer.parseInt(sharedPrefs.getString("remindMemulkType", "1"));
             if (reminderType==1){
                 NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -313,11 +310,10 @@ public class ThikrService extends IntentService  {
                     manager.createNotificationChannel(chan);
                     mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID);
                 }
-                this.startForeground(NOTIFICATION_ID,mBuilder.build());
-                mNotificationManager.notify(NOTIFICATION_ID_BACKGROUND, mBuilder.build());
+                mNotificationManager.notify(NOTIFICATION_ID_QURAN_THIKR, mBuilder.build());
             }else{
                 //new here
-
+                Log.d(TAG,"Quran Mulk audio reminder");
                 sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_QURAN_MULK).commit();
 
                 data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAYALL);
@@ -328,15 +324,6 @@ public class ThikrService extends IntentService  {
                 QariItem qari=qlist.get(qari_num);
 
                 AudioPathInfo audioPathInfo = this.getLocalAudioPathInfo(qari);
-               /*
-                File databaseFile=new File(audioPathInfo.getGaplessDatabase());
-                if(!databaseFile.exists()){
-
-                    Intent downloadIntent = ServiceIntentHelper.getAudioDownloadIntent(this, getGaplessDatabaseUrl(qari), audioPathInfo.getLocalDirectory(), mcontext.getString(R.string.timing_database));
-                    startService(downloadIntent);
-                }
-
-*/
                 if (audioPathInfo != null) {
                     // override streaming if all the files are already downloaded
                     boolean stream = false;
@@ -353,9 +340,9 @@ public class ThikrService extends IntentService  {
                     } else {
                         audioPath = audioPathInfo;
                         //check if the audio files are available
-                        if (!haveAllFiles(audioPathInfo.getUrlFormat(),audioPathInfo.getLocalDirectory(), start, end,qari.isGapless())){
+                       // if (!haveAllFiles(audioPathInfo.getUrlFormat(),audioPathInfo.getLocalDirectory(), start, end,qari.isGapless())){
 
-                        }
+                       // }
                     }
 
 
@@ -370,12 +357,13 @@ public class ThikrService extends IntentService  {
                             Log.d(TAG, "calling handlePlayback");
                             handlePlayback(audioRequest);
                         }else{
+                            Log.d(TAG,"Quran Mulk audio reminder. Need to download files");
                             Intent RecieverIntent_=new Intent(mcontext, QuranThikrDownloadNeeds.class);
                             RecieverIntent_.putExtra("sura",start.sura);
                             RecieverIntent_.putExtra("ayah",end.ayah);
                             RecieverIntent_.putExtra("qari",qari_num);
-                            PendingIntent pendingIntent = PendingIntent.getBroadcast(mcontext, NOTIFICATION_ID_DOWNLOAD1, RecieverIntent_, PendingIntent.FLAG_UPDATE_CURRENT);
-                            handleRequiredDownload(pendingIntent,NOTIFICATION_ID_DOWNLOAD1);
+                            PendingIntent pendingIntent = PendingIntent.getBroadcast(mcontext, NOTIFICATION_ID_QURAN_DOWNLOAD_NEEDED, RecieverIntent_, PendingIntent.FLAG_UPDATE_CURRENT);
+                            handleRequiredDownload(pendingIntent,NOTIFICATION_ID_QURAN_DOWNLOAD_NEEDED);
 
 
 
@@ -410,11 +398,12 @@ public class ThikrService extends IntentService  {
                                 manager.createNotificationChannel(chan);
                                 mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID);
                             }
-                            this.startForeground(NOTIFICATION_ID,mBuilder.build());
-                            mNotificationManager.notify(NOTIFICATION_ID_BACKGROUND, mBuilder.build());
+                            mNotificationManager.notify(NOTIFICATION_ID_QURAN_THIKR, mBuilder.build());
                         }
 
                     }
+                }else{
+                    Log.d(TAG,"audioPathInfo is NULL");
                 }
                /*
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -463,8 +452,7 @@ public class ThikrService extends IntentService  {
                     manager.createNotificationChannel(chan);
                     mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID);
                 }
-                mNotificationManager.notify(NOTIFICATION_ID_BACKGROUND, mBuilder.build());
-                this.startForeground(NOTIFICATION_ID,mBuilder.build());
+                mNotificationManager.notify(NOTIFICATION_ID_QURAN_THIKR, mBuilder.build());
             }else{
 
                 sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_QURAN_MULK).commit();
@@ -514,8 +502,8 @@ public class ThikrService extends IntentService  {
                             RecieverIntent_.putExtra("sura",start.sura);
                             RecieverIntent_.putExtra("ayah",end.ayah);
                             RecieverIntent_.putExtra("qari",qari_num);
-                            PendingIntent pendingIntent = PendingIntent.getBroadcast(mcontext, NOTIFICATION_ID_DOWNLOAD1, RecieverIntent_, PendingIntent.FLAG_UPDATE_CURRENT);
-                            handleRequiredDownload(pendingIntent,NOTIFICATION_ID_DOWNLOAD1);
+                            PendingIntent pendingIntent = PendingIntent.getBroadcast(mcontext, NOTIFICATION_ID_QURAN_DOWNLOAD_NEEDED, RecieverIntent_, PendingIntent.FLAG_UPDATE_CURRENT);
+                            handleRequiredDownload(pendingIntent,NOTIFICATION_ID_QURAN_DOWNLOAD_NEEDED);
 
 
 
@@ -550,8 +538,7 @@ public class ThikrService extends IntentService  {
                                 manager.createNotificationChannel(chan);
                                 mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID);
                             }
-                            this.startForeground(NOTIFICATION_ID,mBuilder.build());
-                            mNotificationManager.notify(NOTIFICATION_ID_BACKGROUND, mBuilder.build());
+                            mNotificationManager.notify(NOTIFICATION_ID_QURAN_THIKR, mBuilder.build());
                         }
 
                     }
@@ -654,22 +641,9 @@ public class ThikrService extends IntentService  {
         mBuilder.setSound(soundUri,AudioManager.STREAM_NOTIFICATION);
 
         mBuilder.setContentIntent(launchAppPendingIntent);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            String NOTIFICATION_CHANNEL_ID = "ThikrService";
-            String channelName = this.getResources().getString(R.string.remember_notification);
-            NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
-            chan.setSound(null,null);
-            chan.setLightColor(Color.BLUE);
-            chan.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
-            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            assert manager != null;
-            manager.createNotificationChannel(chan);
-            mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID);
-        }
-        Log.d(TAG,"showing notifiaction");
 
-        this.startForeground(NOTIFICATION_ID,mBuilder.build());
-        mNotificationManager.notify(NOTIFICATION_ID_BACKGROUND, mBuilder.build());
+        Log.d(TAG,"showing notifiaction NOTIFICATION_ID_QURAN_DOWNLOAD_NEEDED");
+        mNotificationManager.notify(notification_id, mBuilder.build());
     }
     private void showForegroundNotificationan(int ID){
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -938,7 +912,7 @@ public class ThikrService extends IntentService  {
 
     public String getQuranBaseDirectory(Context context) {
         String basePath = QuranSettings.getInstance(context).getAppCustomLocation();
-
+        Log.d(TAG,"basePath based on getAppCustomLocation is "+basePath);
         if (!isSDCardMounted()) {
             // if our best guess suggests that we won't have access to the data due to the sdcard not
             // being mounted, then set the base path to null for now.
@@ -1032,6 +1006,7 @@ public class ThikrService extends IntentService  {
     @Nullable
     private String getQuranAudioDirectory(Context context){
         String path = getQuranBaseDirectory(context);
+        Log.d(TAG,"quran base directory is "+path);
         if (path == null) {
             return null;
         }
@@ -1044,6 +1019,7 @@ public class ThikrService extends IntentService  {
     }
     private String getLocalQariUrl(Context context,QariItem item) {
         String rootDirectory = getQuranAudioDirectory(this);
+        Log.d(TAG,"root directory is "+rootDirectory);
         if (rootDirectory == null){
             return null;
         } else{
@@ -1061,9 +1037,11 @@ public class ThikrService extends IntentService  {
         return databaseName;
     }
     private AudioPathInfo getLocalAudioPathInfo(QariItem item) {
+        Log.d(TAG,"Qari is "+item.getName()+" "+item.getDatabaseName());
         String databaseName = item.getDatabaseName();
         if (databaseName != null) {
             String localPath = getLocalQariUrl(this, item);
+            Log.d(TAG,"localPATH is "+localPath);
             if (localPath != null) {
                 String databasePath = getQariDatabasePathIfGapless(this, item);
                 String urlFormat;
@@ -1075,7 +1053,10 @@ public class ThikrService extends IntentService  {
                 }
                 return new AudioPathInfo(urlFormat, localPath, databasePath);
             }
+        }else{
+            Log.d(TAG,"databaseName is null");
         }
+
         return null;
     }
     private NotificationCompat.Builder setVisibilityPublic(NotificationCompat.Builder inotificationBuilder){
