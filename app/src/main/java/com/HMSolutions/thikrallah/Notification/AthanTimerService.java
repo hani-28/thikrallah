@@ -97,10 +97,12 @@ public class AthanTimerService extends Service {
 		Intent resultIntent = new Intent(mContext, MainActivity.class);
 
 
+		resultIntent.putExtra("FromNotification", true);
+		resultIntent.putExtra("DataType", MainActivity.DATA_TYPE_ATHAN);
 
 		resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		PendingIntent launchAppPendingIntent = PendingIntent.getActivity(mContext,
-				0, resultIntent, PendingIntent.FLAG_CANCEL_CURRENT
+				0, resultIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT
 		);
 
 

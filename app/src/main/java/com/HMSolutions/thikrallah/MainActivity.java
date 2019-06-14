@@ -39,6 +39,7 @@ import android.view.MenuItem;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.HMSolutions.thikrallah.Fragments.AthanFragment;
 import com.HMSolutions.thikrallah.Fragments.MainFragment;
 import com.HMSolutions.thikrallah.Fragments.ThikrFragment;
 import com.HMSolutions.thikrallah.Fragments.TutorialFragment;
@@ -556,11 +557,10 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
                 intent2.setClass(this, QuranDataActivity.class);
                 intent2.putExtras(intent.getExtras());
                 startActivityForResult(intent2, 0);
-                //Bundle data = new Bundle();
-                //data.putString("DataType", intent.getExtras().getString("DataType"));
-                //data.putInt("surat", Integer.parseInt(intent.getExtras().getString("DataType").split("/")[1]));
-                //data.putInt("surat", this.getResources().getIntArray(R.array.surat_values)[0]);
-                //launchFragment(new QuranFragment(), data, "QuranFragment");
+            }
+            if (intent.getExtras().getString("DataType").contains(MainActivity.DATA_TYPE_ATHAN)) {
+                Log.d(TAG, "athan thikr notification");
+                launchFragment(new AthanFragment(), new Bundle(),"AthanFragment");
             }
         }
         boolean isFromSettings = intent.getBooleanExtra("FromPreferenceActivity", false);
