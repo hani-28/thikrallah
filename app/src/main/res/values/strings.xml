@@ -8,7 +8,9 @@
     <string name="share">شارك</string>
     <string name="favorite_reciter">قارئ القرءان المفضل</string>
     <string name="quran_thikr_need_files">اضغط هنا لتحميل بعض الملفات لتفعيل التذكير الصوتي بالقرءان</string>
-    <string name="autostart">تفعيل التشغل الذاتي</string>
+   <string name="quran_thikr_download_need_files_permission">التذكير الصوتي بالقرءان يحتاج ان يحمل الملفات الصوتية المطلوبة لكي تشتغل هذه الخاصية. هل تريد تحميل الملف الصوتي الان؟</string>
+   <string name="quran_thikr_need_files_prompt_title">تحميل ملفات</string>
+   <string name="autostart">تفعيل التشغل الذاتي</string>
     <string name="autostart_message">الرجاء السماح لبرنامجنا بالعمل بالخلفية حتى لو كان البرنامج مغلقا حتى يشتغل البرنامج بشكل صحيح.</string>
     <string name="athan_timer_notifiaction">اشعار الوقت المتبقي للصلاة</string>
     <string name="remember_notification">ذكر الله</string>

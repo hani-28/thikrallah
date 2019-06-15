@@ -47,6 +47,7 @@ import com.HMSolutions.thikrallah.Notification.AthanTimerService;
 import com.HMSolutions.thikrallah.Utilities.AppRater;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
 import com.HMSolutions.thikrallah.Utilities.MyDBHelper;
+import com.HMSolutions.thikrallah.Utilities.MyListPreference;
 import com.HMSolutions.thikrallah.Utilities.WhatsNewScreen;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.location.LocationListener;
@@ -468,7 +469,11 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
         Intent intent1 = new Intent("com.HMSolutions.thikrallah.Notification.ThikrBootReceiver.android.action.broadcast");
 
 
-        new WhatsNewScreen(this).show();
+        //new WhatsNewScreen(this).show();
+        //below is not nice or organized but will refactor and improve code next time
+        MyListPreference isDownload=new MyListPreference(this);
+        isDownload.downloadFilesIfNeeded();
+
 
         timeOperation("timing", "showing what's new screen");
 
