@@ -605,7 +605,7 @@ public class ThikrService extends IntentService  {
                     vibrate();
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (!Settings.canDrawOverlays(this)) {
+                    if (Settings.canDrawOverlays(this)) {
                         Log.d(TAG,"calling chatheadservice");
                         Intent intentChatHead=new Intent(this.getApplicationContext(), ChatHeadService.class);
                         intentChatHead.putExtra("thikr", athan);
