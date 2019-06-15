@@ -1,6 +1,7 @@
 package com.HMSolutions.thikrallah.Notification;
 
 
+import android.Manifest;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -9,6 +10,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -20,11 +22,13 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 
 import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.Models.UserThikr;
@@ -146,14 +150,30 @@ public class ThikrService extends IntentService  {
             }
             Log.d(TAG,"filenumber is"+fileNumber);
 			//fire text chat head service
-            Log.d(TAG,"calling chatheadservice");
-			Intent intentChatHead=new Intent(this.getApplicationContext(), ChatHeadService.class);
-			intentChatHead.putExtra("thikr", thikr.getThikrText());
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(intentChatHead);
-            } else {
-                startService(intentChatHead);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (Settings.canDrawOverlays(this)) {
+                    Log.d(TAG,"calling chatheadservice");
+                    Intent intentChatHead=new Intent(this.getApplicationContext(), ChatHeadService.class);
+                    intentChatHead.putExtra("thikr", thikr.getThikrText());
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        startForegroundService(intentChatHead);
+                    } else {
+                        startService(intentChatHead);
+                    }
+                }
+            }else{
+                Log.d(TAG,"calling chatheadservice");
+                Intent intentChatHead=new Intent(this.getApplicationContext(), ChatHeadService.class);
+                intentChatHead.putExtra("thikr", thikr.getThikrText());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForegroundService(intentChatHead);
+                } else {
+                    startService(intentChatHead);
+                }
             }
+
+
 
 			int reminderType=Integer.parseInt(sharedPrefs.getString("RemindmeThroughTheDayType", "1"));
 			boolean isQuietTime=isTimeNowQuietTime();
@@ -584,17 +604,34 @@ public class ThikrService extends IntentService  {
                 if (am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE){
                     vibrate();
                 }
-                Log.d(TAG,"calling chatheadservice");
-                Intent intentChatHead=new Intent(this.getApplicationContext(), ChatHeadService.class);
-                intentChatHead.putExtra("thikr", athan);
-                intentChatHead.putExtra("isAthan",true);
-                //startService(intentChatHead);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    //startForegroundService(intentChatHead);
-                    startForegroundService(intentChatHead);
-                } else {
-                    startService(intentChatHead);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (!Settings.canDrawOverlays(this)) {
+                        Log.d(TAG,"calling chatheadservice");
+                        Intent intentChatHead=new Intent(this.getApplicationContext(), ChatHeadService.class);
+                        intentChatHead.putExtra("thikr", athan);
+                        intentChatHead.putExtra("isAthan",true);
+                        //startService(intentChatHead);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            //startForegroundService(intentChatHead);
+                            startForegroundService(intentChatHead);
+                        } else {
+                            startService(intentChatHead);
+                        }
+                    }
+                }else{
+                    Log.d(TAG,"calling chatheadservice");
+                    Intent intentChatHead=new Intent(this.getApplicationContext(), ChatHeadService.class);
+                    intentChatHead.putExtra("thikr", athan);
+                    intentChatHead.putExtra("isAthan",true);
+                    //startService(intentChatHead);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        //startForegroundService(intentChatHead);
+                        startForegroundService(intentChatHead);
+                    } else {
+                        startService(intentChatHead);
+                    }
                 }
+
 
             }else{
                 sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", thikrType).commit();
