@@ -213,7 +213,8 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
                             startPlayerIfAllowed();
                         }
-                        updateVolume(100);
+                        //updateVolume(100);
+                        setVolume();
                         updateActions();
                     }
 
