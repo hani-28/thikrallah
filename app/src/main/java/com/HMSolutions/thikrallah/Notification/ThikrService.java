@@ -209,11 +209,11 @@ public class ThikrService extends IntentService  {
                 mBuilder.setSound(soundUri,AudioManager.STREAM_NOTIFICATION);
 
 				Intent launchAppIntent = new Intent(this, MainActivity.class);
-
+                launchAppIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				launchAppIntent.putExtra("FromNotification",true);
 				launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_DAY_THIKR);
 				PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
-						0, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT
+						1458, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT
 						);
 
 				mBuilder.setContentIntent(launchAppPendingIntent);
@@ -258,11 +258,11 @@ public class ThikrService extends IntentService  {
                 mBuilder.setSound(soundUri,AudioManager.STREAM_NOTIFICATION);
 
 				Intent launchAppIntent = new Intent(this, MainActivity.class);
-
+                launchAppIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				launchAppIntent.putExtra("FromNotification",true);
 				launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_NIGHT_THIKR);
 				PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
-						0, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT
+						2354, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT
 						);
 
 				mBuilder.setContentIntent(launchAppPendingIntent);
@@ -309,12 +309,13 @@ public class ThikrService extends IntentService  {
                 Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                 mBuilder.setSound(soundUri,AudioManager.STREAM_NOTIFICATION);
                 Intent launchAppIntent = new Intent(this, MainActivity.class);
+                launchAppIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 launchAppIntent.putExtra("page", 562);
                 launchAppIntent.putExtra("FromNotification",true);
                 launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_QURAN);
 
                 PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
-                        0, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT
+                        9854, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT
                 );
 
                 mBuilder.setContentIntent(launchAppPendingIntent);
@@ -400,10 +401,11 @@ public class ThikrService extends IntentService  {
                             Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                             mBuilder.setSound(soundUri,AudioManager.STREAM_NOTIFICATION);
                             Intent launchAppIntent = new Intent(this, PagerActivity.class);
+                            launchAppIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             launchAppIntent.putExtra("page", 562);
 
                             PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
-                                    0, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT
+                                    9577, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT
                             );
 
                             mBuilder.setContentIntent(launchAppPendingIntent);
@@ -452,12 +454,13 @@ public class ThikrService extends IntentService  {
                 Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                 mBuilder.setSound(soundUri,AudioManager.STREAM_NOTIFICATION);
                 Intent launchAppIntent = new Intent(this, MainActivity.class);
+                launchAppIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 launchAppIntent.putExtra("page", 293);
                 launchAppIntent.putExtra("FromNotification",true);
                 launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_QURAN);
 
                 PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
-                        0, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT
+                        98521, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT
                 );
 
                 mBuilder.setContentIntent(launchAppPendingIntent);
@@ -541,10 +544,11 @@ public class ThikrService extends IntentService  {
                             Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                             mBuilder.setSound(soundUri,AudioManager.STREAM_NOTIFICATION);
                             Intent launchAppIntent = new Intent(this, PagerActivity.class);
+                            launchAppIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             launchAppIntent.putExtra("page", 562);
 
                             PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
-                                    0, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT
+                                    8588, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT
                             );
 
                             mBuilder.setContentIntent(launchAppPendingIntent);
@@ -694,8 +698,9 @@ public class ThikrService extends IntentService  {
         mBuilder=setVisibilityPublic(mBuilder);
         mBuilder.setSound(null);
         Intent launchAppIntent = new Intent(this, MainActivity.class);
+        launchAppIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
-                0, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT
+                45, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT
         );
         mBuilder.setContentIntent(launchAppPendingIntent);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

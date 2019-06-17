@@ -262,16 +262,16 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     private void initNotification() {
 
         Intent resultIntent = new Intent(this, MainActivity.class);
-        if (getThikrType().equals(MainActivity.DATA_TYPE_GENERAL_THIKR)) {
+        //if (getThikrType().equals(MainActivity.DATA_TYPE_GENERAL_THIKR)) {
             resultIntent.putExtra("FromNotification", true);
             resultIntent.putExtra("DataType", this.getThikrType());
 
-        }
+        //}
 
 
         resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
-                0, resultIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT
+                0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT
         );
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -353,7 +353,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         Intent intent = new Intent(label).setClass(this.getApplicationContext(), ThikrMediaBroadcastReciever.class);
         intent.putExtras(callingintent.getExtras());
         PendingIntent RecieverPendingIntent = PendingIntent.getBroadcast(this, 1,
-                intent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT);
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
         // Log.d(TAG, RecieverPendingIntent.getTargetPackage());
@@ -370,14 +370,15 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Crashlytics.log("ThikrMediaPlayerService onStartCommand");
+        this.setThikrType(intent.getExtras().getString("com.HMSolutions.thikrallah.datatype", null));
+        Crashlytics.log("ThikrMediaPlayerService onStartCommand. ThikrType is "+getThikrType());
         Log.d(TAG,"ThikrMediaPlayerService onStartCommand");
         callingintent = intent;
         Bundle data = intent.getExtras();
         mcontext = this.getApplicationContext();
         this.isUserAction = data.getBoolean("isUserAction", false);
         int action = data.getInt("ACTION", -1);
-        this.setThikrType(intent.getExtras().getString("com.HMSolutions.thikrallah.datatype", null));
+
 
         Log.d(TAG, "action " + action);
 
