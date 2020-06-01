@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <!-- actual qari names -->
+  <string name="qari_minshawi_murattal_gapless">المنشاوي (متصل)</string>
+  <string name="qari_shatri">أبو بكر الشاطري</string>
 </resources>
