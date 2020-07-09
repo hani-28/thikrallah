@@ -2,5 +2,6 @@
 <resources>
   <!-- actual qari names -->
   <string name="qari_minshawi_murattal_gapless">المنشاوي (متصل)</string>
+  <string name="qari_husary_gapless">الحصري (متصل)</string>
   <string name="qari_shatri">أبو بكر الشاطري</string>
 </resources>
