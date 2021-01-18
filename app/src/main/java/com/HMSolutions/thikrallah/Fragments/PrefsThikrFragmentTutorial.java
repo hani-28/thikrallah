@@ -7,49 +7,57 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceGroup;
-import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
 import android.util.Log;
+
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceGroup;
+import androidx.preference.PreferenceManager;
+import androidx.preference.PreferenceScreen;
 
 import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
 import com.HMSolutions.thikrallah.ThikrMediaPlayerService;
 import com.HMSolutions.thikrallah.Utilities.TimePreference;
 
-public class PrefsThikrFragmentTutorial extends PreferenceFragment implements OnSharedPreferenceChangeListener{
-	public static String PREF_XML_FILE="PREF_XML_FILE";
+public class PrefsThikrFragmentTutorial extends PreferenceFragmentCompat implements OnSharedPreferenceChangeListener {
+	public static String PREF_XML_FILE = "PREF_XML_FILE";
 	Context mcontext;
-    @Override
+
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// Load the preferences from an XML resource
-		Bundle data=this.getArguments();
-		int xml_file=data.getInt(PREF_XML_FILE);
+		Bundle data = this.getArguments();
+		int xml_file = data.getInt(PREF_XML_FILE);
 		addPreferencesFromResource(xml_file);
 		initSummary(getPreferenceScreen());
 	}
+
+	@Override
+	public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+
+	}
+
 	private void updatePrefSummary(Preference pref) {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mcontext);
 		if (pref instanceof ListPreference) {
-			Log.d("prefs","pref is instance of listpreference");
+			Log.d("prefs", "pref is instance of listpreference");
 			ListPreference listPref = (ListPreference) pref;
 			pref.setSummary(listPref.getEntry());
 		}
 		if (pref instanceof TimePreference) {
-			Log.d("prefs","pref is instance of TimePreference");
-			String time=sharedPreferences.getString(pref.getKey(), "00:00");
-			String AMPM="AM";
-			int hour=TimePreference.getHour(time);
-			if (hour>12){
-				hour=hour-12;
-				AMPM="PM";
+			Log.d("prefs", "pref is instance of TimePreference");
+			String time = sharedPreferences.getString(pref.getKey(), "00:00");
+			String AMPM = "AM";
+			int hour = TimePreference.getHour(time);
+			if (hour > 12) {
+				hour = hour - 12;
+				AMPM = "PM";
 			}
-			if (hour==0){
-				hour=12;
+			if (hour == 0) {
+				hour = 12;
 			}
 			String hourString="";
 			if (hour<10){
@@ -68,7 +76,7 @@ public class PrefsThikrFragmentTutorial extends PreferenceFragment implements On
 		}
 	}
 	private void initSummary(PreferenceScreen p) {
-		if (p instanceof PreferenceGroup) {
+		if (p != null) {
 			PreferenceGroup pGrp = (PreferenceGroup) p;
 			for (int i = 0; i < pGrp.getPreferenceCount(); i++) {
 				initSummary(pGrp.getPreference(i));
@@ -105,21 +113,21 @@ public class PrefsThikrFragmentTutorial extends PreferenceFragment implements On
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
-		if (key.equalsIgnoreCase("volume")){
+		if (key.equalsIgnoreCase("volume")) {
 			return;
 		}
-		MyAlarmsManager manager=new MyAlarmsManager(mcontext);
+		MyAlarmsManager manager = new MyAlarmsManager(mcontext);
 		manager.UpdateAllApplicableAlarms();
-		Preference pref = findPreference(key);
+		Preference pref = this.findPreference((CharSequence) key);
 		updatePrefSummary(pref);
-        if (key.equalsIgnoreCase("language")){
-            Intent intent=new Intent();
-            intent.setClass(this.getActivity(), MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-           // intent.putExtra("FromPreferenceActivity",true);
-            this.startActivity(intent);
-        }
-		if (key.contains("_reminder_type")){//athan type changed
+		if (key.equalsIgnoreCase("language")) {
+			Intent intent = new Intent();
+			intent.setClass(this.getActivity(), MainActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+			// intent.putExtra("FromPreferenceActivity",true);
+			this.startActivity(intent);
+		}
+		if (key.contains("_reminder_type")) {//athan type changed
 			play_athan(key);
 		}
 	}

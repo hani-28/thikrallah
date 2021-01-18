@@ -1,7 +1,6 @@
 package com.HMSolutions.thikrallah.Fragments;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +11,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.PreferenceActivity;
@@ -43,26 +45,26 @@ public class MainFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		this.getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
+		((FragmentActivity) this.getActivity()).getActionBar().setDisplayHomeAsUpEnabled(false);
 		this.getActivity().getActionBar().setDisplayShowHomeEnabled(true);
-		
+
 		View view = inflater.inflate(R.layout.fragment_main, container,
 				false);
 		Button button_remind_me_settings = (Button) view.findViewById(R.id.button_settings);
 
-        Button button_morning_thikr = (Button) view.findViewById(R.id.button_morning_thikr);
+		Button button_morning_thikr = (Button) view.findViewById(R.id.button_morning_thikr);
 		Button button_night_thikr = (Button) view.findViewById(R.id.button_night_thikr);
 		//Button button_donate = (Button) view.findViewById(R.id.butt);
-        Button button_my_athkar = (Button) view.findViewById(R.id.button_my_athkar);
-        Button button_sadaqa= (Button) view.findViewById(R.id.button_sadaqa);
-        Button button_quran= (Button) view.findViewById(R.id.button_quran);
-        Button button_hisn_almuslim=(Button) view.findViewById(R.id.hisn_almuslim);
-        Button button_athan = (Button) view.findViewById(R.id.button_athan);
-        button_athan.setOnClickListener(new OnClickListener(){
+		Button button_my_athkar = (Button) view.findViewById(R.id.button_my_athkar);
+		Button button_sadaqa = (Button) view.findViewById(R.id.button_sadaqa);
+		Button button_quran = (Button) view.findViewById(R.id.button_quran);
+		Button button_hisn_almuslim = (Button) view.findViewById(R.id.hisn_almuslim);
+		Button button_athan = (Button) view.findViewById(R.id.button_athan);
+		button_athan.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-                mCallback.launchFragment(new AthanFragment(), new Bundle(),"AthanFragment");
+				mCallback.launchFragment(new AthanFragment(), new Bundle(), "AthanFragment");
 				
 			}
 			

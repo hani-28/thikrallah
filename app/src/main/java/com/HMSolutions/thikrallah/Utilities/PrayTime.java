@@ -301,7 +301,7 @@ public class PrayTime {
 
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-        return (int) (Math.round(AVERAGE_RADIUS_OF_EARTH_KM * c));
+        return (int) Math.round(AVERAGE_RADIUS_OF_EARTH_KM * c);
     }
     public String[] getPrayerTimes(Context context){
         double latitude =  Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("latitude", "0.0"));
@@ -354,13 +354,13 @@ public class PrayTime {
 
         // Time Names
         timeNames = new String[7];
-        timeNames[0]=("Fajr");
-        timeNames[1]=("Sunrise");
-        timeNames[2]=("Dhuhr");
-        timeNames[3]=("Asr");
-        timeNames[4]=("Sunset");
-        timeNames[5]=("Maghrib");
-        timeNames[6]=("Isha");
+        timeNames[0] = "Fajr";
+        timeNames[1] = "Sunrise";
+        timeNames[2] = "Dhuhr";
+        timeNames[3] = "Asr";
+        timeNames[4] = "Sunset";
+        timeNames[5] = "Maghrib";
+        timeNames[6] = "Isha";
 
         InvalidTime = "-----"; // The string used for invalid times
 
@@ -432,7 +432,7 @@ public class PrayTime {
     // range reduce angle in degrees.
     private double fixangle(double a) {
 
-        a = a - (360 * (Math.floor(a / 360.0)));
+        a = a - (360 * Math.floor(a / 360.0));
 
         a = a < 0 ? (a + 360) : a;
 
@@ -570,7 +570,7 @@ public class PrayTime {
         // (2*g)];
         double e = 23.439 - (0.00000036 * D);
         double d = darcsin(dsin(e) * dsin(L));
-        double RA = (darctan2((dcos(e) * dsin(L)), (dcos(L))))/ 15.0;
+        double RA = darctan2(dcos(e) * dsin(L), dcos(L)) / 15.0;
         RA = fixhour(RA);
         double EqT = q/15.0 - RA;
         double[] sPosition = new double[2];
@@ -738,7 +738,7 @@ public class PrayTime {
         } else {
             suffix = "am";
         }
-        hours = ((((hours+ 12) -1) % (12))+ 1);
+        hours = ((((hours + 12) - 1) % 12) + 1);
         /*hours = (hours + 12) - 1;
         int hrs = (int) hours % 12;
         hrs += 1;*/
@@ -853,18 +853,18 @@ public class PrayTime {
 
         if (this.getTimeFormat() == this.getFloating()) {
             for (int i=0;i<7;i++) {
-                result[i]=(String.valueOf(times[i]));
+                result[i] = String.valueOf(times[i]);
             }
             return result;
         }
 
         for (int i = 0; i < 7; i++) {
             if (this.getTimeFormat() == this.getTime12()) {
-                result[i]=(floatToTime12(times[i], false));
+                result[i] = floatToTime12(times[i], false);
             } else if (this.getTimeFormat() == this.getTime12NS()) {
-                result[i]=(floatToTime12(times[i], true));
+                result[i] = floatToTime12(times[i], true);
             } else {
-                result[i]=(floatToTime24(times[i]));
+                result[i] = floatToTime24(times[i]);
             }
         }
         return result;
@@ -903,7 +903,7 @@ public class PrayTime {
         double calc = 0;
 
         if (adjustHighLats == ADJUST_HIGHER_LATITUDE_AngleBased)
-            calc = (angle)/60.0;
+            calc = angle / 60.0;
         else if (adjustHighLats == ADJUST_HIGHER_LATITUDE_MidNight)
             calc = 0.5;
         else if (adjustHighLats == ADJUST_HIGHER_LATITUDE_OneSeventh)

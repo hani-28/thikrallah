@@ -1,7 +1,6 @@
 package com.HMSolutions.thikrallah.Fragments;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +11,8 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ListView;
+
+import androidx.fragment.app.Fragment;
 
 import com.HMSolutions.thikrallah.Models.UserThikr;
 import com.HMSolutions.thikrallah.R;
@@ -75,7 +76,7 @@ public class MyAthkarFragment extends Fragment implements MyThikrDialogInterface
             @Override
             public void onClick(View v) {
 
-                dialog.show(getActivity().getFragmentManager(), "RecordThikrDialog");
+                dialog.show(getActivity().getSupportFragmentManager(), "RecordThikrDialog");
 
 
 

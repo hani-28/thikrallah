@@ -6,10 +6,9 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 
-import com.crashlytics.android.Crashlytics;
+import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.quran.data.source.PageProvider;
 import com.HMSolutions.thikrallah.quran.data.source.QuranDataSource;
-import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranUtils;
 
 import java.util.ArrayList;
@@ -260,7 +259,7 @@ public class QuranInfo {
 
   public int safelyGetSuraOnPage(int page) {
     if (page < Constants.PAGES_FIRST || page > numberOfPages) {
-      Crashlytics.logException(new IllegalArgumentException("got page: " + page));
+
       page = 1;
     }
     return pageSuraStart[page - 1];

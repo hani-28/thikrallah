@@ -13,7 +13,6 @@ import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
-import com.crashlytics.android.Crashlytics;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.common.QuranText;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.data.QuranFileConstants;
@@ -79,7 +78,7 @@ public class DatabaseHandler {
         handler.database.close();
       }
     } catch (Exception e) {
-      Crashlytics.logException(e);
+
     }
   }
 
@@ -89,16 +88,15 @@ public class DatabaseHandler {
     String base = quranFileUtils.getQuranDatabaseDirectory(context);
     if (base == null) return;
     String path = base + File.separator + databaseName;
-    Crashlytics.log("opening database file: " + path);
+
     try {
       database = SQLiteDatabase.openDatabase(path, null,
         SQLiteDatabase.NO_LOCALIZED_COLLATORS, new DefaultDatabaseErrorHandler());
     } catch (SQLiteDatabaseCorruptException sce) {
-      Crashlytics.log("corrupt database: " + databaseName);
+
       throw sce;
     } catch (SQLException se){
-      Crashlytics.log("database file " + path +
-          (new File(path).exists()? " exists" : " doesn't exist"));
+
       throw se;
     }
 
@@ -356,12 +354,12 @@ public class DatabaseHandler {
     String qtext = "select rowid as " + BaseColumns._ID + ", " + COL_SURA + ", " + COL_AYAH +
         ", " + whatTextToSelect + " from " + table + " where " + COL_TEXT +
         operator + " ? " + " " + limit;
-    Crashlytics.log("search query: " + qtext + ", query: " + query);
+
 
     try {
       return database.rawQuery(qtext, new String[]{ query });
     } catch (Exception e){
-      Crashlytics.logException(e);
+
       return null;
     }
   }

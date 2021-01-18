@@ -18,15 +18,15 @@ package com.HMSolutions.thikrallah.Fragments;
 
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.legacy.app.FragmentPagerAdapter;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.HMSolutions.thikrallah.R;
@@ -75,7 +75,8 @@ public class SlidingTabsBasicFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        mViewPager.setAdapter(new MyPagerAdapter(this.getActivity().getFragmentManager(),this.getActivity()));
+
+        mViewPager.setAdapter(new MyPagerAdapter(this.getFragmentManager(), this.getActivity()));
 
         // Give the SlidingTabLayout the ViewPager, this must be done AFTER the ViewPager has had
         // it's PagerAdapter set.

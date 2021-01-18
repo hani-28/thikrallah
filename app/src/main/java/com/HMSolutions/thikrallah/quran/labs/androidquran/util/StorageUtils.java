@@ -5,8 +5,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 
-import androidx.core.content.ContextCompat;
-
 import com.HMSolutions.thikrallah.R;
 
 import java.io.File;
@@ -60,8 +58,8 @@ public class StorageUtils {
      */
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
       List<Storage> result = new ArrayList<>();
-      int limit = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? 1 : 2;
-      final File[] mountPoints = ContextCompat.getExternalFilesDirs(context, null);
+      int limit = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) ? 1 : 2;
+      final File[] mountPoints = context.getExternalFilesDirs(null);
       if (mountPoints.length >= limit) {
         int typeId;
         if (!Environment.isExternalStorageRemovable() || Environment.isExternalStorageEmulated()) {
@@ -72,8 +70,8 @@ public class StorageUtils {
 
         int number = 1;
         result.add(new Storage(context.getString(typeId, number),
-            Environment.getExternalStorageDirectory().getAbsolutePath(),
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M));
+                context.getExternalFilesDir(null).getAbsolutePath(),
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.M));
         for (File mountPoint : mountPoints) {
           result.add(new Storage(context.getString(typeId, number++),
               mountPoint.getAbsolutePath()));
@@ -131,7 +129,7 @@ public class StorageUtils {
       // Follow Android SD Cards naming conventions
       if (!Environment.isExternalStorageRemovable() || Environment.isExternalStorageEmulated()) {
         list.add(new Storage(context.getString(R.string.prefs_sdcard_internal),
-            Environment.getExternalStorageDirectory().getAbsolutePath()));
+                context.getExternalFilesDir(null).getAbsolutePath()));
       } else {
         externalSdcardsCount = 1;
         list.add(new Storage(context.getString(R.string.prefs_sdcard_external,

@@ -32,14 +32,18 @@
     </style>
 
 
-
     <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="windowActionBarOverlay">true</item>
+
     </style>
 
+    <style name="AppTheme.Preference" parent="AppTheme">
+        <item name="windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@drawable/background_thikr</item>
+    </style>
 
     <style name="TitleText">
         <item name="android:textSize">16sp</item>

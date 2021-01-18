@@ -29,20 +29,22 @@
     <application
         android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.QuranApplication"
         android:allowBackup="true"
+        android:requestLegacyExternalStorage="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/my_app_name"
         android:supportsRtl="true"
+
         android:theme="@style/AppTheme"
-	android:fullBackupContent="@xml/backup"
-        tools:replace="android:theme,android:label,android:icon"
-        >
+
+        android:fullBackupContent="@xml/backup"
+        tools:replace="android:theme,android:label,android:icon">
         <activity
             android:name="com.HMSolutions.thikrallah.MainActivity"
+            android:theme="@style/AppTheme"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/my_app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -50,10 +52,10 @@
 
         <activity
             android:name="com.HMSolutions.thikrallah.PreferenceActivity"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"></activity>
         <activity
             android:name="com.HMSolutions.thikrallah.MediaBrowser"
-            android:theme="@style/Theme.AppCompat"></activity>
+            android:theme="@style/AppTheme.Preference"></activity>
         <activity
             android:name="com.HMSolutions.thikrallah.hisnulmuslim.DuaGroupActivity"
             android:label="@string/title_activity_dua_list"

@@ -6,8 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.crashlytics.android.Crashlytics;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,8 +44,8 @@ public class ExternalDbOpenHelper extends SQLiteOpenHelper {
         DB_PATH = context.getDatabasePath(databaseName).toString();
         //String packageName = context.getPackageName();
         //DB_PATH = String.format("//data//data//%s//databases//%s", packageName,databaseName);
-        Crashlytics.log("DBPATH is "+DB_PATH);
-       // Log.d(TAG,"alternate DB_PATH is "+context.getDatabasePath(databaseName));
+
+        // Log.d(TAG,"alternate DB_PATH is "+context.getDatabasePath(databaseName));
         openDataBase();
     }
 
@@ -58,16 +56,13 @@ public class ExternalDbOpenHelper extends SQLiteOpenHelper {
     //This piece of code will create a com.HMSolutions.thikrallah.hisnulmuslim.database if it’s not yet created
     public void createDataBase() {
         boolean dbExist = checkDataBase();
-        Crashlytics.log("dbExist is "+dbExist);
+
         if (!dbExist) {
             this.getReadableDatabase();
             this.close();
             try {
-                Crashlytics.log("copying database");
                 copyDataBase();
-                Crashlytics.log("Finished copying database");
             } catch (IOException e) {
-                Crashlytics.log("copying database error");
                 Log.e(this.getClass().toString(), "Copying error");
                 throw new Error("Error copying com.HMSolutions.thikrallah.hisnulmuslim.database!");
             }

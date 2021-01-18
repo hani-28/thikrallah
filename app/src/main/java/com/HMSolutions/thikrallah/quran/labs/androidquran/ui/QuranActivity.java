@@ -23,13 +23,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.CustomEvent;
+import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.AboutUsActivity;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.HelpActivity;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.QuranApplication;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.QuranPreferenceActivity;
-import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.SearchActivity;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.ShortcutsActivity;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.data.Constants;
@@ -229,7 +227,7 @@ public class QuranActivity extends QuranActionBarActivity
         return true;
       }
       else if (item.getItemId()==  R.id.other_apps) {
-        Answers.getInstance().logCustom(new CustomEvent("menuOtherApps"));
+
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse("market://search?q=pub:quran.com"));
         if (getPackageManager().resolveActivity(intent,

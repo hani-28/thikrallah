@@ -4,20 +4,23 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceGroup;
-import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
 import android.util.Log;
+
+import androidx.fragment.app.DialogFragment;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceGroup;
+import androidx.preference.PreferenceManager;
+import androidx.preference.PreferenceScreen;
 
 import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Utilities.TimePreference;
+import com.HMSolutions.thikrallah.Utilities.TimePreferenceUI;
 
-public class PrefsThikrFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener{
+public class PrefsThikrFragment extends PreferenceFragmentCompat implements OnSharedPreferenceChangeListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -25,26 +28,47 @@ public class PrefsThikrFragment extends PreferenceFragment implements OnSharedPr
 		addPreferencesFromResource(R.xml.preferences);
 		initSummary(getPreferenceScreen());
 	}
+
+	@Override
+	public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+
+	}
+
+	@Override
+	public void onDisplayPreferenceDialog(Preference preference) {
+		DialogFragment dialogFragment = null;
+		if (preference instanceof TimePreference) {
+			dialogFragment = new TimePreferenceUI(preference);
+		}
+		if (dialogFragment != null && isAdded()) {
+			dialogFragment.setTargetFragment(this, 0);
+			dialogFragment.show(this.getParentFragmentManager(), "android.support.v7.preference" +
+					".PreferenceFragment.DIALOG");
+		} else {
+			super.onDisplayPreferenceDialog(preference);
+		}
+	}
+
 	private void updatePrefSummary(Preference pref) {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getApplicationContext());
 		if (pref instanceof ListPreference) {
-			Log.d("prefs","pref is instance of listpreference");
+			Log.d("prefs", "pref is instance of listpreference");
 			ListPreference listPref = (ListPreference) pref;
 			pref.setSummary(listPref.getEntry());
 		}
 		if (pref instanceof TimePreference) {
-			Log.d("prefs","pref is instance of TimePreference");
-			String time=sharedPreferences.getString(pref.getKey(), "00:00");
-			String AMPM="AM";
-			int hour=TimePreference.getHour(time);
-			if (hour>12){
-				hour=hour-12;
-				AMPM="PM";
+			Log.d("prefs", "pref is instance of TimePreference");
+			String time = sharedPreferences.getString(pref.getKey(), "00:00");
+			String AMPM = "AM";
+			int hour = TimePreference.getHour(time);
+			if (hour > 12) {
+				hour = hour - 12;
+				AMPM = "PM";
 			}
-			if (hour==0){
-				hour=12;
+			if (hour == 0) {
+				hour = 12;
 			}
-			String hourString="";
+			String hourString = "";
 			if (hour<10){
 				hourString="0"+hour;
 			}else{
@@ -61,7 +85,7 @@ public class PrefsThikrFragment extends PreferenceFragment implements OnSharedPr
 		}
 	}
 	private void initSummary(PreferenceScreen p) {
-		if (p instanceof PreferenceGroup) {
+		if (p != null) {
 			PreferenceGroup pGrp = (PreferenceGroup) p;
 			for (int i = 0; i < pGrp.getPreferenceCount(); i++) {
 				initSummary(pGrp.getPreference(i));

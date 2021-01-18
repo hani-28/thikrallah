@@ -13,9 +13,9 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.crashlytics.android.Crashlytics;
-import com.HMSolutions.thikrallah.quran.labs.androidquran.QuranDataActivity;
 import com.HMSolutions.thikrallah.R;
+import com.HMSolutions.thikrallah.quran.labs.androidquran.QuranDataActivity;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 public class QuranDownloadNotifier {
   // error messages
@@ -336,7 +336,7 @@ public class QuranDownloadNotifier {
         notificationManager.notify(notificationId, builder.build());
       }
     } catch (SecurityException se) {
-      Crashlytics.logException(se);
+      FirebaseCrashlytics.getInstance().recordException(se);
     }
   }
 

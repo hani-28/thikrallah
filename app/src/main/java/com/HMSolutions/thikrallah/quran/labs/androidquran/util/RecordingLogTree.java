@@ -2,7 +2,7 @@ package com.HMSolutions.thikrallah.quran.labs.androidquran.util;
 
 import android.util.Log;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -36,8 +36,8 @@ public class RecordingLogTree extends Timber.Tree {
     }
 
     if (t != null && priority == Log.ERROR) {
-      Crashlytics.log(getLogs());
-      Crashlytics.logException(t);
+      FirebaseCrashlytics.getInstance().log(getLogs());
+      FirebaseCrashlytics.getInstance().recordException(t);
     }
   }
 

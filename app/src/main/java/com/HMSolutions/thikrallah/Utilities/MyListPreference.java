@@ -16,24 +16,18 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceManager;
 
 import com.HMSolutions.thikrallah.BuildConfig;
 import com.HMSolutions.thikrallah.Notification.QuranThikrDownloadNeeds;
-import com.HMSolutions.thikrallah.PreferenceActivity;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.quran.data.page.provider.madani.MadaniPageProvider;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.common.QariItem;
@@ -46,7 +40,7 @@ import com.HMSolutions.thikrallah.quran.labs.androidquran.service.QuranDownloadS
 import com.HMSolutions.thikrallah.quran.labs.androidquran.service.util.ServiceIntentHelper;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.AudioUtils;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranSettings;
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -85,16 +79,19 @@ public class MyListPreference extends ListPreference implements Preference.OnPre
         this.setOnPreferenceChangeListener(this);
     }
 
-    @Override
-    protected View onCreateView(ViewGroup parent) {
-        View view = super.onCreateView(parent);
+    /*
+        @Override
+        protected View onCreateView(ViewGroup parent) {
+            View view = super.onCreateView(parent);
 
-        RelativeLayout layout = (RelativeLayout) ((LinearLayout) view).getChildAt(1);
-        layout.setGravity(Gravity.START);
-        return view;
-    }
-public void downloadFilesIfNeeded(){
-    ArrayList<Intent> downloadIntents = new ArrayList<Intent>();
+            RelativeLayout layout = (RelativeLayout) ((LinearLayout) view).getChildAt(1);
+            layout.setGravity(Gravity.START);
+            return view;
+        }
+
+     */
+    public void downloadFilesIfNeeded() {
+        ArrayList<Intent> downloadIntents = new ArrayList<Intent>();
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
     int qari_num = Integer.parseInt(sharedPrefs.getString("quran_readers_name", "11"));
     SuraAyah start;
@@ -528,7 +525,7 @@ public void downloadFilesIfNeeded(){
             intent.putExtra("isFromService", true);
         }
 
-        Crashlytics.log("starting service for audio playback");
+        FirebaseCrashlytics.getInstance().log("starting service for audio playback");
         Log.d(TAG, "starting service for audio playback");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -550,7 +547,7 @@ public void downloadFilesIfNeeded(){
             // if our best guess suggests that we won't have access to the data due to the sdcard not
             // being mounted, then set the base path to null for now.
             if (basePath == null || basePath.equals(
-                    Environment.getExternalStorageDirectory().getAbsolutePath()) ||
+                    this.mContext.getExternalFilesDir(null).getAbsolutePath()) ||
                     (basePath.contains(BuildConfig.APPLICATION_ID) && context.getExternalFilesDir(null) == null)) {
                 basePath = null;
             }

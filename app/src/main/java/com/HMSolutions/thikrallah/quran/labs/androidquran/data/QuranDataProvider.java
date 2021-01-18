@@ -14,16 +14,16 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.crashlytics.android.Crashlytics;
 import com.HMSolutions.thikrallah.BuildConfig;
-import com.HMSolutions.thikrallah.quran.labs.androidquran.QuranApplication;
 import com.HMSolutions.thikrallah.R;
+import com.HMSolutions.thikrallah.quran.labs.androidquran.QuranApplication;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.common.LocalTranslation;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.database.DatabaseHandler;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.database.DatabaseUtils;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.database.TranslationsDBAdapter;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranFileUtils;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranUtils;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.List;
 
@@ -68,6 +68,8 @@ public class QuranDataProvider extends ContentProvider {
   @Override
   public Cursor query(@NonNull Uri uri, String[] projection, String selection,
       String[] selectionArgs, String sortOrder) {
+    FirebaseCrashlytics crashlytics = FirebaseCrashlytics.getInstance();
+
     Context context = getContext();
     if (!didInject) {
       Context appContext = context == null ? null : context.getApplicationContext();
@@ -80,13 +82,13 @@ public class QuranDataProvider extends ContentProvider {
       }
     }
 
-    Log.d(TAG,"uri: " + uri.toString());
-    Crashlytics.log("uri: " + uri.toString());
+    Log.d(TAG, "uri: " + uri.toString());
+    crashlytics.log("uri: " + uri.toString());
     switch (uriMatcher.match(uri)) {
       case SEARCH_SUGGEST: {
         if (selectionArgs == null) {
           throw new IllegalArgumentException(
-              "selectionArgs must be provided for the Uri: " + uri);
+                  "selectionArgs must be provided for the Uri: " + uri);
         }
 
         return getSuggestions(selectionArgs[0]);

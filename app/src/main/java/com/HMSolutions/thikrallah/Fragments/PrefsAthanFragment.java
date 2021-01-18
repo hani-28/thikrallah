@@ -5,13 +5,14 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceGroup;
-import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
 import android.util.Log;
+
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceGroup;
+import androidx.preference.PreferenceManager;
+import androidx.preference.PreferenceScreen;
 
 import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.Notification.AthanTimerService;
@@ -20,7 +21,7 @@ import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.ThikrMediaPlayerService;
 import com.HMSolutions.thikrallah.Utilities.TimePreference;
 
-public class PrefsAthanFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener{
+public class PrefsAthanFragment extends PreferenceFragmentCompat implements OnSharedPreferenceChangeListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -28,11 +29,17 @@ public class PrefsAthanFragment extends PreferenceFragment implements OnSharedPr
 		addPreferencesFromResource(R.xml.preferences_athan);
 		initSummary(getPreferenceScreen());
 	}
+
+	@Override
+	public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+
+	}
+
 	private void updatePrefSummary(Preference pref) {
 
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getApplicationContext());
 		if (pref instanceof ListPreference) {
-			Log.d("prefs","pref is instance of listpreference");
+			Log.d("prefs", "pref is instance of listpreference");
 			ListPreference listPref = (ListPreference) pref;
 			pref.setSummary(listPref.getEntry());
 		}
@@ -67,7 +74,7 @@ public class PrefsAthanFragment extends PreferenceFragment implements OnSharedPr
 
 
 	private void initSummary(PreferenceScreen p) {
-		if (p instanceof PreferenceGroup) {
+		if (p != null) {
 			PreferenceGroup pGrp = (PreferenceGroup) p;
 			for (int i = 0; i < pGrp.getPreferenceCount(); i++) {
 				initSummary(pGrp.getPreference(i));

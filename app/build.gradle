@@ -1,18 +1,17 @@
 buildscript {
     repositories {
-        maven { url 'https://maven.fabric.io/public' }
         maven { url "https://maven.google.com" }
 
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.29.0'
     }
 }
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'io.fabric'
+apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'net.ltgt.errorprone'
 apply plugin: 'kotlin-kapt'
 
@@ -25,14 +24,14 @@ android {
             keyPassword ''
         }
     }
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     defaultConfig {
         applicationId "com.HMSolutions.thikrallah"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 104
-        versionName "5.4"
+        versionCode 106
+        versionName "5.6"
     }
     lintOptions {
         disable 'MissingTranslation'
@@ -61,7 +60,6 @@ repositories {
     jcenter()
     mavenCentral()
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-    maven { url 'https://maven.fabric.io/public' }
     maven { url "https://maven.google.com" }
 
 }
@@ -87,6 +85,7 @@ dependencies {
     implementation 'me.grantland:autofittextview:0.2.1'
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.google.android.gms:play-services-location:16.0.0'
+
     //implementation 'com.google.android.gms:play-services-appindexing:9.2.1'
 
 
@@ -100,7 +99,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:${androidxAppcompatVersion}"
     implementation "androidx.media:media:${androidxMediaVersion}"
     implementation "androidx.preference:preference:${androidxPreferencesVersion}"
-    implementation "androidx.recyclerview:recyclerview:${androidxVersion}"
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
     implementation "com.google.android.material:material:${androidxVersion}"
     implementation 'io.reactivex.rxjava2:rxjava:2.2.7'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
@@ -118,7 +117,8 @@ dependencies {
     testImplementation "com.squareup.okhttp3:mockwebserver:${okhttpVersion}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${espressoVersion}"
     androidTestImplementation "androidx.test.espresso:espresso-intents:${espressoVersion}"
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.0'
+    implementation 'com.google.firebase:firebase-crashlytics:17.3.0'
+    implementation 'com.google.firebase:firebase-analytics:18.0.1'
     errorprone 'com.google.errorprone:error_prone_core:2.3.2'
 
 }

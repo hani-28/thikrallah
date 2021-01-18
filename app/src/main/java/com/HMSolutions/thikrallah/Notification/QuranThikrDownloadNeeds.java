@@ -1,38 +1,37 @@
 package com.HMSolutions.thikrallah.Notification;
 
 
-        import android.content.BroadcastReceiver;
-        import android.content.Context;
-        import android.content.Intent;
-        import android.content.res.Resources;
-        import android.os.Build;
-        import android.os.Environment;
-        import android.text.TextUtils;
-        import android.util.Log;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.os.Build;
+import android.os.Environment;
+import android.text.TextUtils;
+import android.util.Log;
 
-        import androidx.annotation.Nullable;
+import androidx.annotation.Nullable;
 
-        import com.HMSolutions.thikrallah.R;
-        import com.crashlytics.android.Crashlytics;
-        import com.HMSolutions.thikrallah.quran.data.page.provider.madani.MadaniPageProvider;
-        import com.HMSolutions.thikrallah.BuildConfig;
-        import com.HMSolutions.thikrallah.quran.labs.androidquran.common.QariItem;
-        import com.HMSolutions.thikrallah.quran.labs.androidquran.dao.audio.AudioPathInfo;
-        import com.HMSolutions.thikrallah.quran.labs.androidquran.dao.audio.AudioRequest;
-        import com.HMSolutions.thikrallah.quran.labs.androidquran.data.Constants;
-        import com.HMSolutions.thikrallah.quran.labs.androidquran.data.SuraAyah;
-        import com.HMSolutions.thikrallah.quran.labs.androidquran.service.AudioService;
-        import com.HMSolutions.thikrallah.quran.labs.androidquran.service.QuranDownloadService;
-        import com.HMSolutions.thikrallah.quran.labs.androidquran.service.util.ServiceIntentHelper;
-        import com.HMSolutions.thikrallah.quran.labs.androidquran.util.AudioUtils;
-        import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranSettings;
+import com.HMSolutions.thikrallah.BuildConfig;
+import com.HMSolutions.thikrallah.R;
+import com.HMSolutions.thikrallah.quran.data.page.provider.madani.MadaniPageProvider;
+import com.HMSolutions.thikrallah.quran.labs.androidquran.common.QariItem;
+import com.HMSolutions.thikrallah.quran.labs.androidquran.dao.audio.AudioPathInfo;
+import com.HMSolutions.thikrallah.quran.labs.androidquran.dao.audio.AudioRequest;
+import com.HMSolutions.thikrallah.quran.labs.androidquran.data.Constants;
+import com.HMSolutions.thikrallah.quran.labs.androidquran.data.SuraAyah;
+import com.HMSolutions.thikrallah.quran.labs.androidquran.service.AudioService;
+import com.HMSolutions.thikrallah.quran.labs.androidquran.service.QuranDownloadService;
+import com.HMSolutions.thikrallah.quran.labs.androidquran.service.util.ServiceIntentHelper;
+import com.HMSolutions.thikrallah.quran.labs.androidquran.util.AudioUtils;
+import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranSettings;
 
-        import java.io.File;
-        import java.util.ArrayList;
-        import java.util.List;
-        import java.util.Locale;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
-        import timber.log.Timber;
+import timber.log.Timber;
 
 public class QuranThikrDownloadNeeds extends BroadcastReceiver {
     String TAG = "QuranThikrDownloadNeeds";
@@ -360,7 +359,7 @@ public class QuranThikrDownloadNeeds extends BroadcastReceiver {
             intent.putExtra("isFromService",true);
         }
 
-        Crashlytics.log("starting service for audio playback");
+
         Log.d(TAG,"starting service for audio playback");
         mcontext.startService(intent);
     }
@@ -376,7 +375,7 @@ public class QuranThikrDownloadNeeds extends BroadcastReceiver {
             // if our best guess suggests that we won't have access to the data due to the sdcard not
             // being mounted, then set the base path to null for now.
             if (basePath == null || basePath.equals(
-                    Environment.getExternalStorageDirectory().getAbsolutePath()) ||
+                    this.mcontext.getExternalFilesDir(null).getAbsolutePath()) ||
                     (basePath.contains(BuildConfig.APPLICATION_ID) && context.getExternalFilesDir(null) == null)) {
                 basePath = null;
             }

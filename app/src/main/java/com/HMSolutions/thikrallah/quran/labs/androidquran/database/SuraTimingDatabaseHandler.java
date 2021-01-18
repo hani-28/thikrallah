@@ -6,7 +6,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabaseCorruptException;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.io.File;
 import java.util.HashMap;
@@ -34,17 +34,17 @@ public class SuraTimingDatabaseHandler {
   }
 
   private SuraTimingDatabaseHandler(String path) throws SQLException {
-    Crashlytics.log("opening gapless data file, " + path);
+    FirebaseCrashlytics.getInstance().log("opening gapless data file, " + path);
     try {
       database = SQLiteDatabase.openDatabase(path, null,
           SQLiteDatabase.NO_LOCALIZED_COLLATORS, new DefaultDatabaseErrorHandler());
     } catch (SQLiteDatabaseCorruptException sce) {
-      Crashlytics.log("database corrupted: " + path);
+      FirebaseCrashlytics.getInstance().log("database corrupted: " + path);
       database = null;
     } catch (SQLException se) {
-      Crashlytics.log("database at " + path +
-          (new File(path).exists() ? " exists" : " doesn't exist"));
-      Crashlytics.logException(se);
+      FirebaseCrashlytics.getInstance().log("database at " + path +
+              (new File(path).exists() ? " exists" : " doesn't exist"));
+      FirebaseCrashlytics.getInstance().recordException(se);
       database = null;
     }
   }

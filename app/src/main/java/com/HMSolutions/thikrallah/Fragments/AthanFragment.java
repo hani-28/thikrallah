@@ -1,10 +1,8 @@
 package com.HMSolutions.thikrallah.Fragments;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -15,6 +13,9 @@ import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import com.HMSolutions.thikrallah.Models.Prayer;
 import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;

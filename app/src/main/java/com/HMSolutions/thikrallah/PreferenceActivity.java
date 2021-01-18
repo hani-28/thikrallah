@@ -18,9 +18,6 @@ package com.HMSolutions.thikrallah;
 */
 
 
-
-import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -29,6 +26,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.HMSolutions.thikrallah.Fragments.SlidingTabsBasicFragment;
 
 import java.util.Locale;
@@ -36,9 +36,8 @@ import java.util.Locale;
 
 /**
  * A simple launcher activity containing a summary sample description, sample log and a custom
-
  */
-public class PreferenceActivity extends Activity {
+public class PreferenceActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
 
@@ -52,7 +51,7 @@ public class PreferenceActivity extends Activity {
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         String lang=mPrefs.getString("language",null);
 
-        if (lang!=null){
+        if (lang != null) {
             Locale locale = new Locale(lang);
             Locale.setDefault(locale);
             Configuration config = new Configuration();
@@ -61,14 +60,14 @@ public class PreferenceActivity extends Activity {
                     getBaseContext().getResources().getDisplayMetrics());
         }
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setDisplayShowHomeEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
 
 
         setContentView(R.layout.preference_activity_layout);
 
         if (savedInstanceState == null) {
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             SlidingTabsBasicFragment fragment = new SlidingTabsBasicFragment();
             transaction.replace(R.id.sample_content_fragment, fragment);
             transaction.commit();

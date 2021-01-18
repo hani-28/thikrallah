@@ -16,7 +16,6 @@ import android.util.Log;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.crashlytics.android.Crashlytics;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.QuranApplication;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.data.QuranInfo;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.data.SuraAyah;
@@ -27,6 +26,7 @@ import com.HMSolutions.thikrallah.quran.labs.androidquran.service.util.QuranDown
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranSettings;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranUtils;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.ZipUtils;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.io.File;
 import java.io.IOException;
@@ -578,7 +578,7 @@ public class QuranDownloadService extends Service implements
       call = okHttpClient.newCall(request);
       final Response response = call.execute();
       if (response.isSuccessful()) {
-        Crashlytics.log("successful response: " + response.code() + " - " + downloadedAmount);
+        FirebaseCrashlytics.getInstance().log("successful response: " + response.code() + " - " + downloadedAmount);
         final BufferedSink sink = Okio.buffer(Okio.appendingSink(partialFile));
         final ResponseBody body = response.body();
         source = body.source();
@@ -667,7 +667,7 @@ public class QuranDownloadService extends Service implements
 
       return availableSpace > spaceNeeded;
     } catch (Exception e) {
-      Crashlytics.logException(e);
+      FirebaseCrashlytics.getInstance().recordException(e);
       return true;
     }
   }

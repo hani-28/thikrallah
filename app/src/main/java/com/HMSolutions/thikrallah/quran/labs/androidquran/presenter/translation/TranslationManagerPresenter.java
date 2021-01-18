@@ -7,9 +7,6 @@ import android.util.SparseArray;
 import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
 
-import com.crashlytics.android.Crashlytics;
-import com.squareup.moshi.JsonAdapter;
-import com.squareup.moshi.Moshi;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.common.LocalTranslation;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.dao.translation.Translation;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.dao.translation.TranslationItem;
@@ -21,6 +18,9 @@ import com.HMSolutions.thikrallah.quran.labs.androidquran.presenter.Presenter;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.ui.TranslationManagerActivity;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranFileUtils;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranSettings;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -164,7 +164,7 @@ public class TranslationManagerPresenter implements Presenter<TranslationManager
           }
         }
       } catch (Exception e) {
-        Crashlytics.logException(e);
+        FirebaseCrashlytics.getInstance().recordException(e);
       }
       return Observable.empty();
     });
@@ -210,7 +210,7 @@ public class TranslationManagerPresenter implements Presenter<TranslationManager
       }
     } catch (Exception e) {
       cacheFile.delete();
-      Crashlytics.logException(e);
+      FirebaseCrashlytics.getInstance().recordException(e);
     }
   }
 

@@ -8,9 +8,6 @@ import android.os.Build;
 
 import androidx.annotation.NonNull;
 
-import com.HMSolutions.thikrallah.BuildConfig;
-import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.core.CrashlyticsCore;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.component.application.ApplicationComponent;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.component.application.DaggerApplicationComponent;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.module.application.ApplicationModule;
@@ -19,7 +16,6 @@ import com.HMSolutions.thikrallah.quran.labs.androidquran.util.RecordingLogTree;
 
 import java.util.Locale;
 
-import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
 public class QuranApplication extends Application {
@@ -28,11 +24,6 @@ public class QuranApplication extends Application {
   @Override
   public void onCreate() {
     super.onCreate();
-    Fabric.with(this, new Crashlytics.Builder()
-        .core(new CrashlyticsCore.Builder()
-            .disabled(BuildConfig.DEBUG)
-            .build())
-        .build(), new Crashlytics());
     Timber.plant(new RecordingLogTree());
     this.applicationComponent = initializeInjector();
   }

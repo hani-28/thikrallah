@@ -2,10 +2,7 @@ package com.HMSolutions.thikrallah;
 
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,13 +20,13 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.os.SystemClock;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
@@ -38,6 +35,10 @@ import android.view.MenuItem;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.PreferenceManager;
 
 import com.HMSolutions.thikrallah.Fragments.AthanFragment;
 import com.HMSolutions.thikrallah.Fragments.MainFragment;
@@ -48,25 +49,27 @@ import com.HMSolutions.thikrallah.Utilities.AppRater;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
 import com.HMSolutions.thikrallah.Utilities.MyDBHelper;
 import com.HMSolutions.thikrallah.Utilities.MyListPreference;
-import com.HMSolutions.thikrallah.Utilities.WhatsNewScreen;
-import com.crashlytics.android.Crashlytics;
+import com.HMSolutions.thikrallah.quran.labs.androidquran.QuranDataActivity;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
-import com.HMSolutions.thikrallah.quran.labs.androidquran.QuranDataActivity;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import io.fabric.sdk.android.Fabric;
+import timber.log.Timber;
 
-public class MainActivity extends Activity implements MainInterface, LocationListener, android.location.LocationListener,
+public class MainActivity extends FragmentActivity implements MainInterface, LocationListener, android.location.LocationListener,
         SharedPreferences.OnSharedPreferenceChangeListener {
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 2334;
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION_FOR_LOCATION_UPDATES = 5678;
-    private static final int REQUEST_ID_MULTIPLE_PERMISSIONS =7051 ;
-
+    private static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 7051;
     String TAG = "MainActivity";
     public static final String DATA_TYPE_NIGHT_THIKR = "night";
     public static final String DATA_TYPE_DAY_THIKR = "morning";
@@ -97,9 +100,6 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
             new Intent().setComponent(new ComponentName("com.htc.pitroad", "com.htc.pitroad.landingpage.activity.LandingPageActivity")),
             new Intent().setComponent(new ComponentName("com.asus.mobilemanager", "com.asus.mobilemanager.MainActivity"))};
     SharedPreferences mPrefs;
-    Activity activity = this;
-    private String base64RSAPublicKey = "";
-    static final int RC_REQUEST = 9648253;
     static  final int RC_ENABLE_LOCATION_SETTINGS=7866755;
     private Context mcontext;
 
@@ -115,10 +115,10 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equalsIgnoreCase("latitude") || key.equalsIgnoreCase("longitude")) {
-            // new updateLocationDiscription().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,this);
+        // if (key.equalsIgnoreCase("latitude") || key.equalsIgnoreCase("longitude")) {
+        // new updateLocationDiscription().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,this);
 
-        }
+        //}
     }
 
 
@@ -151,7 +151,7 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
             Log.d(TAG, "quran");
 
         } else {
-            ThikrFragment fragment = (ThikrFragment) this.getFragmentManager().findFragmentByTag("ThikrFragment");
+            ThikrFragment fragment = (ThikrFragment) this.getSupportFragmentManager().findFragmentByTag("ThikrFragment");
             if (fragment != null && fragment.isVisible()) {
                 fragment.setCurrentlyPlaying(position);
             }
@@ -426,10 +426,11 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
 
 
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics());
+
         requestPermissions();
         timeOperation("timing", "oncreate_started");
         Log.d(TAG, "oncreate 1");
@@ -459,19 +460,30 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
         timeOperation("timing", "defined_mgoogleApiClient");
 
 
-
         populateBuiltinDatabase();
         timeOperation("timing", "populating builtin database");
 
 
         Log.d(TAG, "oncreate 7");
 
+        if (!mPrefs.getBoolean("isFirstLaunch", true) &&
+                !mPrefs.getBoolean("isMigrated", false) &&
+                ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            //if it is not first launch and we have storage permission and we have not backed up
+            FilesMigration migration = new FilesMigration();
+            migration.execute(this.getApplicationContext());
+        } else {
+            mPrefs.edit().putBoolean("isMigrated", true).apply();
+        }
+
+
         Intent intent1 = new Intent("com.HMSolutions.thikrallah.Notification.ThikrBootReceiver.android.action.broadcast");
 
 
         //new WhatsNewScreen(this).show();
         //below is not nice or organized but will refactor and improve code next time
-        MyListPreference isDownload=new MyListPreference(this);
+        MyListPreference isDownload = new MyListPreference(this);
         isDownload.downloadFilesIfNeeded();
 
 
@@ -483,7 +495,7 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
         setContentView(R.layout.activity_main);
         timeOperation("timing", "setting content");
         if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction().add(R.id.container, new MainFragment()).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.container, new MainFragment()).commit();
         }
         timeOperation("timing", "replacing with main fragment");
 
@@ -631,15 +643,11 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
     @Override
     public void launchFragment(Fragment iFragment, Bundle args, String mytag) {
         iFragment.setArguments(args);
-        FragmentTransaction fragmentTransaction1 = this.getFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction1 = this.getSupportFragmentManager().beginTransaction();
         fragmentTransaction1.replace(R.id.container, iFragment, mytag);
         fragmentTransaction1.addToBackStack(null);
         fragmentTransaction1.commit();
 
-    }
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        //No call for super(). Bug on API Level > 11.
     }
     @Override
     public void share() {
@@ -654,6 +662,7 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
     @Override
     public void onPause() {
         Log.d(TAG,"on pause started");
+
         stopLocationUpdates();
         unbindtoMediaService();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -666,6 +675,7 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
 
     @Override
     protected void onResume() {
+
         timeOperation("timing", "onresume started");
         bindtoMediaService();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -793,8 +803,9 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode==RC_ENABLE_LOCATION_SETTINGS){
-            Log.d(TAG,"requestLocationUpdate. Settings enabled");
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_ENABLE_LOCATION_SETTINGS) {
+            Log.d(TAG, "requestLocationUpdate. Settings enabled");
             this.requestLocationUpdate();
         }
 
@@ -900,27 +911,118 @@ public class MainActivity extends Activity implements MainInterface, LocationLis
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.d(TAG,"onLocationChanged called requesting with provider ="+location.getProvider().toString());
-        Log.d(TAG,"latitude is "+Double.toString(location.getLatitude()));
+        Log.d(TAG, "onLocationChanged called requesting with provider =" + location.getProvider().toString());
+        Log.d(TAG, "latitude is " + Double.toString(location.getLatitude()));
         PreferenceManager.getDefaultSharedPreferences(this).edit().putString("latitude", Double.toString(location.getLatitude())).commit();
         PreferenceManager.getDefaultSharedPreferences(this).edit().putString("longitude", Double.toString(location.getLongitude())).commit();
         stopLocationUpdates();
 
     }
+
+    private static class FilesMigration extends AsyncTask<Context, String, Boolean> {
+        String TAG = "FilesMigration";
+        Context mContext;
+
+        @Override
+        protected Boolean doInBackground(Context... context) {
+            this.mContext = context[0];
+            String newLocation = mContext.getExternalFilesDir(null).getAbsolutePath() + File.separator + "quran_android/";
+            String oldLocation = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "quran_android/";
+            boolean isMigrated = moveAppFiles(oldLocation, newLocation);
+            if (isMigrated) {
+                PreferenceManager.getDefaultSharedPreferences(mContext).edit().putBoolean("isMigrated", true).apply();
+
+            }
+            return isMigrated;
+        }
+
+        public boolean moveAppFiles(String oldLocation, String newLocation) {
+
+            File currentDirectory = new File(oldLocation);
+            File newDirectory = new File(newLocation);
+            if (!currentDirectory.exists()) {
+                // No files to copy, so change the app directory directly
+                return true;
+            } else if (newDirectory.exists() || newDirectory.mkdirs()) {
+                try {
+                    copyFileOrDirectory(currentDirectory, newDirectory);
+                    Log.d(TAG, "Removing " + currentDirectory + " due to move to " + newDirectory);
+                    deleteFileOrDirectory(currentDirectory);
+                    return true;
+                } catch (IOException e) {
+                    Log.d(TAG, "error moving app files");
+                }
+            }
+            return false;
+        }
+
+        public void deleteFileOrDirectory(File file) {
+            if (file.isDirectory()) {
+                File[] subFiles = file.listFiles();
+                // subFiles is null on some devices, despite this being a directory
+                int length = subFiles == null ? 0 : subFiles.length;
+                for (int i = 0; i < length; i++) {
+                    File sf = subFiles[i];
+                    if (sf.isFile()) {
+                        if (!sf.delete()) {
+                            Timber.e("Error deleting %s", sf.getPath());
+                        }
+                    } else {
+                        deleteFileOrDirectory(sf);
+                    }
+                }
+            }
+            if (!file.delete()) {
+                Timber.e("Error deleting %s", file.getPath());
+            }
+        }
+
+        private void copyFileOrDirectory(File source, File destination) throws IOException {
+            if (source.isDirectory()) {
+                if (!destination.exists() && !destination.mkdirs()) {
+                    return;
+                }
+
+                File[] files = source.listFiles();
+                for (File f : files) {
+                    copyFileOrDirectory(f, new File(destination, f.getName()));
+                }
+            } else {
+                copyFile(source, destination);
+            }
+        }
+
+        private void copyFile(File source, File destination) throws IOException {
+            InputStream in = new FileInputStream(source);
+            OutputStream out = new FileOutputStream(destination);
+
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = in.read(buffer)) > 0) {
+                out.write(buffer, 0, length);
+            }
+            out.flush();
+            out.close();
+            in.close();
+        }
+
+    }
+
     private static class updateLocationDiscription extends AsyncTask<Context, String, String> {
         String TAG = "updateLocationDiscription";
+
         @Override
         protected String doInBackground(Context... context) {
             return updateCity(context[0]);
         }
 
-        private String updateCity(Context context){
+        private String updateCity(Context context) {
 
-            double latitude=Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("latitude","0.0"));
-            double longitude=Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("longitude","0.0"));
+            double latitude = Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("latitude", "0.0"));
+            double longitude = Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("longitude", "0.0"));
             Geocoder geocoder = new Geocoder(context, Locale.getDefault());
             List<Address> addresses;
-            String locationDiscription="";
+            String locationDiscription = "";
             try {
                 addresses = geocoder.getFromLocation(latitude, longitude, 1);
 //                String cityName = addresses.get(0).getAddressLine(0);

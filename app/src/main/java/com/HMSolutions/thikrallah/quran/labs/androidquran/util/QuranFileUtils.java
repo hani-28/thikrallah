@@ -8,8 +8,8 @@ import android.os.Environment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.HMSolutions.thikrallah.quran.data.source.PageProvider;
 import com.HMSolutions.thikrallah.BuildConfig;
+import com.HMSolutions.thikrallah.quran.data.source.PageProvider;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.common.Response;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.data.QuranDataProvider;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.extension.CloseableExtensionKt;
@@ -329,8 +329,8 @@ public class QuranFileUtils {
       // if our best guess suggests that we won't have access to the data due to the sdcard not
       // being mounted, then set the base path to null for now.
       if (basePath == null || basePath.equals(
-          Environment.getExternalStorageDirectory().getAbsolutePath()) ||
-          (basePath.contains(BuildConfig.APPLICATION_ID) && context.getExternalFilesDir(null) == null)) {
+              this.appContext.getExternalFilesDir(null).getAbsolutePath()) ||
+              (basePath.contains(BuildConfig.APPLICATION_ID) && context.getExternalFilesDir(null) == null)) {
         basePath = null;
       }
     }

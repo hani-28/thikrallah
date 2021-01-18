@@ -1,13 +1,9 @@
 package com.HMSolutions.thikrallah.Utilities;
 
 import android.content.Context;
-import android.preference.CheckBoxPreference;
 import android.util.AttributeSet;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+
+import androidx.preference.CheckBoxPreference;
 
 /**
  * Created by hani on 2/13/16.
@@ -24,6 +20,7 @@ public class MyCheckBoxPreference extends CheckBoxPreference {
     public MyCheckBoxPreference(Context context) {
         super(context);
     }
+    /*
     @Override
     protected View onCreateView(ViewGroup parent) {
         View view = super.onCreateView(parent);
@@ -31,4 +28,6 @@ public class MyCheckBoxPreference extends CheckBoxPreference {
         layout.setGravity(Gravity.START);
         return view;
     }
+    
+     */
 }

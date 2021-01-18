@@ -43,7 +43,7 @@ import androidx.media.app.NotificationCompat.MediaStyle;
 
 import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
 import com.HMSolutions.thikrallah.Notification.ThikrMediaBroadcastReciever;
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
@@ -55,7 +55,6 @@ import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import io.fabric.sdk.android.services.common.Crash;
 //import android.support.v4.media.app.NotificationCompat.MediaStyle;
 
 public class ThikrMediaPlayerService extends Service implements OnCompletionListener,
@@ -180,8 +179,8 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     @Override
     public void onCreate() {
         super.onCreate();
-        Crashlytics.log("ThikrMediaPlayerService onCreate");
-        Log.d(TAG,"ThikrMediaPlayerService onCreate");
+        FirebaseCrashlytics.getInstance().log("ThikrMediaPlayerService onCreate");
+        Log.d(TAG, "ThikrMediaPlayerService onCreate");
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
                 TAG);
@@ -371,8 +370,8 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         this.setThikrType(intent.getExtras().getString("com.HMSolutions.thikrallah.datatype", null));
-        Crashlytics.log("ThikrMediaPlayerService onStartCommand. ThikrType is "+getThikrType());
-        Log.d(TAG,"ThikrMediaPlayerService onStartCommand");
+        FirebaseCrashlytics.getInstance().log("ThikrMediaPlayerService onStartCommand. ThikrType is " + getThikrType());
+        Log.d(TAG, "ThikrMediaPlayerService onStartCommand");
         callingintent = intent;
         Bundle data = intent.getExtras();
         mcontext = this.getApplicationContext();
@@ -675,7 +674,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             numbers_text = getResources().getStringArray(R.array.GeneralThikr);
         }
         if (this.getThikrType().contains(MainActivity.DATA_TYPE_QURAN)) {
-            int surat = Integer.parseInt(this.getThikrType().split("/")[1]);
+            int surat = Integer.parseInt(this.getThikrType().split("/", 3)[1]);
 
 
             int count = this.getResources().getIntArray(R.array.verses_count)[surat];

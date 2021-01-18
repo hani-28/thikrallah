@@ -1,6 +1,5 @@
 package com.HMSolutions.thikrallah.Notification;
 
-import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -9,19 +8,16 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
 import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Utilities.PrayTime;
-import com.crashlytics.android.Crashlytics;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -29,7 +25,6 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import io.fabric.sdk.android.services.common.Crash;
 
 
 public class AthanTimerService extends Service {
@@ -93,7 +88,7 @@ public class AthanTimerService extends Service {
 	}
 	private void initNotification() {
 		Log.d(TAG,"initiNotification started");
-		Crashlytics.log("AthanTimerService called");
+
 		Intent resultIntent = new Intent(mContext, MainActivity.class);
 
 
@@ -170,8 +165,8 @@ public class AthanTimerService extends Service {
 			}else {
 				Calendar prayer_time = Calendar.getInstance();
 				//calendar.setTimeInMillis(System.currentTimeMillis());
-				prayer_time.set(Calendar.HOUR_OF_DAY, Integer.parseInt(prayerTimesList.get(i).split(":")[0]));
-				prayer_time.set(Calendar.MINUTE, Integer.parseInt(prayerTimesList.get(i).split(":")[1]));
+				prayer_time.set(Calendar.HOUR_OF_DAY, Integer.parseInt(prayerTimesList.get(i).split(":", 3)[0]));
+				prayer_time.set(Calendar.MINUTE, Integer.parseInt(prayerTimesList.get(i).split(":", 3)[1]));
 				prayer_time.set(Calendar.SECOND, 0);
 				if (prayer_time.before(now)) {
 					prayer_time.add(Calendar.HOUR, 24);

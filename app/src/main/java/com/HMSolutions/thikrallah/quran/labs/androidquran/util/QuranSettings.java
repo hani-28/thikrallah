@@ -4,7 +4,6 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
@@ -250,7 +249,8 @@ public class QuranSettings {
   }
 
   public String getDefaultLocation() {
-    return Environment.getExternalStorageDirectory().getAbsolutePath();
+    return this.appContext.getExternalFilesDir(null).getAbsolutePath();
+    //return Environment.getExternalStorageDirectory().getAbsolutePath();
   }
 
   public void setAppCustomLocation(String newLocation) {

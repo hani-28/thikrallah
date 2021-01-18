@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -18,13 +17,11 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceGroup;
 
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.CustomEvent;
 import com.HMSolutions.thikrallah.BuildConfig;
+import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.QuranAdvancedPreferenceActivity;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.QuranApplication;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.QuranImportActivity;
-import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.data.Constants;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.model.bookmark.BookmarkImportExportModel;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.service.util.PermissionUtil;
@@ -141,7 +138,7 @@ public class QuranAdvancedSettingsFragment extends PreferenceFragmentCompat {
             .subscribeWith(new DisposableSingleObserver<Uri>() {
               @Override
               public void onSuccess(Uri uri) {
-                Answers.getInstance().logCustom(new CustomEvent("exportData"));
+
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("application/json");
                 shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -173,7 +170,7 @@ public class QuranAdvancedSettingsFragment extends PreferenceFragmentCompat {
       return true;
     });
 
-    internalSdcardLocation = Environment.getExternalStorageDirectory().getAbsolutePath();
+    internalSdcardLocation = this.appContext.getExternalFilesDir(null).getAbsolutePath();
 
     listStoragePref = (DataListPreference) findPreference(getString(R.string.prefs_app_location));
     listStoragePref.setEnabled(false);
@@ -260,7 +257,7 @@ public class QuranAdvancedSettingsFragment extends PreferenceFragmentCompat {
             final QuranSettings settings = QuranSettings.getInstance(context1);
 
             if (TextUtils.isEmpty(settings.getAppCustomLocation()) &&
-                Environment.getExternalStorageDirectory().equals(newValue)) {
+                    this.appContext.getExternalFilesDir(null).equals(newValue)) {
               // do nothing since we're moving from empty settings to
               // the default sdcard setting, which are the same, but write it.
               return false;

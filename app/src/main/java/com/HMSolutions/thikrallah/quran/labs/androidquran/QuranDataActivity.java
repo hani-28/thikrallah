@@ -19,10 +19,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.HMSolutions.thikrallah.BuildConfig;
 import com.HMSolutions.thikrallah.R;
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.CustomEvent;
 import com.HMSolutions.thikrallah.quran.data.source.PageProvider;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.data.QuranDataProvider;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.data.QuranInfo;
@@ -39,6 +36,7 @@ import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranFileUtils;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranPartialPageChecker;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranScreenInfo;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranSettings;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.File;
 
@@ -66,19 +64,28 @@ public class QuranDataActivity extends Activity implements
   private boolean taskIsRunning;
   private String patchUrl;
   private int fromVersion;
-  private static final String TAG="QuranDataActivity";
+  private static final String TAG = "QuranDataActivity";
 
-  @Inject QuranInfo quranInfo;
-  @Inject QuranFileUtils quranFileUtils;
-  @Inject QuranScreenInfo quranScreenInfo;
-  @Inject PageProvider quranPageProvider;
-  @Inject CopyDatabaseUtil copyDatabaseUtil;
-  @Inject QuranPartialPageChecker quranPartialPageChecker;
-  @Inject TranslationManagerPresenter translationManagerPresenter;
+  @Inject
+  QuranInfo quranInfo;
+  @Inject
+  QuranFileUtils quranFileUtils;
+  @Inject
+  QuranScreenInfo quranScreenInfo;
+  @Inject
+  PageProvider quranPageProvider;
+  @Inject
+  CopyDatabaseUtil copyDatabaseUtil;
+  @Inject
+  QuranPartialPageChecker quranPartialPageChecker;
+  @Inject
+  TranslationManagerPresenter translationManagerPresenter;
+  private FirebaseAnalytics mFirebaseAnalytics;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
     QuranApplication quranApp = (QuranApplication) getApplication();
     quranApp.getApplicationComponent().inject(this);
@@ -168,7 +175,7 @@ public class QuranDataActivity extends Activity implements
     if (needsPermission && !PermissionUtil.haveWriteExternalStoragePermission(this)) {
       // request permission
       if (PermissionUtil.canRequestWriteExternalStoragePermission(this)) {
-        Answers.getInstance().logCustom(new CustomEvent("storagePermissionRationaleShown"));
+
         //show permission rationale dialog
         permissionsDialog = new AlertDialog.Builder(this)
             .setMessage(R.string.storage_permission_rationale)
@@ -177,8 +184,7 @@ public class QuranDataActivity extends Activity implements
               dialog.dismiss();
               permissionsDialog = null;
 
-              Answers.getInstance().logCustom(
-                  new CustomEvent("storagePermissionRationaleAccepted"));
+
               // request permissions
               requestExternalSdcardPermission();
             })
@@ -187,8 +193,7 @@ public class QuranDataActivity extends Activity implements
               dialog.dismiss();
               permissionsDialog = null;
 
-              Answers.getInstance().logCustom(
-                  new CustomEvent("storagePermissionRationaleDenied"));
+
               // fall back if we can
               if (fallbackFile != null) {
                 quranSettings.setAppCustomLocation(fallbackFile.getAbsolutePath());
@@ -255,15 +260,12 @@ public class QuranDataActivity extends Activity implements
          * http://stackoverflow.com/questions/32471888/
          */
         havePermission = true;
-        Answers.getInstance().logCustom(new CustomEvent("storagePermissionGranted"));
         if (!canWriteSdcardAfterPermissions()) {
-          Answers.getInstance().logCustom(new CustomEvent("storagePermissionNeedsRestart"));
           Toast.makeText(this,
               R.string.storage_permission_please_restart, Toast.LENGTH_LONG).show();
         }
         checkPages();
       } else {
-        Answers.getInstance().logCustom(new CustomEvent("storagePermissionDenied"));
         final File fallbackFile = getExternalFilesDir(null);
         if (fallbackFile != null) {
           quranSettings.setAppCustomLocation(fallbackFile.getAbsolutePath());
@@ -466,12 +468,12 @@ public class QuranDataActivity extends Activity implements
         if (quranSettings.didDownloadPages()) {
           // log an event to Answers - this should help figure out why people are complaining that
           // they are always prompted to re-download images, even after they did.
-          Answers.getInstance()
-              .logCustom(new CustomEvent("imagesDisappeared")
-                .putCustomAttribute("permissionGranted", havePermission ? "true" : "false")
-                .putCustomAttribute("osVersion", Build.VERSION.SDK_INT)
-                .putCustomAttribute("storagePath", quranSettings.getAppCustomLocation())
-                .putCustomAttribute("storageNotAvailable", storageNotAvailable? "true" : "false"));
+          Bundle bundle = new Bundle();
+          bundle.putString("permissionGranted", havePermission ? "true" : "false");
+          bundle.putInt("osVersion", Build.VERSION.SDK_INT);
+          bundle.putString("storagePath", quranSettings.getAppCustomLocation());
+          bundle.putString("storageNotAvailable", storageNotAvailable ? "true" : "false");
+          mFirebaseAnalytics.logEvent("imagesDisappeared", bundle);
           Timber.e(new IllegalStateException("Deleted Data"), "Unable to Download Pages");
           quranSettings.setDownloadedPages(false);
         }
@@ -521,15 +523,7 @@ public class QuranDataActivity extends Activity implements
       final boolean success =
           copyDatabaseUtil.copyArabicDatabaseFromAssets(QuranDataProvider.QURAN_ARABIC_DATABASE)
               .blockingGet();
-      if (success) {
-        Answers.getInstance()
-            .logCustom(new CustomEvent("arabicDatabaseCopied")
-                .putCustomAttribute("database", QuranDataProvider.QURAN_ARABIC_DATABASE));
-      } else {
-        Answers.getInstance()
-            .logCustom(new CustomEvent("arabicDatabaseCopyFailed")
-                .putCustomAttribute("database", QuranDataProvider.QURAN_ARABIC_DATABASE));
-      }
+
     }
   }
 

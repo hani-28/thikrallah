@@ -45,11 +45,10 @@ import androidx.viewpager.widget.NonRestoringViewPager;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener;
 
-import com.crashlytics.android.Crashlytics;
+import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.HelpActivity;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.QuranApplication;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.QuranPreferenceActivity;
-import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.SearchActivity;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.common.LocalTranslation;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.common.QariItem;
@@ -755,7 +754,6 @@ public class PagerActivity extends QuranActionBarActivity implements
       Intent intent = ServiceIntentHelper.getDownloadIntent(this, url,
           destination, notificationTitle, AUDIO_DOWNLOAD_KEY,
           downloadType);
-      Crashlytics.log("starting service to download ayah position file");
       startService(intent);
 
       haveDownload = true;
@@ -777,7 +775,6 @@ public class PagerActivity extends QuranActionBarActivity implements
           AUDIO_DOWNLOAD_KEY, downloadType);
       intent.putExtra(QuranDownloadService.EXTRA_OUTPUT_FILE_NAME,
           QuranDataProvider.QURAN_ARABIC_DATABASE + extension);
-      Crashlytics.log("starting service to download arabic database");
       startService(intent);
     }
 
@@ -1487,7 +1484,6 @@ public class PagerActivity extends QuranActionBarActivity implements
         toggleActionBar();
       }
       audioStatusBar.switchMode(AudioStatusBar.DOWNLOADING_MODE);
-      Crashlytics.log("starting service in handleRequiredDownload");
       startService(downloadIntent);
     }
   }
@@ -1503,7 +1499,7 @@ public class PagerActivity extends QuranActionBarActivity implements
       audioStatusBar.switchMode(AudioStatusBar.LOADING_MODE);
     }
 
-    Crashlytics.log("starting service for audio playback");
+
     startService(intent);
   }
 

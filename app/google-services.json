@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "53950277468",
+    "firebase_url": "https://remember-allah.firebaseio.com",
+    "project_id": "remember-allah",
+    "storage_bucket": "remember-allah.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53950277468:android:9c1ed7720875624e",
+        "android_client_info": {
+          "package_name": "com.HMSolutions.thikrallah"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53950277468-5pffqt7kgj98a268gt975dom9id8ilai.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1DsuNDQ_XgYZyk9EztGvQH9yIR4yu7A8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53950277468-5pffqt7kgj98a268gt975dom9id8ilai.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

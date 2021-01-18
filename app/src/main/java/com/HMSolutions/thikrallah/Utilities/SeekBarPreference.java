@@ -5,13 +5,14 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.View;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+
+import androidx.preference.Preference;
+import androidx.preference.PreferenceViewHolder;
 
 import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.R;
@@ -47,26 +48,38 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
     }
 
     @Override
-    protected void onBindView(View view) {
-        super.onBindView(view);
-
-        Log.d("1thikr1", "onBindView called");
-        //summaryTV=(TextView) view.findViewById(R.id.sum);
-        mSeekBar = (SeekBar) view.findViewById(R.id.seekbar);
-        volumeValue = (TextView) view.findViewById(R.id.volumeValue);
+    public void onBindViewHolder(PreferenceViewHolder holder) {
+        super.onBindViewHolder(holder);
+        mSeekBar = (SeekBar) holder.findViewById(R.id.seekbar);
+        volumeValue = (TextView) holder.findViewById(R.id.volumeValue);
         mSeekBar.setMax(100);
         mSeekBar.setProgress(mProgress);
         volumeValue.setText(String.valueOf(mProgress));
         mSeekBar.setOnSeekBarChangeListener(this);
     }
 
+    /*
+        @Override
+        protected void onBindView(View view) {
+            super.onBindView(view);
+
+            Log.d("1thikr1", "onBindView called");
+            //summaryTV=(TextView) view.findViewById(R.id.sum);
+            mSeekBar = view.findViewById(R.id.seekbar);
+            volumeValue =  view.findViewById(R.id.volumeValue);
+            mSeekBar.setMax(100);
+            mSeekBar.setProgress(mProgress);
+            volumeValue.setText(String.valueOf(mProgress));
+            mSeekBar.setOnSeekBarChangeListener(this);
+        }
+    */
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         Log.d("1thikr1", "onProgressChanged called");
         this.uncommittedProgress=progress;
         if (!fromUser)
             return;
-       // this.summaryTV.setText(progress);
+        // this.summaryTV.setText(progress);
         //volumeValue.setText(progress);
 
     }

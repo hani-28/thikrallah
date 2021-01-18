@@ -65,9 +65,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.media.app.NotificationCompat.MediaStyle;
 import androidx.media.session.MediaButtonReceiver;
 
-import com.crashlytics.android.Crashlytics;
-import com.HMSolutions.thikrallah.quran.labs.androidquran.QuranApplication;
 import com.HMSolutions.thikrallah.R;
+import com.HMSolutions.thikrallah.quran.labs.androidquran.QuranApplication;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.dao.audio.AudioPlaybackInfo;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.dao.audio.AudioRequest;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.data.QuranInfo;
@@ -81,7 +80,7 @@ import com.HMSolutions.thikrallah.quran.labs.androidquran.service.util.AudioFocu
 import com.HMSolutions.thikrallah.quran.labs.androidquran.service.util.QuranDownloadNotifier;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.ui.PagerActivity;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.AudioUtils;
-import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranSettings;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.io.File;
 import java.io.IOException;
@@ -101,6 +100,7 @@ import timber.log.Timber;
  */
 public class AudioService extends Service implements OnCompletionListener,
     OnPreparedListener, OnErrorListener, AudioFocusable, MediaPlayer.OnSeekCompleteListener {
+  FirebaseCrashlytics crashlytics = FirebaseCrashlytics.getInstance();
 
   private static final String TAG = "AudioService";
   // These are the Intent actions that we are prepared to handle. Notice that
@@ -279,7 +279,7 @@ public class AudioService extends Service implements OnCompletionListener,
 
       mediaSession.setActive(true);
     } else {
-      Crashlytics.log("resetting player...");
+      crashlytics.log("resetting player...");
       player.reset();
     }
   }
@@ -327,7 +327,7 @@ public class AudioService extends Service implements OnCompletionListener,
       Canvas canvas = new Canvas(displayIcon);
       canvas.drawColor(notificationColor);
     } catch (OutOfMemoryError oom) {
-      Crashlytics.logException(oom);
+      crashlytics.recordException(oom);
     }
 
     compositeDisposable.add(
@@ -430,20 +430,20 @@ public class AudioService extends Service implements OnCompletionListener,
       AudioRequest playInfo = intent.getParcelableExtra(EXTRA_PLAY_INFO);
       if (playInfo != null) {
         audioRequest = playInfo;
-        Log.d(TAG,"action playback");
+        Log.d(TAG, "action playback");
         final SuraAyah start = audioRequest.getStart();
         final boolean basmallah = !playInfo.isGapless() &&
-            SuraAyahExtensionKt.requiresBasmallah(start);
+                SuraAyahExtensionKt.requiresBasmallah(start);
         audioQueue = new AudioQueue(quranInfo, audioRequest,
-            new AudioPlaybackInfo(start, 1, 1, basmallah));
-        Crashlytics.log("audio request has changed...");
+                new AudioPlaybackInfo(start, 1, 1, basmallah));
+        crashlytics.log("audio request has changed...");
 
         if (player != null) {
           player.stop();
-          Log.d(TAG,"stopping player");
+          Log.d(TAG, "stopping player");
         }
         state = State.Stopped;
-        Crashlytics.log("stop if playing...");
+        crashlytics.log("stop if playing...");
       }
 
       processTogglePlaybackRequest();
@@ -502,7 +502,7 @@ public class AudioService extends Service implements OnCompletionListener,
         }
       } catch (SQLException se) {
         // don't crash the app if the database is corrupt
-        Crashlytics.logException(se);
+        crashlytics.recordException(se);
       } finally {
         DatabaseUtils.closeCursor(cursor);
       }
@@ -1058,8 +1058,8 @@ public class AudioService extends Service implements OnCompletionListener,
           player.setDataSource(url);
         }
       } catch (IllegalStateException ie) {
-        Crashlytics.log("IllegalStateException() while " +
-            "setting data source, trying to reset...");
+        crashlytics.log("IllegalStateException() while " +
+                "setting data source, trying to reset...");
         if (overrideResource != 0) {
           playAudio(false);
           return;
@@ -1078,7 +1078,7 @@ public class AudioService extends Service implements OnCompletionListener,
       //
       // Until the media player is prepared, we *cannot* call start() on it!
       Timber.d("preparingAsync()...");
-      Crashlytics.log("prepareAsync: " + overrideResource + ", " + url);
+      crashlytics.log("prepareAsync: " + overrideResource + ", " + url);
       player.prepareAsync();
 
       // If we are streaming from the internet, we want to hold a Wifi lock,
@@ -1218,7 +1218,7 @@ public class AudioService extends Service implements OnCompletionListener,
       return bitmap;
     } catch (OutOfMemoryError oomError) {
       // if this happens, we need to handle it gracefully, since it's not crash worthy.
-      Crashlytics.logException(oomError);
+      crashlytics.recordException(oomError);
       return null;
     }
   }

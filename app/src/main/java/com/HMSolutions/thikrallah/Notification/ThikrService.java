@@ -1,7 +1,6 @@
 package com.HMSolutions.thikrallah.Notification;
 
 
-import android.Manifest;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -10,7 +9,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -28,18 +26,15 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-import androidx.core.content.ContextCompat;
 
+import com.HMSolutions.thikrallah.BuildConfig;
 import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.Models.UserThikr;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.ThikrMediaPlayerService;
 import com.HMSolutions.thikrallah.Utilities.MyDBHelper;
-import com.crashlytics.android.Crashlytics;
 import com.HMSolutions.thikrallah.quran.data.page.provider.madani.MadaniPageProvider;
 import com.HMSolutions.thikrallah.quran.data.source.PageProvider;
-import com.HMSolutions.thikrallah.BuildConfig;
-import com.HMSolutions.thikrallah.quran.labs.androidquran.QuranApplication;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.common.QariItem;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.dao.audio.AudioPathInfo;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.dao.audio.AudioRequest;
@@ -51,7 +46,6 @@ import com.HMSolutions.thikrallah.quran.labs.androidquran.service.util.ServiceIn
 import com.HMSolutions.thikrallah.quran.labs.androidquran.ui.PagerActivity;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.AudioUtils;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranSettings;
-import com.google.gson.TypeAdapterFactory;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -91,7 +85,7 @@ public class ThikrService extends IntentService  {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-        Crashlytics.log("ThikrService called");
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             //workaround androidO limitation on background services
             showForegroundNotificationan(NOTIFICATION_ID_GENERIC_FOREGROUND);
@@ -940,7 +934,7 @@ public class ThikrService extends IntentService  {
             intent.putExtra("isFromService",true);
         }
 
-        Crashlytics.log("starting service for audio playback");
+
         Log.d(TAG,"starting service for audio playback");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -961,7 +955,7 @@ public class ThikrService extends IntentService  {
             // if our best guess suggests that we won't have access to the data due to the sdcard not
             // being mounted, then set the base path to null for now.
             if (basePath == null || basePath.equals(
-                    Environment.getExternalStorageDirectory().getAbsolutePath()) ||
+                    this.mcontext.getExternalFilesDir(null).getAbsolutePath()) ||
                     (basePath.contains(BuildConfig.APPLICATION_ID) && context.getExternalFilesDir(null) == null)) {
                 basePath = null;
             }

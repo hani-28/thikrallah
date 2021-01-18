@@ -5,11 +5,9 @@ import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
-import com.crashlytics.android.answers.Answers
-import com.crashlytics.android.answers.CustomEvent
+import com.HMSolutions.thikrallah.R
 import com.HMSolutions.thikrallah.quran.labs.androidquran.QuranApplication
 import com.HMSolutions.thikrallah.quran.labs.androidquran.QuranDataActivity
-import com.HMSolutions.thikrallah.R
 import com.HMSolutions.thikrallah.quran.labs.androidquran.ui.helpers.QuranDisplayHelper
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranSettings
 import javax.inject.Inject
@@ -24,8 +22,6 @@ class PageSelectActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     (application as QuranApplication).applicationComponent.inject(this)
-
-    Answers.getInstance().logCustom(CustomEvent("pageSelectionActivityVisited"))
 
     setContentView(R.layout.page_select)
 
@@ -73,8 +69,6 @@ class PageSelectActivity : AppCompatActivity() {
     if (pageType != type) {
       quranSettings.setDownloadedPages(false)
       quranSettings.pageType = type
-      Answers.getInstance().logCustom(
-          CustomEvent("pageTypeChanged").putCustomAttribute("pageType", type))
       val intent = Intent(this, QuranDataActivity::class.java).apply {
         addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
       }

@@ -5,9 +5,6 @@ import android.content.Context;
 
 import androidx.annotation.VisibleForTesting;
 
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.CustomEvent;
-import com.google.android.material.snackbar.Snackbar;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.dao.RecentPage;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.dao.Tag;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.dao.bookmark.Bookmark;
@@ -23,6 +20,7 @@ import com.HMSolutions.thikrallah.quran.labs.androidquran.ui.helpers.QuranRow;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.ui.helpers.QuranRowFactory;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranSettings;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranUtils;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -114,16 +112,14 @@ public class BookmarkPresenter implements Presenter<BookmarksFragment> {
     groupByTags = !groupByTags;
     quranSettings.setBookmarksGroupedByTags(groupByTags);
     requestData(false);
-    Answers.getInstance().logCustom(
-        new CustomEvent(groupByTags ? "groupByTags" : "doNotGroupByTags"));
+
   }
 
   public void toggleShowRecents() {
     showRecents = !showRecents;
     quranSettings.setShowRecents(showRecents);
     requestData(false);
-    Answers.getInstance().logCustom(
-        new CustomEvent(showRecents ? "showRecents" : "doNotMinimizeRecents"));
+
   }
 
   public boolean isShowingRecents() {
