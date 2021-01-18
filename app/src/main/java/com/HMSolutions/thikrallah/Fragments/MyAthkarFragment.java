@@ -1,6 +1,7 @@
 package com.HMSolutions.thikrallah.Fragments;
 
-import android.app.Activity;
+
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ListView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.HMSolutions.thikrallah.Models.UserThikr;
@@ -33,7 +35,7 @@ public class MyAthkarFragment extends Fragment implements MyThikrDialogInterface
 
     UserThikrArrayAdapter adapter;
     ArrayList<UserThikr> thickerArray;
-    Activity context;
+    Context context;
     RecordThikrDialog dialog;
     String TAG="MyAthkarFragment";
 
@@ -41,13 +43,13 @@ public class MyAthkarFragment extends Fragment implements MyThikrDialogInterface
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        context = activity;
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
         try {
-            mCallback = (MainInterface) activity;
+            mCallback = (MainInterface) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
+            throw new ClassCastException(context.toString()
                     + " must implement MainInterface");
         }
     }
@@ -56,8 +58,8 @@ public class MyAthkarFragment extends Fragment implements MyThikrDialogInterface
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        this.getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-        this.getActivity().getActionBar().setDisplayShowHomeEnabled(true);
+        ((AppCompatActivity) this.getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity) this.getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
         this.setHasOptionsMenu(true);
         db = new MyDBHelper(this.getActivity());
         View view = inflater.inflate(R.layout.my_athkar, container,
@@ -112,13 +114,13 @@ public class MyAthkarFragment extends Fragment implements MyThikrDialogInterface
         return false;
     }
 
-    private void hideKeyboard(Activity activity) {
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+    private void hideKeyboard(Context context) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         //Find the currently focused view, so we can grab the correct window token from it.
-        View view = activity.getCurrentFocus();
+        View view = ((AppCompatActivity) context).getCurrentFocus();
         //If no view currently has focus, create a new one, just so we can grab a window token from it
         if (view == null) {
-            view = new View(activity);
+            view = new View(context);
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }

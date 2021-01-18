@@ -14,8 +14,10 @@
   limitations under the License.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/menu_toggle_log"
-          android:showAsAction="always"
-          android:title="show log" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_toggle_log"
+        app:showAsAction="always"
+        android:title="show log" />
 </menu>

@@ -1,6 +1,5 @@
 package com.HMSolutions.thikrallah.Fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,8 +11,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 
 import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.PreferenceActivity;
@@ -29,14 +28,15 @@ public class MainFragment extends Fragment {
 
 	public MainFragment() {
 	}
+
 	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-        mContext=activity;
-        try {
-			mCallback = (MainInterface) activity;
+	public void onAttach(Context context) {
+		super.onAttach(context);
+		mContext = context;
+		try {
+			mCallback = (MainInterface) mContext;
 		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString()
+			throw new ClassCastException(mContext.toString()
 					+ " must implement MainInterface");
 		}
 	}
@@ -45,8 +45,8 @@ public class MainFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		((FragmentActivity) this.getActivity()).getActionBar().setDisplayHomeAsUpEnabled(false);
-		this.getActivity().getActionBar().setDisplayShowHomeEnabled(true);
+		((AppCompatActivity) this.getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+		((AppCompatActivity) this.getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 		View view = inflater.inflate(R.layout.fragment_main, container,
 				false);

@@ -1,6 +1,7 @@
 package com.HMSolutions.thikrallah.Fragments;
 
-import android.app.Activity;
+
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.ListFragment;
 
 import com.HMSolutions.thikrallah.MainActivity;
@@ -44,35 +46,37 @@ public class ThikrFragment extends ListFragment implements OnClickListener {
 	}
 
 
-	public ThikrFragment() {
-	}
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		
-		try {
-			mCallback = (MainInterface) activity;
-		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString()
-					+ " must implement MainInterface");
-		}
-		 
-	}
-	@Override
+    public ThikrFragment() {
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            mCallback = (MainInterface) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement MainInterface");
+        }
+
+    }
+
+    @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		this.getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-		this.getActivity().getActionBar().setDisplayShowHomeEnabled(true);
-		this.setHasOptionsMenu(true);
-		
-		mCallback.setCurrentPlaying(this.thikrType,1);
-		thikrType=this.getArguments().getString("DataType");
-		mCallback.setThikrType(thikrType);
-		View view = inflater.inflate(R.layout.fragment_thikr, container,
-				false);
-		play = (Button) view.findViewById(R.id.button_play);
-		pause = (Button) view.findViewById(R.id.button_pause);
-		stop = (Button) view.findViewById(R.id.button_stop);
+        ((AppCompatActivity) this.getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity) this.getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+        this.setHasOptionsMenu(true);
+
+        mCallback.setCurrentPlaying(this.thikrType, 1);
+        thikrType = this.getArguments().getString("DataType");
+        mCallback.setThikrType(thikrType);
+        View view = inflater.inflate(R.layout.fragment_thikr, container,
+                false);
+        play = (Button) view.findViewById(R.id.button_play);
+        pause = (Button) view.findViewById(R.id.button_pause);
+        stop = (Button) view.findViewById(R.id.button_stop);
 		play.setOnClickListener(this);
 		pause.setOnClickListener(this);
 		stop.setOnClickListener(this);

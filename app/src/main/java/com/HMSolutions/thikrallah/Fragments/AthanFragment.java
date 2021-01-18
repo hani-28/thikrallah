@@ -1,6 +1,7 @@
 package com.HMSolutions.thikrallah.Fragments;
 
-import android.app.Activity;
+
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.widget.NumberPicker;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
@@ -66,24 +68,24 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
     }
 
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		
-		try {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
             prefListener = this;
             prefs.registerOnSharedPreferenceChangeListener(prefListener);
 
-            mCallback = (MainInterface) activity;
+            mCallback = (MainInterface) context;
             mCallback.requestLocationUpdate();
 
 
 		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString()
-					+ " must implement MainInterface");
-		}
+            throw new ClassCastException(context.toString()
+                    + " must implement MainInterface");
+        }
 		 
 	}
 
@@ -92,18 +94,18 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
 			Bundle savedInstanceState) {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getApplicationContext());
 
-		this.getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-		this.getActivity().getActionBar().setDisplayShowHomeEnabled(true);
-		this.setHasOptionsMenu(true);
-		
-		View view = inflater.inflate(R.layout.athan_fragment, container,
-				false);
+        ((AppCompatActivity) this.getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity) this.getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+        this.setHasOptionsMenu(true);
+
+        View view = inflater.inflate(R.layout.athan_fragment, container,
+                false);
 
         //locationDescription=(TextView)  view.findViewById(R.id.textView_location);
 
-        prayer1_time=(TextView) view.findViewById(R.id.athan_timing1);
-        prayer2_time=(TextView) view.findViewById(R.id.athan_timing2);
-        prayer3_time=(TextView) view.findViewById(R.id.athan_timing3);
+        prayer1_time = (TextView) view.findViewById(R.id.athan_timing1);
+        prayer2_time = (TextView) view.findViewById(R.id.athan_timing2);
+        prayer3_time = (TextView) view.findViewById(R.id.athan_timing3);
         prayer4_time=(TextView) view.findViewById(R.id.athan_timing4);
         prayer5_time=(TextView) view.findViewById(R.id.athan_timing5);
         sunrise_time=(TextView) view.findViewById(R.id.sunrise_timing1);

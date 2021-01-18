@@ -33,10 +33,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.PreferenceManager;
 
@@ -65,7 +65,7 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
-public class MainActivity extends FragmentActivity implements MainInterface, LocationListener, android.location.LocationListener,
+public class MainActivity extends AppCompatActivity implements MainInterface, LocationListener, android.location.LocationListener,
         SharedPreferences.OnSharedPreferenceChangeListener {
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 2334;
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION_FOR_LOCATION_UPDATES = 5678;
@@ -242,6 +242,7 @@ public class MainActivity extends FragmentActivity implements MainInterface, Loc
 
         bindtoMediaService();
         timeOperation("timing", "onstart finished");
+        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         super.onStart();
 
 

@@ -52,7 +52,7 @@
 
         <activity
             android:name="com.HMSolutions.thikrallah.PreferenceActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"></activity>
+            android:theme="@style/AppTheme"></activity>
         <activity
             android:name="com.HMSolutions.thikrallah.MediaBrowser"
             android:theme="@style/AppTheme.Preference"></activity>
