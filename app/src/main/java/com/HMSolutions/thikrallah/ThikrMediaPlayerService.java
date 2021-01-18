@@ -11,10 +11,11 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.media.AudioAttributes;
+import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -32,13 +33,10 @@ import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
-import android.telephony.PhoneStateListener;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
-import androidx.core.content.ContextCompat;
 import androidx.media.app.NotificationCompat.MediaStyle;
 
 import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
@@ -55,7 +53,6 @@ import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//import android.support.v4.media.app.NotificationCompat.MediaStyle;
 
 public class ThikrMediaPlayerService extends Service implements OnCompletionListener,
         AudioManager.OnAudioFocusChangeListener {
@@ -94,7 +91,6 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     private String filepath;
     private PowerManager.WakeLock wakeLock;
     private Context mcontext;
-    private PhoneStateListener phoneStateListener;
 
     /**
      * Handler of incoming messages from clients.
@@ -186,58 +182,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 TAG);
         wakeLock.acquire();
 
-        phoneStateListener = new PhoneStateListener() {
-            @Override
-            public void onCallStateChanged(int state, String incomingNumber) {
-                if (state == TelephonyManager.CALL_STATE_RINGING) {
-                    Log.d(TAG, "transient loss of  focus- PHONE RINGING");
-                    if (isPlaying()) player.pause();
 
-                    updateActions();
-                } else if (state == TelephonyManager.CALL_STATE_IDLE) {
-                    // resume playback
-                    //pause for a second. This seems to resolve issue of not being able to gain audio focus after a phone call
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        //handle
-                    }
-                    Log.d(TAG, "gained focus call state idle");
-                    if(getThikrType()!=null){
-                        //do this only if thikrtype has been set (happens once OnStartCommand is called)
-                        mediaSession.setActive(true);
-                        if (player == null) {
-                            initMediaPlayer();
-                        } else if (!isPlaying()) {
-
-                            startPlayerIfAllowed();
-                        }
-                        //updateVolume(100);
-                        setVolume();
-                        updateActions();
-                    }
-
-                } else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
-                    //A call is dialing, active or on hold
-                    Log.d(TAG, "transient loss of  focus-  call is dialing, active or on hold");
-                    if (isPlaying()) player.pause();
-                    updateActions();
-                }
-                super.onCallStateChanged(state, incomingNumber);
-            }
-        };
-        TelephonyManager mgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-        if (mgr != null) {
-            int PhoneStatePermission = ContextCompat.checkSelfPermission(this,
-                    android.Manifest.permission.READ_PHONE_STATE);
-            if (PhoneStatePermission == PackageManager.PERMISSION_GRANTED) {
-                Log.d(TAG, "requesting phonestate listener. permission is already granted");
-                mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
-            } else {
-                Log.d(TAG, " phonestate listener permission not granted. request not made.");
-            }
-
-        }
 
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         String lang = mPrefs.getString("language", null);
@@ -467,7 +412,6 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 currentThikrCounter = 0;
                 this.playAll();
                 updateActions();
-                //   if ((TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE)).getCallState()!=TelephonyManager.CALL_STATE_OFFHOOK;
                 break;
             case MEDIA_PLAYER_ISPLAYING:
                 Log.d(TAG, "isplaying called");
@@ -535,15 +479,22 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         }
     }
 
+    private int getStreamAudioAttributes() {
+
+        if (this.getThikrType().equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)) {
+            return AudioAttributes.USAGE_NOTIFICATION;
+        } else if (this.getThikrType().contains(MainActivity.DATA_TYPE_ATHAN)) {
+            return AudioAttributes.USAGE_NOTIFICATION;
+        } else {
+            return AudioAttributes.USAGE_MEDIA;
+        }
+    }
+
     public void play() {
         player.setOnCompletionListener(this);
 
 
-        int ret = am.requestAudioFocus(this,
-                // Use the music stream.
-                this.getStreamType(),
-                // Request permanent focus.
-                getAudioFocusRequestType());
+        int ret = requestAudioFocus();
         if (ret == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
             Log.d(TAG, "audiofocus request granted");
             startPlayerIfAllowed();
@@ -582,11 +533,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
                 player.prepare();
 
-                int ret = am.requestAudioFocus(this,
-                        // Use the music stream.
-                        this.getStreamType(),
-                        // Request permanent focus.
-                        getAudioFocusRequestType());
+                int ret = requestAudioFocus();
                 if (ret == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
                     Log.d(TAG, "audio focus request granted.");
                     startPlayerIfAllowed();
@@ -637,11 +584,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 player.setDataSource(afd);
                 player.prepare();
 
-                int ret = am.requestAudioFocus(this,
-                        // Use the music stream.
-                        this.getStreamType(),
-                        // Request permanent focus.
-                        getAudioFocusRequestType());
+                int ret = requestAudioFocus();
                 if (ret == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
 
                     startPlayerIfAllowed();
@@ -728,16 +671,42 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
 
         player.setOnCompletionListener(this);
-        int ret = am.requestAudioFocus(this,
-                // Use the music stream.
-                this.getStreamType(),
-                // Request permanent focus.
-                getAudioFocusRequestType());
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            AudioFocusRequest mFocusRequest = new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+                    .setAcceptsDelayedFocusGain(true)
+                    .setOnAudioFocusChangeListener(this)
+                    .build();
+        }
+        int ret = requestAudioFocus();
         Log.d(TAG, "audiofocus request return code is " + ret);
         if (ret == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
             Log.d(TAG, "audiofocus request granted =" + AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
             startPlayerIfAllowed();
             setVolume();
+        }
+
+    }
+
+    private int requestAudioFocus() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            AudioAttributes mPlaybackAttributes = new AudioAttributes.Builder()
+                    .setUsage(this.getStreamAudioAttributes())
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                    .build();
+            AudioFocusRequest mFocusRequest = new AudioFocusRequest.Builder(this.getAudioFocusRequestType())
+                    .setAcceptsDelayedFocusGain(true)
+                    .setOnAudioFocusChangeListener(this)
+                    .setAudioAttributes(mPlaybackAttributes)
+                    .build();
+            int ret = am.requestAudioFocus(mFocusRequest);
+            return ret;
+        } else {
+            int ret = am.requestAudioFocus(this,
+                    // Use the music stream.
+                    this.getStreamType(),
+                    // Request permanent focus.
+                    getAudioFocusRequestType());
+            return ret;
         }
 
     }
@@ -751,10 +720,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         }
         am.abandonAudioFocus(this);
         wakeLock.release();
-        TelephonyManager mgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-        if (mgr != null) {
-            mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);
-        }
+
         this.sendMessageToUI(MSG_CURRENT_PLAYING, -99);
         this.sendMessageToUI(MSG_UNBIND, MSG_UNBIND);
         this.stopForeground(true);
@@ -1007,11 +973,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         //TODO:Update requestAudioFocus methods to use api 26 methods.
         //stopping thread for a second after phone call finishes seems to resolve issue for some reason
 
-        int ret = am.requestAudioFocus(this,
-                // Use the music stream.
-                this.getStreamType(),
-                // Request permanent focus.
-                getAudioFocusRequestType());
+        int ret = requestAudioFocus();
         Log.d(TAG, "request audio focus return code is " + ret);
         if (ret == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
 

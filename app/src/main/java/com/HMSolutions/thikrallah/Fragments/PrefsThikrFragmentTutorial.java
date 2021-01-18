@@ -1,6 +1,5 @@
 package com.HMSolutions.thikrallah.Fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -20,6 +20,7 @@ import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
 import com.HMSolutions.thikrallah.ThikrMediaPlayerService;
 import com.HMSolutions.thikrallah.Utilities.TimePreference;
+import com.HMSolutions.thikrallah.Utilities.TimePreferenceUI;
 
 public class PrefsThikrFragmentTutorial extends PreferenceFragmentCompat implements OnSharedPreferenceChangeListener {
 	public static String PREF_XML_FILE = "PREF_XML_FILE";
@@ -86,20 +87,22 @@ public class PrefsThikrFragmentTutorial extends PreferenceFragmentCompat impleme
 		}
 	}
 	private void initSummary(Preference p) {
-        if (p instanceof PreferenceGroup) {
-            PreferenceGroup pGrp = (PreferenceGroup) p;
-            for (int i = 0; i < pGrp.getPreferenceCount(); i++) {
-                initSummary(pGrp.getPreference(i));
-            }
-        } else {
-            updatePrefSummary(p);
-        }
-    }
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		this.mcontext=activity.getApplicationContext();
+		if (p instanceof PreferenceGroup) {
+			PreferenceGroup pGrp = (PreferenceGroup) p;
+			for (int i = 0; i < pGrp.getPreferenceCount(); i++) {
+				initSummary(pGrp.getPreference(i));
+			}
+		} else {
+			updatePrefSummary(p);
+		}
 	}
+
+	@Override
+	public void onAttach(Context context) {
+		super.onAttach(context);
+		this.mcontext = context;
+	}
+
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -157,8 +160,9 @@ public class PrefsThikrFragmentTutorial extends PreferenceFragmentCompat impleme
 		data.putInt("FILE", file);
 		sendActionToMediaService(data);
 	}
-	public void sendActionToMediaService(Bundle data){
-		if (data!=null){
+
+	public void sendActionToMediaService(Bundle data) {
+		if (data != null) {
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 				this.getActivity().startForegroundService(new Intent(this.getActivity(), ThikrMediaPlayerService.class).putExtras(data));
 			} else {
@@ -166,5 +170,20 @@ public class PrefsThikrFragmentTutorial extends PreferenceFragmentCompat impleme
 			}
 		}
 
+	}
+
+	@Override
+	public void onDisplayPreferenceDialog(Preference preference) {
+		DialogFragment dialogFragment = null;
+		if (preference instanceof TimePreference) {
+			dialogFragment = new TimePreferenceUI(preference);
+		}
+		if (dialogFragment != null && isAdded()) {
+			dialogFragment.setTargetFragment(this, 0);
+			dialogFragment.show(this.getParentFragmentManager(), "android.support.v7.preference" +
+					".PreferenceFragment.DIALOG");
+		} else {
+			super.onDisplayPreferenceDialog(preference);
+		}
 	}
 }

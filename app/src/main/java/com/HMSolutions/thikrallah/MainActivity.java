@@ -382,11 +382,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
         if (locationPermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION);
         }
-        int PhoneStatePermission = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_PHONE_STATE);
-        if (PhoneStatePermission != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.READ_PHONE_STATE);
-        }
+
         int StoragePermissions = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (StoragePermissions != PackageManager.PERMISSION_GRANTED) {
