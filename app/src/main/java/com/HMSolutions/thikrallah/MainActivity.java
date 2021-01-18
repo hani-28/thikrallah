@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
 
         bindtoMediaService();
         timeOperation("timing", "onstart finished");
-        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         super.onStart();
 
 
