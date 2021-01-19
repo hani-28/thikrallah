@@ -176,7 +176,7 @@ public class PrefsThikrFragmentTutorial extends PreferenceFragmentCompat impleme
 	public void onDisplayPreferenceDialog(Preference preference) {
 		DialogFragment dialogFragment = null;
 		if (preference instanceof TimePreference) {
-			dialogFragment = new TimePreferenceUI(preference);
+			dialogFragment = TimePreferenceUI.newInstance(preference);
 		}
 		if (dialogFragment != null && isAdded()) {
 			dialogFragment.setTargetFragment(this, 0);

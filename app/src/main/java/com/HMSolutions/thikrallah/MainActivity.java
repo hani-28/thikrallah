@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
             new Intent().setComponent(new ComponentName("com.htc.pitroad", "com.htc.pitroad.landingpage.activity.LandingPageActivity")),
             new Intent().setComponent(new ComponentName("com.asus.mobilemanager", "com.asus.mobilemanager.MainActivity"))};
     SharedPreferences mPrefs;
-    static  final int RC_ENABLE_LOCATION_SETTINGS=7866755;
+    static final int RC_ENABLE_LOCATION_SETTINGS = 786;
     private Context mcontext;
 
     Messenger mServiceThikrMediaPlayerMessenger = null;

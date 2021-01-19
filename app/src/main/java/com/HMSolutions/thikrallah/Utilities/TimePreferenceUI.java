@@ -1,27 +1,30 @@
 package com.HMSolutions.thikrallah.Utilities;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TimePicker;
 
+import androidx.preference.DialogPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceDialogFragmentCompat;
+import androidx.preference.PreferenceManager;
 
 public class TimePreferenceUI extends PreferenceDialogFragmentCompat {
     private int lastHour = 0;
     private int lastMinute = 0;
     private TimePicker picker = null;
-    private TimePreference preference;
 
-    public TimePreferenceUI(Preference preference) {
-        this.preference = (TimePreference) preference;
-        lastHour = getHour(this.preference.getTime());
-        lastMinute = getMinute(this.preference.getTime());
+    public static TimePreferenceUI newInstance(Preference preference) {
+        final TimePreferenceUI
+                fragment = new TimePreferenceUI();
+
 
         final Bundle b = new Bundle();
         b.putString(ARG_KEY, preference.getKey());
-        this.setArguments(b);
+        fragment.setArguments(b);
+        return fragment;
     }
 
     public static int getHour(String time) {
@@ -37,7 +40,12 @@ public class TimePreferenceUI extends PreferenceDialogFragmentCompat {
 
     @Override
     protected View onCreateDialogView(Context mContext) {
-        picker = new TimePicker(getContext());
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        String time = mPrefs.getString(getPreference().getKey(), "00:00");
+
+        lastHour = TimePreferenceUI.getHour(time);
+        lastMinute = TimePreferenceUI.getMinute(time);
+        picker = new TimePicker(mContext);
         return (picker);
     }
 
@@ -56,10 +64,18 @@ public class TimePreferenceUI extends PreferenceDialogFragmentCompat {
             lastHour = picker.getCurrentHour();
             lastMinute = picker.getCurrentMinute();
 
-            String time = String.valueOf(lastHour) + ":" + String.valueOf(lastMinute);
+            String time = lastHour + ":" + lastMinute;
 
-            if (preference.callChangeListener(time)) {
-                preference.setValue(time);
+            // Save the value
+            DialogPreference preference = getPreference();
+            if (preference instanceof TimePreference) {
+                TimePreference timePreference = ((TimePreference) preference);
+                // This allows the client to ignore the user value.
+                timePreference.setValue(time);
+                if (timePreference.callChangeListener(time)) {
+                    // Save the value
+                    timePreference.setValue(time);
+                }
             }
         }
     }
