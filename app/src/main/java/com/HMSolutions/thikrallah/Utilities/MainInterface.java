@@ -1,5 +1,6 @@
 package com.HMSolutions.thikrallah.Utilities;
 
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,25 +11,27 @@ public interface MainInterface {
 
 	void share();
 
-	void playAll(String AssetFolder);
+    void playAll(String AssetFolder);
 
-	void incrementCurrentPlaying(String AssetFolder, int i);
+    void incrementCurrentPlaying(String AssetFolder, int i);
 
-	void pausePlayer(String DataType);
+    void pausePlayer(String DataType);
 
-	void play(String AssetFolder, int fileNumber);
+    void play(String AssetFolder, int fileNumber);
 
-	void play(String path);
+    void play(String path);
 
-	boolean isPlaying();
+    void play(Uri path);
 
-	void resetPlayer(String thikrtype);
+    boolean isPlaying();
 
-	void setCurrentPlaying(String AssetFolder, int currentPlaying);
+    void resetPlayer(String thikrtype);
 
-	int getCurrentPlaying();
+    void setCurrentPlaying(String AssetFolder, int currentPlaying);
 
-	void setThikrType(String thikrType);
+    int getCurrentPlaying();
+
+    void setThikrType(String thikrType);
 
 	void requestLocationUpdate();
 

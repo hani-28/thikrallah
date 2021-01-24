@@ -367,16 +367,19 @@ public class AudioService extends Service implements OnCompletionListener,
 
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
-    Log.d(TAG,"Onstartcommand called");
+    Log.d(TAG, "Onstartcommand called");
+    Log.d(TAG, "ThikrMediaPlayerService onStartCommand");
+
     if (intent == null) {
       // handle a crash that occurs where intent comes in as null
       if (State.Stopped == state) {
         serviceHandler.removeCallbacksAndMessages(null);
-        Log.d(TAG,"state is stopped");
+        Log.d(TAG, "state is stopped");
         stopSelf();
       }
     } else {
       final String action = intent.getAction();
+
       if (ACTION_PLAYBACK.equals(action) || Intent.ACTION_MEDIA_BUTTON.equals(action)) {
         // go to the foreground as quickly as possible.
         Log.d(TAG,"setUpAsForeground");

@@ -24,6 +24,7 @@ import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
 import com.HMSolutions.thikrallah.Utilities.PrayTime;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class AthanFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener, NumberPicker.OnValueChangeListener {
 
@@ -71,7 +72,6 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
         try {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
@@ -287,23 +287,33 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
 	public void onPause(){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getApplicationContext());
         prefs.unregisterOnSharedPreferenceChangeListener(this);
-		super.onPause();
-	}
+        super.onPause();
+    }
+
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
+        logScreen();
         this.updateprayerTimes();
     }
-	@Override
-	public void onDestroy(){
-		super.onDestroy();
-	}
+
+    private void logScreen() {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, this.getClass().getSimpleName());
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, this.getClass().getSimpleName());
+        FirebaseAnalytics.getInstance(this.getActivity()).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 
 
     @Override
     public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-        int hours=hours_adjustments.getValue();
-        int minutes=minutes_adjustments.getValue();
+        int hours = hours_adjustments.getValue();
+        int minutes = minutes_adjustments.getValue();
         int sign=adjuster_sign.getValue();
         int multiplier=1;
         if (sign==0){

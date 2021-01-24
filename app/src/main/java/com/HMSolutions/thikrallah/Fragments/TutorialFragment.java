@@ -17,16 +17,30 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class TutorialFragment extends Fragment {
-	private MainInterface mCallback;
+    private MainInterface mCallback;
     private Context mContext;
-	private TextView Tutorial_description;
+    private TextView Tutorial_description;
     private int count;
-    final private int final_count=4;
+    final private int final_count = 4;
 
 
     public TutorialFragment() {
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        logScreen();
+    }
+
+    private void logScreen() {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, this.getClass().getSimpleName());
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, this.getClass().getSimpleName());
+        FirebaseAnalytics.getInstance(this.getActivity()).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
     }
 
     @Override

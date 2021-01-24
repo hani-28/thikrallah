@@ -19,6 +19,7 @@ import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Utilities.CustumThickerAdapter;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class ThikrFragment extends ListFragment implements OnClickListener {
 	
@@ -114,26 +115,34 @@ public class ThikrFragment extends ListFragment implements OnClickListener {
 				mCallback.play(this.thikrType,mCallback.getCurrentPlaying());
 			}
 			mCallback.pausePlayer(this.thikrType);
-		} else {
-			mCallback.play(this.thikrType,position + 1);
-            setCurrentlyPlaying(position+1);
-		}
-	}
+        } else {
+            mCallback.play(this.thikrType, position + 1);
+            setCurrentlyPlaying(position + 1);
+        }
+    }
 
-	@Override
-	public void onResume() {
-		mCallback.requestMediaServiceStatus();
-		super.onResume();
-	}
+    @Override
+    public void onResume() {
+        mCallback.requestMediaServiceStatus();
+        super.onResume();
+        logScreen();
+    }
 
-	private String[] getThikrArray(){
-		String[] numbers_text = null;
-		if (this.thikrType.equals(MainActivity.DATA_TYPE_DAY_THIKR)){
-			return getResources().getStringArray(R.array.MorningThikr);
-		}
-		if (this.thikrType.equals(MainActivity.DATA_TYPE_NIGHT_THIKR)){
-			return getResources().getStringArray(R.array.NightThikr);
-		}
+    private void logScreen() {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, this.getClass().getSimpleName());
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, this.getClass().getSimpleName());
+        FirebaseAnalytics.getInstance(this.getActivity()).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
+    }
+
+    private String[] getThikrArray() {
+        String[] numbers_text = null;
+        if (this.thikrType.equals(MainActivity.DATA_TYPE_DAY_THIKR)) {
+            return getResources().getStringArray(R.array.MorningThikr);
+        }
+        if (this.thikrType.equals(MainActivity.DATA_TYPE_NIGHT_THIKR)) {
+            return getResources().getStringArray(R.array.NightThikr);
+        }
         if (this.thikrType.equals(MainActivity.DATA_TYPE_QURAN)){
          //   surat=this.getArguments().getInt("surat");
            // return new String[]{this.getActivity().getResources().getStringArray(R.array.surat_text)[surat]};

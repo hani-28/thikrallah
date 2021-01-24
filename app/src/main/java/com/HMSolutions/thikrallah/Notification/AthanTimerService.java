@@ -43,19 +43,19 @@ public class AthanTimerService extends Service {
 	}
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		mContext=this;
-		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-		boolean isTimer=sharedPrefs.getBoolean("foreground_athan_timer",true);
-
-		if(isTimer){
-			if(!isStarted){
-				Log.d(TAG,TAG+"started");
-				Timer timer = new Timer();
-				isStarted=true;
-				timer.scheduleAtFixedRate(new TimerTask() {
-					@Override
-					public void run() {
-						initNotification();
+        mContext = this;
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+        boolean isTimer = sharedPrefs.getBoolean("foreground_athan_timer", true);
+        Log.d(TAG, "istimer is " + isTimer);
+        if (isTimer) {
+            if (!isStarted) {
+                Log.d(TAG, TAG + "started");
+                Timer timer = new Timer();
+                isStarted = true;
+                timer.scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+                        initNotification();
 
 					}
 				},0,60000);

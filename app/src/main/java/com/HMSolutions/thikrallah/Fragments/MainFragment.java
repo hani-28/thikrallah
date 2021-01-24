@@ -20,14 +20,16 @@ import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
 import com.HMSolutions.thikrallah.hisnulmuslim.DuaGroupActivity;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.QuranDataActivity;
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 public class MainFragment extends Fragment {
-	private MainInterface mCallback;
+    private MainInterface mCallback;
     private Context mContext;
-	SharedPreferences mPrefs;
+    SharedPreferences mPrefs;
 
 
-	public MainFragment() {
-	}
+    public MainFragment() {
+    }
 
 	@Override
 	public void onAttach(Context context) {
@@ -131,15 +133,30 @@ public class MainFragment extends Fragment {
 			public void onClick(View v) {
 				Bundle data=new Bundle();
 				data.putString("DataType", MainActivity.DATA_TYPE_NIGHT_THIKR);
-				mCallback.launchFragment(new ThikrFragment(),data,"ThikrFragment");
-			}});
-        button_my_athkar.setOnClickListener(new OnClickListener(){
+                mCallback.launchFragment(new ThikrFragment(), data, "ThikrFragment");
+            }
+        });
+        button_my_athkar.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle data=new Bundle();
-                mCallback.launchFragment(new MyAthkarFragment(),data,"MyAthkarFragment");
-            }});
-		return view;
-	}
-	
+                Bundle data = new Bundle();
+                mCallback.launchFragment(new MyAthkarFragment(), data, "MyAthkarFragment");
+            }
+        });
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        logScreen();
+    }
+
+    private void logScreen() {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, this.getClass().getSimpleName());
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, this.getClass().getSimpleName());
+        FirebaseAnalytics.getInstance(this.getActivity()).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
+    }
+
 }

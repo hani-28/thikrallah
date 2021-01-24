@@ -23,6 +23,7 @@ import com.HMSolutions.thikrallah.Utilities.MyDBHelper;
 import com.HMSolutions.thikrallah.Utilities.MyThikrDialogInterface;
 import com.HMSolutions.thikrallah.Utilities.RecordThikrDialog;
 import com.HMSolutions.thikrallah.Utilities.UserThikrArrayAdapter;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 
@@ -37,9 +38,22 @@ public class MyAthkarFragment extends Fragment implements MyThikrDialogInterface
     ArrayList<UserThikr> thickerArray;
     Context context;
     RecordThikrDialog dialog;
-    String TAG="MyAthkarFragment";
+    String TAG = "MyAthkarFragment";
 
     public MyAthkarFragment() {
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        logScreen();
+    }
+
+    private void logScreen() {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, this.getClass().getSimpleName());
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, this.getClass().getSimpleName());
+        FirebaseAnalytics.getInstance(this.getActivity()).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
     }
 
     @Override

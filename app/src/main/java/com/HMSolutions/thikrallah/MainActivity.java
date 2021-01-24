@@ -747,9 +747,23 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
         data.putInt("FILE", -1);
         data.putString("com.HMSolutions.thikrallah.datatype", DATA_TYPE_GENERAL_THIKR);
         data.putString("FILE_PATH", path);
+        data.putString("URI", "null");
         sendActionToMediaService(data);
 
     }
+
+    @Override
+    public void play(Uri uri) {
+        Bundle data = new Bundle();
+        data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAY);
+        data.putInt("FILE", -1);
+        data.putString("com.HMSolutions.thikrallah.datatype", DATA_TYPE_GENERAL_THIKR);
+        data.putString("FILE_PATH", "");
+        data.putString("URI", uri.toString());
+        sendActionToMediaService(data);
+
+    }
+
 
     @Override
     public boolean isPlaying() {

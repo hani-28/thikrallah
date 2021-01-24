@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -46,6 +47,7 @@ public class RecordThikrDialog extends DialogFragment {
     private Button browse;
     private String file="";
     private MainInterface mCallback;
+    private Uri uri;
 
 
     @Override
@@ -99,7 +101,8 @@ public class RecordThikrDialog extends DialogFragment {
                             Log.d(TAG,"filename is "+context.getFilesDir().getPath() + File.separator  +"user"+file_id+".mp3");
                             my_interface.updateList();
                         }else{
-                            Toast.makeText(context,R.string.thikr_text_required,Toast.LENGTH_LONG).show();
+                            mCallback.resetPlayer(MainActivity.DATA_TYPE_GENERAL_THIKR);
+                            Toast.makeText(context, R.string.thikr_text_required, Toast.LENGTH_LONG).show();
                         }
                     }
                 })
@@ -161,11 +164,9 @@ public class RecordThikrDialog extends DialogFragment {
                 file=context.getFilesDir().getPath()  +File.separator+"user"+file_id+".mp3";
                 mProgressDialog.dismiss();
                 recorder.stop();
+                recorder.reset();
                 recorder.release();
                 mCallback.play(file);
-
-
-
             }
         });
 
@@ -173,6 +174,7 @@ public class RecordThikrDialog extends DialogFragment {
             @Override
             public void onCancel(DialogInterface p1) {
                 recorder.stop();
+                recorder.reset();
                 recorder.release();
             }
         });
@@ -229,10 +231,22 @@ public class RecordThikrDialog extends DialogFragment {
         if (requestCode == 0) {
             if (resultCode == Activity.RESULT_OK) {
                 file = data.getExtras().getString("FILE");
-                mCallback.play(file);
-                Log.d(TAG,"returned results: "+ file);
+                uri = Uri.parse(file);
+                if (exists(this.getContext(), uri)) {
+                    mCallback.play(uri);
+                } else {
+                    mCallback.play(file);
+                }
+                Log.d(TAG, "onActivityResult file is " + file);
+
+                Log.d(TAG, "returned results: " + file);
             }
         }
+    }
+
+    public boolean exists(Context context, Uri uri) {//check if a uri points to a file that exists
+        return context.getContentResolver().getType(uri) != null;
+
     }
 
 }

@@ -17,6 +17,7 @@ import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Utilities.TimePreference;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class PrefsGeneralFragment extends PreferenceFragmentCompat implements OnSharedPreferenceChangeListener {
 	@Override
@@ -88,20 +89,31 @@ public class PrefsGeneralFragment extends PreferenceFragmentCompat implements On
             updatePrefSummary(p);
         }
     }
-	@Override
-	public void onResume() {
-		super.onResume();
-		getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-	}
-	@Override
-	public void onPause() {
-		getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
-		super.onPause();
-	}
-	@Override
-	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-			String key) {
-		if (key.equalsIgnoreCase("volume")){
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        logScreen();
+    }
+
+    private void logScreen() {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, this.getClass().getSimpleName());
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, this.getClass().getSimpleName());
+        FirebaseAnalytics.getInstance(this.getActivity()).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
+    }
+
+    @Override
+    public void onPause() {
+        getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+        super.onPause();
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+                                          String key) {
+        if (key.equalsIgnoreCase("volume")) {
 			return;
 		}
 		MyAlarmsManager manager=new MyAlarmsManager(this.getActivity().getApplicationContext());
