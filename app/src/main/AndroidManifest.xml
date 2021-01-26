@@ -5,7 +5,6 @@
     package="com.HMSolutions.thikrallah">
 
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
 
@@ -51,6 +50,7 @@
 
         <activity
             android:name="com.HMSolutions.thikrallah.PreferenceActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/AppTheme"></activity>
         <activity
             android:name="com.HMSolutions.thikrallah.MediaBrowser"

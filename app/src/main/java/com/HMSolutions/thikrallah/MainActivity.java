@@ -281,29 +281,33 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
 
     @Override
     public void requestLocationUpdate() {
-        Log.d(TAG,"requestLocationUpdate");
+        Log.d(TAG, "requestLocationUpdate");
         Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-        criteria.setPowerRequirement(Criteria.POWER_LOW);
+        criteria.setAccuracy(Criteria.NO_REQUIREMENT);
+        criteria.setPowerRequirement(Criteria.NO_REQUIREMENT);
 
         int permissionCheck = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION);
+                Manifest.permission.ACCESS_FINE_LOCATION);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     MY_PERMISSIONS_REQUEST_ACCESS_LOCATION_FOR_LOCATION_UPDATES);
         } else {
+            Log.d(TAG, "location permission granted");
             if (locationManager == null) {
                 locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             }
             String provider = locationManager.getBestProvider(criteria, true);
-            if (provider==null){
-                if (PreferenceManager.getDefaultSharedPreferences(this).getString("latitude", "0.0").equalsIgnoreCase("0.0")){
+            if (provider==null) {
+                Log.d(TAG, "provider is null. Enabled providers are " + locationManager.getProviders(true).size());
+
+                if (PreferenceManager.getDefaultSharedPreferences(this).getString("latitude", "0.0").equalsIgnoreCase("0.0")) {
                     buildAlertMessageNoGps();
                 }
 
                 return;
             }else {
+                Log.d(TAG, "provider is " + provider.toString());
 
 
                 Location location = locationManager.getLastKnownLocation(provider);
@@ -353,7 +357,8 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
             if (!Settings.canDrawOverlays(this)) {
                 Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                         Uri.parse("package:" + getPackageName()));
-                startActivityForResult(intent, 9999);
+                showMessageAndLaunchIntent(intent, R.string.need_overlay_permission_title, R.string.need_overlay_permission_message);
+
             }
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -381,14 +386,16 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
         }
         if (locationPermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION);
-        }
 
+
+        }
+/*
         int StoragePermissions = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (StoragePermissions != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
-
+*/
        /* if (writePermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
@@ -537,15 +544,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
         }
 
 
-        boolean isTimer=mPrefs.getBoolean("foreground_athan_timer",true);
-
-        if(isTimer){
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(new Intent(this,AthanTimerService.class));
-            } else {
-                this.startService(new Intent(this,AthanTimerService.class));
-            }
-        }
+        startAthanTimer(this.getApplicationContext());
 
 
 
@@ -588,13 +587,67 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
 
     }
 
+    public static void startAthanTimer(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean isTimer = prefs.getBoolean("foreground_athan_timer", true);
+        double latitude = Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("latitude", "0.0"));
+
+        boolean isLocationDefined = latitude != 0.0;
+        if (isTimer && isLocationDefined) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(new Intent(context, AthanTimerService.class));
+            } else {
+                context.startService(new Intent(context, AthanTimerService.class));
+            }
+        }
+    }
+
+    private void showMessageAndLaunchLocationPermission(int title_resource, int message_resource) {
+        AppCompatActivity activity = this;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(this.getResources().getString(title_resource)).setMessage(this.getResources().getString(message_resource))
+                .setPositiveButton(this.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ActivityCompat.requestPermissions(activity,
+                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                MY_PERMISSIONS_REQUEST_ACCESS_LOCATION_FOR_LOCATION_UPDATES);
+
+
+                    }
+                })
+                .setCancelable(false)
+                .create().show();
+    }
+
+    private void showMessageAndLaunchIntent(Intent intent, int title_resource, int message_resource) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(this.getResources().getString(title_resource)).setMessage(this.getResources().getString(message_resource))
+                .setPositiveButton(this.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        try {
+                            if (intent != null) {
+                                startActivityForResult(intent, 9999);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Log.d(TAG, "" + e.getMessage());
+                        }
+
+
+                    }
+                })
+                .setCancelable(false)
+                .create().show();
+    }
+
     private void timeOperation(String mytag, String operation) {
         endnow = SystemClock.elapsedRealtime();
         Log.d(mytag, "Execution time: " + (endnow - startnow) + " ms for " + operation);
         //Log.d(tag,operation);
         startnow = SystemClock.elapsedRealtime();
     }
-
 
 
     private void populateBuiltinDatabase() {
@@ -831,13 +884,21 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
         switch (requestCode) {
             case REQUEST_ID_MULTIPLE_PERMISSIONS:{
                 if (grantResults.length > 0
-                        && (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED )) {
-                    Log.d(TAG,"requestLocationUpdate. permissions granted");
+                        && (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED)) {
+                    Log.d(TAG, "requestLocationUpdate. permissions granted");
 
                     this.requestLocationUpdate();
+                    startAthanTimer(this.getApplicationContext());
                     // permission was granted, yay! Do the
                     // location-related task you need to do.
                 } else {
+                    if ((ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) ==
+                            PackageManager.PERMISSION_DENIED) &&
+                            ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                        showMessageAndLaunchLocationPermission(R.string.need_location_permission_title, R.string.need_location_permission_message);
+
+                    }
 
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
@@ -851,6 +912,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                     Log.d(TAG,"requestLocationUpdate. permissions granted");
 
                     this.requestLocationUpdate();
+                    startAthanTimer(this.getApplicationContext());
                     // permission was granted, yay! Do the
                     // location-related task you need to do.
                 } else {
@@ -866,6 +928,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                     Log.d(TAG,"requestLocationUpdate. permissions granted");
 
                     this.requestLocationUpdate();
+                    startAthanTimer(this.getApplicationContext());
                     // permission was granted, yay! Do the
                     // location-related task you need to do.
                 } else {

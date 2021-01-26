@@ -610,14 +610,19 @@
     <string name="starting_page_label">بداية الصفحة</string>
     <plurals name="plural_recent_pages" translatable="false">
         <item quantity="one">@string/menu_jump_last_page</item>
-        <item quantity="other">@string/recent_pages</item>
+       <item quantity="other">@string/recent_pages</item>
     </plurals>
-    <string name="tag_blank_tag_error">الاسم لا يستطيع ان يكون فارغا</string>
-    <string name="tag_duplicate_tag_error">الاسم موجود مسبقا</string>
-    <!-- format strings -->
-    <string name="sura_ayah" translatable="false">%1$d:%2$d</string>
+   <string name="tag_blank_tag_error">الاسم لا يستطيع ان يكون فارغا</string>
+   <string name="tag_duplicate_tag_error">الاسم موجود مسبقا</string>
+   <!-- format strings -->
+   <string name="sura_ayah" translatable="false">%1$d:%2$d</string>
 
-    <!-- notification channel names [CHAR LIMIT=40] -->
-    <string name="notification_channel_download">تحميلات القرءان</string>
-    <string name="notification_channel_audio">تلاوة القرءان</string>
+   <!-- notification channel names [CHAR LIMIT=40] -->
+   <string name="notification_channel_download">تحميلات القرءان</string>
+   <string name="notification_channel_audio">تلاوة القرءان</string>
+   <string name="need_overlay_permission_title">اظهار فوق التطبيقات الاخرى</string>
+   <string name="need_overlay_permission_message">ير جى السماح لبرنامجنا بالظهور فوق التطبيقات الاخرى لكي نتمكن من عرض التذكيرات بالله لك وانت في اي تطبيق</string>
+   <string name="need_location_permission_title">السماح بمعلومات الموقع</string>
+   <string name="need_location_permission_message">يرجى السماح لبرنامج اذكر الله بالاذن للحصول على معلومات موقعك لكي يستطيع البرنامج تحديد موقع مدينتك. هذا ضروري لكي يتم حساب اوقات الصلاة بشكل صحيح</string>
+
 </resources>

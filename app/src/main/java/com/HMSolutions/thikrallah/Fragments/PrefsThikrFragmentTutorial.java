@@ -18,6 +18,7 @@ import androidx.preference.PreferenceScreen;
 
 import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
+import com.HMSolutions.thikrallah.Notification.ThikrService;
 import com.HMSolutions.thikrallah.ThikrMediaPlayerService;
 import com.HMSolutions.thikrallah.Utilities.TimePreference;
 import com.HMSolutions.thikrallah.Utilities.TimePreferenceUI;
@@ -175,9 +176,9 @@ public class PrefsThikrFragmentTutorial extends PreferenceFragmentCompat impleme
 	public void sendActionToMediaService(Bundle data) {
 		if (data != null) {
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-				this.getActivity().startForegroundService(new Intent(this.getActivity(), ThikrMediaPlayerService.class).putExtras(data));
+				this.getActivity().startForegroundService(new Intent(this.getActivity(), ThikrService.class).putExtras(data));
 			} else {
-				this.getActivity().startService(new Intent(this.getActivity(), ThikrMediaPlayerService.class).putExtras(data));
+				this.getActivity().startService(new Intent(this.getActivity(), ThikrService.class).putExtras(data));
 			}
 		}
 

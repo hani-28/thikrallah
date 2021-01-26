@@ -1,6 +1,5 @@
 package com.HMSolutions.thikrallah.Notification;
 
-import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -13,6 +12,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -25,10 +25,10 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.core.app.NotificationCompat;
-import androidx.core.content.ContextCompat;
 
 import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.R;
+import com.HMSolutions.thikrallah.ThikrMediaPlayerService;
 
 import java.util.Locale;
 
@@ -37,17 +37,19 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 	private WindowManager windowManager;
 	//private ImageView chatHead;
 	private TextView chatHead;
-    String TAG = "ChatHeadService";
-    private final static int NOTIFICATION_ID=235;
+	String TAG = "ChatHeadService";
+	private final static int NOTIFICATION_ID = 235;
 	WindowManager.LayoutParams params;
 	private String thikr;
+	private boolean isAthan;
+
 	@Override
 	public IBinder onBind(Intent intent) {
 		// Not used
 		return null;
 	}
 
-	private void startnotification(){
+	private void startnotification() {
 		String NOTIFICATION_CHANNEL_ID = "com.HMSolutions.thikrallah.Notification.ChatHeadService";
 		String channelName = this.getResources().getString(R.string.floating_notification);
 		NotificationCompat.Builder mBuilder;
@@ -104,10 +106,10 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 		}
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
 		int reminderType=Integer.parseInt(sharedPrefs.getString("RemindmeThroughTheDayType", "1"));
-	    if (reminderType==1 ||reminderType==3){
+	    if (reminderType==1 ||reminderType==3) {
 
-	    	String thikr=intent.getStringExtra("thikr");
-			boolean isAthan=intent.getBooleanExtra("isAthan",false);
+			String thikr = intent.getStringExtra("thikr");
+			isAthan = intent.getBooleanExtra("isAthan", false);
 
 			if (isAthan) {
 				NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -117,7 +119,7 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 					String NOTIFICATION_CHANNEL_ID = "com.HMSolutions.thikrallah.Notification.AthanTimerService";
 					String channelName = this.getResources().getString(R.string.athan_timer_notifiaction);
 					NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
-					chan.setSound(null,null);
+					chan.setSound(null, null);
 					chan.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
 					NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 					assert manager != null;
@@ -174,7 +176,7 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 			chatHead.setTextColor(Color.BLACK);
 			chatHead.setGravity(Gravity.CENTER);
 			chatHead.setGravity(Gravity.CENTER);
-			
+
 			//chatHead.setImageResource(R.drawable.chat_head);
 			if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
 				params = new WindowManager.LayoutParams(
@@ -183,6 +185,7 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 						WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
 						WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
 						PixelFormat.TRANSLUCENT);
+
 			} else {
 				params = new WindowManager.LayoutParams(
 						WindowManager.LayoutParams.WRAP_CONTENT,
@@ -199,13 +202,11 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 
 
 			chatHead.setOnTouchListener(this);
-
-			int permissionCheck = ContextCompat.checkSelfPermission(this,
-					Manifest.permission.ACCESS_FINE_LOCATION);
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 				if (Settings.canDrawOverlays(this)) {
                     windowManager.addView(chatHead, params);
-                    if (!isAthan){
+
+					if (!isAthan){
 						new Handler().postDelayed(new Runnable() {
 							@Override
 							public void run() {
@@ -240,12 +241,21 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 	}
     private NotificationCompat.Builder setVisibilityPublic(NotificationCompat.Builder inotificationBuilder){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            inotificationBuilder.setVisibility(Notification.VISIBILITY_PUBLIC);
+			inotificationBuilder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
         }
         return inotificationBuilder;
     }
 	@Override 
 	public boolean onTouch(View v, MotionEvent event) {
+		if (isAthan) {
+			Bundle data = new Bundle();
+			data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_RESET);
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+				this.startForegroundService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+			} else {
+				this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
+			}
+		}
 		stopSelf();
 		return true;
 	}

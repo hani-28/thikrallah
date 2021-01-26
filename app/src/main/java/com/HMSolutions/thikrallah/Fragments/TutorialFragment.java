@@ -83,22 +83,18 @@ public class TutorialFragment extends Fragment {
 
     private void showNextScreen(int i){
         FragmentTransaction ft = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            ft = this.getChildFragmentManager()
-                    .beginTransaction();
-        }else{
-            ft = this.getFragmentManager()
-                    .beginTransaction();
-        }
+        ft = this.getChildFragmentManager()
+                .beginTransaction();
+
         PrefsThikrFragmentTutorial fragment = new PrefsThikrFragmentTutorial();
-        Log.d("testing321",""+i);
+        Log.d("testing321", "" + i);
         Bundle data = new Bundle();
-        switch (i){
+        switch (i) {
             case 0:
-                data.putInt(PrefsThikrFragmentTutorial.PREF_XML_FILE,R.xml.prefs_tutorial1);
+                data.putInt(PrefsThikrFragmentTutorial.PREF_XML_FILE, R.xml.prefs_tutorial1);
                 break;
             case 1:
-                data.putInt(PrefsThikrFragmentTutorial.PREF_XML_FILE,R.xml.prefs_tutorial2);
+                data.putInt(PrefsThikrFragmentTutorial.PREF_XML_FILE, R.xml.prefs_tutorial2);
                 break;
             case 2:
                 data.putInt(PrefsThikrFragmentTutorial.PREF_XML_FILE,R.xml.prefs_tutorial3);

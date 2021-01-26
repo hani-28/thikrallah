@@ -536,7 +536,9 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     }
 
     private int getStreamAudioAttributes() {
-
+        if (this.getThikrType() == null) {
+            return AudioAttributes.USAGE_NOTIFICATION;
+        }
         if (this.getThikrType().equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)) {
             return AudioAttributes.USAGE_NOTIFICATION;
         } else if (this.getThikrType().contains(MainActivity.DATA_TYPE_ATHAN)) {
