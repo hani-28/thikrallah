@@ -2,6 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
  <string name="app_package" translatable="false">com.HMSolutions.thikrallah</string>
     <string name="contact_developer_uri" translatable="false">mailto:28.hani@gmail.com</string>
+    <string name="invalid_input">إدخال الوقت غير صحيح</string>
     <string name="help_translate">ساعدنا بترجمة البرنامج</string>
     <string name="offer_translate_help">ارغب في المساعدة بترجمة برنامج اذكر الله</string>
     <string name="my_app_name">أذكر الله</string>

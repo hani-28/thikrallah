@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.widget.TimePicker;
 
 import androidx.preference.DialogPreference;
 
@@ -13,7 +12,6 @@ import com.HMSolutions.thikrallah.R;
 public class TimePreference extends DialogPreference {
     private int lastHour = 0;
     private int lastMinute = 0;
-    private TimePicker picker;
     private String time = "";
     private int mDialogLayoutResId = R.layout.preference_dialog_time;
 

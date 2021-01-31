@@ -4,6 +4,7 @@
     <string name="help_translate">Help Us Translate To Other Languages</string>
     <string name="offer_translate_help">I Want to help translate Remember Allah App</string>
     <string name="my_app_name">Remember Allah</string>
+    <string name="invalid_input">Invalid time input</string>
     <string name="share">Share</string>
     <string name="favorite_reciter">Favorite Quran Reciter</string>
     <string name="quran_thikr_need_files">Click here to download files to enable audio reminders of Quran</string>

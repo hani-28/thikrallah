@@ -23,7 +23,7 @@
     <item>@string/qari_mostafa_ismaeel_gapless</item>
     <item>@string/qari_qatami_gapless</item>
     <item>@string/qari_dussary</item>
-    <item>@string/qari_walk</item>
+    <item>@string/mishari_walk</item>
   </string-array>
     <string-array name="quran_readers_value" translatable="false" >
         <item>0</item>
@@ -99,7 +99,7 @@
     <item>mostafa_ismaeel</item>
     <item>qatami</item>
     <item>yasser_dussary</item>
-    <item>19</item>
+    <item>mishari_walk</item>
   </string-array>
 
   <string-array translatable="false" name="quran_readers_db_name">
@@ -125,7 +125,7 @@
     <item>mostafa_ismaeel</item>
     <item>qatami</item>
     <item>yasser_dussary</item>
-    <item></item>
+    <item>mishari_walk</item>
   </string-array>
 
   <string-array translatable="false" name="quran_readers_urls">
@@ -151,7 +151,7 @@
     <item>https://download.quranicaudio.com/quran/mostafa_ismaeel/128kbps/</item>
     <item>https://download.quranicaudio.com/quran/nasser_bin_ali_alqatami/</item>
     <item>https://download.quranicaudio.com/quran/yasser_ad-dussary/</item>
-    <item>http://mirrors.quranicaudio.com/everyayah/Ibrahim_Walk_192kbps_TEST/</item>
+    <item>https://download.quranicaudio.com/quran/mishaari_w_ibrahim_walk_si/</item>
   </string-array>
 
   <!-- actual qari names -->
@@ -198,4 +198,5 @@
   <string name="qari_husary_iza3a_gapless">الحصري تسجيل الإذاعة (متصل)</string>
   <string name="qari_abdulaziz_zahrani_gapless">عبد العزيز بن صالح الزهراني (متصل)</string>
   <string name="qari_ayman_suwaid">د. أيمن سويد</string>
+  <string name="mishari_walk">ابراهيم والك ومشاري (ترجمة انجليزية (متصل))</string>
 </resources>

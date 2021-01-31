@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:layoutDirection="ltr">
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:id="@+id/hour_text"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:maxLength="2"
+        android:hint="HH" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:id="@+id/minute_text"
+        android:maxLength="2"
+        android:hint="MM" />
+
+    <RadioGroup
+        android:id="@+id/am_pm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PM"
+            android:id="@+id/pm"
+            android:layout_gravity="center_horizontal" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="AM"
+            android:id="@+id/am"
+            android:layout_gravity="center_horizontal" />
+
+
+    </RadioGroup>
+
+</LinearLayout>

@@ -252,9 +252,10 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         notificationBuilder = addAction(notificationBuilder, "pause", R.drawable.ic_media_pause);
         notificationBuilder = addAction(notificationBuilder, "stop", R.drawable.ic_media_stop);
         this.SetMediaMetadata();
-        notificationBuilder.setStyle(new MediaStyle()
+        notificationBuilder = this.setMediaStyle(notificationBuilder, new MediaStyle()
                 .setShowActionsInCompactView(new int[]{0, 1})
                 .setMediaSession(mediaSession.getSessionToken()));
+
 
 
         mediaSession.setActive(true);
@@ -271,6 +272,19 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             inotificationBuilder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
         }
         return inotificationBuilder;
+    }
+
+    private NotificationCompat.Builder setMediaStyle(NotificationCompat.Builder builder, MediaStyle mediaStyle) {
+        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1
+                && (Build.MANUFACTURER.toLowerCase(Locale.ENGLISH).contains("huawei")
+                || Build.MANUFACTURER.toLowerCase(Locale.ENGLISH).contains("samsung"))) {
+            //Huawei and samsung devices do not support remote views created by mediastyle notification
+            return builder;
+        } else {
+            return builder.setStyle(mediaStyle);
+        }
+
+
     }
 
     private void SetMediaMetadata() {
@@ -293,17 +307,17 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 Log.d(TAG, "show pause & stop");
                 notificationBuilder = addAction(notificationBuilder, "pause", R.drawable.ic_media_pause);
                 notificationBuilder = addAction(notificationBuilder, "stop", R.drawable.ic_media_stop);
-                notificationBuilder.setStyle(new MediaStyle()
+                notificationBuilder = this.setMediaStyle(notificationBuilder, new MediaStyle()
                         .setShowActionsInCompactView(new int[]{0, 1})
                         .setMediaSession(mediaSession.getSessionToken()));
+                // notificationBuilder.setStyle();
 
 
             } else {
                 Log.d(TAG, "show play");
                 notificationBuilder = addAction(notificationBuilder, "play", R.drawable.ic_media_play);
                 notificationBuilder = addAction(notificationBuilder, "stop", R.drawable.ic_media_stop);
-
-                notificationBuilder.setStyle(new MediaStyle()
+                notificationBuilder = this.setMediaStyle(notificationBuilder, new MediaStyle()
                         .setShowActionsInCompactView(new int[]{0})
                         .setMediaSession(mediaSession.getSessionToken()));
 
