@@ -204,7 +204,7 @@ He knows what lies before them and what is after them, And they comprehend not a
         for the Quran images you have on your device. Would you like to download this
         patch now?
     </string>
-  <string name="downloadPrompt_ok">Yes</string>
+  <string name="ok">Yes</string>
   <string name="downloadPrompt_no">No</string>
   <string name="downloading_title">Downloading…</string>
   <string name="downloading_message">Please wait for the files to download (resume supported).</string>
