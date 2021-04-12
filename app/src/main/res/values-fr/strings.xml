@@ -8,7 +8,7 @@
   <string name="downloadPrompt_title">Télécharger les fichiers requis ?</string>
   <string name="downloadPrompt">Pour des performances optimales, certains fichiers doivent être téléchargés. Si vous ne voulez ne pas faire cela maintenant, chaque page prendra plus de temps à charger. Souhaitez-vous télécharger les fichiers requis maintenant ?   </string>
   <string name="downloadImportantPrompt">Il y a une petite mais importante mise à jour pour les images du Coran. Voulez-vous télécharger cette mise à jour maintenant ?</string>
-  <string name="downloadPrompt_ok">Oui</string>
+  <string name="ok">Oui</string>
   <string name="downloadPrompt_no">Non</string>
   <string name="downloading_title">Téléchargement en cours…</string>
   <string name="downloading_message">Veuillez patienter jusqu\'à la fin du téléchargement. (Reprise supportée)</string>
