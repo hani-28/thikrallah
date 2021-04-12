@@ -516,7 +516,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle(this.getResources().getString(R.string.autostart)).setMessage(this.getResources().getString(R.string.autostart_message))
-                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     try{
@@ -533,7 +533,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                                 }
                             })
                             .setCancelable(false)
-                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                 }
@@ -949,13 +949,13 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.location_services_not_enabled)
                 .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
                         startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS),RC_ENABLE_LOCATION_SETTINGS);
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
                         dialog.cancel();

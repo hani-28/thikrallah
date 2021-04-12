@@ -798,6 +798,9 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             player.release();
             player = null;
         }
+        if (mediaSession!=null){
+            mediaSession.release();
+        }
         am.abandonAudioFocus(this);
         wakeLock.release();
 

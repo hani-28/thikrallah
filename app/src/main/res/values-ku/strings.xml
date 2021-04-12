@@ -4,7 +4,7 @@
   <string name="downloadPrompt_title">داگرتنی فایلە پێویستەکان؟</string>
   <string name="downloadPrompt">بۆ کارکردنی بەرنامە، پێویستە ھەندێ فایل دابگریت. ئەگەر ئێستا ئەم فرمانە ئەنجام نەدەیت، ھەر پەڕەیەک کاتێکی زیاتری ئەوێت بۆ کردنەوە. ئەتەوێ ئێستا فایلە پێویستەکان دابگریت؟
 		</string>
-  <string name="downloadPrompt_ok">بەڵێ</string>
+  <string name="ok">بەڵێ</string>
   <string name="downloadPrompt_no">نەخێر</string>
   <string name="downloading_title">داگرتن&#8230;</string>
   <string name="downloading_message">تکایە چاوەڕوانبە ھەتا فایلەکان دادەگیرێت. (پشگیری بەردەوامبون دەکرێت)</string>

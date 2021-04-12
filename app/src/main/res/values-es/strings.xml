@@ -8,7 +8,7 @@
     <string name="downloadPrompt_title">¿Desea descargar otros archivos necesarios por la aplicación?</string>
     <string name="downloadPrompt">Corán para Android  necesitamos descargar unos archivos para que funcione correctamente. Si no haces esto, la aplicación puede no funcionar confiablemente y requerirá una conexión a internet para leer.\n¿Te gustaría descargar los archivos necesarios ahora?\n\t\t</string>
     <string name="downloadImportantPrompt">Hay disponible una pequeña actualización, pero importante\npara las imágenes del Corán que tienes en tu dispositivo móvil. ¿Quieres descargar \nesta actualización ahora?</string>
-    <string name="downloadPrompt_ok">Si</string>
+    <string name="ok">Si</string>
     <string name="downloadPrompt_no">No</string>
     <string name="downloading_title">Descargando…</string>
     <string name="downloading_message">Por favor, espera a la descarga de los archivos. (La aplicación se reiniciará)</string>

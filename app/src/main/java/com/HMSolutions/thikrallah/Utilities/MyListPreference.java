@@ -186,7 +186,7 @@ public class MyListPreference extends ListPreference implements Preference.OnPre
 
                     dialogInterface.dismiss();
                 }});
-            builder.setPositiveButton(R.string.downloadPrompt_ok,new Dialog.OnClickListener()
+            builder.setPositiveButton(R.string.ok,new Dialog.OnClickListener()
 
                     {
                         @Override

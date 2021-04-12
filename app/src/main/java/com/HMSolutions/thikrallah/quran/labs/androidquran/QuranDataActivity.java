@@ -611,7 +611,7 @@ public class QuranDataActivity extends Activity implements
     AlertDialog.Builder dialog = new AlertDialog.Builder(this);
     dialog.setMessage(message);
     dialog.setCancelable(false);
-    dialog.setPositiveButton(R.string.downloadPrompt_ok,
+    dialog.setPositiveButton(R.string.ok,
         (dialog1, id) -> {
           dialog1.dismiss();
           promptForDownloadDialog = null;

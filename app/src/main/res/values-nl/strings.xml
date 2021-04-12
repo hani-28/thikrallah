@@ -12,7 +12,7 @@
     </string>
     <string name="downloadImportantPrompt">Er is een kleine maar belangrijke update voor Koran afbeeldingen die je op je apparaat hebt staat. Wil je deze patch nu downloaden?
     </string>
-    <string name="downloadPrompt_ok">Ja</string>
+    <string name="ok">Ja</string>
     <string name="downloadPrompt_no">Nee</string>
     <string name="downloading_title">Downloaden&#8230;</string>
     <string name="downloading_message">Wacht tot de bestanden zijn gedownload (CV ondersteund).</string>

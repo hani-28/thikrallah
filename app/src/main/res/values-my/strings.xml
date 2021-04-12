@@ -5,7 +5,7 @@
   <string name="downloadPrompt">Untuk prestasi yang optimal, beberapa fail perlu dimuat turun. Jika anda memilih untuk tidak melakukannya sekarang, setiap halaman yang dibuka nanti akan mengambil lebih masa. Apakah anda ingin memuat turun fail yang diperlukan sekarang?</string>
   <string name="downloadTabletPrompt">Kami baru saja meningkatkan kualiti halaman untuk tablet. Apakah anda ingin memuat turun sekarang?</string>
   <string name="downloadImportantPrompt">Terdapat kemas kini penting untuk halaman Quran peranti anda. Apakah anda ingin memuat turun sekarang?</string>
-  <string name="downloadPrompt_ok">Ya</string>
+  <string name="ok">Ya</string>
   <string name="downloadPrompt_no">Tidak</string>
   <string name="downloading_title">Sedang memuat turun&#8230;</string>
   <string name="downloading_message">Sila tunggu fail dimuat turun. (Boleh menyambung semula)</string>

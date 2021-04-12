@@ -8,7 +8,7 @@
   <string name="downloadTabletPrompt">Planshetlar uchun rasmlar yangilandi. Yangi fayllarni hozir saqlab olasizmi?</string>
   <string name="downloadImportantPrompt">Uskunangizdagi Qurʼon rasmlari uchun kichik, ammo muhim oʻzgartirishlar kiritish lozim.
         Yangilangan fayllarni hozir saqlab olasizmi?</string>
-  <string name="downloadPrompt_ok">Ha</string>
+  <string name="ok">Ha</string>
   <string name="downloadPrompt_no">Yoʻq</string>
   <string name="downloading_title">Saqlanmoqda&#8230;</string>
   <string name="downloading_message">Iltimos, fayllar toʻliq saqlanib olinguncha biroz kutib turing.</string>

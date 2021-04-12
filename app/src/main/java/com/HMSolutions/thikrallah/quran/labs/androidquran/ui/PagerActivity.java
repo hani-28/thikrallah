@@ -712,7 +712,7 @@ public class PagerActivity extends QuranActionBarActivity implements
     }
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setMessage(R.string.download_extra_data)
-        .setPositiveButton(R.string.downloadPrompt_ok,
+        .setPositiveButton(R.string.ok,
             (dialog, option) -> {
               downloadRequiredFiles();
               dialog.dismiss();

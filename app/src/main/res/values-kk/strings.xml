@@ -9,7 +9,7 @@
   <string name="downloadImportantPrompt">Құран суреттері үшін кішігірім, бірақ маңызды өзгерістер пайда болды.
         Жаңа файлдар қазір жүктелінсін бе?
     </string>
-  <string name="downloadPrompt_ok">Иә</string>
+  <string name="ok">Иә</string>
   <string name="downloadPrompt_no">Жоқ</string>
   <string name="downloading_title">Жүктеу&#8230;</string>
   <string name="downloading_message">Файлдар толық жазылғанша күтіңіз</string>

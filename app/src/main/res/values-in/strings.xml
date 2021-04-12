@@ -12,7 +12,7 @@
         Apakah anda ingin mengunduh tambahan ini sekarang?
     </string>
   <string name="downloadPrompt_title">Unduh Berkas yang Diperlukan?</string>
-  <string name="downloadPrompt_ok">Ya</string>
+  <string name="ok">Ya</string>
   <string name="downloadPrompt_no">Tidak</string>
   <string name="downloading_title">Mengunduh&#8230;</string>
   <string name="downloading_message">Harap tunggu berkas selesai diunduh (bisa dijeda).</string>
