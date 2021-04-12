@@ -14,7 +14,7 @@
     Quran-Abbildungen auf ihrem Gerät vorhanden. Wollen Sie diese Aktualisierung jetzt
     herunterladen?
   </string>
-  <string name="downloadPrompt_ok">Ja</string>
+  <string name="ok">Ja</string>
   <string name="downloadPrompt_no">Nein</string>
   <string name="downloading_title">Dateien werden heruntergeladen&#8230;</string>
   <string name="downloading_message">Bitte warten Sie bis die Dateien heruntergeladen wurden.
