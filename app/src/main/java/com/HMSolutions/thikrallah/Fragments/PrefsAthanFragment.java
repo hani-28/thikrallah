@@ -1,8 +1,10 @@
 package com.HMSolutions.thikrallah.Fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +25,8 @@ import com.HMSolutions.thikrallah.ThikrMediaPlayerService;
 import com.HMSolutions.thikrallah.Utilities.TimePreference;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
+import java.util.Locale;
+
 public class PrefsAthanFragment extends PreferenceFragmentCompat implements OnSharedPreferenceChangeListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -31,7 +35,11 @@ public class PrefsAthanFragment extends PreferenceFragmentCompat implements OnSh
 		addPreferencesFromResource(R.xml.preferences_athan);
 		initSummary(getPreferenceScreen());
 	}
-
+	@Override
+	public void onAttach(Context context) {
+		super.onAttach(context);
+		MainActivity.setLocale(context);
+	}
 	@Override
 	public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
 

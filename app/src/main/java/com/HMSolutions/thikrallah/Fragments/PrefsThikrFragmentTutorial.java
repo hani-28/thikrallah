@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +24,8 @@ import com.HMSolutions.thikrallah.ThikrMediaPlayerService;
 import com.HMSolutions.thikrallah.Utilities.TimePreference;
 import com.HMSolutions.thikrallah.Utilities.TimePreferenceUI;
 import com.google.firebase.analytics.FirebaseAnalytics;
+
+import java.util.Locale;
 
 public class PrefsThikrFragmentTutorial extends PreferenceFragmentCompat implements OnSharedPreferenceChangeListener {
 	public static String PREF_XML_FILE = "PREF_XML_FILE";
@@ -99,11 +102,12 @@ public class PrefsThikrFragmentTutorial extends PreferenceFragmentCompat impleme
 		}
 	}
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        this.mcontext = context;
-    }
+	@Override
+	public void onAttach(Context context) {
+		super.onAttach(context);
+		MainActivity.setLocale(context);
+		this.mcontext=context;
+	}
 
     @Override
     public void onResume() {

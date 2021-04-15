@@ -433,8 +433,11 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Log.d(TAG, "oncreate 2");
+        timeOperation("timing", "minor_setups");
+        MainActivity.setLocale(this);
         super.onCreate(savedInstanceState);
-
         requestPermissions();
         timeOperation("timing", "oncreate_started");
         Log.d(TAG, "oncreate 1");
@@ -443,20 +446,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
         PreferenceManager.setDefaultValues(this.getApplicationContext(), R.xml.preferences_athan, true);
         PreferenceManager.setDefaultValues(this.getApplicationContext(), R.xml.preferences_general, true);
         mcontext = this.getApplicationContext();
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String lang = mPrefs.getString("language", null);
-        Log.d(TAG, "oncreate 2");
-        timeOperation("timing", "minor_setups");
-        if (lang != null) {
-            Locale locale = new Locale(lang);
-            Locale.setDefault(locale);
-            Configuration config = new Configuration();
-            config.locale = locale;
-            getBaseContext().getResources().updateConfiguration(config,
-                    getBaseContext().getResources().getDisplayMetrics());
-            Log.d(TAG, "oncreate 3");
 
-        }
         timeOperation("timing", "locale_setup_if_needed");
         Log.d(TAG, "oncreate 4");
 
@@ -722,7 +712,16 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
         Log.d(TAG,"on pause finished on parent");
 
     }
-
+    public static void setLocale(Context context) {
+        if (androidx.preference.PreferenceManager.getDefaultSharedPreferences(context).getString("language", null) != null) {
+            Locale locale = new Locale(androidx.preference.PreferenceManager.getDefaultSharedPreferences(context).getString("language", null));
+            Locale.setDefault(locale);
+            Configuration config = new Configuration();
+            config.locale = locale;
+            context.getResources().updateConfiguration(config,
+                    context.getResources().getDisplayMetrics());
+        }
+    }
     @Override
     protected void onResume() {
 
@@ -732,7 +731,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
 
         prefListener = this;
         prefs.registerOnSharedPreferenceChangeListener(prefListener);
-
+        MainActivity.setLocale(this);
 
 
         timeOperation("timing", "onresume finished");

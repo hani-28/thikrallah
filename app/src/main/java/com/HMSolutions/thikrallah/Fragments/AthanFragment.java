@@ -3,6 +3,7 @@ package com.HMSolutions.thikrallah.Fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,12 +20,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
+import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.Models.Prayer;
 import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
 import com.HMSolutions.thikrallah.Utilities.PrayTime;
 import com.google.firebase.analytics.FirebaseAnalytics;
+
+import java.util.Locale;
 
 public class AthanFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener, NumberPicker.OnValueChangeListener {
 
@@ -72,6 +76,7 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        MainActivity.setLocale(context);
         try {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
@@ -92,6 +97,8 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+        MainActivity.setLocale(this.getContext());
+
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getApplicationContext());
 
         ((AppCompatActivity) this.getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);

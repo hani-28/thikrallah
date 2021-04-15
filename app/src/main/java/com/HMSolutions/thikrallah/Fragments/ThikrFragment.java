@@ -2,6 +2,7 @@ package com.HMSolutions.thikrallah.Fragments;
 
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,8 @@ import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Utilities.CustumThickerAdapter;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
 import com.google.firebase.analytics.FirebaseAnalytics;
+
+import java.util.Locale;
 
 public class ThikrFragment extends ListFragment implements OnClickListener {
 	
@@ -53,7 +56,7 @@ public class ThikrFragment extends ListFragment implements OnClickListener {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
+		MainActivity.setLocale(context);
         try {
             mCallback = (MainInterface) context;
         } catch (ClassCastException e) {
@@ -66,7 +69,8 @@ public class ThikrFragment extends ListFragment implements OnClickListener {
     @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-        ((AppCompatActivity) this.getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		MainActivity.setLocale(this.getContext());
+		((AppCompatActivity) this.getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity) this.getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
         this.setHasOptionsMenu(true);
 

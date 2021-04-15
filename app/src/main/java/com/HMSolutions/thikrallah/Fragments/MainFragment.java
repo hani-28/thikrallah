@@ -3,8 +3,10 @@ package com.HMSolutions.thikrallah.Fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,6 +24,8 @@ import com.HMSolutions.thikrallah.hisnulmuslim.DuaGroupActivity;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.QuranDataActivity;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
+import java.util.Locale;
+
 public class MainFragment extends Fragment {
     private MainInterface mCallback;
     private Context mContext;
@@ -34,6 +38,10 @@ public class MainFragment extends Fragment {
 	@Override
 	public void onAttach(Context context) {
 		super.onAttach(context);
+		Log.d("MainFragment","onattach called");
+
+		MainActivity.setLocale(context);
+
 		mContext = context;
 		try {
 			mCallback = (MainInterface) mContext;
@@ -46,7 +54,7 @@ public class MainFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-
+		MainActivity.setLocale(this.getContext());
 		((AppCompatActivity) this.getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 		((AppCompatActivity) this.getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
 

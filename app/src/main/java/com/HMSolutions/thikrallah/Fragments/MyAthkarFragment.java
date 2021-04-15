@@ -2,6 +2,7 @@ package com.HMSolutions.thikrallah.Fragments;
 
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.Models.UserThikr;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
@@ -26,6 +28,7 @@ import com.HMSolutions.thikrallah.Utilities.UserThikrArrayAdapter;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class MyAthkarFragment extends Fragment implements MyThikrDialogInterface {
     private MainInterface mCallback;
@@ -59,6 +62,7 @@ public class MyAthkarFragment extends Fragment implements MyThikrDialogInterface
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        MainActivity.setLocale(context);
         this.context = context;
         try {
             mCallback = (MainInterface) context;
@@ -71,7 +75,7 @@ public class MyAthkarFragment extends Fragment implements MyThikrDialogInterface
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        MainActivity.setLocale(this.getContext());
         ((AppCompatActivity) this.getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity) this.getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
         this.setHasOptionsMenu(true);

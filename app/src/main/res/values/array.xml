@@ -121,12 +121,10 @@
     <string-array name="languagelist">
         <item>@string/arabic</item>
         <item>@string/english</item>
-        <item>@string/urdu</item>
     </string-array>
     <string-array name="languagelistValues">
         <item>ar</item>
         <item>en</item>
-        <item>ur</item>
     </string-array>
 
 

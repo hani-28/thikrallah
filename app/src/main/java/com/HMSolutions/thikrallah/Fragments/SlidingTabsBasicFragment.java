@@ -19,6 +19,7 @@ package com.HMSolutions.thikrallah.Fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,8 +30,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Utilities.SlidingTabLayout;
+
+import java.util.Locale;
 
 /**
  * A basic sample which shows how to use {@link com.HMSolutions.thikrallah.Utilities.SlidingTabLayout}
@@ -59,6 +63,7 @@ public class SlidingTabsBasicFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        MainActivity.setLocale(this.getContext());
         return inflater.inflate(R.layout.preference_layout, container, false);
     }
 
@@ -83,7 +88,11 @@ public class SlidingTabsBasicFragment extends Fragment {
         mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setViewPager(mViewPager);
     }
-
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        MainActivity.setLocale(context);
+    }
     public static class MyPagerAdapter extends FragmentPagerAdapter {
         private static int NUM_ITEMS = 3;
         private Context context;

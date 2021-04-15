@@ -1,6 +1,7 @@
 package com.HMSolutions.thikrallah.Fragments;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -15,9 +16,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
 import com.google.firebase.analytics.FirebaseAnalytics;
+
+import java.util.Locale;
 
 public class TutorialFragment extends Fragment {
     private MainInterface mCallback;
@@ -46,6 +50,7 @@ public class TutorialFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        MainActivity.setLocale(context);
         this.mContext = context;
         try {
             mCallback = (MainInterface) context;
@@ -58,7 +63,7 @@ public class TutorialFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-
+        MainActivity.setLocale(this.getContext());
         ((AppCompatActivity) this.getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         ((AppCompatActivity) this.getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
 
