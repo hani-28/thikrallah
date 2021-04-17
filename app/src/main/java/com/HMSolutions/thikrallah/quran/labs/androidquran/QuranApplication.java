@@ -39,7 +39,8 @@ public class QuranApplication extends Application {
   }
 
   public void refreshLocale(@NonNull Context context, boolean force) {
-    final String language = QuranSettings.getInstance(this).isArabicNames() ? "ar" : null;
+   // final String language = QuranSettings.getInstance(this).isArabicNames() ? "ar" : null;
+    final String language = androidx.preference.PreferenceManager.getDefaultSharedPreferences(context).getString("language", null);
 
     final Locale locale;
     if ("ar".equals(language)) {

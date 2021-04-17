@@ -10,15 +10,6 @@
       app:iconSpaceReserved="false">
 
     <CheckBoxPreference
-        android:defaultValue="false"
-        android:disableDependentsState="false"
-        android:key="@string/prefs_use_arabic_names"
-        android:persistent="true"
-        android:summary="@string/prefs_use_arabic_summary_on"
-        android:title="@string/prefs_use_arabic_title"
-        app:iconSpaceReserved="false"/>
-
-    <CheckBoxPreference
         android:defaultValue="true"
         android:key="@string/prefs_new_background"
         android:persistent="true"
