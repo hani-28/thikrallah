@@ -59,6 +59,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -315,9 +317,10 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                 Log.d(TAG, "requesting best provider: " + provider);
 
                 if (location != null) {
-
-                    PreferenceManager.getDefaultSharedPreferences(this).edit().putString("latitude", Double.toString(location.getLatitude())).commit();
-                    PreferenceManager.getDefaultSharedPreferences(this).edit().putString("longitude", Double.toString(location.getLongitude())).commit();
+                    NumberFormat nf = NumberFormat.getInstance(new Locale("en_US"));
+                    nf.setMaximumFractionDigits(3);
+                    PreferenceManager.getDefaultSharedPreferences(this).edit().putString("latitude", nf.format(location.getLatitude())).commit();
+                    PreferenceManager.getDefaultSharedPreferences(this).edit().putString("longitude", nf.format(location.getLongitude())).commit();
                 }
                 Log.d(TAG, "isproviderenabled" + locationManager.isProviderEnabled(provider));
                 if ((!locationManager.isProviderEnabled(provider) || !isLocationEnabled(this)) &&
@@ -712,6 +715,24 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
         Log.d(TAG,"on pause finished on parent");
 
     }
+    public static String getLatitude(Context context) {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        if (sharedPrefs.getBoolean("isCustomLocation", false)) {
+            return sharedPrefs.getString("c_latitude", "0.0");
+        }else{
+            return sharedPrefs.getString("latitude", "0.0");
+
+        }
+    }
+    public static String getLongitude(Context context) {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        if (sharedPrefs.getBoolean("isCustomLocation", false)) {
+            return sharedPrefs.getString("c_longitude", "0.0");
+        }else{
+            return sharedPrefs.getString("longitude", "0.0");
+
+        }
+    }
     public static void setLocale(Context context) {
         if (androidx.preference.PreferenceManager.getDefaultSharedPreferences(context).getString("language", null) != null) {
             Locale locale = new Locale(androidx.preference.PreferenceManager.getDefaultSharedPreferences(context).getString("language", null));
@@ -986,8 +1007,10 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
     public void onLocationChanged(Location location) {
         Log.d(TAG, "onLocationChanged called requesting with provider =" + location.getProvider().toString());
         Log.d(TAG, "latitude is " + Double.toString(location.getLatitude()));
-        PreferenceManager.getDefaultSharedPreferences(this).edit().putString("latitude", Double.toString(location.getLatitude())).commit();
-        PreferenceManager.getDefaultSharedPreferences(this).edit().putString("longitude", Double.toString(location.getLongitude())).commit();
+        NumberFormat nf = NumberFormat.getInstance(new Locale("en_US"));
+        nf.setMaximumFractionDigits(3);
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putString("latitude", nf.format(location.getLatitude())).commit();
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putString("longitude", nf.format(location.getLongitude())).commit();
         stopLocationUpdates();
 
     }
@@ -1091,8 +1114,8 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
 
         private String updateCity(Context context) {
 
-            double latitude = Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("latitude", "0.0"));
-            double longitude = Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("longitude", "0.0"));
+            double latitude = Double.parseDouble(MainActivity.getLatitude(context));
+            double longitude = Double.parseDouble(MainActivity.getLongitude(context));
             Geocoder geocoder = new Geocoder(context, Locale.getDefault());
             List<Address> addresses;
             String locationDiscription = "";

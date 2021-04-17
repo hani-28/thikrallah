@@ -27,6 +27,7 @@ import android.content.Context;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.Utilities.reversegeocode.GeocodeListBuilder;
 
 import java.util.Calendar;
@@ -123,8 +124,8 @@ public class PrayTime {
             return Integer.parseInt(user_option);
         }
 
-        double latitude =  Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("latitude", "0.0"));
-        double longitude = Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("longitude","0.0"));
+        double latitude =  Double.parseDouble(MainActivity.getLatitude(context));
+        double longitude = Double.parseDouble(MainActivity.getLongitude(context));
         if(latitude==0&&longitude==0){
             return CALC_METHOD_MWL;
         }
@@ -240,8 +241,8 @@ public class PrayTime {
             return Integer.parseInt(user_option);
         }
 
-        double latitude =  Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("latitude", "0.0"));
-        double longitude = Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("longitude","0.0"));
+        double latitude =  Double.parseDouble(MainActivity.getLatitude(context));
+        double longitude = Double.parseDouble(MainActivity.getLongitude(context));
 
         if(latitude==0&&longitude==0){
             return JURISTIC_METHOD_Shafii;
@@ -304,8 +305,8 @@ public class PrayTime {
         return (int) Math.round(AVERAGE_RADIUS_OF_EARTH_KM * c);
     }
     public String[] getPrayerTimes(Context context){
-        double latitude =  Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("latitude", "0.0"));
-        double longitude = Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context).getString("longitude","0.0"));
+        double latitude =  Double.parseDouble(MainActivity.getLatitude(context));
+        double longitude = Double.parseDouble(MainActivity.getLongitude(context));
         double timezone = getCurrentTimezoneOffset();
         int adjustment=PreferenceManager.getDefaultSharedPreferences(context).getInt("time_adjustment",0);
         offsets=new int[]{adjustment,adjustment,adjustment,adjustment,adjustment,adjustment,adjustment};

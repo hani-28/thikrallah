@@ -199,7 +199,7 @@
     <string name="thikr_text_required">نص الذكر لا يحتوي على اي ذكر. يرجى اضافة نص الدعاء</string>
     <string name="recording">جاري التسجيل</string>
     <string name="next">التالي</string>
- <string name="time_adjustment">تعديل وقت الاذان</string>
+ <string name="location_adjustment">تعديل موقع المدينة يدويا:</string>
 
 
     <string name="action_search">بحث</string>
@@ -625,5 +625,11 @@
    <string name="need_overlay_permission_message">ير جى السماح لبرنامجنا بالظهور فوق التطبيقات الاخرى لكي نتمكن من عرض التذكيرات بالله لك وانت في اي تطبيق</string>
    <string name="need_location_permission_title">السماح بمعلومات الموقع</string>
    <string name="need_location_permission_message">يرجى السماح لبرنامج اذكر الله بالاذن للحصول على معلومات موقعك لكي يستطيع البرنامج تحديد موقع مدينتك. هذا ضروري لكي يتم حساب اوقات الصلاة بشكل صحيح</string>
+    <string name="longitude">خط الطول</string>
+   <string name="latitude">خط العرض</string>
+   <string name="current_location">الموقع الحالي: </string>
+   <string name="number_format_error">خطأ في الرقم المدخل</string>
+
+   <string name="override_location">لا تستعمل الموقع بناء على الGPS. حدد الموقع يدويا</string>
 
 </resources>

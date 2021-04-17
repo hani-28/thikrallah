@@ -175,7 +175,7 @@ He knows what lies before them and what is after them, And they comprehend not a
     <string name="thikr_text_required">Supplication text is required. Please add text.</string>
     <string name="recording">Recording</string>
     <string name="next">Next</string>
-    <string name="time_adjustment">Adjust Prayer Times</string>
+    <string name="location_adjustment">Location Manual Adjustments:</string>
     <string name="action_search">Search</string>
     <string name="action_bookmarks">Bookmarks</string>
     <string name="action_settings">Settings</string>
@@ -228,7 +228,7 @@ He knows what lies before them and what is after them, And they comprehend not a
         for the Quran images you have on your device. Would you like to download this
         patch now?
     </string>
-    <string name="ok">Yes</string>
+    <string name="ok">Ok</string>
     <string name="downloadPrompt_no">No</string>
     <string name="downloading_title">Downloading…</string>
     <string name="downloading_message">Please wait for the files to download (resume supported).</string>
@@ -520,4 +520,10 @@ He knows what lies before them and what is after them, And they comprehend not a
     <!-- notification channel names [CHAR LIMIT=40] -->
     <string name="notification_channel_download">Quran Downloads</string>
     <string name="notification_channel_audio">Quran Recitation</string>
+    <string name="longitude">Longitude</string>
+    <string name="latitude">Latitude</string>
+    <string name="number_format_error">ُError in number format</string>
+    <string name="current_location">Current location: </string>
+    <string name="override_location">Use manual location instead of GPS</string>
+
 </resources>

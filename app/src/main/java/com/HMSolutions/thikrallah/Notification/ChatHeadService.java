@@ -85,8 +85,18 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 	}
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		//Log.d(TAG,"onstartcommadn called. foreground notification started");
-		//this.startnotification();
+
+		windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+		if (chatHead!=null ){
+			//remove any overlay windows from previous run
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+				if(chatHead.isAttachedToWindow()){
+					windowManager.removeView(chatHead);
+				}
+			}else{
+				windowManager.removeView(chatHead);
+			}
+		}
 		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         String lang=mPrefs.getString("language",null);
         Log.d(TAG,"chatheadservice started");
@@ -153,22 +163,6 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 				startnotification();
 				//mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
 			}
-
-			//thikr=this.getApplicationContext().getResources().getStringArray(R.array.GeneralThikr)[thikrNumber-1];
-		    // We want this service to continue running until it is explicitly
-		    // stopped, so return sticky.
-			windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-			if (chatHead!=null ){
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    if(chatHead.isAttachedToWindow()){
-                        windowManager.removeView(chatHead);
-                    }
-                }else{
-                    windowManager.removeView(chatHead);
-                }
-			}
-			//chatHead = new ImageView(this);
-			
 			chatHead=new TextView(this);
 			chatHead.setTextAppearance(this.getApplicationContext(), android.R.style.TextAppearance_Large);
 			chatHead.setText(thikr, TextView.BufferType.SPANNABLE);

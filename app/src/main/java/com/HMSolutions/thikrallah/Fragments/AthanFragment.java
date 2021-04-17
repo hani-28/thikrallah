@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.NumberPicker;
@@ -24,13 +25,14 @@ import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.Models.Prayer;
 import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
 import com.HMSolutions.thikrallah.R;
+import com.HMSolutions.thikrallah.Utilities.CustomLocation;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
 import com.HMSolutions.thikrallah.Utilities.PrayTime;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.Locale;
 
-public class AthanFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener, NumberPicker.OnValueChangeListener {
+public class AthanFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener, View.OnClickListener {
 
 
 
@@ -44,7 +46,6 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
     private TextView prayer4_time;
     private TextView prayer5_time;
     private TextView sunrise_time;
-    private TextView sunset_time;
     private Switch fajr_switch;
     private Switch duhr_switch;
     private Switch asr_switch;
@@ -52,9 +53,9 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
     private Switch ishaa_switch;
     private SharedPreferences mPrefs;
     private SharedPreferences.OnSharedPreferenceChangeListener prefListener;
-    private NumberPicker adjuster_sign;
-    private NumberPicker minutes_adjustments;
-    private NumberPicker hours_adjustments;
+    private CheckBox is_Manual_Location;
+    private TextView currentLocation;
+
 
     //  private TextView locationDescription;
 
@@ -63,14 +64,22 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
 	}
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equalsIgnoreCase("latitude") || key.equalsIgnoreCase("longitude")) {
+        if (key.equalsIgnoreCase("latitude") || key.equalsIgnoreCase("longitude")
+                || key.equalsIgnoreCase("isCustomLocation")||key.equalsIgnoreCase("c_latitude")
+                ||key.equalsIgnoreCase("c_longitude")) {
             updateprayerTimes();
+            currentLocation.setText(this.getContext().getResources().getString(R.string.current_location)+MainActivity.getLatitude(getContext())+", "+ MainActivity.getLongitude(getContext()));
+            is_Manual_Location.setChecked(PreferenceManager.getDefaultSharedPreferences(this.getContext()).getBoolean("isCustomLocation",false));
         }
+
+    }
+
+
        /* if (key.equalsIgnoreCase("location")){
             locationDescription.setText(PreferenceManager.getDefaultSharedPreferences(this.getActivity()).getString("location",""));
 
         }*/
-    }
+
 
 
     @Override
@@ -116,8 +125,16 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
         prayer4_time=(TextView) view.findViewById(R.id.athan_timing4);
         prayer5_time=(TextView) view.findViewById(R.id.athan_timing5);
         sunrise_time=(TextView) view.findViewById(R.id.sunrise_timing1);
-        sunset_time=(TextView) view.findViewById(R.id.sunset_timing);
+        is_Manual_Location= (CheckBox) view.findViewById(R.id.is_manual_location);
+        if (PreferenceManager.getDefaultSharedPreferences(this.getContext()).getBoolean("isCustomLocation", false)) {
+            is_Manual_Location.setChecked(true);
+        }else{
+            is_Manual_Location.setChecked(false);
+        }
 
+        is_Manual_Location.setOnClickListener(this);
+        currentLocation= view.findViewById(R.id.current_location);
+        currentLocation.setText(this.getContext().getResources().getString(R.string.current_location)+MainActivity.getLatitude(getContext())+", "+ MainActivity.getLongitude(getContext()));
         fajr_switch=(Switch) view.findViewById(R.id.switch1);
         duhr_switch=(Switch) view.findViewById(R.id.switch2);
         asr_switch=(Switch) view.findViewById(R.id.switch3);
@@ -129,40 +146,6 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
         asr_switch.setChecked(mPrefs.getBoolean("isAsrReminder",true));
         maghrib_switch.setChecked(mPrefs.getBoolean("isMaghribReminder",true));
         ishaa_switch.setChecked(mPrefs.getBoolean("isIshaaReminder",true));
-
-
-        adjuster_sign=(NumberPicker) view.findViewById(R.id.adjuster_sign);
-        hours_adjustments=(NumberPicker) view.findViewById(R.id.hourPicker);
-        minutes_adjustments=(NumberPicker) view.findViewById(R.id.minutePicker);
-        hours_adjustments.setMinValue(0);
-        hours_adjustments.setMaxValue(1);
-        minutes_adjustments.setMinValue(0);
-        minutes_adjustments.setMaxValue(59);
-        adjuster_sign.setMinValue(0);
-        adjuster_sign.setMaxValue(1);
-
-        adjuster_sign.setDisplayedValues( new String[] { "+", "-" } );
-       int adjustments=mPrefs.getInt("time_adjustment",0);
-        Log.d("adjustment","adjustment was "+adjustments);
-        if(adjustments==0){
-            hours_adjustments.setValue(0);
-            minutes_adjustments.setValue(0);
-            adjuster_sign.setValue(0);
-        }else if(adjustments<0){
-            adjuster_sign.setValue(1);
-            hours_adjustments.setValue(adjustments/60*-1);
-            minutes_adjustments.setValue((adjustments-(adjustments/60)*60)*-1);
-
-        }else if (adjustments>0){
-            Log.d("adjustment","hour is "+(int)(adjustments/60));
-            adjuster_sign.setValue(0);
-            hours_adjustments.setValue(adjustments/60);
-            minutes_adjustments.setValue(adjustments-(adjustments/60)*60);
-        }
-
-        adjuster_sign.setOnValueChangedListener(this);
-        hours_adjustments.setOnValueChangedListener(this);
-        minutes_adjustments.setOnValueChangedListener(this);
 
 
 
@@ -251,7 +234,7 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
                 sunrise_time.setText(prayers[1].getTime());
                 prayer2_time.setText(prayers[2].getTime());
                 prayer3_time.setText(prayers[3].getTime());
-                sunset_time.setText(prayers[4].getTime());
+
                 prayer4_time.setText(prayers[5].getTime());
                 prayer5_time.setText(prayers[6].getTime());
 
@@ -318,20 +301,15 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
 
 
     @Override
-    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-        int hours = hours_adjustments.getValue();
-        int minutes = minutes_adjustments.getValue();
-        int sign=adjuster_sign.getValue();
-        int multiplier=1;
-        if (sign==0){
-            multiplier=1;
+    public void onClick(View v) {
+        if (is_Manual_Location.isChecked()){
+            CustomLocation Customlocation=new CustomLocation(this.getActivity());
+            Customlocation.show();
         }else{
-            multiplier=-1;
+            PreferenceManager.getDefaultSharedPreferences(this.getContext()).edit().putBoolean("isCustomLocation", false).commit();
         }
-        int adjustment_in_minutes=(hours*60+minutes)*multiplier;
-        mPrefs.edit().putInt("time_adjustment",adjustment_in_minutes).commit();
-        Log.d("adjustment","adjustment is "+adjustment_in_minutes);
+        currentLocation.setText(this.getContext().getResources().getString(R.string.current_location)+MainActivity.getLatitude(getContext())+", "+ MainActivity.getLongitude(getContext()));
         updateprayerTimes();
-
+        updateAthanAlarms();
     }
 }
