@@ -308,8 +308,7 @@ public class PrayTime {
         double latitude =  Double.parseDouble(MainActivity.getLatitude(context));
         double longitude = Double.parseDouble(MainActivity.getLongitude(context));
         double timezone = getCurrentTimezoneOffset();
-        int adjustment=PreferenceManager.getDefaultSharedPreferences(context).getInt("time_adjustment",0);
-        offsets=new int[]{adjustment,adjustment,adjustment,adjustment,adjustment,adjustment,adjustment};
+        offsets=new int[]{0,0,0,0,0,0,0};
         if(getCalcMethod()==CALC_METHOD_OMAN){
             offsets[2]= offsets[2]+5;
             offsets[3]= offsets[3]+5;
