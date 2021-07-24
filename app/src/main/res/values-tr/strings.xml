@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+  <string name="share">Paylaş</string>
+  <string name="quran_thikr_need_files_prompt_title">Dosyayı indir</string>
   <string name="Settings">ayarlar</string>
   <string name="language">Dil </string>
   <!-- Shown above search results when we receive a search request. -->
