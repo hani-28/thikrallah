@@ -44,7 +44,6 @@ import androidx.media.app.NotificationCompat.MediaStyle;
 
 import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
 import com.HMSolutions.thikrallah.Notification.ThikrMediaBroadcastReciever;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
@@ -398,7 +397,6 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         }
         Bundle bundle = new Bundle();
         bundle.putString("thikrtype", this.getThikrType());
-        FirebaseAnalytics.getInstance(this).logEvent(TAG, bundle);
         if (this.getThikrType().equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)) {
             this.updateAllAlarms();
             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());

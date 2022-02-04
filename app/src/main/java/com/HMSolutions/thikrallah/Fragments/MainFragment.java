@@ -22,7 +22,6 @@ import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
 import com.HMSolutions.thikrallah.hisnulmuslim.DuaGroupActivity;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.QuranDataActivity;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.Locale;
 
@@ -161,10 +160,12 @@ public class MainFragment extends Fragment {
     }
 
     private void logScreen() {
-        Bundle bundle = new Bundle();
+        /*
+    	Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, this.getClass().getSimpleName());
         bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, this.getClass().getSimpleName());
         FirebaseAnalytics.getInstance(this.getActivity()).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
+   */
     }
 
 }

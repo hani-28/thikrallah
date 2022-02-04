@@ -40,7 +40,6 @@ import com.HMSolutions.thikrallah.quran.labs.androidquran.service.QuranDownloadS
 import com.HMSolutions.thikrallah.quran.labs.androidquran.service.util.ServiceIntentHelper;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.AudioUtils;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranSettings;
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -525,7 +524,7 @@ public class MyListPreference extends ListPreference implements Preference.OnPre
             intent.putExtra("isFromService", true);
         }
 
-        FirebaseCrashlytics.getInstance().log("starting service for audio playback");
+        //FirebaseCrashlytics.getInstance().log("starting service for audio playback");
         Log.d(TAG, "starting service for audio playback");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

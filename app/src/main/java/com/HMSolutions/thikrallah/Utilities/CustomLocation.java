@@ -2,6 +2,7 @@ package com.HMSolutions.thikrallah.Utilities;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -61,9 +62,11 @@ public class CustomLocation extends Dialog implements
                     NumberFormat nf= NumberFormat.getInstance();
                     double longitude = nf.parse(longitudeInput.getText().toString().replace(',', '.')).doubleValue();
                     double latitude = nf.parse(latitudeInput.getText().toString().replace(',', '.')).doubleValue();
-                    PreferenceManager.getDefaultSharedPreferences(this.getContext()).edit().putString("c_latitude", Double.toString(latitude)).commit();
-                    PreferenceManager.getDefaultSharedPreferences(this.getContext()).edit().putString("c_longitude", Double.toString(longitude)).commit();
-                    PreferenceManager.getDefaultSharedPreferences(this.getContext()).edit().putBoolean("isCustomLocation", true).commit();
+                    SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this.getContext()).edit();
+                    editor.putString("c_latitude", Double.toString(latitude));
+                    editor.putString("c_longitude", Double.toString(longitude));
+                    editor.putBoolean("isCustomLocation", true);
+                    editor.commit();
 
                 } catch (ParseException e) {
                     //

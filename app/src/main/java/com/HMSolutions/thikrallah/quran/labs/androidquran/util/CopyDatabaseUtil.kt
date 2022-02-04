@@ -1,7 +1,6 @@
 package com.HMSolutions.thikrallah.quran.labs.androidquran.util
 
 import android.content.Context
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.reactivex.Single
 import okio.Okio
 import java.io.File
@@ -42,7 +41,7 @@ class CopyDatabaseUtil @Inject constructor(val context: Context,
         false
       }
     }
-            .doOnError { FirebaseCrashlytics.getInstance().recordException(it) }
+
     .onErrorReturn { false }
   }
 }

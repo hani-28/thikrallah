@@ -23,7 +23,6 @@ import com.HMSolutions.thikrallah.quran.labs.androidquran.database.DatabaseUtils
 import com.HMSolutions.thikrallah.quran.labs.androidquran.database.TranslationsDBAdapter;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranFileUtils;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranUtils;
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.List;
 
@@ -68,7 +67,6 @@ public class QuranDataProvider extends ContentProvider {
   @Override
   public Cursor query(@NonNull Uri uri, String[] projection, String selection,
       String[] selectionArgs, String sortOrder) {
-    FirebaseCrashlytics crashlytics = FirebaseCrashlytics.getInstance();
 
     Context context = getContext();
     if (!didInject) {
@@ -83,7 +81,6 @@ public class QuranDataProvider extends ContentProvider {
     }
 
     Log.d(TAG, "uri: " + uri.toString());
-    crashlytics.log("uri: " + uri.toString());
     switch (uriMatcher.match(uri)) {
       case SEARCH_SUGGEST: {
         if (selectionArgs == null) {

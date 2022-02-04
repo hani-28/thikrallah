@@ -6,7 +6,6 @@ import com.HMSolutions.thikrallah.quran.labs.androidquran.common.Response;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.di.ActivityScope;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranFileUtils;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranScreenInfo;
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import javax.inject.Inject;
 
@@ -38,7 +37,7 @@ public class QuranPageWorker {
   }
 
   private Response downloadImage(int pageNumber) {
-    FirebaseCrashlytics crashlytics = FirebaseCrashlytics.getInstance();
+
 
     Response response = null;
     OutOfMemoryError oom = null;
@@ -47,8 +46,6 @@ public class QuranPageWorker {
       response = QuranDisplayHelper.getQuranPage(
               okHttpClient, appContext, imageWidth, pageNumber, quranFileUtils);
     } catch (OutOfMemoryError me) {
-      crashlytics.log(TAG +
-              " out of memory exception loading page " + pageNumber + ", " + imageWidth);
       oom = me;
     }
 
@@ -56,7 +53,6 @@ public class QuranPageWorker {
         (response.getBitmap() == null &&
             response.getErrorCode() != Response.ERROR_SD_CARD_NOT_FOUND)){
       if (quranScreenInfo.isDualPageMode()) {
-        crashlytics.log(TAG + " tablet got bitmap null, trying alternate width...");
         String param = quranScreenInfo.getWidthParam();
         if (param.equals(imageWidth)) {
           param = quranScreenInfo.getTabletWidthParam();
@@ -64,12 +60,9 @@ public class QuranPageWorker {
         response = QuranDisplayHelper.getQuranPage(
                 okHttpClient, appContext, param, pageNumber, quranFileUtils);
         if (response.getBitmap() == null) {
-          crashlytics.log(TAG +
-                  " bitmap still null, giving up... [" + response.getErrorCode() + "]");
-        }
+          }
       }
-      crashlytics.log(TAG + " got response back as null... [" +
-              (response == null ? "" : response.getErrorCode()));
+
     }
 
     if ((response == null || response.getBitmap() == null) && oom != null) {

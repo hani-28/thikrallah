@@ -319,8 +319,10 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                 if (location != null) {
                     NumberFormat nf = NumberFormat.getInstance(new Locale("en_US"));
                     nf.setMaximumFractionDigits(3);
-                    PreferenceManager.getDefaultSharedPreferences(this).edit().putString("latitude", nf.format(location.getLatitude())).commit();
-                    PreferenceManager.getDefaultSharedPreferences(this).edit().putString("longitude", nf.format(location.getLongitude())).commit();
+                    SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+                    editor.putString("latitude", nf.format(location.getLatitude()));
+                    editor.putString("longitude", nf.format(location.getLongitude()));
+                    editor.commit();
                 }
                 Log.d(TAG, "isproviderenabled" + locationManager.isProviderEnabled(provider));
                 if ((!locationManager.isProviderEnabled(provider) || !isLocationEnabled(this)) &&
@@ -551,23 +553,25 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
         boolean isNotification = intent.getBooleanExtra("FromNotification", false);
         if (isNotification == true) {
             Log.d(TAG, "from notification");
-            if (intent.getExtras().getString("DataType").equalsIgnoreCase(MainActivity.DATA_TYPE_DAY_THIKR) ||
-                    intent.getExtras().getString("DataType").equalsIgnoreCase(MainActivity.DATA_TYPE_NIGHT_THIKR)) {
-                Log.d(TAG, "general thikr notification");
-                launchFragment(new ThikrFragment(), intent.getExtras(), "ThikrFragment");
+            if (intent.getExtras().getString("DataType")!=null){
+                if (intent.getExtras().getString("DataType").equalsIgnoreCase(MainActivity.DATA_TYPE_DAY_THIKR) ||
+                        intent.getExtras().getString("DataType").equalsIgnoreCase(MainActivity.DATA_TYPE_NIGHT_THIKR)) {
+                    Log.d(TAG, "general thikr notification");
+                    launchFragment(new ThikrFragment(), intent.getExtras(), "ThikrFragment");
+                }
+                if (intent.getExtras().getString("DataType").contains(MainActivity.DATA_TYPE_QURAN)) {
+                    Log.d(TAG, "quran thikr notification");
+                    Intent intent2 = new Intent();
+                    intent2.setClass(this, QuranDataActivity.class);
+                    intent2.putExtras(intent.getExtras());
+                    startActivityForResult(intent2, 0);
+                }
+                if (intent.getExtras().getString("DataType").contains(MainActivity.DATA_TYPE_ATHAN)) {
+                    Log.d(TAG, "athan thikr notification");
+                    launchFragment(new AthanFragment(), new Bundle(),"AthanFragment");
+                }
             }
-            if (intent.getExtras().getString("DataType").contains(MainActivity.DATA_TYPE_QURAN)) {
-                Log.d(TAG, "quran thikr notification");
 
-                Intent intent2 = new Intent();
-                intent2.setClass(this, QuranDataActivity.class);
-                intent2.putExtras(intent.getExtras());
-                startActivityForResult(intent2, 0);
-            }
-            if (intent.getExtras().getString("DataType").contains(MainActivity.DATA_TYPE_ATHAN)) {
-                Log.d(TAG, "athan thikr notification");
-                launchFragment(new AthanFragment(), new Bundle(),"AthanFragment");
-            }
         }
         boolean isFromSettings = intent.getBooleanExtra("FromPreferenceActivity", false);
         if (isFromSettings == true) {
@@ -1009,8 +1013,10 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
         Log.d(TAG, "latitude is " + Double.toString(location.getLatitude()));
         NumberFormat nf = NumberFormat.getInstance(new Locale("en_US"));
         nf.setMaximumFractionDigits(3);
-        PreferenceManager.getDefaultSharedPreferences(this).edit().putString("latitude", nf.format(location.getLatitude())).commit();
-        PreferenceManager.getDefaultSharedPreferences(this).edit().putString("longitude", nf.format(location.getLongitude())).commit();
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        editor.putString("latitude", nf.format(location.getLatitude()));
+        editor.putString("longitude", nf.format(location.getLongitude()));
+        editor.commit();
         stopLocationUpdates();
 
     }

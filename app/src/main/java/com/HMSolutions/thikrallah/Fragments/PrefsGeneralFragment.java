@@ -19,7 +19,6 @@ import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Utilities.TimePreference;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.Locale;
 
@@ -107,11 +106,13 @@ public class PrefsGeneralFragment extends PreferenceFragmentCompat implements On
     }
 
     private void logScreen() {
+		/*
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, this.getClass().getSimpleName());
         bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, this.getClass().getSimpleName());
         FirebaseAnalytics.getInstance(this.getActivity()).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
-    }
+  	  */
+	}
 
     @Override
     public void onPause() {

@@ -36,7 +36,6 @@ import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranFileUtils;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranPartialPageChecker;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranScreenInfo;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranSettings;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.File;
 
@@ -80,12 +79,10 @@ public class QuranDataActivity extends Activity implements
   QuranPartialPageChecker quranPartialPageChecker;
   @Inject
   TranslationManagerPresenter translationManagerPresenter;
-  private FirebaseAnalytics mFirebaseAnalytics;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
     QuranApplication quranApp = (QuranApplication) getApplication();
     quranApp.getApplicationComponent().inject(this);
@@ -473,7 +470,6 @@ public class QuranDataActivity extends Activity implements
           bundle.putInt("osVersion", Build.VERSION.SDK_INT);
           bundle.putString("storagePath", quranSettings.getAppCustomLocation());
           bundle.putString("storageNotAvailable", storageNotAvailable ? "true" : "false");
-          mFirebaseAnalytics.logEvent("imagesDisappeared", bundle);
           Timber.e(new IllegalStateException("Deleted Data"), "Unable to Download Pages");
           quranSettings.setDownloadedPages(false);
         }

@@ -25,7 +25,6 @@ import com.HMSolutions.thikrallah.Utilities.MyDBHelper;
 import com.HMSolutions.thikrallah.Utilities.MyThikrDialogInterface;
 import com.HMSolutions.thikrallah.Utilities.RecordThikrDialog;
 import com.HMSolutions.thikrallah.Utilities.UserThikrArrayAdapter;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -53,10 +52,12 @@ public class MyAthkarFragment extends Fragment implements MyThikrDialogInterface
     }
 
     private void logScreen() {
+        /*
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, this.getClass().getSimpleName());
         bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, this.getClass().getSimpleName());
         FirebaseAnalytics.getInstance(this.getActivity()).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
+    */
     }
 
     @Override

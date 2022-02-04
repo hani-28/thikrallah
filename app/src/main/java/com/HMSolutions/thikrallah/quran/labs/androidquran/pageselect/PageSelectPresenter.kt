@@ -4,7 +4,6 @@ import com.HMSolutions.thikrallah.quran.data.source.PageProvider
 import com.HMSolutions.thikrallah.quran.labs.androidquran.presenter.Presenter
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.ImageUtil
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranFileUtils
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.Reusable
 import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
@@ -46,7 +45,7 @@ class PageSelectPresenter @Inject
                   imageUtil.downloadImage(url, previewImage)
                           .subscribeOn(Schedulers.io())
                           .observeOn(mainThreadScheduler)
-                          .subscribe({ generateData() }, { FirebaseCrashlytics.getInstance().recordException(it) })
+                          .subscribe { generateData() }
           )
           null
         } else {

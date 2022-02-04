@@ -23,7 +23,6 @@ import com.HMSolutions.thikrallah.Notification.ThikrService;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.ThikrMediaPlayerService;
 import com.HMSolutions.thikrallah.Utilities.TimePreference;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.Locale;
 
@@ -112,11 +111,13 @@ public class PrefsAthanFragment extends PreferenceFragmentCompat implements OnSh
     }
 
     private void logScreen() {
+		/*
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, this.getClass().getSimpleName());
         bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, this.getClass().getSimpleName());
         FirebaseAnalytics.getInstance(this.getActivity()).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
-    }
+   		*/
+	}
 
     @Override
     public void onPause() {

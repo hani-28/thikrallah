@@ -26,7 +26,6 @@ import com.HMSolutions.thikrallah.quran.labs.androidquran.service.util.QuranDown
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranSettings;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranUtils;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.ZipUtils;
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.io.File;
 import java.io.IOException;
@@ -578,7 +577,6 @@ public class QuranDownloadService extends Service implements
       call = okHttpClient.newCall(request);
       final Response response = call.execute();
       if (response.isSuccessful()) {
-        FirebaseCrashlytics.getInstance().log("successful response: " + response.code() + " - " + downloadedAmount);
         final BufferedSink sink = Okio.buffer(Okio.appendingSink(partialFile));
         final ResponseBody body = response.body();
         source = body.source();
@@ -667,7 +665,6 @@ public class QuranDownloadService extends Service implements
 
       return availableSpace > spaceNeeded;
     } catch (Exception e) {
-      FirebaseCrashlytics.getInstance().recordException(e);
       return true;
     }
   }

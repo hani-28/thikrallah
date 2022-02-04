@@ -28,7 +28,6 @@ import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Utilities.CustomLocation;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
 import com.HMSolutions.thikrallah.Utilities.PrayTime;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.Locale;
 
@@ -67,9 +66,12 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
         if (key.equalsIgnoreCase("latitude") || key.equalsIgnoreCase("longitude")
                 || key.equalsIgnoreCase("isCustomLocation")||key.equalsIgnoreCase("c_latitude")
                 ||key.equalsIgnoreCase("c_longitude")) {
-            updateprayerTimes();
-            currentLocation.setText(this.getContext().getResources().getString(R.string.current_location)+MainActivity.getLatitude(getContext())+", "+ MainActivity.getLongitude(getContext()));
-            is_Manual_Location.setChecked(PreferenceManager.getDefaultSharedPreferences(this.getContext()).getBoolean("isCustomLocation",false));
+            if (this.getView()!=null){
+                updateprayerTimes();
+                currentLocation.setText(this.getContext().getResources().getString(R.string.current_location)+MainActivity.getLatitude(getContext())+", "+ MainActivity.getLongitude(getContext()));
+                is_Manual_Location.setChecked(PreferenceManager.getDefaultSharedPreferences(this.getContext()).getBoolean("isCustomLocation",false));
+            }
+
         }
 
     }
@@ -87,11 +89,7 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
         super.onAttach(context);
         MainActivity.setLocale(context);
         try {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
             prefListener = this;
-            prefs.registerOnSharedPreferenceChangeListener(prefListener);
-
             mCallback = (MainInterface) context;
             mCallback.requestLocationUpdate();
 
@@ -220,7 +218,7 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
                 updateAthanAlarms();
             }
         });
-
+        PreferenceManager.getDefaultSharedPreferences(this.getContext()).registerOnSharedPreferenceChangeListener(prefListener);
         this.updateprayerTimes();
 
 		return view;
@@ -283,15 +281,18 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
     @Override
     public void onResume() {
         super.onResume();
+        PreferenceManager.getDefaultSharedPreferences(this.getContext()).registerOnSharedPreferenceChangeListener(prefListener);
         logScreen();
         this.updateprayerTimes();
     }
 
     private void logScreen() {
+        /*
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, this.getClass().getSimpleName());
         bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, this.getClass().getSimpleName());
         FirebaseAnalytics.getInstance(this.getActivity()).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
+    */
     }
 
     @Override

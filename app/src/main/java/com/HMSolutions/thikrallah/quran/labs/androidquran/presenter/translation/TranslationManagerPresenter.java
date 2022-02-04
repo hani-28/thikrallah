@@ -18,7 +18,6 @@ import com.HMSolutions.thikrallah.quran.labs.androidquran.presenter.Presenter;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.ui.TranslationManagerActivity;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranFileUtils;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranSettings;
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
@@ -164,7 +163,7 @@ public class TranslationManagerPresenter implements Presenter<TranslationManager
           }
         }
       } catch (Exception e) {
-        FirebaseCrashlytics.getInstance().recordException(e);
+       // FirebaseCrashlytics.getInstance().recordException(e);
       }
       return Observable.empty();
     });
@@ -210,7 +209,7 @@ public class TranslationManagerPresenter implements Presenter<TranslationManager
       }
     } catch (Exception e) {
       cacheFile.delete();
-      FirebaseCrashlytics.getInstance().recordException(e);
+      //FirebaseCrashlytics.getInstance().recordException(e);
     }
   }
 
