@@ -15,7 +15,7 @@ class AboutFragment : PreferenceFragmentCompat() {
     val flavor = "madaniImages"
     val parent = findPreference("aboutDataSources") as PreferenceCategory?
     imagePrefKeys.filter { it != flavor }.map {
-      parent?.removePreference(findPreference(it))
+      parent?.removePreference(findPreference(it)!!)
     }
   }
 

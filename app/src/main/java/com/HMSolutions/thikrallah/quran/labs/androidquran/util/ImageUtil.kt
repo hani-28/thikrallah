@@ -6,6 +6,8 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.Okio
 import okio.Source
+import okio.buffer
+import okio.sink
 import java.io.File
 import javax.inject.Inject
 
@@ -22,7 +24,7 @@ class ImageUtil @Inject constructor(private val okHttpClient: OkHttpClient) {
         val response = call.execute()
 
         var source: Source? = null
-        val sink = Okio.buffer(Okio.sink(destination))
+        val sink = destination.sink().buffer()
         try {
           if (response.isSuccessful) {
             source = response.body()?.source()

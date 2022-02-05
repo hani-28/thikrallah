@@ -184,7 +184,7 @@ public class RecordThikrDialog extends DialogFragment {
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-
+        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
         Log.e("DialogPermission","Ho! Ho! Ho!");  // Log printed
 
 

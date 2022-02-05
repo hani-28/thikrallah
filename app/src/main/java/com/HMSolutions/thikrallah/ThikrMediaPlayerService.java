@@ -792,22 +792,20 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     @Override
     public void onDestroy() {
         Log.d(TAG, "ondestroy called");
+        if (mediaSession!=null){
+            mediaSession.release();
+        }
+        this.stopForeground(true);
         if (player != null) {
             player.release();
             player = null;
         }
-        if (mediaSession!=null){
-            mediaSession.release();
-        }
         am.abandonAudioFocus(this);
         wakeLock.release();
-
         this.sendMessageToUI(MSG_CURRENT_PLAYING, -99);
         this.sendMessageToUI(MSG_UNBIND, MSG_UNBIND);
-        this.stopForeground(true);
         this.stopSelf();
         super.onDestroy();
-
     }
 
     public int getCurrentThikrRepeat() {
@@ -1127,6 +1125,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 //            MediaSessionManager mManager = (MediaSessionManager) getSystemService(Context.MEDIA_SESSION_SERVICE);
 
             ComponentName receiver = new ComponentName("com.HMSolutions.thikrallah.Notification", ThikrMediaBroadcastReciever.class.getName());
+
 
             mediaSession = new MediaSessionCompat(this
                     , "MEDIA_SESSION_THIKRALLAH"

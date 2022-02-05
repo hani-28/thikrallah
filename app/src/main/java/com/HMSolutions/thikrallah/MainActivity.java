@@ -905,8 +905,9 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case REQUEST_ID_MULTIPLE_PERMISSIONS:{
+            case REQUEST_ID_MULTIPLE_PERMISSIONS: {
                 if (grantResults.length > 0
                         && (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                         == PackageManager.PERMISSION_GRANTED)) {
@@ -932,8 +933,8 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
             case MY_PERMISSIONS_REQUEST_ACCESS_LOCATION: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
-                        && (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED )) {
-                    Log.d(TAG,"requestLocationUpdate. permissions granted");
+                        && (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
+                    Log.d(TAG, "requestLocationUpdate. permissions granted");
 
                     this.requestLocationUpdate();
                     startAthanTimer(this.getApplicationContext());
@@ -946,10 +947,10 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                 }
                 return;
             }
-            case MY_PERMISSIONS_REQUEST_ACCESS_LOCATION_FOR_LOCATION_UPDATES:{
+            case MY_PERMISSIONS_REQUEST_ACCESS_LOCATION_FOR_LOCATION_UPDATES: {
                 if (grantResults.length > 0
-                        && (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED )) {
-                    Log.d(TAG,"requestLocationUpdate. permissions granted");
+                        && (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
+                    Log.d(TAG, "requestLocationUpdate. permissions granted");
 
                     this.requestLocationUpdate();
                     startAthanTimer(this.getApplicationContext());
@@ -961,7 +962,6 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                     // functionality that depends on this permission.
                 }
             }
-
 
 
             // other 'case' lines to check for other

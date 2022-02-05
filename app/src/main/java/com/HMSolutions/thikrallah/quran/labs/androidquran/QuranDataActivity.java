@@ -242,6 +242,7 @@ public class QuranDataActivity extends Activity implements
   @Override
   public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
       @NonNull int[] grantResults) {
+    super.onRequestPermissionsResult(requestCode,permissions,grantResults);
     if (requestCode == REQUEST_WRITE_TO_SDCARD_PERMISSIONS) {
       if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
         /*
