@@ -59,6 +59,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.ref.WeakReference;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -489,7 +490,8 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
         timeOperation("timing", "showing what's new screen");
 
         Log.d(TAG, "oncreate 8");
-        AppRater.app_launched(this);
+
+        AppRater.app_launched(new WeakReference<Context>(this.getApplicationContext()));
         timeOperation("timing", "launching apprater if applicable");
         setContentView(R.layout.activity_main);
         timeOperation("timing", "setting content");

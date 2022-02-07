@@ -43,6 +43,7 @@ public class ApplicationModule {
   @Provides
   DisplaySize provideDisplaySize(Display display) {
     final Point point = new Point();
+    //TODO: display.getreasize is deprecated in android 12. should work on removing below
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
       display.getRealSize(point);
     } else {

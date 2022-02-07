@@ -20,7 +20,6 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
-import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,8 +34,8 @@ import android.preference.PreferenceManager;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
-import android.util.Log;
-import android.widget.Toast;
+
+
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationCompat.Action;
@@ -48,6 +47,7 @@ import com.HMSolutions.thikrallah.Notification.ThikrMediaBroadcastReciever;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Timer;
@@ -56,6 +56,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static android.support.v4.media.MediaMetadataCompat.Builder;
+
+import timber.log.Timber;
 
 
 public class ThikrMediaPlayerService extends Service implements OnCompletionListener,
@@ -72,13 +74,12 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
 
     AudioManager am;
-    private boolean StayPaused = false;
     int play_count = 0;
     private MediaPlayer player;
     //public int counter=0;
     public int currentThikrCounter = 0;
     private boolean isPaused;
-    private int NOTIFICATION_ID = 74;
+    private final int NOTIFICATION_ID = 74;
     private int currentPlaying;
     private String ThikrType;
     private MediaSessionCompat mediaSession;
@@ -86,7 +87,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     private boolean overRideRespectMute = false;
     private boolean isUserAction = true;
     private NotificationCompat.Builder notificationBuilder;
-    ArrayList<Messenger> mClients = new ArrayList<Messenger>(); // Keeps track of all current registered clients.
+    ArrayList<Messenger> mClients = new ArrayList<>(); // Keeps track of all current registered clients.
     /**
      * Command to the service to display a message
      */
@@ -100,34 +101,34 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     /**
      * Handler of incoming messages from clients.
      */
-    class IncomingHandler extends Handler {
+    static class IncomingHandler extends Handler {
+        private final WeakReference<ThikrMediaPlayerService> mService;
+
+        IncomingHandler(ThikrMediaPlayerService service) {
+            mService = new WeakReference<ThikrMediaPlayerService>(service);
+        }
+
         @Override
         public void handleMessage(Message msg) {
-            Message msg2;
-            switch (msg.what) {
-                case MSG_CURRENT_PLAYING:
-                    mClients.clear();
-                    mClients.add(msg.replyTo);
-
-                    sendMessageToUI(MSG_CURRENT_PLAYING, getCurrentPlaying());
-                    // Toast.makeText(getApplicationContext(), "hello! 1", Toast.LENGTH_SHORT).show();
-                    msg2 = Message.obtain(null, ThikrMediaPlayerService.MSG_CURRENT_PLAYING, 0, 0);
-                    //  try {
-                    // msg.replyTo.send(msg2);
-                    //  } catch (RemoteException e) {
-                    //     e.printStackTrace();
-                    //  }
-                    break;
-                default:
-                    Toast.makeText(getApplicationContext(), "hello! 2", Toast.LENGTH_SHORT).show();
-                    msg2 = Message.obtain(null, ThikrMediaPlayerService.MSG_CURRENT_PLAYING, 0, 0);
-                    try {
-                        msg.replyTo.send(msg2);
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                        Log.e(TAG, "" + e.getMessage());
-                    }
-                    super.handleMessage(msg);
+            ThikrMediaPlayerService service = mService.get();
+            if (service != null) {
+                Message msg2;
+                switch (msg.what) {
+                    case MSG_CURRENT_PLAYING:
+                        service.mClients.clear();
+                        service.mClients.add(msg.replyTo);
+                        service.sendMessageToUI(MSG_CURRENT_PLAYING, service.getCurrentPlaying());
+                        break;
+                    default:
+                        msg2 = Message.obtain(null, ThikrMediaPlayerService.MSG_CURRENT_PLAYING, 0, 0);
+                        try {
+                            msg.replyTo.send(msg2);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                            Timber.e("%s", e.getMessage());
+                        }
+                        super.handleMessage(msg);
+                }
             }
         }
     }
@@ -136,7 +137,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     /**
      * Target we publish for clients to send messages to IncomingHandler.
      */
-    final Messenger mMessenger = new Messenger(new IncomingHandler());
+    final Messenger mMessenger = new Messenger(new IncomingHandler(this));
 
 
     private void sendMessageToUI(int what, int intvaluetosend) {
@@ -157,14 +158,23 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
     private void updateAllAlarms() {
 
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                new MyAlarmsManager(mcontext).UpdateAllApplicableAlarms();
-            }
-        }, 5000);
+        new Handler(Looper.getMainLooper()).postDelayed(new UpdateAlarmsRunnable(mcontext) , 5000);
     }
+    private static class UpdateAlarmsRunnable implements Runnable{
+        private final WeakReference<Context> mApplicationContext;
 
+        UpdateAlarmsRunnable(Context context) {
+            mApplicationContext = new WeakReference<Context>(context);
+        }
+        @Override
+        public void run() {
+            Context mContext=mApplicationContext.get();
+            if (mContext!=null){
+                new MyAlarmsManager(mApplicationContext.get()).UpdateAllApplicableAlarms();
+            }
+
+        }
+    }
     /**
      * When binding to the service, we return an interface to our messenger
      * for sending messages to the service.
@@ -178,12 +188,14 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     @Override
     public void onCreate() {
         super.onCreate();
-
-        Log.d(TAG, "ThikrMediaPlayerService onCreate");
+        Timber.plant(new Timber.DebugTree());
+        Timber.d( "ThikrMediaPlayerService onCreate");
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
                 TAG);
-        wakeLock.acquire();
+        if (!wakeLock.isHeld()) {
+            wakeLock.acquire();
+        }
 
 
 
@@ -198,7 +210,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             getBaseContext().getResources().updateConfiguration(config,
                     getBaseContext().getResources().getDisplayMetrics());
         }
-        Log.d(TAG, "oncreate called");
+        Timber.d( "oncreate called");
         initMediaPlayer();
 
         //below is wip
@@ -252,24 +264,23 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         notificationBuilder = addAction(notificationBuilder, "stop", R.drawable.ic_media_stop);
         this.SetMediaMetadata();
         notificationBuilder = this.setMediaStyle(notificationBuilder, new MediaStyle()
-                .setShowActionsInCompactView(new int[]{0, 1})
+                .setShowActionsInCompactView(0, 1)
                 .setMediaSession(mediaSession.getSessionToken()));
 
 
 
         mediaSession.setActive(true);
-        Log.d(TAG, "starting thikrmediaplayerservice notification on foreground");
+        Timber.d( "starting thikrmediaplayerservice notification on foreground");
         startForeground(NOTIFICATION_ID, notificationBuilder.build());
-        Log.d(TAG, "Finished starting thikrmediaplayerservice notification on foreground");
+        Timber.d( "Finished starting thikrmediaplayerservice notification on foreground");
         updateActions();
 
 
     }
 
     private NotificationCompat.Builder setVisibilityPublic(NotificationCompat.Builder inotificationBuilder) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            inotificationBuilder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
-        }
+        inotificationBuilder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+
         return inotificationBuilder;
     }
 
@@ -303,21 +314,21 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             this.SetMediaMetadata();
 
             if (this.isPlaying()) {
-                Log.d(TAG, "show pause & stop");
+                Timber.d( "show pause & stop");
                 notificationBuilder = addAction(notificationBuilder, "pause", R.drawable.ic_media_pause);
                 notificationBuilder = addAction(notificationBuilder, "stop", R.drawable.ic_media_stop);
                 notificationBuilder = this.setMediaStyle(notificationBuilder, new MediaStyle()
-                        .setShowActionsInCompactView(new int[]{0, 1})
+                        .setShowActionsInCompactView(0, 1)
                         .setMediaSession(mediaSession.getSessionToken()));
                 // notificationBuilder.setStyle();
 
 
             } else {
-                Log.d(TAG, "show play");
+                Timber.d( "show play");
                 notificationBuilder = addAction(notificationBuilder, "play", R.drawable.ic_media_play);
                 notificationBuilder = addAction(notificationBuilder, "stop", R.drawable.ic_media_stop);
                 notificationBuilder = this.setMediaStyle(notificationBuilder, new MediaStyle()
-                        .setShowActionsInCompactView(new int[]{0})
+                        .setShowActionsInCompactView(0)
                         .setMediaSession(mediaSession.getSessionToken()));
 
 
@@ -325,11 +336,9 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             mediaSession.setActive(true);
 
 
-            Log.d(TAG, "starting thikrmediaplayerservice notification on foreground");
-            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            //manager.notify(NOTIFICATION_ID,notificationBuilder.build());
+            Timber.d( "starting thikrmediaplayerservice notification on foreground");
             startForeground(NOTIFICATION_ID, notificationBuilder.build());
-            Log.d(TAG, "Finished starting thikrmediaplayerservice notification on foreground");
+            Timber.d( "Finished starting thikrmediaplayerservice notification on foreground");
 
 
         }
@@ -347,7 +356,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
-        // Log.d(TAG, RecieverPendingIntent.getTargetPackage());
+        // Timber.d( RecieverPendingIntent.getTargetPackage());
 
         //recieverIntent.setAction(label);
 
@@ -363,7 +372,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         this.setThikrType(intent.getExtras().getString("com.HMSolutions.thikrallah.datatype", null));
-        Log.d(TAG, "ThikrMediaPlayerService onStartCommand");
+        Timber.d( "ThikrMediaPlayerService onStartCommand");
 
 
         callingintent = intent;
@@ -373,23 +382,23 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         int action = data.getInt("ACTION", -1);
 
 
-        Log.d(TAG, "action " + action);
+        Timber.d( "action %s", action);
 
         if (intent.getExtras().getString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_DAY_THIKR).equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR) && this.isPlaying()) {
             this.updateAllAlarms();
             if (action == MEDIA_PLAYER_RESET) {
-                Log.d(TAG, "reset called");
+                Timber.d( "reset called");
                 this.resetPlayer();
                 this.stopForeground(true);
                 this.stopSelf();
             }
             return Service.START_NOT_STICKY;
         }
-        Log.d(TAG, "initNotification called");
+        Timber.d( "initNotification called");
         initNotification();
-        Log.d(TAG, "initNotification finished");
+        Timber.d( "initNotification finished");
         if (getThikrType() == null) {
-            Log.d(TAG, "thikrtype is null... why?");
+            Timber.d( "thikrtype is null... why?");
             this.updateAllAlarms();
             this.stopForeground(true);
             this.stopSelf();
@@ -403,13 +412,13 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
             boolean isRespectMute = sharedPrefs.getBoolean("mute_thikr_when_ringer_mute", true);
             if ((am.getRingerMode() == AudioManager.RINGER_MODE_SILENT || am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE)
-                    && isRespectMute == true) {
+                    && isRespectMute) {
                 if (this.getThikrType().contains(MainActivity.DATA_TYPE_ATHAN)) {//show pop up for athan
                     if (am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
                         vibrate();
-                        Log.d(TAG, "ringer mode vibrate. now vibrating");
+                        Timber.d( "ringer mode vibrate. now vibrating");
                     }
-                    Log.d(TAG, "stopping self");
+                    Timber.d( "stopping self");
                     this.stopForeground(true);
                     this.stopSelf();
                 }
@@ -419,12 +428,12 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         if (this.getThikrType().contains(MainActivity.DATA_TYPE_ATHAN)) {
             this.updateAllAlarms();
         }
-        Log.d(TAG, "onStartCommand called" + intent.getExtras().toString());
+        Timber.d( "onStartCommand called%s", intent.getExtras().toString());
 
 
         switch (action) {
             case MEDIA_PLAYER_PAUSE:
-                Log.d(TAG, "pause called");
+                Timber.d( "pause called");
 
                 //  mediaSession.setPlaybackState(new PlaybackStateCompat.Builder()
                 //          .setState(PlaybackStateCompat.STATE_PAUSED, 0, 0)
@@ -432,11 +441,10 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 //           .build());
 
                 this.pausePlayer();
-
                 updateActions();
                 break;
             case MEDIA_PLAYER_INNCREMENT:
-                Log.d(TAG, "increment called");
+                Timber.d( "increment called");
 
                 int increment = intent.getExtras().getInt("INCREMENT", 1);
                 this.setCurrentPlaying(this.getCurrentPlaying() + increment);
@@ -445,18 +453,18 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 updateActions();
                 break;
             case MEDIA_PLAYER_CHANGE_VOLUME:
-                Log.d(TAG, "MEDIA_PLAYER_CHANGE_VOLUME called");
+                Timber.d( "MEDIA_PLAYER_CHANGE_VOLUME called");
                 this.setVolume();
                 break;
 
             case MEDIA_PLAYER_RESET:
-                Log.d(TAG, "reset called stopping self");
+                Timber.d("reset called stopping self");
                 this.resetPlayer();
                 this.stopForeground(true);
                 this.stopSelf();
                 break;
             case MEDIA_PLAYER_PLAYALL:
-                Log.d(TAG, "playall called");
+                Timber.d( "playall called");
                 // mediaSession.setPlaybackState(new PlaybackStateCompat.Builder()
                 //         .setState(PlaybackStateCompat.STATE_PLAYING, 0, 0)
                 //       .setActions(PlaybackStateCompat.ACTION_PAUSE | PlaybackStateCompat.ACTION_STOP)
@@ -466,7 +474,6 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 updateActions();
                 break;
             case MEDIA_PLAYER_ISPLAYING:
-                Log.d(TAG, "isplaying called");
                 this.isPlaying();
                 break;
             case MEDIA_PLAYER_PLAY:
@@ -478,22 +485,22 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 String URI_string = data.getString("URI");
                 if (URI_string != null && !URI_string.equals("null")) {
                     uri = Uri.parse(data.getString("URI"));
-                    Log.d(TAG, "URI passed is " + uri + " file path is " + filepath);
+                    Timber.d( "URI passed is " + uri + " file path is " + filepath);
                 } else {
 
                     if (filepath != null && this.exists(this.getApplicationContext(), Uri.parse(filepath))) {
                         uri = Uri.parse(filepath);
-                        Log.d(TAG, "URI passed is " + uri + " file path is " + filepath);
+                        Timber.d( "URI passed is " + uri + " file path is " + filepath);
 
                     } else {
                         uri = null;
-                        Log.d(TAG, "URI passed is null file path is " + filepath);
+                        Timber.d( "URI passed is null file path is %s", filepath);
 
                     }
                 }
 
 
-                Log.d(TAG, "play " + file + " called");
+                Timber.d( "play " + file + " called");
                 //  mediaSession.setPlaybackState(new PlaybackStateCompat.Builder()
                 //        .setState(PlaybackStateCompat.STATE_PLAYING, 0, 0)
                 //        .setActions(PlaybackStateCompat.ACTION_PAUSE | PlaybackStateCompat.ACTION_STOP)
@@ -511,7 +518,6 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     }
 
 
-    /** method for clients */
 
 
     /**
@@ -566,12 +572,12 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
         int ret = requestAudioFocus();
         if (ret == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-            Log.d(TAG, "audiofocus request granted");
+            Timber.d( "audiofocus request granted");
             startPlayerIfAllowed();
             setVolume();
 
         } else {
-            Log.d(TAG, "audiofocus request denied");
+            Timber.d( "audiofocus request denied");
         }
         updateActions();
 
@@ -595,10 +601,10 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         try {
 
             if (fileNumber != -1) {
-                Log.d(TAG, "file number is " + fileNumber);
+                Timber.d( "file number is %s", fileNumber);
                 AssetFileDescriptor afd = this.getApplicationContext().getAssets().openFd(this.getMediaFolderName() + "/" + fileNumber + ".mp3");
 
-                Log.d(TAG, "file path  is " + this.getMediaFolderName() + "/" + fileNumber + ".mp3");
+                Timber.d( "file path  is " + this.getMediaFolderName() + "/" + fileNumber + ".mp3");
                 player.reset();
 
                 player.setAudioStreamType(getStreamType());
@@ -607,7 +613,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
                 int ret = requestAudioFocus();
                 if (ret == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-                    Log.d(TAG, "audio focus request granted.");
+                    Timber.d( "audio focus request granted.");
                     startPlayerIfAllowed();
                     updateActions();
                     //Start increasing volume in increments
@@ -620,7 +626,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                                     timer.cancel();
                                     timer.purge();
                                 } else {
-                                    updateVolume(1);
+                                    incrementVolume();
                                 }
 
 
@@ -640,14 +646,14 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                         this.setVolume();
                     }
                 } else {
-                    Log.d(TAG, "audio focus request denied.");
+                    Timber.d( "audio focus request denied.");
                     //am.abandonAudioFocus(this);
                     //this.stopForeground(true);
                     //this.stopSelf();
                 }
 
             } else {
-                FileDescriptor afd = null;
+                FileDescriptor afd;
                 FileInputStream fis;
                 if (uri != null) {
                     fis = new FileInputStream(this.getApplicationContext().getContentResolver().openFileDescriptor(uri, "r").getFileDescriptor());
@@ -667,17 +673,13 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
                     startPlayerIfAllowed();
                     setVolume();
-                } else {
-                    //am.abandonAudioFocus(this);
-                    //this.stopForeground(true);
-                    //this.stopSelf();
                 }
 
             }
 
 
         } catch (IOException e) {
-            Log.e(TAG, "" + e.getMessage());
+            Timber.e( "%s", e.getMessage());
             e.printStackTrace();
         }
         updateActions();
@@ -716,7 +718,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     public void playAll() {
 
 
-        if (isPaused == false) {  //mediaplayer was stopped
+        if (!isPaused) {  //mediaplayer was stopped
 
             if (this.getCurrentPlaying() < 1) {
                 setCurrentPlaying(1);
@@ -724,19 +726,19 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
             AssetFileDescriptor afd;
             try {
-                Log.d(TAG, "current playing is " + getCurrentPlaying());
-                Log.d(TAG, "thikrtype is " + getThikrType());
+                Timber.d( "current playing is %s", getCurrentPlaying());
+                Timber.d( "thikrtype is %s", getThikrType());
                 afd = this.getApplicationContext().getAssets().openFd(getThikrType() + "/" + this.getCurrentPlaying() + ".mp3");
                 //player.reset();
-                Log.d(TAG, "now will call initmediaplayer");
+                Timber.d( "now will call initmediaplayer");
                 this.initMediaPlayer();
-                Log.d(TAG, "finished initmediaplayer");
+                Timber.d( "finished initmediaplayer");
                 player.setAudioStreamType(getStreamType());
-                Log.d(TAG, "audio stream type set");
+                Timber.d( "audio stream type set");
                 player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-                Log.d(TAG, "datasource set");
+                Timber.d( "datasource set");
                 player.prepare();
-                Log.d(TAG, "current playing was prepared successfully " + getCurrentPlaying());
+                Timber.d( "current playing was prepared successfully %s", getCurrentPlaying());
             } catch (IOException e) {
                 if (this.getCurrentPlaying() < 1) {
                     setCurrentPlaying(1);
@@ -756,9 +758,9 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         player.setOnCompletionListener(this);
 
         int ret = requestAudioFocus();
-        Log.d(TAG, "audiofocus request return code is " + ret);
+        Timber.d( "audiofocus request return code is %s", ret);
         if (ret == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-            Log.d(TAG, "audiofocus request granted =" + AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
+            Timber.d( "audiofocus request granted =%s", AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
             startPlayerIfAllowed();
             setVolume();
         }
@@ -776,22 +778,20 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                     .setOnAudioFocusChangeListener(this)
                     .setAudioAttributes(mPlaybackAttributes)
                     .build();
-            int ret = am.requestAudioFocus(mFocusRequest);
-            return ret;
+            return am.requestAudioFocus(mFocusRequest);
         } else {
-            int ret = am.requestAudioFocus(this,
+            return am.requestAudioFocus(this,
                     // Use the music stream.
                     this.getStreamType(),
                     // Request permanent focus.
                     getAudioFocusRequestType());
-            return ret;
         }
 
     }
 
     @Override
     public void onDestroy() {
-        Log.d(TAG, "ondestroy called");
+        Timber.d( "ondestroy called");
         if (mediaSession!=null){
             mediaSession.release();
         }
@@ -801,7 +801,9 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             player = null;
         }
         am.abandonAudioFocus(this);
-        wakeLock.release();
+        if (wakeLock.isHeld()) {
+            wakeLock.release();
+        }
         this.sendMessageToUI(MSG_CURRENT_PLAYING, -99);
         this.sendMessageToUI(MSG_UNBIND, MSG_UNBIND);
         this.stopSelf();
@@ -817,17 +819,17 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         try {
             currentThikr = this.getThikrArray()[this.getCurrentPlaying() - 1];
         } catch (IndexOutOfBoundsException e) {
-            Log.d(TAG, "'index out of bound");
+            Timber.d( "'index out of bound");
         }
         Pattern pattern = Pattern.compile("[\\d]+");
         Matcher matcher = pattern.matcher(currentThikr);
-        Log.d(TAG, "current thikr is: " + currentThikr);
+        Timber.d( "current thikr is: %s", currentThikr);
         if (matcher.find()) {
             repeat = Integer.parseInt(matcher.group(0));
-            Log.d(TAG, "repeat number found" + repeat);
+            Timber.d( "repeat number found%s", repeat);
         } else {
             repeat = 1;
-            Log.d(TAG, "no repeat number found" + repeat);
+            Timber.d( "no repeat number found%s", repeat);
         }
         return repeat;
     }
@@ -835,12 +837,12 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     @Override
     public void onCompletion(MediaPlayer mp) {
         mp.reset();
-        Log.d(TAG, "oncomplete called");
+        Timber.d( "oncomplete called");
 
-        Log.d(TAG, "thikrtype is " + this.getThikrType() + " vs " + MainActivity.DATA_TYPE_GENERAL_THIKR);
+        Timber.d( "thikrtype is " + this.getThikrType() + " vs " + MainActivity.DATA_TYPE_GENERAL_THIKR);
         currentThikrCounter++;
         if (this.getThikrType().equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR) || this.getThikrType().contains(MainActivity.DATA_TYPE_QURAN) || this.getThikrType().contains(MainActivity.DATA_TYPE_ATHAN)) {
-            ;
+
             this.resetPlayer();
 
             this.stopForeground(true);
@@ -856,7 +858,6 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
             this.stopForeground(true);
             this.stopSelf();
-            return;
         } else {
             if (currentThikrCounter >= getCurrentThikrRepeat()) {
                 currentThikrCounter = 0;
@@ -868,18 +869,6 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             playAll();
         }
     }
-
-    /**
-     * Class used for the client Binder.  Because we know this service always
-     * runs in the same process as its clients, we don't need to deal with IPC.
-     */
-    public class MyBinder extends Binder {
-        ThikrMediaPlayerService getService() {
-            // Return this instance of LocalService so clients can call public methods
-            return ThikrMediaPlayerService.this;
-        }
-    }
-
     private String getThikrType() {
         return ThikrType;
 
@@ -951,23 +940,26 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             try {
                 isPlaying = this.player.isPlaying();
             } catch (Exception e) {
-
+                Timber.e(e.getMessage());
             }
 
         }
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-        sharedPrefs.edit().putBoolean("ISPLAYING", isPlaying);
-
+        //SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+        //sharedPrefs.edit().putBoolean("d", isPlaying).commit();
+        Timber.d("isPlaying returning %s",isPlaying);
         return isPlaying;
 
     }
 
     public void pausePlayer() {
         isPaused = true;
-        StayPaused = true;
         if (this.isPlaying()) {
             this.player.pause();
             this.updateActions();
+            if (wakeLock.isHeld()) {
+                wakeLock.release();
+            }
+
         } else {
             if (this.play_count == 0) {
                 this.stopSelf();
@@ -983,7 +975,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         switch (focusChange) {
             case AudioManager.AUDIOFOCUS_GAIN:
                 // resume playback
-                Log.d(TAG, "gained focus");
+                Timber.d( "gained focus");
                 mediaSession.setActive(true);
                 if (player == null) {
                     initMediaPlayer();
@@ -998,12 +990,12 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
             case AudioManager.AUDIOFOCUS_LOSS:
                 // Lost focus for an unbounded amount of time: stop playback and release media player
-                Log.d(TAG, "lost focus");
+                Timber.d( "lost focus");
                 mediaSession.setActive(false);
                 if (isPlaying()) {
                     player.stop();
                 }
-                Log.d(TAG, "reseting player and releasing service");
+                Timber.d( "reseting player and releasing service");
                 this.resetPlayer();
                 this.stopForeground(true);
                 this.stopSelf();
@@ -1013,14 +1005,14 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 // Lost focus for a short time, but we have to stop
                 // playback. We don't release the media player because playback
                 // is likely to resume
-                Log.d(TAG, "transient loss of  focus");
+                Timber.d( "transient loss of  focus");
                 if (isPlaying()) player.pause();
                 break;
 
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                 // Lost focus for a short time, but it's ok to keep playing
                 // at an attenuated level
-                Log.d(TAG, "AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK");
+                Timber.d( "AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK");
                 if (isPlaying()) {
 
                     player.setVolume(0.1f, 0.1f);
@@ -1034,39 +1026,40 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         boolean isGradual = sharedPrefs.getBoolean("gradual_volume", true);
         if (!this.getThikrType().contains(MainActivity.DATA_TYPE_ATHAN) || !isGradual) {
-            Log.d(TAG, "setVolume 1");
+            Timber.d( "setVolume 1");
             int volumeLevel = sharedPrefs.getInt("volume", 100);
             int maxVolume = 101;
             float volume = (float) (1 - Math.log(maxVolume - volumeLevel) / Math.log(maxVolume));
             player.setVolume(volume, volume);
 
         } else {
-            updateVolume(1);
-            Log.d(TAG, "setVolume 3");
+            incrementVolume();
+            Timber.d( "setVolume 3");
         }
     }
 
     private void startPlayerIfAllowed() {
-        Log.d(TAG, "startPlayerIfAllowed called");
+        Timber.d( "startPlayerIfAllowed called");
         //TODO:WHY IS AUDIOFOCUS REQUEST DENIED AFTER PHONE CALL FINISHES IF THE SERVICE STARTS DURING A CALL?
         //TODO:Update requestAudioFocus methods to use api 26 methods.
         //stopping thread for a second after phone call finishes seems to resolve issue for some reason
 
         int ret = requestAudioFocus();
-        Log.d(TAG, "request audio focus return code is " + ret);
+        Timber.d( "request audio focus return code is %s", ret);
         if (ret == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
 
-            Log.d(TAG, "request audio focus granted");
+            Timber.d( "request audio focus granted");
 
             this.play_count++;
             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
             boolean isRespectMute = sharedPrefs.getBoolean("mute_thikr_when_ringer_mute", true);
             if ((am.getRingerMode() == AudioManager.RINGER_MODE_SILENT || am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE)
-                    && isRespectMute == true && this.overRideRespectMute == false && isUserAction == false) {
+                    && isRespectMute && !this.overRideRespectMute && !isUserAction) {
                 if (!this.getThikrType().equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)) {
-                    Log.d(TAG, "pausing player");
+                    Timber.d( "pausing player");
                     this.pausePlayer();
                     this.updateActions();
+
                     vibrate();
                     this.stopSelf();
                 }
@@ -1074,9 +1067,11 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             } else {
 
                 sendMessageToUI(MSG_CURRENT_PLAYING, currentPlaying);
-                StayPaused = false;
+                if (!wakeLock.isHeld()) {
+                    wakeLock.acquire();
+                }
                 player.start();
-                Log.d(TAG, "player started");
+                Timber.d( "player started");
                 this.updateActions();
             }
         }
@@ -1090,11 +1085,11 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 // In Morse Code, "s" = "dot-dot-dot", "o" = "dash-dash-dash"
 // There are pauses to separate dots/dashes, letters, and words
 // The following numbers represent millisecond lengths
-        int dot = 200;      // Length of a Morse Code "dot" in milliseconds
+        //int dot = 200;      // Length of a Morse Code "dot" in milliseconds
         int dash = 500;     // Length of a Morse Code "dash" in milliseconds
-        int short_gap = 200;    // Length of Gap Between dots/dashes
+        //int short_gap = 200;    // Length of Gap Between dots/dashes
         int medium_gap = 500;   // Length of Gap Between Letters
-        int long_gap = 1000;    // Length of Gap Between Words
+        //int long_gap = 1000;    // Length of Gap Between Words
         long[] pattern = {
                 0,  // Start immediately
 
@@ -1107,17 +1102,17 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
     }
 
-    private boolean initMediaPlayer() {
+    private void initMediaPlayer() {
         if (player != null) {
             //if (this.isPlaying()) {
-            Log.d(TAG, "initiMediaPlayer is called and player is not null");
+            Timber.d( "initiMediaPlayer is called and player is not null");
             this.resetPlayer();
             //}
         }
 
         //this.setCurrentPlaying(1);
         if (player == null) {
-            Log.d(TAG, "initiMediaPlayer is called and player is null");
+            Timber.d( "initiMediaPlayer is called and player is null");
             player = new MediaPlayer();
             player.setWakeMode(this, PowerManager.PARTIAL_WAKE_LOCK);
             am = (AudioManager) this.getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
@@ -1144,43 +1139,42 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             mediaSession.setCallback(new MediaSessionCompat.Callback() {
                 @Override
                 public boolean onMediaButtonEvent(Intent mediaButtonEvent) {
-                    Log.d(TAG, "onMediaButtonEvent");
+                    Timber.d( "onMediaButtonEvent");
                     return super.onMediaButtonEvent(mediaButtonEvent);
                 }
 
                 @Override
                 public void onPlay() {
-                    Log.d(TAG, "onPlay");
+                    Timber.d( "onPlay");
                     super.onPlay();
                 }
 
                 @Override
                 public void onPause() {
-                    Log.d(TAG, "onPause");
+                    Timber.d( "onPause");
                     super.onPause();
                 }
 
                 @Override
                 public void onSkipToNext() {
-                    Log.d(TAG, "onSkipToNext");
+                    Timber.d( "onSkipToNext");
                     super.onSkipToNext();
                 }
 
                 @Override
                 public void onSkipToPrevious() {
-                    Log.d(TAG, "onSkipToPrevious");
+                    Timber.d( "onSkipToPrevious");
                     super.onSkipToPrevious();
                 }
 
                 @Override
                 public void onSeekTo(long pos) {
-                    Log.d(TAG, String.format("onSeekTo %d", pos));
                     super.onSeekTo(pos);
                 }
 
                 @Override
                 public void onStop() {
-                    Log.d(TAG, "onStop");
+                    Timber.d( "onStop");
                     super.onStop();
                 }
             });
@@ -1195,7 +1189,6 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             //mController = MediaController.fromToken( mediaSession.getSessionToken() );
 
         }
-        return true;
 
     }
 
@@ -1206,10 +1199,10 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     private final static float FLOAT_VOLUME_MAX = 1;
     private final static float FLOAT_VOLUME_MIN = 0;
 
-    private void updateVolume(int change) {
-        Log.d(TAG, "updateVolume called");
+    private void incrementVolume() {
+        Timber.d( "incrementVolume called");
         //increment or decrement depending on type of fade
-        iVolume = iVolume + change;
+        iVolume = iVolume + 1;
 
         //ensure iVolume within boundaries
         if (iVolume < INT_VOLUME_MIN)
@@ -1233,7 +1226,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 }
             } catch (IllegalStateException e) {
                 e.printStackTrace();
-                Log.e(TAG, "" + e.getMessage());
+                Timber.e("%s", e.getMessage());
             }
 
 

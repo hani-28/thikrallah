@@ -15,6 +15,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
+import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
@@ -30,7 +32,10 @@ import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.ThikrMediaPlayerService;
 
+import java.lang.ref.WeakReference;
 import java.util.Locale;
+
+import timber.log.Timber;
 
 public class ChatHeadService extends Service implements View.OnTouchListener {
 
@@ -201,12 +206,7 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
                     windowManager.addView(chatHead, params);
 
 					if (!isAthan){
-						new Handler().postDelayed(new Runnable() {
-							@Override
-							public void run() {
-								stopSelf();
-							}
-						}, 10000);    //will stop service after 10 seconds
+						new Handler().postDelayed(new DestroyRunnable(this) , 10000);    //will stop service after 10 seconds
 					}
 
                 }else{
@@ -215,12 +215,7 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 			}else{
 				windowManager.addView(chatHead, params);
 				if (!isAthan){
-					new Handler().postDelayed(new Runnable() {
-						@Override
-						public void run() {
-							stopSelf();
-						}
-					}, 10000);    //will stop service after 10 seconds
+					new Handler().postDelayed(new DestroyRunnable(this) , 10000);    //will stop service after 10 seconds
 				}
 			}
 			return START_NOT_STICKY;
@@ -232,6 +227,26 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 	    	return START_NOT_STICKY;
 	    }
 		
+	}
+
+	static class DestroyRunnable implements Runnable {
+		public WeakReference<ChatHeadService> getmService() {
+			return mService;
+		}
+
+		private final WeakReference<ChatHeadService> mService;
+
+		DestroyRunnable(ChatHeadService service) {
+			mService = new WeakReference<ChatHeadService>(service);
+		}
+
+
+		@Override
+		public void run() {
+			if (mService.get()!=null){
+				mService.get().stopSelf();
+			}
+		}
 	}
     private NotificationCompat.Builder setVisibilityPublic(NotificationCompat.Builder inotificationBuilder){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
