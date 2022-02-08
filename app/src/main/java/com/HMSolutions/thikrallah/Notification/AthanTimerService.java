@@ -97,7 +97,7 @@ public class AthanTimerService extends Service {
 
 		resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		PendingIntent launchAppPendingIntent = PendingIntent.getActivity(mContext,
-				0, resultIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT
+				0, resultIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE
 		);
 
 

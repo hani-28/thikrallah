@@ -1233,13 +1233,13 @@ public class AudioService extends Service implements OnCompletionListener,
 
     final PendingIntent previousIntent = PendingIntent.getService(
         appContext, REQUEST_CODE_PREVIOUS, audioUtils.getAudioIntent(this, ACTION_REWIND),
-        PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
     final PendingIntent nextIntent = PendingIntent.getService(
         appContext, REQUEST_CODE_SKIP, audioUtils.getAudioIntent(this, ACTION_SKIP),
-        PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
     final PendingIntent pauseIntent = PendingIntent.getService(
         appContext, REQUEST_CODE_PAUSE, audioUtils.getAudioIntent(this, ACTION_PAUSE),
-        PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
 
     String audioTitle = getTitle();
     if (notificationBuilder == null) {
@@ -1276,10 +1276,10 @@ public class AudioService extends Service implements OnCompletionListener,
     final Context appContext = getApplicationContext();
     final PendingIntent resumeIntent = PendingIntent.getService(
         appContext, REQUEST_CODE_RESUME, audioUtils.getAudioIntent(this, ACTION_PLAYBACK),
-        PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
     final PendingIntent stopIntent = PendingIntent.getService(
         appContext, REQUEST_CODE_STOP, audioUtils.getAudioIntent(this, ACTION_STOP),
-        PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
     final PendingIntent pi = getNotificationPendingIntent();
 
     if (pausedNotificationBuilder == null) {
@@ -1311,7 +1311,7 @@ public class AudioService extends Service implements OnCompletionListener,
     final Context appContext = getApplicationContext();
     return PendingIntent.getActivity(
         appContext, REQUEST_CODE_MAIN, new Intent(appContext, PagerActivity.class),
-        PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
   }
 
   /**

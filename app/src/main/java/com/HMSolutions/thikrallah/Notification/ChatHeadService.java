@@ -82,7 +82,7 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 		mBuilder = setVisibilityPublic(mBuilder);
 		Intent launchAppIntent = new Intent(this, MainActivity.class);
 		PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
-				0, launchAppIntent, PendingIntent.FLAG_CANCEL_CURRENT
+				0, launchAppIntent, PendingIntent.FLAG_CANCEL_CURRENT|PendingIntent.FLAG_IMMUTABLE
 		);
 
 		mBuilder.setContentIntent(launchAppPendingIntent);
@@ -155,7 +155,7 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 				launchAppIntent.putExtra("FromNotification", true);
 				launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_ATHAN);
 				PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
-						0, launchAppIntent, PendingIntent.FLAG_CANCEL_CURRENT
+						0, launchAppIntent, PendingIntent.FLAG_CANCEL_CURRENT|PendingIntent.FLAG_IMMUTABLE
 				);
 
 				mBuilder.setContentIntent(launchAppPendingIntent);

@@ -230,7 +230,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
         resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
-                0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT
+                0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE
         );
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -353,7 +353,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         Intent intent = new Intent(label).setClass(this.getApplicationContext(), ThikrMediaBroadcastReciever.class);
         intent.putExtras(callingintent.getExtras());
         PendingIntent RecieverPendingIntent = PendingIntent.getBroadcast(this, 1,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                intent, PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_MUTABLE);
 
 
         // Timber.d( RecieverPendingIntent.getTargetPackage());
