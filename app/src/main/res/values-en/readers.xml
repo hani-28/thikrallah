@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <!-- actual qari names -->
-  <string name="qari_minshawi_murattal_gapless">المنشاوي (متصل)</string>
+  <string name="qari_minshawi_murattal_gapless">Minshawi Murattal (gapless)</string>
   <string name="qari_husary_gapless">الحصري (متصل)</string>
   <string name="qari_sudais_gapless">عبد الرحمن السديس (متصل)</string>
   <string name="qari_qatami_gapless">ناصر القطامي (متصل)</string>
