@@ -491,7 +491,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
 
         Log.d(TAG, "oncreate 8");
 
-        AppRater.app_launched(new WeakReference<Context>(this.getApplicationContext()));
+        AppRater.app_launched(new WeakReference<Context>(this));
         timeOperation("timing", "launching apprater if applicable");
         setContentView(R.layout.activity_main);
         timeOperation("timing", "setting content");

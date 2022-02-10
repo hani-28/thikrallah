@@ -27,10 +27,10 @@ public class AppRater {
 	public static void app_launched(WeakReference<Context> mContext) {
 		context=mContext.get();
 		SharedPreferences prefs;
-		if (mContext.get()!=null){
+		if (context!=null){
 			Log.d("AppRater","apprater app_launched called");
-			APP_PNAME=mContext.get().getResources().getString(R.string.app_package);
-			prefs = mContext.get().getSharedPreferences("apprater", 0);
+			APP_PNAME=context.getResources().getString(R.string.app_package);
+			prefs = context.getSharedPreferences("apprater", 0);
 		}else{
 			return;
 		}
@@ -53,8 +53,8 @@ public class AppRater {
 		if (launch_count >= LAUNCHES_UNTIL_PROMPT) {
 			if (System.currentTimeMillis() >= date_firstLaunch + 
 					(DAYS_UNTIL_PROMPT * 24 * 60 * 60 * 1000)) {
-				if (mContext.get()!=null){
-					showRateDialog(mContext.get(), editor);
+				if (context!=null){
+					showRateDialog(context, editor);
 				}
 
 			}
