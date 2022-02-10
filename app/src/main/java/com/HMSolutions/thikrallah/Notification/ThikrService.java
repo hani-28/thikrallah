@@ -207,7 +207,7 @@ public class ThikrService extends IntentService  {
 				launchAppIntent.putExtra("FromNotification",true);
 				launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_DAY_THIKR);
 				PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
-						1458, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT
+						1458, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE
 						);
 
 				mBuilder.setContentIntent(launchAppPendingIntent);
@@ -256,7 +256,7 @@ public class ThikrService extends IntentService  {
 				launchAppIntent.putExtra("FromNotification",true);
 				launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_NIGHT_THIKR);
 				PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
-						2354, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT
+						2354, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE
 						);
 
 				mBuilder.setContentIntent(launchAppPendingIntent);
@@ -309,7 +309,7 @@ public class ThikrService extends IntentService  {
                 launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_QURAN);
 
                 PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
-                        9854, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT
+                        9854, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE
                 );
 
                 mBuilder.setContentIntent(launchAppPendingIntent);
@@ -378,7 +378,7 @@ public class ThikrService extends IntentService  {
                             RecieverIntent_.putExtra("ayah",end.ayah);
                             RecieverIntent_.putExtra("qari",qari_num);
                             PendingIntent pendingIntent = PendingIntent.getBroadcast(mcontext, NOTIFICATION_ID_QURAN_DOWNLOAD_NEEDED, RecieverIntent_,
-                                    PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT);
+                                    PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
                             handleRequiredDownload(pendingIntent,NOTIFICATION_ID_QURAN_DOWNLOAD_NEEDED);
 
 
@@ -399,7 +399,7 @@ public class ThikrService extends IntentService  {
                             launchAppIntent.putExtra("page", 562);
 
                             PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
-                                    9577, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT
+                                    9577, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE
                             );
 
                             mBuilder.setContentIntent(launchAppPendingIntent);
@@ -454,7 +454,7 @@ public class ThikrService extends IntentService  {
                 launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_QURAN);
 
                 PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
-                        98521, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT
+                        98521, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE
                 );
 
                 mBuilder.setContentIntent(launchAppPendingIntent);
@@ -521,7 +521,7 @@ public class ThikrService extends IntentService  {
                             RecieverIntent_.putExtra("ayah",end.ayah);
                             RecieverIntent_.putExtra("qari",qari_num);
                             PendingIntent pendingIntent = PendingIntent.getBroadcast(mcontext, NOTIFICATION_ID_QURAN_DOWNLOAD_NEEDED, RecieverIntent_,
-                                    PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT);
+                                    PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
                             handleRequiredDownload(pendingIntent,NOTIFICATION_ID_QURAN_DOWNLOAD_NEEDED);
 
 
@@ -542,7 +542,7 @@ public class ThikrService extends IntentService  {
                             launchAppIntent.putExtra("page", 562);
 
                             PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
-                                    8588, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT
+                                    8588, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE
                             );
 
                             mBuilder.setContentIntent(launchAppPendingIntent);
@@ -688,7 +688,7 @@ public class ThikrService extends IntentService  {
         Intent launchAppIntent = new Intent(this, MainActivity.class);
         launchAppIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
-                45, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT
+                45, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE
         );
         mBuilder.setContentIntent(launchAppPendingIntent);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

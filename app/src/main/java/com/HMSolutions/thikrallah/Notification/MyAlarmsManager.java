@@ -64,7 +64,7 @@ public class MyAlarmsManager {
 
 
         //mulk Reminder
-        PendingIntent pendingIntentMulk =PendingIntent.getBroadcast(context, requestCodeMulkAlarm,launchIntent.putExtra("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_QURAN_MULK), PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntentMulk =PendingIntent.getBroadcast(context, requestCodeMulkAlarm,launchIntent.putExtra("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_QURAN_MULK), PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
         if (Remindmemulk){
 
             // Set the alarm to start at approximately 2:00 p.m.
@@ -94,7 +94,7 @@ public class MyAlarmsManager {
         }
 
         //Morning Reminder
-		PendingIntent pendingIntentMorningThikr =PendingIntent.getBroadcast(context, requestCodeMorningAlarm, launchIntent.putExtra("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_DAY_THIKR), PendingIntent.FLAG_UPDATE_CURRENT);		
+		PendingIntent pendingIntentMorningThikr =PendingIntent.getBroadcast(context, requestCodeMorningAlarm, launchIntent.putExtra("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_DAY_THIKR), PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
 		if (remindMeMorningThikr){
 			
 			// Set the alarm to start at approximately 2:00 p.m.
@@ -125,7 +125,7 @@ public class MyAlarmsManager {
 
 
 		//Night Reminder
-		PendingIntent pendingIntentNightThikr =PendingIntent.getBroadcast(context, requestCodeNightAlarm,launchIntent.putExtra("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_NIGHT_THIKR), PendingIntent.FLAG_UPDATE_CURRENT);		
+		PendingIntent pendingIntentNightThikr =PendingIntent.getBroadcast(context, requestCodeNightAlarm,launchIntent.putExtra("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_NIGHT_THIKR), PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
 
 		if (remindMeNightThikr){
 			// Set the alarm to start at approximately 2:00 p.m.
@@ -149,7 +149,7 @@ public class MyAlarmsManager {
 			alarmMgr.cancel(pendingIntentNightThikr);
 			
 		}
-		PendingIntent pendingIntentGeneral =PendingIntent.getBroadcast(context, requestCodeRandomAlarm,launchIntent.putExtra("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_GENERAL_THIKR), PendingIntent.FLAG_UPDATE_CURRENT);
+		PendingIntent pendingIntentGeneral =PendingIntent.getBroadcast(context, requestCodeRandomAlarm,launchIntent.putExtra("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_GENERAL_THIKR), PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
 		
 		if (RemindmeThroughTheDay){
 			//Random Reminder
@@ -167,7 +167,7 @@ public class MyAlarmsManager {
 			alarmMgr.cancel(pendingIntentGeneral);
 		}
 
-        PendingIntent pendingIntentKahf =PendingIntent.getBroadcast(context, requestCodeKahfAlarm,launchIntent.putExtra("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_QURAN_KAHF), PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntentKahf =PendingIntent.getBroadcast(context, requestCodeKahfAlarm,launchIntent.putExtra("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_QURAN_KAHF), PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
 
         if (Remindmekahf && Calendar.getInstance().get(Calendar.DAY_OF_MONTH)!=sharedPrefs.getInt("lastKahfPlayed",-1)){
 
@@ -218,7 +218,7 @@ public class MyAlarmsManager {
         Calendar now = Calendar.getInstance();
         now.setTime(dat);
 
-        PendingIntent intent =PendingIntent.getBroadcast(context, 100, launchIntent, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent intent =PendingIntent.getBroadcast(context, 100, launchIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_IMMUTABLE);
 
         Calendar calendar1 = Calendar.getInstance();
         calendar1.set(Calendar.HOUR_OF_DAY, 1);
@@ -274,7 +274,7 @@ public class MyAlarmsManager {
         //now.add(Calendar.SECOND,10);
 
         //athan Reminder
-        PendingIntent pendingIntentAthan =PendingIntent.getBroadcast(context, requestCode, launchIntent.putExtra("com.HMSolutions.thikrallah.datatype", datatype), PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntentAthan =PendingIntent.getBroadcast(context, requestCode, launchIntent.putExtra("com.HMSolutions.thikrallah.datatype", datatype), PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
         alarmMgr.cancel(pendingIntentAthan);
         if (isAthanReminder) {
 

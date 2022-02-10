@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 
 import com.HMSolutions.thikrallah.R;
 
+import java.lang.ref.WeakReference;
+
 public class AppRater {
 	
 	private final static int DAYS_UNTIL_PROMPT = 2;
@@ -21,10 +24,16 @@ public class AppRater {
 	private static Context context;
 	private static  String APP_PNAME = "";
 
-	public static void app_launched(Context mContext) {
-		context=mContext;
-		APP_PNAME=context.getResources().getString(R.string.app_package);
-		SharedPreferences prefs = mContext.getSharedPreferences("apprater", 0);
+	public static void app_launched(WeakReference<Context> mContext) {
+		context=mContext.get();
+		SharedPreferences prefs;
+		if (context!=null){
+			Log.d("AppRater","apprater app_launched called");
+			APP_PNAME=context.getResources().getString(R.string.app_package);
+			prefs = context.getSharedPreferences("apprater", 0);
+		}else{
+			return;
+		}
 		if (prefs.getBoolean("dontshowagain", false)) { return ; }
 
 		SharedPreferences.Editor editor = prefs.edit();
@@ -44,7 +53,10 @@ public class AppRater {
 		if (launch_count >= LAUNCHES_UNTIL_PROMPT) {
 			if (System.currentTimeMillis() >= date_firstLaunch + 
 					(DAYS_UNTIL_PROMPT * 24 * 60 * 60 * 1000)) {
-				showRateDialog(mContext, editor);
+				if (context!=null){
+					showRateDialog(context, editor);
+				}
+
 			}
 		}
 
