@@ -6,6 +6,7 @@
     <string name="my_app_name">Remember Allah</string>
     <string name="invalid_input">Invalid time input</string>
     <string name="share">Share</string>
+    <string name="qibla">Qibla Direction</string>
     <string name="favorite_reciter">Favorite Quran Reciter</string>
     <string name="quran_thikr_need_files">Click here to download files to enable audio reminders of Quran</string>
     <string name="quran_thikr_download_need_files_permission">Audio reminder of Quran needs to download the required audio files for it to work correctly. Do you want to download the needed files now?</string>

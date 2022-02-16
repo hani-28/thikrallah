@@ -7,7 +7,18 @@
     <string name="offer_translate_help">ارغب في المساعدة بترجمة برنامج اذكر الله</string>
     <string name="my_app_name">أذكر الله</string>
     <string name="share">شارك</string>
-    <string name="favorite_reciter">قارئ القرءان المفضل</string>
+   <string name="qibla">القبلة</string>
+   <string name="compass_dial" translatable="false">Compass Dial</string>
+   <string name="compass_hands" translatable="false">Compass Hands</string>
+   <string name="sotw_north">N</string>
+   <string name="sotw_east">E</string>
+   <string name="sotw_south">S</string>
+   <string name="sotw_west">W</string>
+   <string name="sotw_northeast">NE</string>
+   <string name="sotw_northwest">NW</string>
+   <string name="sotw_southeast">SE</string>
+   <string name="sotw_southwest">SW</string>
+   <string name="favorite_reciter">قارئ القرءان المفضل</string>
     <string name="quran_thikr_need_files">اضغط هنا لتحميل بعض الملفات لتفعيل التذكير الصوتي بالقرءان</string>
    <string name="quran_thikr_download_need_files_permission">التذكير الصوتي بالقرءان يحتاج ان يحمل الملفات الصوتية المطلوبة لكي تشتغل هذه الخاصية. هل تريد تحميل الملف الصوتي الان؟</string>
    <string name="quran_thikr_need_files_prompt_title">تحميل ملفات</string>

@@ -375,7 +375,8 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                 Log.d(TAG,"forground_service permission requested");
             }
         }
-
+        int alarmsPermission = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.SCHEDULE_EXACT_ALARM);
 
         int mediacontrolPermission = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.MEDIA_CONTENT_CONTROL);
@@ -389,6 +390,9 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
 
         if (mediacontrolPermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.MEDIA_CONTENT_CONTROL);
+        }
+        if (alarmsPermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.SCHEDULE_EXACT_ALARM);
         }
         if (locationPermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION);
@@ -431,10 +435,6 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                     new String[]{Manifest.permission.MEDIA_CONTENT_CONTROL},
                     1);
         }
-
-
-
-
     }
 
     @Override

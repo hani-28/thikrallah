@@ -10,8 +10,7 @@
                 tools:context="com.HMSolutions.thikrallah.MainActivity">
 
     <ScrollView android:id="@+id/container_scroll_view"
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
+        android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
         <LinearLayout
@@ -85,6 +84,19 @@
                 android:text="@string/athan"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+            <Button
+                android:id="@+id/button_qibla"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:background="@android:color/transparent"
+                android:drawableTop="@drawable/qibla"
+                android:ellipsize="none"
+                android:scrollHorizontally="false"
+                android:text="@string/qibla"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <Button
                 android:id="@+id/hisn_almuslim"

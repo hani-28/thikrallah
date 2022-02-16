@@ -23,6 +23,7 @@ import com.HMSolutions.thikrallah.Utilities.MainInterface;
 import com.HMSolutions.thikrallah.hisnulmuslim.DuaGroupActivity;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.QuranDataActivity;
 
+
 import java.util.Locale;
 
 public class MainFragment extends Fragment {
@@ -69,6 +70,8 @@ public class MainFragment extends Fragment {
 		Button button_quran = (Button) view.findViewById(R.id.button_quran);
 		Button button_hisn_almuslim = (Button) view.findViewById(R.id.hisn_almuslim);
 		Button button_athan = (Button) view.findViewById(R.id.button_athan);
+		Button button_qibla = (Button) view.findViewById(R.id.button_qibla);
+
 		button_athan.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -77,6 +80,16 @@ public class MainFragment extends Fragment {
 				
 			}
 			
+		});
+		button_qibla.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mCallback.launchFragment(new QiblaFragment(), new Bundle(), "QiblaFragment");
+
+
+			}
+
 		});
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
 

@@ -30,8 +30,8 @@ android {
         applicationId "com.HMSolutions.thikrallah"
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode 120
-        versionName "6.0.0"
+        versionCode 121
+        versionName "6.1.0"
     }
     lintOptions {
         disable 'MissingTranslation'
@@ -62,10 +62,10 @@ repositories {
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     maven { url "https://maven.google.com" }
 
+
 }
 
 dependencies {
-
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
