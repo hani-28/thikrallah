@@ -37,7 +37,7 @@ public class QiblaFragment extends Fragment implements SharedPreferences.OnShare
     private Compass compass;
     private ImageView arrowView;
     private ImageView dialView;
-    private TextView sotwLabel;  // SOTW is for "side of the world"
+   // private TextView sotwLabel;  // SOTW is for "side of the world"
     private Context mContext;
     private float currentAzimuth;
     private float currentQibla;
@@ -182,7 +182,7 @@ public class QiblaFragment extends Fragment implements SharedPreferences.OnShare
     }
 
     private void adjustSotwLabel(float azimuth) {
-        sotwLabel.setText(sotwFormatter.format(azimuth));
+        //sotwLabel.setText(sotwFormatter.format(azimuth));
     }
 
 	@Override
