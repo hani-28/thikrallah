@@ -1,5 +1,7 @@
 package com.HMSolutions.thikrallah.quran.labs.androidquran.service.util;
 
+import static android.app.PendingIntent.FLAG_IMMUTABLE;
+
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -324,7 +326,7 @@ public class QuranDownloadNotifier {
     }
 
     Intent notificationIntent = new Intent(appContext, QuranDataActivity.class);
-    PendingIntent contentIntent = PendingIntent.getActivity(appContext, 0, notificationIntent, 0);
+    PendingIntent contentIntent = PendingIntent.getActivity(appContext, 0, notificationIntent, FLAG_IMMUTABLE);
     builder.setContentIntent(contentIntent);
 
     try {
