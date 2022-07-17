@@ -11,6 +11,9 @@
     <string name="quran_thikr_need_files">Click here to download files to enable audio reminders of Quran</string>
     <string name="quran_thikr_download_need_files_permission">Audio reminder of Quran needs to download the required audio files for it to work correctly. Do you want to download the needed files now?</string>
     <string name="quran_thikr_need_files_prompt_title">Download Files</string>
+    <string name="power_Exclusion">Battery Optimization Exclusion</string>
+    <string name="power_Exclusion_message">Please exclude Remember Allah app from battery optimization setting. This enables the automated audio reminders and prayer Athans to show up on time</string>
+
     <string name="autostart">Enable AutoStart</string>
     <string name="autostart_message">Please allow our app to always run in the background, else our services cannot be accessed.</string>
     <string name="athan_timer_notifiaction">Prayer Time Remaining</string>

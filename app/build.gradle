@@ -11,7 +11,7 @@ buildscript {
 apply plugin: 'com.android.application'
 //apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 apply plugin: 'net.ltgt.errorprone'
 apply plugin: 'kotlin-kapt'
 
@@ -33,25 +33,20 @@ android {
         versionCode 122
         versionName "6.1.1"
     }
-    lintOptions {
-        disable 'MissingTranslation'
-        checkReleaseBuilds false
-        // Or, if you prefer, you can continue to check for errors in release builds,
-        // but continue the build even when errors are found:
-        //abortOnError false
-    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
-    androidExtensions {
-        experimental = true
-    }
+
     compileOptions {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
+    }
+    lint {
+        checkReleaseBuilds false
+        disable 'MissingTranslation'
     }
 
 }
@@ -66,13 +61,13 @@ repositories {
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
-    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'com.google.android.material:material:1.6.1'
 
 
     //BELOW is for compatibility with hisn-almuslim
@@ -84,7 +79,7 @@ dependencies {
     implementation 'com.vanniktech:vntfontlistpreference:1.0.1-SNAPSHOT'
     implementation 'me.grantland:autofittextview:0.2.1'
     implementation 'com.google.code.gson:gson:2.8.6'
-    implementation 'com.google.android.gms:play-services-location:19.0.1'
+    implementation 'com.google.android.gms:play-services-location:20.0.0'
 
     //implementation 'com.google.android.gms:play-services-appindexing:9.2.1'
 

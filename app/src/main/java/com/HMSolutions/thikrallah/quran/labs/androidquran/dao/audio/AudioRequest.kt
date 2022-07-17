@@ -3,7 +3,8 @@ package com.HMSolutions.thikrallah.quran.labs.androidquran.dao.audio
 import android.os.Parcelable
 import com.HMSolutions.thikrallah.quran.labs.androidquran.common.QariItem
 import com.HMSolutions.thikrallah.quran.labs.androidquran.data.SuraAyah
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
+
 
 @Parcelize
 data class AudioRequest(val start: SuraAyah,

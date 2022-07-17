@@ -25,6 +25,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
+import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.provider.Settings;
@@ -539,6 +540,37 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                     break;
                 }
         }
+
+
+        PowerManager powerManager = (PowerManager) getApplicationContext().getSystemService(POWER_SERVICE);
+        String packageName = "com.HMSolutions.thikrallah";
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            if (!powerManager.isIgnoringBatteryOptimizations(packageName)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(this.getResources().getString(R.string.power_Exclusion)).setMessage(this.getResources().getString(R.string.power_Exclusion_message))
+                        .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Intent intent = new Intent();
+                                intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                                intent.setData(Uri.parse("package:" + getPackageName()));
+                                    startActivity(intent);
+                                    Log.d(TAG,"launched battery optimization activity");
+                            }
+                        })
+                        .setCancelable(false)
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .create().show();
+            }
+        }
+
+
+
 
 
         startAthanTimer(this.getApplicationContext());
