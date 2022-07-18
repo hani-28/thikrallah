@@ -51,6 +51,7 @@
     <string name="email_subject">مقترحات على برنامج اذكر الله</string>
     <string name="quiet_time">وقت عدم التذكير الصوتي</string>
     <string name="quiet_time_choice">اوقف التذكير الصوتي في هذه الاوقات</string>
+   <string name="quiet_time_after_athan_choice">اوقف التذكير الصوتي بعد الاذان بنصف ساعه</string>
     <string name="quiet_time_start">وقت عدم التذكير يبدأ في</string>
     <string name="quiet_time_end">وقت عدم التذكير ينتهي في</string>
     <string name="rate_message">اذا لديك اي انطباع سلبي او ايجابي باستخدام برنامجنا يرجى اخذ لحظه من وقتك لتقييم البرنامج حتى نستطيع تحسين البرنامج الى الافضل ان شاء الله. ايظا يرجى دعم المبرمج بالضغط على الدعايات بين الحين والاخر. وشكرا.</string>

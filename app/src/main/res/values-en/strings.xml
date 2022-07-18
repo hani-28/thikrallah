@@ -39,6 +39,7 @@
     <string name="email_subject">App Recommendations</string>
     <string name="quiet_time">Time To Stop Reminders</string>
     <string name="quiet_time_choice">Stop Audio Reminders During This Time</string>
+    <string name="quiet_time_after_athan_choice">Stop Audio Reminders within half hour of Athan</string>
     <string name="quiet_time_start">No Reminders Time Starts On:</string>
     <string name="quiet_time_end">No Reminders Time Ends On</string>
     <string name="rate_message">If you have any good or bad experience using our app, please give us a minute of your time to give us that feedback so that we can improve this app God willing. Also, please support us by clicking on interesting ads every now and then. Thank you.</string>

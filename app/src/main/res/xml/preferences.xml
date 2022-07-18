@@ -45,6 +45,10 @@
             android:defaultValue="@string/quiet_time_endvalue"
             android:key="quiet_time_end"
             android:title="@string/quiet_time_end" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="quiet_time_after_athan_choice"
+            android:title="@string/quiet_time_after_athan_choice" />
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/morningThikrSettings"

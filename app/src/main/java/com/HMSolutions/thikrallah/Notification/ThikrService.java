@@ -29,10 +29,12 @@ import androidx.core.app.NotificationCompat;
 
 import com.HMSolutions.thikrallah.BuildConfig;
 import com.HMSolutions.thikrallah.MainActivity;
+import com.HMSolutions.thikrallah.Models.Prayer;
 import com.HMSolutions.thikrallah.Models.UserThikr;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.ThikrMediaPlayerService;
 import com.HMSolutions.thikrallah.Utilities.MyDBHelper;
+import com.HMSolutions.thikrallah.Utilities.PrayTime;
 import com.HMSolutions.thikrallah.quran.data.page.provider.madani.MadaniPageProvider;
 import com.HMSolutions.thikrallah.quran.data.source.PageProvider;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.common.QariItem;
@@ -1136,25 +1138,44 @@ public class ThikrService extends IntentService  {
 			Date dateCompareTwo = parseDate(quiet_time_end);
 			if (dateCompareOne.after(dateCompareTwo)){
 				if (!(dateCompareTwo.before( date ) && dateCompareOne.after(date))) {
-
 					return true;
 				}
 			}else{
 				if (dateCompareOne.before( date ) && dateCompareTwo.after(date)) {
-
 					return true;
 				}
 			}
-			return false;
-
-
-		}else{
-			return false;
 		}
+        boolean quiet_time_after_athan_choice=sharedPrefs.getBoolean("quiet_time_after_athan_choice", true);
+        if (quiet_time_after_athan_choice){
+            PrayTime prayersObject=PrayTime.instancePrayTime(this.getApplicationContext());
+            String[] times=prayersObject.getPrayerTimes(this.getApplicationContext());
+            for (int i=0;i<7;i++){
+                if (i!=1){
+                    Calendar now = Calendar.getInstance();
+                    int hour = now.get(Calendar.HOUR_OF_DAY); // Get hour in 24 hour format
+                    int minute = now.get(Calendar.MINUTE);
+                    Date date = parseDate(hour + ":" + minute);
+                    Date PrayerTime = parseDate(times[i]);
+                    long difference = (date.getTime() - PrayerTime.getTime())/(1000*60);
+                    Log.d(TAG,"difference between"+PrayerTime.toString()+" " +times[i]+" and "+date.toString()+" is "+difference+"minutes");
+                    if(difference < 70 && difference >=0){
+                        return true;
+                    }
+
+                }
+            }
+        }
+        return false;
 	}
 	private Date parseDate(String date) {
+        String inputFormat="";
+        if (date.length()==8){
+            inputFormat = "hh:mm a";
+        }else{
+            inputFormat = "HH:mm";
+        }
 
-		final String inputFormat = "HH:mm";
 		SimpleDateFormat inputParser = new SimpleDateFormat(inputFormat, Locale.US);
 		try {
 			return inputParser.parse(date);
