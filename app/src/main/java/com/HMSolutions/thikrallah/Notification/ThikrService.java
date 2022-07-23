@@ -95,6 +95,7 @@ public class ThikrService extends IntentService  {
 
         calling_intent=intent;
         mcontext=this.getApplicationContext();
+        new MyAlarmsManager(mcontext).UpdateAllApplicableAlarms();
         quransettings=QuranSettings.getInstance(mcontext);
         //update all alarms
         Intent boot_reciever = new Intent("com.HMSolutions.thikrallah.Notification.ThikrBootReceiver.android.action.broadcast");
@@ -1158,9 +1159,9 @@ public class ThikrService extends IntentService  {
                     Date date = parseDate(hour + ":" + minute);
                     Date PrayerTime = parseDate(times[i]);
                     long difference = (date.getTime() - PrayerTime.getTime())/(1000*60);
-                    Log.d(TAG,"difference between"+PrayerTime.toString()+" " +times[i]+" and "+date.toString()+" is "+difference+"minutes");
-                    if(difference < 70 && difference >=0){
-                        return true;
+                   if(difference < 30 && difference >=0){
+                       Log.d(TAG,"within 30 minutes of athan, quite time"+difference);
+                       return true;
                     }
 
                 }

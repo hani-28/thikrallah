@@ -27,9 +27,9 @@
 
    <string name="autostart">تفعيل التشغل الذاتي</string>
     <string name="autostart_message">الرجاء السماح لبرنامجنا بالعمل بالخلفية حتى لو كان البرنامج مغلقا حتى يشتغل البرنامج بشكل صحيح.</string>
-    <string name="athan_timer_notifiaction">اشعار الوقت المتبقي للصلاة</string>
-    <string name="remember_notification">ذكر الله</string>
-    <string name="floating_notification">نافذة التذكيرات التلقائية</string>
+    <string name="athan_timer_notifiaction" translatable="false">Prayer Time Remaining</string>
+    <string name="remember_notification" translatable="false">Remembrance of Allah</string>
+    <string name="floating_notification" translatable="false">Remember Allah Floating Reminders</string>
     <string name="volume_level">مستوى صوت التذكير</string>
    <string name="translation_link" translatable="false">https://crowdin.com/project/thikrallah</string>
     <string name="mute_when_ringer_mute">كتم التذكير اذا الجهاز في وضع الصامت</string>
@@ -634,8 +634,8 @@
    <string name="sura_ayah" translatable="false">%1$d:%2$d</string>
 
    <!-- notification channel names [CHAR LIMIT=40] -->
-   <string name="notification_channel_download">تحميلات القرءان</string>
-   <string name="notification_channel_audio">تلاوة القرءان</string>
+   <string name="notification_channel_download" translatable="false">Quran Downloads</string>
+   <string name="notification_channel_audio" translatable="false">Quran Recitation</string>
    <string name="need_overlay_permission_title">اظهار فوق التطبيقات الاخرى</string>
    <string name="need_overlay_permission_message">ير جى السماح لبرنامجنا بالظهور فوق التطبيقات الاخرى لكي نتمكن من عرض التذكيرات بالله لك وانت في اي تطبيق</string>
    <string name="need_location_permission_title">السماح بمعلومات الموقع</string>

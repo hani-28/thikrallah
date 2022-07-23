@@ -331,6 +331,4 @@
   <string name="more_translations">Yana tarjimalar</string>
 
   <!-- notification channel names [CHAR LIMIT=40] -->
-  <string name="notification_channel_download">Qurʼon yuklamalari</string>
-  <string name="notification_channel_audio">Qurʼon qiroati</string>
 </resources>

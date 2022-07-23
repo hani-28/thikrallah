@@ -318,6 +318,4 @@
   <string name="audio_manager">Pengurus Audio</string>
 
   <!-- notification channel names [CHAR LIMIT=40] -->
-  <string name="notification_channel_download">Muat turun Quran</string>
-  <string name="notification_channel_audio">Pembacaan Quran</string>
 </resources>

@@ -16,9 +16,6 @@
 
     <string name="autostart">Enable AutoStart</string>
     <string name="autostart_message">Please allow our app to always run in the background, else our services cannot be accessed.</string>
-    <string name="athan_timer_notifiaction">Prayer Time Remaining</string>
-    <string name="remember_notification">Remembrance of Allah</string>
-    <string name="floating_notification">Remember Allah Floating Reminders</string>
     <string name="volume_level">Notification Volume Level</string>
     <string name="mute_when_ringer_mute">Mute Notification If Device Is In Silent Mode</string>
     <string name="morningThikr">Morning Rememberance</string>
@@ -523,8 +520,6 @@ He knows what lies before them and what is after them, And they comprehend not a
     <string name="tag_duplicate_tag_error">Tag name already exists!</string>
     <!-- format strings -->
     <!-- notification channel names [CHAR LIMIT=40] -->
-    <string name="notification_channel_download">Quran Downloads</string>
-    <string name="notification_channel_audio">Quran Recitation</string>
     <string name="longitude">Longitude</string>
     <string name="latitude">Latitude</string>
     <string name="number_format_error">ُError in number format</string>
