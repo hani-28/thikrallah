@@ -3,9 +3,11 @@ package com.HMSolutions.thikrallah.Fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
+import android.icu.util.Calendar;
+import android.icu.util.IslamicCalendar;
+import android.icu.util.ULocale;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,9 +15,13 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
-import android.widget.NumberPicker;
 import android.widget.Switch;
 import android.widget.TextView;
+import net.time4j.*;
+import net.time4j.calendar.HijriCalendar;
+import net.time4j.engine.StartOfDay;
+import net.time4j.format.expert.ChronoFormatter;
+import net.time4j.format.expert.PatternType;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -40,6 +46,7 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
 	private MainInterface mCallback;
     private ListView AthanList;
     private TextView prayer1_time;
+    private TextView HijriDate;
     private TextView prayer2_time;
     private TextView prayer3_time;
     private TextView prayer4_time;
@@ -116,6 +123,13 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
                 false);
 
         //locationDescription=(TextView)  view.findViewById(R.id.textView_location);
+        HijriDate= (TextView) view.findViewById(R.id.Hijri_date);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            IslamicCalendar islamic_cal = (IslamicCalendar) IslamicCalendar
+                    .getInstance(new ULocale("ar_SA@calendar=islamic"));
+            islamic_cal.setCalculationType(IslamicCalendar.CalculationType.ISLAMIC);
+            HijriDate.setText(getHijriDate());
+        }
 
         prayer1_time = (TextView) view.findViewById(R.id.athan_timing1);
         prayer2_time = (TextView) view.findViewById(R.id.athan_timing2);
@@ -312,5 +326,35 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
         currentLocation.setText(this.getContext().getResources().getString(R.string.current_location)+MainActivity.getLatitude(getContext())+", "+ MainActivity.getLongitude(getContext()));
         updateprayerTimes();
         updateAthanAlarms();
+    }
+    private String getHijriDate(){
+
+        ChronoFormatter<HijriCalendar> hijriFormat =
+                ChronoFormatter.setUp(HijriCalendar.family(), this.getResources().getConfiguration().locale)
+                        //.addEnglishOrdinal(HijriCalendar.DAY_OF_MONTH)
+                        .addPattern(" dd MMMM yyyy", PatternType.CLDR)
+                        .build()
+                        .withCalendarVariant(HijriCalendar.VARIANT_UMALQURA);
+
+// conversion from gregorian to hijri-umalqura valid at noon
+// (not really valid in the evening when next islamic day starts)
+        HijriCalendar today =
+                SystemClock.inLocalView().today().transform(
+                        HijriCalendar.class,
+                        HijriCalendar.VARIANT_UMALQURA
+                );
+        return hijriFormat.format(today); // 22nd Rajab 1438
+
+// taking into account the specific start of day for Hijri calendar
+ /*       HijriCalendar todayExact =
+                SystemClock.inLocalView().now(
+                        HijriCalendar.family(),
+                        HijriCalendar.VARIANT_UMALQURA,
+                        StartOfDay.EVENING // simple approximation => 18:00
+                ).toDate();
+        //System.out.println(hijriFormat.format(todayExact)); // 22nd Rajab 1438 (23rd after 18:00)
+        return hijriFormat.format(todayExact);
+
+  */
     }
 }

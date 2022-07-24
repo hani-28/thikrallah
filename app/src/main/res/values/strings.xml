@@ -22,8 +22,8 @@
     <string name="quran_thikr_need_files">اضغط هنا لتحميل بعض الملفات لتفعيل التذكير الصوتي بالقرءان</string>
    <string name="quran_thikr_download_need_files_permission">التذكير الصوتي بالقرءان يحتاج ان يحمل الملفات الصوتية المطلوبة لكي تشتغل هذه الخاصية. هل تريد تحميل الملف الصوتي الان؟</string>
    <string name="quran_thikr_need_files_prompt_title">تحميل ملفات</string>
-   <string name="power_Exclusion">استثناء البطارية</string>
-   <string name="power_Exclusion_message">الرجاء استثناء برنامج اذكر الله من خاصية تحسين طاقة البطارية. هذا لكي تعمل التذكيرات والاذان في وقتهم الصحيح</string>
+   <string name="power_Exclusion">استثناءات توفير الطاقة</string>
+   <string name="power_Exclusion_message">الرجاء استثناء برنامج اذكر الله من خاصية توفير طاقة البطارية. هذا لكي تعمل التذكيرات والاذان في وقتهم الصحيح بدون تأخير. لا تقلق فالبرنامج لن يستعمل من البطارية الا نسية بسيطة جدا.</string>
 
    <string name="autostart">تفعيل التشغل الذاتي</string>
     <string name="autostart_message">الرجاء السماح لبرنامجنا بالعمل بالخلفية حتى لو كان البرنامج مغلقا حتى يشتغل البرنامج بشكل صحيح.</string>

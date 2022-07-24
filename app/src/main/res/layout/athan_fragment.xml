@@ -15,15 +15,26 @@
         android:text="Large Text"
         android:id="@+id/textView_location" /-->
 
-
-    <GridLayout
+    <TextView
+        android:id="@+id/Hijri_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:paddingTop="20dp"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    <View style="@style/Divider"
+        android:id="@+id/divider_1"
+        android:layout_below="@id/Hijri_date"/>
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider_1"
         android:gravity="start"
-        android:rowCount="10"
-        android:columnCount="4"
+        android:rowCount="7"
+        android:columnCount="3"
         android:verticalSpacing="@dimen/grid_vertical_spacing"
         android:horizontalSpacing="@dimen/grid_vertical_spacing"
         android:id="@+id/gridview_athan">
@@ -204,33 +215,37 @@
 
         android:padding="15dip" >
         <TextView
-            android:id="@+id/adjustment_text"
-            android:paddingTop="100dp"
+            android:id="@+id/current_location"
+            android:layout_alignParentTop="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/current_location"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/location_adjustment"
-            android:gravity="center_horizontal"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
+            android:layoutDirection="locale"
             />
+        <View style="@style/Divider"
+            android:id="@+id/divider_2"
+            android:layout_below="@id/current_location"/>
+        <TextView
+            android:id="@+id/adjustment_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider_2"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:paddingTop="10dp"
+            android:text="@string/location_adjustment"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
         <CheckBox
             android:id="@+id/is_manual_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/override_location"
-            android:layout_below="@id/current_location"
-            android:layoutDirection="locale"
-            />
-        <TextView
-            android:id="@+id/current_location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/current_location"
-            android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_below="@id/adjustment_text"
             android:layoutDirection="locale"
             />
+
+
     </RelativeLayout>
 </RelativeLayout>

@@ -291,10 +291,10 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
         criteria.setPowerRequirement(Criteria.NO_REQUIREMENT);
 
         int permissionCheck = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION);
+                Manifest.permission.ACCESS_COARSE_LOCATION);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                     MY_PERMISSIONS_REQUEST_ACCESS_LOCATION_FOR_LOCATION_UPDATES);
         } else {
             Log.d(TAG, "location permission granted");
@@ -383,7 +383,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                 Manifest.permission.MEDIA_CONTENT_CONTROL);
 
         int locationPermission = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION);
+                Manifest.permission.ACCESS_COARSE_LOCATION);
 
         //ask for this when needed and not here
        // int writePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -396,7 +396,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
             listPermissionsNeeded.add(Manifest.permission.SCHEDULE_EXACT_ALARM);
         }
         if (locationPermission != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION);
+            listPermissionsNeeded.add(Manifest.permission.ACCESS_COARSE_LOCATION);
 
 
         }
@@ -496,11 +496,11 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
         timeOperation("timing", "launching apprater if applicable");
         setContentView(R.layout.activity_main);
         timeOperation("timing", "setting content");
+
+        timeOperation("timing", "replacing with main fragment");
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().add(R.id.container, new MainFragment()).commit();
         }
-        timeOperation("timing", "replacing with main fragment");
-
         if (mPrefs.getBoolean("isFirstLaunch", true)) {
             Log.d(TAG, "first launch. calling boot recbiever");
             sendBroadcast(intent1);
@@ -544,35 +544,6 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
 
         PowerManager powerManager = (PowerManager) getApplicationContext().getSystemService(POWER_SERVICE);
         String packageName = "com.HMSolutions.thikrallah";
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-            if (!powerManager.isIgnoringBatteryOptimizations(packageName)) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(this.getResources().getString(R.string.power_Exclusion)).setMessage(this.getResources().getString(R.string.power_Exclusion_message))
-                        .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                Intent intent = new Intent();
-                                intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
-                                intent.setData(Uri.parse("package:" + getPackageName()));
-                                    startActivity(intent);
-                                    Log.d(TAG,"launched battery optimization activity");
-                            }
-                        })
-                        .setCancelable(false)
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
-                        .create().show();
-            }
-        }
-
-
-
-
-
         startAthanTimer(this.getApplicationContext());
 
 
@@ -641,7 +612,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         ActivityCompat.requestPermissions(activity,
-                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                                 MY_PERMISSIONS_REQUEST_ACCESS_LOCATION_FOR_LOCATION_UPDATES);
 
 
@@ -943,7 +914,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
         switch (requestCode) {
             case REQUEST_ID_MULTIPLE_PERMISSIONS: {
                 if (grantResults.length > 0
-                        && (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                        && (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                         == PackageManager.PERMISSION_GRANTED)) {
                     Log.d(TAG, "requestLocationUpdate. permissions granted");
 
@@ -952,9 +923,9 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                     // permission was granted, yay! Do the
                     // location-related task you need to do.
                 } else {
-                    if ((ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) ==
+                    if ((ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) ==
                             PackageManager.PERMISSION_DENIED) &&
-                            ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                            ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
                         showMessageAndLaunchLocationPermission(R.string.need_location_permission_title, R.string.need_location_permission_message);
 
                     }
@@ -967,7 +938,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
             case MY_PERMISSIONS_REQUEST_ACCESS_LOCATION: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
-                        && (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
+                        && (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
                     Log.d(TAG, "requestLocationUpdate. permissions granted");
 
                     this.requestLocationUpdate();
@@ -983,7 +954,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
             }
             case MY_PERMISSIONS_REQUEST_ACCESS_LOCATION_FOR_LOCATION_UPDATES: {
                 if (grantResults.length > 0
-                        && (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
+                        && (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
                     Log.d(TAG, "requestLocationUpdate. permissions granted");
 
                     this.requestLocationUpdate();
@@ -1024,7 +995,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
     }
     protected void stopLocationUpdates() {
         int permissionCheck = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION);
+                Manifest.permission.ACCESS_COARSE_LOCATION);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
             /*
             ActivityCompat.requestPermissions(this,
