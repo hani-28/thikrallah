@@ -30,7 +30,7 @@ android {
         applicationId "com.HMSolutions.thikrallah"
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode 123
+        versionCode 124
         versionName "6.2.0"
     }
     buildTypes {
