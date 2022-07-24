@@ -9,7 +9,7 @@ public interface MainInterface {
 
 	void launchFragment(Fragment iFragment, Bundle args, String tag);
 
-	void share();
+    void share();
 
     void playAll(String AssetFolder);
 

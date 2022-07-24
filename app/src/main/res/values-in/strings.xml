@@ -322,8 +322,6 @@
   <string name="prefs_immersive_in_portrait_summary_disabled">Hanya gambar yang ditampilkan ketika layar penuh</string>
   <string name="tag_blank_tag_error">Nama label tidak boleh kosong!</string>
   <string name="tag_duplicate_tag_error">Nama label sudah dipakai</string>
-  <string name="notification_channel_download">Unduhan Quran</string>
-  <string name="notification_channel_audio">Bacaan Quran</string>
   <string name="prefs_import_title">Impor</string>
   <string name="prefs_import_summary">Impor penyimpanan dan penanda</string>
   <string name="prefs_category_advanced_summary">Impor/ekspor penanda, menentukan direktori data Quran, dll.</string>

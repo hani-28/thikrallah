@@ -14,6 +14,8 @@ import com.HMSolutions.thikrallah.quran.labs.androidquran.module.application.App
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranSettings;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.RecordingLogTree;
 
+import net.time4j.android.ApplicationStarter;
+
 import java.util.Locale;
 
 import timber.log.Timber;
@@ -26,6 +28,8 @@ public class QuranApplication extends Application {
     super.onCreate();
     Timber.plant(new RecordingLogTree());
     this.applicationComponent = initializeInjector();
+    ApplicationStarter.initialize(this, true);
+
   }
 
   protected ApplicationComponent initializeInjector() {

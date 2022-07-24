@@ -3,6 +3,7 @@ package com.HMSolutions.thikrallah.quran.labs.androidquran.ui.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,8 @@ import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranSettings;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.widgets.InlineTranslationView;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.widgets.QuranSpinner;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -121,13 +124,11 @@ public class AyahTranslationFragment extends AyahActionFragment
         translationControls.setVisibility(View.GONE);
         return;
       }
-
+      Set<String> activeTranslations = pagerActivity.getActiveTranslations();
+      if (activeTranslations == null) {
+        activeTranslations = quranSettings.getActiveTranslations();
+      }
       if (translationAdapter == null) {
-        Set<String> activeTranslations = pagerActivity.getActiveTranslations();
-        if (activeTranslations == null) {
-          activeTranslations = quranSettings.getActiveTranslations();
-        }
-
         translationAdapter = new TranslationsSpinnerAdapter(activity,
             R.layout.translation_ab_spinner_item,
             pagerActivity.getTranslationNames(),
@@ -138,6 +139,11 @@ public class AyahTranslationFragment extends AyahActionFragment
               refreshView();
             });
         translator.setAdapter(translationAdapter);
+      }else{
+        translationAdapter.updateItems(
+                pagerActivity.getTranslationNames(),
+                translations,
+                activeTranslations);
       }
 
       if (start.equals(end)) {

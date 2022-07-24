@@ -22,14 +22,14 @@
     <string name="quran_thikr_need_files">اضغط هنا لتحميل بعض الملفات لتفعيل التذكير الصوتي بالقرءان</string>
    <string name="quran_thikr_download_need_files_permission">التذكير الصوتي بالقرءان يحتاج ان يحمل الملفات الصوتية المطلوبة لكي تشتغل هذه الخاصية. هل تريد تحميل الملف الصوتي الان؟</string>
    <string name="quran_thikr_need_files_prompt_title">تحميل ملفات</string>
-   <string name="power_Exclusion">استثناء البطارية</string>
-   <string name="power_Exclusion_message">الرجاء استثناء برنامج اذكر الله من خاصية تحسين طاقة البطارية. هذا لكي تعمل التذكيرات والاذان في وقتهم الصحيح</string>
+   <string name="power_Exclusion">استثناءات توفير الطاقة</string>
+   <string name="power_Exclusion_message">الرجاء استثناء برنامج اذكر الله من خاصية توفير طاقة البطارية. هذا لكي تعمل التذكيرات والاذان في وقتهم الصحيح بدون تأخير. لا تقلق فالبرنامج لن يستعمل من البطارية الا نسية بسيطة جدا.</string>
 
    <string name="autostart">تفعيل التشغل الذاتي</string>
     <string name="autostart_message">الرجاء السماح لبرنامجنا بالعمل بالخلفية حتى لو كان البرنامج مغلقا حتى يشتغل البرنامج بشكل صحيح.</string>
-    <string name="athan_timer_notifiaction">اشعار الوقت المتبقي للصلاة</string>
-    <string name="remember_notification">ذكر الله</string>
-    <string name="floating_notification">نافذة التذكيرات التلقائية</string>
+    <string name="athan_timer_notifiaction" translatable="false">Prayer Time Remaining</string>
+    <string name="remember_notification" translatable="false">Remembrance of Allah</string>
+    <string name="floating_notification" translatable="false">Remember Allah Floating Reminders</string>
     <string name="volume_level">مستوى صوت التذكير</string>
    <string name="translation_link" translatable="false">https://crowdin.com/project/thikrallah</string>
     <string name="mute_when_ringer_mute">كتم التذكير اذا الجهاز في وضع الصامت</string>
@@ -51,6 +51,8 @@
     <string name="email_subject">مقترحات على برنامج اذكر الله</string>
     <string name="quiet_time">وقت عدم التذكير الصوتي</string>
     <string name="quiet_time_choice">اوقف التذكير الصوتي في هذه الاوقات</string>
+   <string name="quiet_time_after_athan_choice">لا تذكير صوتي بعد الاذان</string>
+    <string name="quiet_time_after_athan_choice_summary">اوقف التذكير الصوتي بعد الاذان بنصف ساعه</string>
     <string name="quiet_time_start">وقت عدم التذكير يبدأ في</string>
     <string name="quiet_time_end">وقت عدم التذكير ينتهي في</string>
     <string name="rate_message">اذا لديك اي انطباع سلبي او ايجابي باستخدام برنامجنا يرجى اخذ لحظه من وقتك لتقييم البرنامج حتى نستطيع تحسين البرنامج الى الافضل ان شاء الله. ايظا يرجى دعم المبرمج بالضغط على الدعايات بين الحين والاخر. وشكرا.</string>
@@ -633,8 +635,8 @@
    <string name="sura_ayah" translatable="false">%1$d:%2$d</string>
 
    <!-- notification channel names [CHAR LIMIT=40] -->
-   <string name="notification_channel_download">تحميلات القرءان</string>
-   <string name="notification_channel_audio">تلاوة القرءان</string>
+   <string name="notification_channel_download" translatable="false">Quran Downloads</string>
+   <string name="notification_channel_audio" translatable="false">Quran Recitation</string>
    <string name="need_overlay_permission_title">اظهار فوق التطبيقات الاخرى</string>
    <string name="need_overlay_permission_message">ير جى السماح لبرنامجنا بالظهور فوق التطبيقات الاخرى لكي نتمكن من عرض التذكيرات بالله لك وانت في اي تطبيق</string>
    <string name="need_location_permission_title">السماح بمعلومات الموقع</string>

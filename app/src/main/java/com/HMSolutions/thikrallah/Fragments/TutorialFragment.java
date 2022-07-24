@@ -1,9 +1,19 @@
 package com.HMSolutions.thikrallah.Fragments;
 
+import static android.content.Context.POWER_SERVICE;
+
+import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +23,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.HMSolutions.thikrallah.MainActivity;
@@ -23,6 +35,7 @@ import com.HMSolutions.thikrallah.Utilities.MainInterface;
 import java.util.Locale;
 
 public class TutorialFragment extends Fragment {
+    private static final String TAG ="TutorialFragment" ;
     private MainInterface mCallback;
     private Context mContext;
     private TextView Tutorial_description;
@@ -103,6 +116,7 @@ public class TutorialFragment extends Fragment {
                 data.putInt(PrefsThikrFragmentTutorial.PREF_XML_FILE, R.xml.prefs_tutorial2);
                 break;
             case 2:
+                requestBatteryExclusion(mContext) ;
                 data.putInt(PrefsThikrFragmentTutorial.PREF_XML_FILE,R.xml.prefs_tutorial3);
                 break;
             case 3:
@@ -121,6 +135,12 @@ public class TutorialFragment extends Fragment {
         }else{
             PreferenceManager.getDefaultSharedPreferences(this.getActivity()).edit().putBoolean("isFirstLaunch", false).commit();
             this.getActivity().onBackPressed();
+            fragment.setArguments(data);
+            ft.replace(R.id.preference_container, new MainFragment());
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            ft.commitAllowingStateLoss();
+            //mCallback.launchFragment(new MainFragment(),null,"MainFragment");
+            //this.getActivity().onBackPressed();
             count++;
             return;
         }
@@ -131,5 +151,34 @@ public class TutorialFragment extends Fragment {
 			//mCallback.launchFragment(new MainFragment(),null,"MainFragment");
 		}
     }
-	
+
+    private void requestBatteryExclusion(Context mContext) {
+        Log.d(TAG,"requestBatteryExclusion");
+        PowerManager powerManager = (PowerManager) mContext.getSystemService(POWER_SERVICE);
+        String packageName = "com.HMSolutions.thikrallah";
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            if (!powerManager.isIgnoringBatteryOptimizations(packageName)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setTitle(this.getResources().getString(R.string.power_Exclusion)).setMessage(this.getResources().getString(R.string.power_Exclusion_message))
+                        .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Intent intent = new Intent();
+                                intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                                intent.setData(Uri.parse("package:" + mContext.getPackageName()));
+                                startActivity(intent);
+                            }
+                        })
+                        .setCancelable(false)
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .create().show();
+            }
+        }
+    }
+
 }

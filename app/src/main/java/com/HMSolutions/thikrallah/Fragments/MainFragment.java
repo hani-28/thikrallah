@@ -1,11 +1,19 @@
 package com.HMSolutions.thikrallah.Fragments;
 
+import static android.content.Context.POWER_SERVICE;
+
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +38,7 @@ public class MainFragment extends Fragment {
     private MainInterface mCallback;
     private Context mContext;
     SharedPreferences mPrefs;
-
+	String TAG = "MainFragment";
 
     public MainFragment() {
     }
@@ -163,6 +171,8 @@ public class MainFragment extends Fragment {
                 mCallback.launchFragment(new MyAthkarFragment(), data, "MyAthkarFragment");
             }
         });
+		Log.d(TAG,"requestBatteryExclusion");
+		requestBatteryExclusion(mContext);
         return view;
     }
 
@@ -180,5 +190,35 @@ public class MainFragment extends Fragment {
         FirebaseAnalytics.getInstance(this.getActivity()).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
    */
     }
+	private void requestBatteryExclusion(Context mContext) {
+		//first time launch, request is made in tutorial fragment, do not request here:
+		if (mPrefs.getBoolean("isFirstLaunch", true)==false) {
+			PowerManager powerManager = (PowerManager) mContext.getSystemService(POWER_SERVICE);
+			String packageName = "com.HMSolutions.thikrallah";
+			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
+				if (!powerManager.isIgnoringBatteryOptimizations(packageName)) {
+					AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+					builder.setTitle(this.getResources().getString(R.string.power_Exclusion)).setMessage(this.getResources().getString(R.string.power_Exclusion_message))
+							.setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialogInterface, int i) {
+									Intent intent = new Intent();
+									intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+									intent.setData(Uri.parse("package:" + mContext.getPackageName()));
+									startActivity(intent);
+								}
+							})
+							.setCancelable(false)
+							.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+								}
+							})
+							.create().show();
+				}
+			}
+		}
+
+	}
 }

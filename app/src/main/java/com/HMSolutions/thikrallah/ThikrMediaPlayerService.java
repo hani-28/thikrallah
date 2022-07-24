@@ -1121,7 +1121,9 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
             ComponentName receiver = new ComponentName("com.HMSolutions.thikrallah.Notification", ThikrMediaBroadcastReciever.class.getName());
 
-
+            if (mediaSession!=null){
+                mediaSession.release();
+            }
             mediaSession = new MediaSessionCompat(this
                     , "MEDIA_SESSION_THIKRALLAH"
                     , receiver
