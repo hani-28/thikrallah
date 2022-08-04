@@ -142,7 +142,7 @@ public class AyahTranslationFragment extends AyahActionFragment
       }else{
         translationAdapter.updateItems(
                 pagerActivity.getTranslationNames(),
-                translations,
+                pagerActivity.getTranslations(),
                 activeTranslations);
       }
 
