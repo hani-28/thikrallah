@@ -39,6 +39,7 @@ import java.util.Random;
 public class RecordThikrDialog extends DialogFragment {
     private static final  int MY_PERMISSIONS_REQUEST_RECORD_AUDIO = 4367;
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE =8754 ;
+    private static final int MY_PERMISSIONS_REQUEST_READ_MEDIA_AUDIO =8755 ;
     private EditText thikr_text_edittext_view;
     private Context context;
     private Button record_button;
@@ -94,16 +95,18 @@ public class RecordThikrDialog extends DialogFragment {
                     public void onClick(DialogInterface dialog, int id) {
                         String newThikr = thikr_text_edittext_view.getText().toString();
 
-                        if (newThikr.equalsIgnoreCase("")==false){
-                            mCallback.resetPlayer(MainActivity.DATA_TYPE_GENERAL_THIKR);
-                            MyDBHelper db = new MyDBHelper(context);
-                            db.addThikr(newThikr,0, file);
-                            Log.d(TAG,"filename is "+context.getFilesDir().getPath() + File.separator  +"user"+file_id+".mp3");
-                            my_interface.updateList();
-                        }else{
+                        if (newThikr.equalsIgnoreCase("")==true && file.equalsIgnoreCase("")){
                             mCallback.resetPlayer(MainActivity.DATA_TYPE_GENERAL_THIKR);
                             Toast.makeText(context, R.string.thikr_text_required, Toast.LENGTH_LONG).show();
+                        }else if (newThikr.equalsIgnoreCase("")==true){
+                            newThikr = context.getString(R.string.my_app_name);
                         }
+                        mCallback.resetPlayer(MainActivity.DATA_TYPE_GENERAL_THIKR);
+                        MyDBHelper db = new MyDBHelper(context);
+                        db.addThikr(newThikr,0, file);
+                        Log.d(TAG,"filename is "+context.getFilesDir().getPath() + File.separator  +"user"+file_id+".mp3");
+                        my_interface.updateList();
+
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -118,17 +121,31 @@ public class RecordThikrDialog extends DialogFragment {
 
             @Override
             public void onClick(View v) {
-                int permissionCheck = ContextCompat.checkSelfPermission(context,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+                    int permissionCheck = ContextCompat.checkSelfPermission(context,
+                            Manifest.permission.READ_MEDIA_AUDIO);
+                    if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            requestPermissions(new String[]{Manifest.permission.READ_MEDIA_AUDIO},
+                                    MY_PERMISSIONS_REQUEST_READ_MEDIA_AUDIO);
+                        }
+                    } else {
+                        Intent intent = new Intent(getActivity(), MediaBrowser.class);
+                        startActivityForResult(intent, 0);
                     }
-                } else {
-                    Intent intent = new Intent(getActivity(), MediaBrowser.class);
-                    startActivityForResult(intent, 0);
+                }else{
+                    int permissionCheck = ContextCompat.checkSelfPermission(context,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                    if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                    MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+
+                    } else {
+                        Intent intent = new Intent(getActivity(), MediaBrowser.class);
+                        startActivityForResult(intent, 0);
+                    }
                 }
+
 
 
             }
@@ -211,6 +228,19 @@ public class RecordThikrDialog extends DialogFragment {
                     startActivityForResult(intent, 0);
                     // permission was granted, yay! Do the
                     // location-related task you need to do.
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+            case MY_PERMISSIONS_REQUEST_READ_MEDIA_AUDIO: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && (ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.READ_MEDIA_AUDIO) == PackageManager.PERMISSION_GRANTED )) {
+                    Intent intent = new Intent(getActivity(), MediaBrowser.class);
+                    startActivityForResult(intent, 0);
                 } else {
 
                     // permission denied, boo! Disable the

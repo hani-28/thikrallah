@@ -376,11 +376,17 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                 Log.d(TAG,"forground_service permission requested");
             }
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            int postnotification_permission = ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.POST_NOTIFICATIONS);
+            if (postnotification_permission != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(Manifest.permission.POST_NOTIFICATIONS);
+                Log.d(TAG,"POST_NOTIFICATIONS permission requested");
+            }
+        }
         int alarmsPermission = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.SCHEDULE_EXACT_ALARM);
 
-        int mediacontrolPermission = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.MEDIA_CONTENT_CONTROL);
 
         int locationPermission = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION);
@@ -389,9 +395,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
        // int writePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
 
-        if (mediacontrolPermission != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.MEDIA_CONTENT_CONTROL);
-        }
+
         if (alarmsPermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.SCHEDULE_EXACT_ALARM);
         }
@@ -429,13 +433,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                     1);
         }
 
-        permissionCheck = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.MEDIA_CONTENT_CONTROL);
-        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.MEDIA_CONTENT_CONTROL},
-                    1);
-        }
+
     }
 
     @Override
