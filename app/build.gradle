@@ -41,15 +41,22 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = '1.8'
-        targetCompatibility = '1.8'
+        sourceCompatibility = JavaVersion.VERSION_18
+        targetCompatibility = JavaVersion.VERSION_18
     }
+    kotlinOptions {
+        jvmTarget = "18"
+    }
+
     lint {
         checkReleaseBuilds false
         disable 'MissingTranslation'
     }
     namespace 'com.HMSolutions.thikrallah'
 
+}
+kotlin {
+    jvmToolchain(18)
 }
 repositories {
     google()

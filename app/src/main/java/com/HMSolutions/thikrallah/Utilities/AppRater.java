@@ -6,9 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,7 +22,6 @@ public class AppRater {
 	private final static int LAUNCHES_UNTIL_PROMPT = 5;
 	private  Context context;
 	private static  String APP_PNAME = "";
-	private static String TAG="AppRater";
 	public void app_launched(WeakReference<Context> mContext) {
 		context=mContext.get();
 		SharedPreferences prefs;
@@ -45,13 +41,12 @@ public class AppRater {
 		editor.putLong("launch_count", launch_count);
 
 		// Get date of first launch
-		Long date_firstLaunch = prefs.getLong("date_firstlaunch", 0);
+		long date_firstLaunch = prefs.getLong("date_firstlaunch", 0);
 		if (date_firstLaunch == 0) {
 			date_firstLaunch = System.currentTimeMillis();
 			editor.putLong("date_firstlaunch", date_firstLaunch);
 		}
-		Log.d(TAG,"apprater called and showrateDialog");
-		showRateDialog(context, editor);
+		Timber.d("apprater called and showrateDialog");
 		// Wait at least n days before opening
 		if (launch_count >= LAUNCHES_UNTIL_PROMPT) {
 			if (System.currentTimeMillis() >= date_firstLaunch + 
@@ -90,7 +85,7 @@ public class AppRater {
 			if (intent.resolveActivity(context.getPackageManager()) != null) {
 				mContext.startActivity(intent);
 			}else{
-				Log.d(TAG,"playstore not available");
+				Timber.d("playstore not available");
 			}
 
 			dialog.dismiss();

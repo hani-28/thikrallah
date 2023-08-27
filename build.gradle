@@ -17,7 +17,7 @@ buildscript {
                         build: [
                                 minSdkVersion    : 21,
                                 targetSdkVersion : 33,
-                                compileSdk: 33
+                                compileSdkVersion: 33
                         ]
                 ],
                 kotlin: [
@@ -48,7 +48,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath 'com.android.tools.build:gradle:8.1.1'
         classpath 'com.google.gms:google-services:4.3.15'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "net.ltgt.gradle:gradle-errorprone-plugin:3.1.0"
