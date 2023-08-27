@@ -1,57 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
- <string name="app_package" translatable="false">com.HMSolutions.thikrallah</string>
+    <string name="app_package" translatable="false">com.HMSolutions.thikrallah</string>
     <string name="contact_developer_uri" translatable="false">mailto:28.hani@gmail.com</string>
     <string name="invalid_input">إدخال الوقت غير صحيح</string>
     <string name="help_translate">ساعدنا بترجمة البرنامج</string>
     <string name="offer_translate_help">ارغب في المساعدة بترجمة برنامج اذكر الله</string>
     <string name="my_app_name">أذكر الله</string>
     <string name="share">شارك</string>
-   <string name="qibla">القبلة</string>
-   <string name="compass_dial" translatable="false">Compass Dial</string>
-   <string name="compass_hands" translatable="false">Compass Hands</string>
-   <string name="sotw_north">N</string>
-   <string name="sotw_east">E</string>
-   <string name="sotw_south">S</string>
-   <string name="sotw_west">W</string>
-   <string name="sotw_northeast">NE</string>
-   <string name="sotw_northwest">NW</string>
-   <string name="sotw_southeast">SE</string>
-   <string name="sotw_southwest">SW</string>
-   <string name="favorite_reciter">قارئ القرءان المفضل</string>
-    <string name="quran_thikr_need_files">اضغط هنا لتحميل بعض الملفات لتفعيل التذكير الصوتي بالقرءان</string>
-   <string name="quran_thikr_download_need_files_permission">التذكير الصوتي بالقرءان يحتاج ان يحمل الملفات الصوتية المطلوبة لكي تشتغل هذه الخاصية. هل تريد تحميل الملف الصوتي الان؟</string>
-   <string name="quran_thikr_need_files_prompt_title">تحميل ملفات</string>
-   <string name="power_Exclusion">استثناءات توفير الطاقة</string>
-   <string name="power_Exclusion_message">الرجاء استثناء برنامج اذكر الله من خاصية توفير طاقة البطارية. هذا لكي تعمل التذكيرات والاذان في وقتهم الصحيح بدون تأخير. لا تقلق فالبرنامج لن يستعمل من البطارية الا نسية بسيطة جدا.</string>
+    <string name="playstore_not_exist">جوجل بلاي او متصفح انترنت غير محمل على هذا الجهاز</string>
+    <string name="browser_not_exist"> متصفح انترنت غير محمل على هذا الجهاز</string>
+    <string name="email_client_not_exist">لا يوجد برنامج بريد الكتروني محمل على هذا الجهاز</string>
 
-   <string name="autostart">تفعيل التشغل الذاتي</string>
+    <string name="qibla">القبلة</string>
+    <string name="compass_dial" translatable="false">Compass Dial</string>
+    <string name="compass_hands" translatable="false">Compass Hands</string>
+    <string name="sotw_north">N</string>
+    <string name="sotw_east">E</string>
+    <string name="sotw_south">S</string>
+    <string name="sotw_west">W</string>
+    <string name="sotw_northeast">NE</string>
+    <string name="sotw_northwest">NW</string>
+    <string name="sotw_southeast">SE</string>
+    <string name="sotw_southwest">SW</string>
+    <string name="favorite_reciter">قارئ القرءان المفضل</string>
+    <string name="quran_thikr_need_files">اضغط هنا لتحميل بعض الملفات لتفعيل التذكير الصوتي بالقرءان</string>
+    <string name="quran_thikr_download_need_files_permission">التذكير الصوتي بالقرءان يحتاج ان يحمل الملفات الصوتية المطلوبة لكي تشتغل هذه الخاصية. هل تريد تحميل الملف الصوتي الان؟</string>
+    <string name="quran_thikr_need_files_prompt_title">تحميل ملفات</string>
+    <string name="power_Exclusion">استثناءات توفير الطاقة</string>
+    <string name="power_Exclusion_message">الرجاء استثناء برنامج اذكر الله من خاصية توفير طاقة البطارية. هذا لكي تعمل التذكيرات والاذان في وقتهم الصحيح بدون تأخير. لا تقلق فالبرنامج لن يستعمل من البطارية الا نسية بسيطة جدا.</string>
+
+    <string name="autostart">تفعيل التشغل الذاتي</string>
     <string name="autostart_message">الرجاء السماح لبرنامجنا بالعمل بالخلفية حتى لو كان البرنامج مغلقا حتى يشتغل البرنامج بشكل صحيح.</string>
     <string name="athan_timer_notifiaction" translatable="false">Prayer Time Remaining</string>
     <string name="remember_notification" translatable="false">Remembrance of Allah</string>
     <string name="floating_notification" translatable="false">Remember Allah Floating Reminders</string>
     <string name="volume_level">مستوى صوت التذكير</string>
-   <string name="translation_link" translatable="false">https://crowdin.com/project/thikrallah</string>
+    <string name="translation_link" translatable="false">https://crowdin.com/project/thikrallah</string>
     <string name="mute_when_ringer_mute">كتم التذكير اذا الجهاز في وضع الصامت</string>
     <string name="morningThikr">أذكار الصباح</string>
     <string name="nightThikr">أذكار المساء</string>
- <string name="morningThikrSettings">أعدادات أذكار الصباح</string>
+    <string name="morningThikrSettings">أعدادات أذكار الصباح</string>
     <string name="nightThikrSettings">أعدادات أذكار المساء</string>
- <string name="Settings">الاعدادات</string>
- <string name="remindMeMorningThikr">تذكير بقراءة أذكار اصباح</string>
+    <string name="Settings">الاعدادات</string>
+    <string name="remindMeMorningThikr">تذكير بقراءة أذكار اصباح</string>
     <string name="remindMeNightThikr">تذكير بقراءة اذكار المساء</string>
     <string name="changeReminderTime">تعديل وقت التنبية</string>
     <string name="RemindMeSettings">اعدادات ذكرني بالله</string>
     <string name="general_thikr_reminder_type">طريقة التذكير بالله</string>
     <string name="RemindMeEvery">ذكرني بالله كل</string>
- <string name="RemindmeThroughTheDay">ذكرني بالله على مدى اليوم</string>
- <string name="whatsnew">تم اضافة القرءان الكريم كاملا الى البرنامج. الشكر لمبرمجي برنامج قرءان اندرويد لاتاحتهم لنا برنامجهم لكي ندمجة مع برنامجنا فلا تنسوهم وتنسونا من الدعاء. تستطيع تغيير قرائك المفضل من اعدادات البرنامج لتذكيرات القرءان</string>
+    <string name="RemindmeThroughTheDay">ذكرني بالله على مدى اليوم</string>
+    <string name="whatsnew">تم اضافة القرءان الكريم كاملا الى البرنامج. الشكر لمبرمجي برنامج قرءان اندرويد لاتاحتهم لنا برنامجهم لكي ندمجة مع برنامجنا فلا تنسوهم وتنسونا من الدعاء. تستطيع تغيير قرائك المفضل من اعدادات البرنامج لتذكيرات القرءان</string>
     <string name="contactUs">تواصل معنا</string>
     <string name="email_Us">تواصل معنا عبر البريد الالكتروني</string>
     <string name="email_subject">مقترحات على برنامج اذكر الله</string>
     <string name="quiet_time">وقت عدم التذكير الصوتي</string>
     <string name="quiet_time_choice">اوقف التذكير الصوتي في هذه الاوقات</string>
-   <string name="quiet_time_after_athan_choice">لا تذكير صوتي بعد الاذان</string>
+    <string name="quiet_time_after_athan_choice">لا تذكير صوتي بعد الاذان</string>
     <string name="quiet_time_after_athan_choice_summary">اوقف التذكير الصوتي بعد الاذان بنصف ساعه</string>
     <string name="quiet_time_start">وقت عدم التذكير يبدأ في</string>
     <string name="quiet_time_end">وقت عدم التذكير ينتهي في</string>
@@ -149,9 +153,9 @@
     <string name="sadaqa">انشر الخير</string>
     <string name="quranic_verses">قرءان</string>
     <string name="share_text">اذكر الله\nهذا البرنامج يقوم باظهار الأذكار والأدعية على شاشة الهاتف ، وايضا تذكير صوتي بقوله سبحان الله, الحمدلله, اللهم صلى على نبينا محمد, وغيرها من الأدعية الرائعة بدون أن تحتاج إلى أن تفتح البرنامج.\n\nيقول الله في كتابه الكريم: (وَالذَّاكِرِينَ اللَّهَ كَثِيرًا وَالذَّاكِرَاتِ أَعَدَّ اللَّهُ لَهُم مَّغْفِرَةً وَأَجْرًا عَظِيمًا)\n\nويقول ابن القيم:\nحاجة العبد للمعوذات أشد من حاجته للطعام والشراب واللباس!\nداوموا على اذكاركم لتدركوا معنى: احفظ الله يحفظك. تحصنوا كل صباح ومساء فالدنيا مخيفة وفي جوفها مفاجئات والله هو الحافظ لعبادة. جعلكم الله في حفظه ورعايته.\n\nجزى الله تعالى خيرا من اعان على نشر هذا البرنامج.\n\nفقد قال رسول الله صلى الله علية وسلم (من دل على خير فله مثل أجر فاعله.) \nاعن على نشر هذه الرسالة لتصبح لك كصدقة جارية.\n\n للتحميل:\n\nاندرويد: https://play.google.com/store/apps/details?id=com.HMSolutions.thikrallah \n\n ايفون: https://itunes.apple.com/app/id1004470625</string>
- <string name="surat_alkahf">سورة الكهف</string>
+    <string name="surat_alkahf">سورة الكهف</string>
     <string name="surat_almulk">سورة الملك</string>
- <string name="remindMekahf">ذكرني بقراءة سورة الكهف</string>
+    <string name="remindMekahf">ذكرني بقراءة سورة الكهف</string>
     <string name="kahf_reminder_type">طريقة التذكير بسورة الكهف</string>
     <string name="pref_tab1">اعدادات التذكير</string>
     <string name="pref_tab2">اعدادات الاذان</string>
@@ -200,13 +204,13 @@
     <string name="highlatitudeadjustment_seventh">سبع (1/7)الليل</string>
     <string name="highlatitudeadjustment_anglebased">بموجب الزاوية</string>
 
- <string name="athan_type">طريقة التذكير بالصلاة</string>
+    <string name="athan_type">طريقة التذكير بالصلاة</string>
     <string name="record_audio">سجل صوت الدعاء</string>
- <string name="location_services_not_enabled">خدمة تحديد الموقع غير مفعلها. البرنامج يجتاج معرفة موقعك كي يتم حساب مواقيت الاذان. هل تريد تفعيل خدمة الموقع الان؟</string>
+    <string name="location_services_not_enabled">خدمة تحديد الموقع غير مفعلها. البرنامج يجتاج معرفة موقعك كي يتم حساب مواقيت الاذان. هل تريد تفعيل خدمة الموقع الان؟</string>
 
- <string name="choose_audio_file">اختر ملف صوتي</string>
+    <string name="choose_audio_file">اختر ملف صوتي</string>
 
- <string name="QuranThikrSettings">اعدادات التذكير بالقرءان</string>
+    <string name="QuranThikrSettings">اعدادات التذكير بالقرءان</string>
     <string name="remindMemulk">ذكرني بقراءة سورة الملك</string>
     <string name="mulk_reminder_type">طريقة التذكير بسورة الملك</string>
 
@@ -215,14 +219,14 @@
     <string name="thikr_text_required">لم يتم اختيار ملف صوتي او اضافة نص كتابي للذكر</string>
     <string name="recording">جاري التسجيل</string>
     <string name="next">التالي</string>
- <string name="location_adjustment">تعديل موقع المدينة يدويا:</string>
+    <string name="location_adjustment">تعديل موقع المدينة يدويا:</string>
 
 
     <string name="action_search">بحث</string>
     <string name="action_bookmarks">المرجعيات</string>
     <string name="action_settings">الإعدادات</string>
     <string name="action_about">عن</string>
- <string name="hisn_almuslim">حصن المسلم</string>
+    <string name="hisn_almuslim">حصن المسلم</string>
     <string name="title_activity_dua_list">حصن المسلم</string>
     <string name="title_activity_about">عنا</string>
     <string name="title_activity_bookmarks">المرجعيات</string>
@@ -232,9 +236,9 @@
     <string name="version_name" translatable="false">Version 0.1.1</string>
     <string name="beta_version" translatable="false">0.06 - RecyclerView</string>
 
- <string name="title_activity_dua_detail" translatable="false">DuaDetail</string>
+    <string name="title_activity_dua_detail" translatable="false">DuaDetail</string>
 
- <string name="about_us">
+    <string name="about_us">
         <![CDATA[
             Hisnul Muslim is a collection of supplications for various occasions compiled by Dr. Sa\'eed bin Ali bin Wahaf Al-Qahtani. The author is from amongst the senior students of the former Grand Mufti of Saudi Arabia, Shaykh Abdul Aziz bin Abdullah bin Baz (May Allah have mercy on him).
             <br/><br/>
@@ -257,19 +261,19 @@
         ]]>
     </string>
 
- <string name="action_share_title">انشر دعاء</string>
+    <string name="action_share_title">انشر دعاء</string>
     <string name="action_share_credit">عن طريق برنامج اذكر الله</string>
 
- <string name="snackbar_text_begin">احذف دعاء#</string>
+    <string name="snackbar_text_begin">احذف دعاء#</string>
     <string name="snackbar_text_end">" من المرجعيات"</string>
     <string name="snackbar_action">تراجع</string>
 
     <string name="gradual_volume">رفع صوت الاذان تدريجيا</string>
     <string name="is_foreground_athan_timer">اظهار الوقت المتبقي للصلاةدائما</string>
-    <string name="untill">حتى</string>
+    <string name="until">حتى</string>
     <string name="hour">ساعة</string>
     <string name="hours">ساعات</string>
- <string name="minute">دقيقة</string>
+    <string name="minute">دقيقة</string>
 
 
     <string name="app_name">قرآن</string>
@@ -530,7 +534,7 @@
 
     <!-- bookmark & tag list -->
 
- <!-- audio manager -->
+    <!-- audio manager -->
     <string name="audio_manager">إدارة الصوتيات</string>
     <string name="prefs_use_arabic_summary_on">سيتم تحويل التطبيق إلى اللغة العربية</string>
     <string name="prefs_use_arabic_title">الوضع العربي</string>
@@ -610,7 +614,7 @@
      هذا يستخدم لتخزين صفحات القرءان والملفات الصوتية للقرءان.
      هل تسمح لبرنامجنا بهذا؟</string>
     <string name="storage_permission_please_restart">الرجاء قفل البرنامج واعادة فتحة كي ياخذ هذا التغيير مفعولة</string>
-    <string name="prefs_megabytes_int"  translatable="false">%1$d MB</string>
+    <string name="prefs_megabytes_int" translatable="false">%1$d MB</string>
     <string name="prefs_megabytes_str" translatable="false">%s MB</string>
     <string name="translations" translatable="false">@string/prefs_translations</string>
     <string name="more_translations">ترجمات اخرى</string>
@@ -627,25 +631,25 @@
     <string name="starting_page_label">بداية الصفحة</string>
     <plurals name="plural_recent_pages" translatable="false">
         <item quantity="one">@string/menu_jump_last_page</item>
-       <item quantity="other">@string/recent_pages</item>
+        <item quantity="other">@string/recent_pages</item>
     </plurals>
-   <string name="tag_blank_tag_error">الاسم لا يستطيع ان يكون فارغا</string>
-   <string name="tag_duplicate_tag_error">الاسم موجود مسبقا</string>
-   <!-- format strings -->
-   <string name="sura_ayah" translatable="false">%1$d:%2$d</string>
+    <string name="tag_blank_tag_error">الاسم لا يستطيع ان يكون فارغا</string>
+    <string name="tag_duplicate_tag_error">الاسم موجود مسبقا</string>
+    <!-- format strings -->
+    <string name="sura_ayah" translatable="false">%1$d:%2$d</string>
 
-   <!-- notification channel names [CHAR LIMIT=40] -->
-   <string name="notification_channel_download" translatable="false">Quran Downloads</string>
-   <string name="notification_channel_audio" translatable="false">Quran Recitation</string>
-   <string name="need_overlay_permission_title">اظهار فوق التطبيقات الاخرى</string>
-   <string name="need_overlay_permission_message">ير جى السماح لبرنامجنا بالظهور فوق التطبيقات الاخرى لكي نتمكن من عرض التذكيرات بالله لك وانت في اي تطبيق</string>
-   <string name="need_location_permission_title">السماح بمعلومات الموقع</string>
-   <string name="need_location_permission_message">يرجى السماح لبرنامج اذكر الله بالاذن للحصول على معلومات موقعك لكي يستطيع البرنامج تحديد موقع مدينتك. هذا ضروري لكي يتم حساب اوقات الصلاة بشكل صحيح</string>
+    <!-- notification channel names [CHAR LIMIT=40] -->
+    <string name="notification_channel_download" translatable="false">Quran Downloads</string>
+    <string name="notification_channel_audio" translatable="false">Quran Recitation</string>
+    <string name="need_overlay_permission_title">اظهار فوق التطبيقات الاخرى</string>
+    <string name="need_overlay_permission_message">ير جى السماح لبرنامجنا بالظهور فوق التطبيقات الاخرى لكي نتمكن من عرض التذكيرات بالله لك وانت في اي تطبيق</string>
+    <string name="need_location_permission_title">السماح بمعلومات الموقع</string>
+    <string name="need_location_permission_message">يرجى السماح لبرنامج اذكر الله بالاذن للحصول على معلومات موقعك لكي يستطيع البرنامج تحديد موقع مدينتك. هذا ضروري لكي يتم حساب اوقات الصلاة بشكل صحيح</string>
     <string name="longitude">خط الطول</string>
-   <string name="latitude">خط العرض</string>
-   <string name="current_location">الموقع الحالي: </string>
-   <string name="number_format_error">خطأ في الرقم المدخل</string>
+    <string name="latitude">خط العرض</string>
+    <string name="current_location">الموقع الحالي: </string>
+    <string name="number_format_error">خطأ في الرقم المدخل</string>
 
-   <string name="override_location">لا تستعمل الموقع بناء على الGPS. حدد الموقع يدويا</string>
+    <string name="override_location">لا تستعمل الموقع بناء على الGPS. حدد الموقع يدويا</string>
 
 </resources>

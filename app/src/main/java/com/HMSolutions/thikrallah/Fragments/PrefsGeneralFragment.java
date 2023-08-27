@@ -6,8 +6,9 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -23,6 +24,7 @@ import com.HMSolutions.thikrallah.Utilities.TimePreference;
 import timber.log.Timber;
 
 public class PrefsGeneralFragment extends PreferenceFragmentCompat implements OnSharedPreferenceChangeListener {
+	Context mContext;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -30,24 +32,52 @@ public class PrefsGeneralFragment extends PreferenceFragmentCompat implements On
 		addPreferencesFromResource(R.xml.preferences_general);
 		initSummary(getPreferenceScreen());
 		//findPreference()
+		mContext= this.getContext();
 		Preference contactUsPref = findPreference("contactDevKey");
-		Log.d("prefsGeneral","finding contactUsPref");
-		Log.d("prefsGeneral","finding contactUsPref"+contactUsPref.toString());
 		contactUsPref.setOnPreferenceClickListener(
-				new Preference.OnPreferenceClickListener() {
-					@Override
-					public boolean onPreferenceClick(Preference arg0) {
-						Log.d("prefsGeneral","onPreferenceClick called");
-						Intent intent = new Intent(Intent.ACTION_SENDTO);
-						intent.setData(Uri.parse("mailto:")); // Only email apps handle this.
-						intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"28.hani@gmail.com"});
-						intent.putExtra(Intent.EXTRA_SUBJECT, getContext().getString(R.string.email_subject));
-						if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-							Log.d("prefsGeneral","Intent called");
-							startActivity(intent);
-						}
-						return true;
+				arg0 -> {
+					Intent intent = new Intent(Intent.ACTION_SENDTO);
+					intent.setData(Uri.parse("mailto:")); // Only email apps handle this.
+					intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"28.hani@gmail.com"});
+					intent.putExtra(Intent.EXTRA_SUBJECT, getContext().getString(R.string.email_subject));
+					if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+						startActivity(intent);
+					}else{
+						Toast.makeText(mContext,R.string.email_client_not_exist,Toast.LENGTH_LONG).show();
 					}
+					return true;
+				});
+		Preference rateApp = findPreference("rateus");
+		rateApp.setOnPreferenceClickListener(
+				arg0 -> {
+					Intent intent = new Intent(Intent.ACTION_VIEW);
+					intent.setData(Uri.parse("market://details?id=com.HMSolutions.thikrallah"));
+					intent.setPackage("com.android.vending");
+					if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+						startActivity(intent);
+					}else{
+						intent = new Intent(Intent.ACTION_VIEW);
+						intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.HMSolutions.thikrallah"));
+						if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+							startActivity(intent);
+						}else{
+							Toast.makeText(mContext,R.string.playstore_not_exist,Toast.LENGTH_LONG).show();
+						}
+					}
+					return true;
+				});
+
+		Preference helpTranslate = findPreference("help_translate");
+		helpTranslate.setOnPreferenceClickListener(
+				arg0 -> {
+					Intent intent = new Intent(Intent.ACTION_VIEW);
+					intent.setData(Uri.parse(getContext().getString(R.string.translation_link)));
+					if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+						startActivity(intent);
+					}else{
+						Toast.makeText(mContext,R.string.browser_not_exist,Toast.LENGTH_LONG).show();
+					}
+					return true;
 				});
 	}
 
@@ -56,7 +86,7 @@ public class PrefsGeneralFragment extends PreferenceFragmentCompat implements On
 
 	}
 	@Override
-	public void onAttach(Context context) {
+	public void onAttach(@NonNull Context context) {
 		super.onAttach(context);
 		MainActivity.setLocale(context);
 	}
@@ -98,9 +128,8 @@ public class PrefsGeneralFragment extends PreferenceFragmentCompat implements On
 	}
 	private void initSummary(PreferenceScreen p) {
 		if (p != null) {
-			PreferenceGroup pGrp = (PreferenceGroup) p;
-			for (int i = 0; i < pGrp.getPreferenceCount(); i++) {
-				initSummary(pGrp.getPreference(i));
+			for (int i = 0; i < ((PreferenceGroup) p).getPreferenceCount(); i++) {
+				initSummary(((PreferenceGroup) p).getPreference(i));
 			}
 		} else {
 			updatePrefSummary(p);
