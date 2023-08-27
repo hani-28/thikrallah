@@ -213,7 +213,7 @@ public class AthanTimerService extends Service {
 		minutesText=minutes+" "+getResources().getString(R.string.minute);
 
 
-		return hoursText+" "+minutesText+" "+getResources().getString(R.string.untill)+" "+prayerName;
+		return hoursText+" "+minutesText+" "+getResources().getString(R.string.until)+" "+prayerName;
 
 	}
 }
