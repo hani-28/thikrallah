@@ -154,8 +154,6 @@ public class MyAlarmsManager {
 		if (RemindmeThroughTheDay){
 			//Random Reminder
             alarmMgr.cancel(pendingIntentGeneral);
-           // alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + Long.parseLong(RandomReminderInterval) * 1000 * 60,
-            //        Long.parseLong(RandomReminderInterval) * 1000 * 60, pendingIntentGeneral);
 
 
             Calendar calendar1 = Calendar.getInstance();

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
 
 
@@ -24,26 +24,26 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
-  <uses-sdk tools:overrideLibrary="timber.log"/>
+
+    <uses-sdk tools:overrideLibrary="timber.log" />
     <application
         android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.QuranApplication"
 
         android:allowBackup="true"
-        android:requestLegacyExternalStorage="true"
+        android:exported="true"
+        android:fullBackupContent="@xml/backup"
         android:icon="@drawable/ic_launcher"
         android:label="@string/my_app_name"
+        android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
-        android:exported="true"
-        android:theme="@style/AppTheme"
 
-        android:fullBackupContent="@xml/backup"
+        android:theme="@style/AppTheme"
         tools:replace="android:theme,android:label,android:icon">
         <activity
             android:name="com.HMSolutions.thikrallah.MainActivity"
-            android:theme="@style/AppTheme"
-            android:exported="true"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:label="@string/my_app_name">
+            android:exported="true"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -55,15 +55,15 @@
             android:name="com.HMSolutions.thikrallah.PreferenceActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name="com.HMSolutions.thikrallah.MediaBrowser"
             android:exported="false"
-            android:theme="@style/AppTheme.Preference"></activity>
+            android:theme="@style/AppTheme.Preference" />
         <activity
             android:name="com.HMSolutions.thikrallah.hisnulmuslim.DuaGroupActivity"
-            android:label="@string/title_activity_dua_list"
             android:exported="false"
+            android:label="@string/title_activity_dua_list"
 
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.Base">
@@ -73,14 +73,14 @@
         </activity>
         <activity
             android:name="com.HMSolutions.thikrallah.hisnulmuslim.DuaDetailActivity"
-            android:label="@string/title_activity_dua_detail"
             android:exported="false"
+            android:label="@string/title_activity_dua_detail"
             android:parentActivityName="com.HMSolutions.thikrallah.hisnulmuslim.DuaGroupActivity"
-            android:theme="@style/AppTheme.Base"></activity>
+            android:theme="@style/AppTheme.Base" />
         <activity
             android:name="com.HMSolutions.thikrallah.hisnulmuslim.AboutActivity"
-            android:label="@string/title_activity_about"
             android:exported="false"
+            android:label="@string/title_activity_about"
             android:parentActivityName="com.HMSolutions.thikrallah.hisnulmuslim.DuaGroupActivity"
             android:theme="@style/AppTheme.Base">
             <meta-data
@@ -102,38 +102,38 @@
             android:exported="false"
             android:label="@string/title_activity_dua_detail"
             android:parentActivityName="com.HMSolutions.thikrallah.hisnulmuslim.BookmarksGroupActivity"
-            android:theme="@style/AppTheme.Base"></activity>
+            android:theme="@style/AppTheme.Base" />
         <activity
             android:name="com.HMSolutions.thikrallah.hisnulmuslim.PreferencesActivity"
             android:exported="false"
             android:label="@string/title_activity_preferences"
-            android:theme="@style/AppTheme.Base"></activity>
+            android:theme="@style/AppTheme.Base" />
 
         <service
             android:name="com.HMSolutions.thikrallah.Notification.ThikrService"
-            android:exported="false"
-            android:enabled="true" />
+            android:enabled="true"
+            android:exported="false" />
 
         <service
             android:name="com.HMSolutions.thikrallah.ThikrMediaPlayerService"
-            android:exported="false"
-            android:enabled="true" />
+            android:enabled="true"
+            android:exported="false" />
         <service
             android:name="com.HMSolutions.thikrallah.Notification.ChatHeadService"
-            android:exported="false"
-            android:enabled="true" />
+            android:enabled="true"
+            android:exported="false" />
         <service
             android:name="com.HMSolutions.thikrallah.Notification.AthanTimerService"
+            android:enabled="true"
             android:exported="false"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:enabled="true" />
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <receiver
             android:name="com.HMSolutions.thikrallah.Notification.ThikrAlarmReceiver"
-            android:exported="true"/>
+            android:exported="false" />
         <receiver
             android:name="com.HMSolutions.thikrallah.Notification.QuranThikrDownloadNeeds"
-            android:exported="true"/>
+            android:exported="false" />
         <receiver
             android:name="com.HMSolutions.thikrallah.Notification.ThikrBootReceiver"
             android:exported="true">
@@ -149,164 +149,159 @@
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
-    <activity
-        android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.QuranDataActivity"
-        android:exported="false"
-        android:label="@string/app_name"
-        android:configChanges="keyboardHidden|orientation|screenSize"
-        android:theme="@style/Theme.AppCompat.NoActionBar">
 
-    </activity>
+        <activity
+            android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.QuranDataActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
 
-    <activity
-        android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.ShortcutsActivity"
-        android:theme="@style/Theme.AppCompat.NoActionBar"
-        android:exported="true" />
-    <activity
-        android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.ui.QuranActivity"
-        android:exported="false"
-        android:theme="@style/QuranToolBar"/>
-    <activity
-        android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.AboutUsActivity"
-        android:exported="false"
-        android:theme="@style/QuranToolBar"/>
-    <activity
-        android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.HelpActivity"
-        android:exported="false"
-        android:theme="@style/Theme.AppCompat.NoActionBar"/>
-    <activity
-        android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.ui.PagerActivity"
-        android:exported="false"
-        android:launchMode="singleTop"
-        android:theme="@style/QuranToolBar.Overlay"/>
-    <activity
-        android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.ui.TranslationManagerActivity"
-        android:exported="false"
-        android:theme="@style/Theme.AppCompat.NoActionBar"
-        android:configChanges="keyboardHidden|orientation|screenSize"/>
-    <activity
-        android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.QuranPreferenceActivity"
-        android:exported="false"
-        android:theme="@style/QuranToolBar"
-        android:configChanges="keyboardHidden|orientation|screenSize"/>
-    <activity
-        android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.QuranAdvancedPreferenceActivity"
-        android:exported="false"
-        android:theme="@style/QuranToolBar"
-        android:configChanges="keyboardHidden|orientation|screenSize"/>
+        </activity>
 
-    <activity
-        android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.SearchActivity"
-        android:theme="@style/Theme.AppCompat.NoActionBar"
-        android:exported="true"
-        android:launchMode="singleTop">
-      <intent-filter>
-        <action android:name="android.intent.action.SEARCH"/>
-      </intent-filter>
-      <meta-data
-          android:name="android.app.searchable"
-          android:exported="true"
-          android:resource="@xml/searchable"/>
-    </activity>
-    <activity
-        android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.QuranForwarderActivity"
-        android:exported="true"
-        android:theme="@style/Theme.AppCompat.NoActionBar">
-      <intent-filter>
-        <action android:name="android.intent.action.VIEW"/>
-        <category android:name="android.intent.category.DEFAULT"/>
-        <data android:scheme="quran"/>
-      </intent-filter>
-    </activity>
-    <activity
-        android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.ui.AudioManagerActivity"
-        android:exported="false"
-        android:theme="@style/Quran"/>
+        <activity
+            android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.ShortcutsActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.ui.QuranActivity"
+            android:exported="false"
+            android:theme="@style/QuranToolBar" />
+        <activity
+            android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.AboutUsActivity"
+            android:exported="false"
+            android:theme="@style/QuranToolBar" />
+        <activity
+            android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.HelpActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.ui.PagerActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:theme="@style/QuranToolBar.Overlay" />
+        <activity
+            android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.ui.TranslationManagerActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.QuranPreferenceActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="false"
+            android:theme="@style/QuranToolBar" />
+        <activity
+            android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.QuranAdvancedPreferenceActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="false"
+            android:theme="@style/QuranToolBar" />
 
-    <!-- declare the default searchable Activity for the whole app -->
-    <meta-data
-        android:name="android.app.default_searchable"
-        android:value=".SearchActivity"/>
-    <!-- provides search suggestions for verses. -->
-    <provider
-        android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.data.QuranDataProvider"
-        android:exported="false"
-        android:authorities="@string/authority"/>
+        <activity
+            android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.SearchActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.app.searchable"
+                android:exported="true"
+                android:resource="@xml/searchable" />
+        </activity>
+        <activity
+            android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.QuranForwarderActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="quran" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.ui.AudioManagerActivity"
+            android:exported="false"
+            android:theme="@style/Quran" />
 
-    <provider
-        android:name="androidx.core.content.FileProvider"
-        android:authorities="@string/file_authority"
-        android:grantUriPermissions="true"
-        android:exported="false">
-      <meta-data
-          android:name="android.support.FILE_PROVIDER_PATHS"
-          android:resource="@xml/file_paths"/>
-    </provider>
-
-    <receiver
-        android:name="androidx.media.session.MediaButtonReceiver"
-        android:exported="false">
-      <intent-filter>
-        <action android:name="android.intent.action.MEDIA_BUTTON"/>
-      </intent-filter>
-    </receiver>
-
-    <activity
-        android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.QuranImportActivity"
-        android:exported="true"
-        android:theme="@style/Theme.AppCompat.NoActionBar">
-      <intent-filter>
-        <action android:name="android.intent.action.SEND"/>
-        <category android:name="android.intent.category.DEFAULT"/>
-        <data android:mimeType="application/json"/>
-      </intent-filter>
-      <intent-filter>
-        <action android:name="android.intent.action.VIEW"/>
-
-        <category android:name="android.intent.category.DEFAULT"/>
-        <category android:name="android.intent.category.BROWSABLE"/>
-
-        <data
-            android:mimeType="*/*"
-            android:scheme="file"
-            android:pathPattern=".*\\.backup"
-            android:host="*"/>
-        <data
-            android:mimeType="*/*"
-            android:scheme="file"
-            android:pathPattern=".*\\..*\\.backup"
-            android:host="*"/>
-        <data
-            android:mimeType="*/*"
-            android:scheme="file"
-            android:pathPattern=".*\\..*\\..*\\.backup"
-            android:host="*"/>
-        <data
-            android:mimeType="*/*"
-            android:scheme="file"
-            android:pathPattern=".*\\..*\\..*\\..*\\.backup"
-            android:host="*"/>
-      </intent-filter>
-    </activity>
-    <activity
-        android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.pageselect.PageSelectActivity"
-        android:exported="false"
-        android:theme="@style/Theme.AppCompat.NoActionBar"/>
-
-    <service
-        android:enabled="true"
-        android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.service.QuranDownloadService"
-        android:exported="false"/>
-    <service
-        android:exported="false"
-        android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.service.AudioService">
-      <intent-filter>
-        <action android:name="android.intent.action.MEDIA_BUTTON"/>
-      </intent-filter>
-    </service>
+        <!-- declare the default searchable Activity for the whole app -->
         <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="538344ba5873c9838593b43901f011a0fb34b24c" />
-    </application>
+            android:name="android.app.default_searchable"
+            android:value=".SearchActivity" />
+        <!-- provides search suggestions for verses. -->
+        <provider
+            android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.data.QuranDataProvider"
+            android:authorities="@string/authority"
+            android:exported="false" />
 
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="@string/file_authority"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <receiver
+            android:name="androidx.media.session.MediaButtonReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.QuranImportActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/json" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="file"/>
+                <data android:host="*"/>
+                <data android:mimeType="*/*"/>
+                <data android:pathPattern=".*\\.backup"/>
+                <data android:pathPattern=".*\\..*\\.backup"/>
+                <data android:pathPattern=".*\\..*\\..*\\.backup"/>
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.backup"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.pageselect.PageSelectActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+
+        <service
+            android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.service.QuranDownloadService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name="com.HMSolutions.thikrallah.quran.labs.androidquran.service.AudioService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </service>
+    </application>
+    <queries>
+        <!-- Email -->
+        <intent>
+            <action android:name="android.intent.action.SEND" />
+            <data android:mimeType="*/*" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+        </intent>
+
+    </queries>
 </manifest>

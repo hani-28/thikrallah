@@ -55,31 +55,26 @@ public class CustomLocation extends Dialog implements
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_yes:
+        int id = v.getId();
+        if (id == R.id.btn_yes) {
+            try {
+                NumberFormat nf = NumberFormat.getInstance();
+                double longitude = nf.parse(longitudeInput.getText().toString().replace(',', '.')).doubleValue();
+                double latitude = nf.parse(latitudeInput.getText().toString().replace(',', '.')).doubleValue();
+                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this.getContext()).edit();
+                editor.putString("c_latitude", Double.toString(latitude));
+                editor.putString("c_longitude", Double.toString(longitude));
+                editor.putBoolean("isCustomLocation", true);
+                editor.commit();
 
-                try {
-                    NumberFormat nf= NumberFormat.getInstance();
-                    double longitude = nf.parse(longitudeInput.getText().toString().replace(',', '.')).doubleValue();
-                    double latitude = nf.parse(latitudeInput.getText().toString().replace(',', '.')).doubleValue();
-                    SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this.getContext()).edit();
-                    editor.putString("c_latitude", Double.toString(latitude));
-                    editor.putString("c_longitude", Double.toString(longitude));
-                    editor.putBoolean("isCustomLocation", true);
-                    editor.commit();
-
-                } catch (ParseException e) {
-                    //
-                    Toast.makeText(this.getContext(), R.string.number_format_error,Toast.LENGTH_LONG).show();
-                }
-                dismiss();
-                break;
-            case R.id.btn_no:
-                PreferenceManager.getDefaultSharedPreferences(this.getContext()).edit().putBoolean("isCustomLocation", false).commit();
-                dismiss();
-                break;
-            default:
-                break;
+            } catch (ParseException e) {
+                //
+                Toast.makeText(this.getContext(), R.string.number_format_error, Toast.LENGTH_LONG).show();
+            }
+            dismiss();
+        } else if (id == R.id.btn_no) {
+            PreferenceManager.getDefaultSharedPreferences(this.getContext()).edit().putBoolean("isCustomLocation", false).commit();
+            dismiss();
         }
         dismiss();
     }

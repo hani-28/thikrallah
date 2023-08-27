@@ -4,7 +4,6 @@ import com.HMSolutions.thikrallah.quran.labs.androidquran.extension.closeQuietly
 import io.reactivex.Maybe
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okio.Okio
 import okio.Source
 import okio.buffer
 import okio.sink

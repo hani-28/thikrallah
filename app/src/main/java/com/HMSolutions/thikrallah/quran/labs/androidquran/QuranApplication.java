@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.component.application.ApplicationComponent;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.component.application.DaggerApplicationComponent;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.module.application.ApplicationModule;
-import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranSettings;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.util.RecordingLogTree;
 
 import net.time4j.android.ApplicationStarter;

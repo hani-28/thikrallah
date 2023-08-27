@@ -78,19 +78,8 @@ public class MyListPreference extends ListPreference implements Preference.OnPre
         this.setOnPreferenceChangeListener(this);
     }
 
-    /*
-        @Override
-        protected View onCreateView(ViewGroup parent) {
-            View view = super.onCreateView(parent);
-
-            RelativeLayout layout = (RelativeLayout) ((LinearLayout) view).getChildAt(1);
-            layout.setGravity(Gravity.START);
-            return view;
-        }
-
-     */
     public void downloadFilesIfNeeded() {
-        ArrayList<Intent> downloadIntents = new ArrayList<Intent>();
+        ArrayList<Intent> downloadIntents = new ArrayList<>();
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
     int qari_num = Integer.parseInt(sharedPrefs.getString("quran_readers_name", "11"));
     SuraAyah start;
@@ -118,7 +107,7 @@ public class MyListPreference extends ListPreference implements Preference.OnPre
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         Log.d(TAG, "onpreferencechange called" + preference.getKey());
         if (preference != null) {
-            ArrayList<Intent> downloadIntents = new ArrayList<Intent>();
+            ArrayList<Intent> downloadIntents = new ArrayList<>();
 
             if (preference.getKey().equals("remindMemulkType") && Integer.parseInt(newValue.toString()) == 2) {
                 SuraAyah start = new SuraAyah(67, 1);
@@ -228,13 +217,11 @@ public class MyListPreference extends ListPreference implements Preference.OnPre
             } else {
                 audioPath = audioPathInfo;
                 //check if the audio files are available
-                // if (!haveAllFiles(audioPathInfo.getUrlFormat(),audioPathInfo.getLocalDirectory(), start, end,qari.isGapless())){
 
-                // }
             }
 
 
-            Log.d(TAG, "ready to play Quran");
+            Timber.tag(TAG).d("ready to play Quran");
             if (audioPathInfo != null) {
                 AudioRequest audioRequest = new AudioRequest(start, end, qari, 0, 0, true, false, audioPath);
 
@@ -321,7 +308,7 @@ public class MyListPreference extends ListPreference implements Preference.OnPre
     }
 
     private ArrayList<Intent> DownloadedNeededFiles(Context context, AudioRequest request) {
-        ArrayList<Intent> downloadIntents = new ArrayList<Intent>();
+        ArrayList<Intent> downloadIntents = new ArrayList<>();
         QariItem qari = request.getQari();
         AudioPathInfo audioPathInfo = request.getAudioPathInfo();
         String path = audioPathInfo.getLocalDirectory();
@@ -505,7 +492,7 @@ public class MyListPreference extends ListPreference implements Preference.OnPre
         String[] urls = resources.getStringArray(R.array.quran_readers_urls);
         String[] databases = resources.getStringArray(R.array.quran_readers_db_name);
         int[] hasGaplessEquivalent = resources.getIntArray(R.array.quran_readers_have_gapless_equivalents);
-        List<QariItem> items = new ArrayList<QariItem>();
+        List<QariItem> items = new ArrayList<>();
 
         for (int i = 0; i < shuyookh.length; i++) {
             items.add(new QariItem(i, shuyookh[i], urls[i], paths[i], databases[i]));

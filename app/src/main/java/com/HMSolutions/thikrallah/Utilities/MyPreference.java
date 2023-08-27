@@ -21,16 +21,4 @@ public class MyPreference extends Preference {
     public MyPreference(Context context) {
         super(context);
     }
-    /*
-    @Override
-    protected View onCreateView(ViewGroup parent) {
-        View view = super.onCreateView(parent);
-
-        RelativeLayout layout = (RelativeLayout) ((LinearLayout) view).getChildAt(1);
-        layout.setGravity(Gravity.START);
-
-        return view;
-    }
-
-     */
 }

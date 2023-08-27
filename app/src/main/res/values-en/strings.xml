@@ -175,7 +175,7 @@ He knows what lies before them and what is after them, And they comprehend not a
     <string name="remindMemulk">Remind Me Of Surat Al-Mulk</string>
     <string name="mulk_reminder_type">Reminder Method</string>
     <string name="stop_recording">Stop Recording</string>
-    <string name="thikr_text_required">Supplication text is required. Please add text.</string>
+    <string name="thikr_text_required">Supplication text or audio file is required</string>
     <string name="recording">Recording</string>
     <string name="next">Next</string>
     <string name="location_adjustment">Location Manual Adjustments:</string>

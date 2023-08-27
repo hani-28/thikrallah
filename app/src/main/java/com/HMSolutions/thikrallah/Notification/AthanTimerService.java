@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import timber.log.Timber;
 
 
 public class AthanTimerService extends Service {
@@ -46,10 +47,10 @@ public class AthanTimerService extends Service {
         mContext = this;
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         boolean isTimer = sharedPrefs.getBoolean("foreground_athan_timer", true);
-        Log.d(TAG, "istimer is " + isTimer);
-        if (isTimer) {
-            if (!isStarted) {
-                Log.d(TAG, TAG + "started");
+		Timber.tag(TAG).d("istimer is " + isTimer);
+		if (isTimer) {
+			if (!isStarted) {
+				Timber.tag(TAG).d(TAG + "started");
                 Timer timer = new Timer();
                 isStarted = true;
                 timer.scheduleAtFixedRate(new TimerTask() {
@@ -63,14 +64,10 @@ public class AthanTimerService extends Service {
 			}else{//timer is already running. Just run once to respect the runforeground promise
 				initNotification();
 			}
-
-
-			return START_NOT_STICKY;
 		}else{
 			this.stopSelf();
-			return START_NOT_STICKY;
 		}
-
+		return START_NOT_STICKY;
 
 
 	}
@@ -87,7 +84,7 @@ public class AthanTimerService extends Service {
 
 	}
 	private void initNotification() {
-		Log.d(TAG,"initiNotification started");
+		Timber.tag(TAG).d("initiNotification started");
 
 		Intent resultIntent = new Intent(mContext, MainActivity.class);
 
@@ -105,7 +102,7 @@ public class AthanTimerService extends Service {
 			String NOTIFICATION_CHANNEL_ID = "com.HMSolutions.thikrallah.Notification.AthanTimerService";
 			String channelName = this.getResources().getString(R.string.athan_timer_notifiaction);
 			NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
-            chan.setSound(null,null);
+			chan.setSound(null,null);
 			chan.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
 			NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 			assert manager != null;
@@ -127,8 +124,8 @@ public class AthanTimerService extends Service {
 
 				.setContentIntent(launchAppPendingIntent);
 		notificationBuilder=setVisibilityPublic(notificationBuilder);
-		Log.d(TAG,"started forground");
-		Log.d(TAG,"context is "+mContext);
+		Timber.tag(TAG).d("started forground");
+		Timber.tag(TAG).d("context is " + mContext);
 		if (mContext!=null){
 			startForeground(NOTIFICATION_ID, notificationBuilder.build());
 		}

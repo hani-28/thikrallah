@@ -53,7 +53,7 @@ public class WhatsNewScreen {
                     public void onClick(DialogInterface dialogInterface, int which) {
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.putLong(LAST_VERSION_CODE_KEY, packageInfo.versionCode);
-                        editor.commit();
+                        editor.apply();
                         dialogInterface.dismiss();
                     }});
                 builder.setPositiveButton(R.string.open_settings,new Dialog.OnClickListener()
@@ -64,7 +64,7 @@ public class WhatsNewScreen {
                         // Mark this version as read
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.putLong(LAST_VERSION_CODE_KEY, packageInfo.versionCode);
-                        editor.commit();
+                        editor.apply();
                         dialogInterface.dismiss();
                         Intent intent = new Intent();
                         intent.setClass(mActivity, PreferenceActivity.class);

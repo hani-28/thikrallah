@@ -150,8 +150,6 @@ public class BookmarksDetailRecycleAdapter extends RecyclerView.Adapter<Bookmark
         finalmHolder.favButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // boolean isFav = !p.getFav();
-                // boolean isFav = !mDuaData.get(finalPosition).getFav();
                 boolean isFav = false;
                 Log.d("K12_isFav", "isFav: " + isFav);
 
@@ -193,21 +191,7 @@ public class BookmarksDetailRecycleAdapter extends RecyclerView.Adapter<Bookmark
                         finalmHolder.favButton.setText("{faw-star}");
                     } else {
                         finalmHolder.favButton.setText("{faw-star-o}");
-                        /*Snackbar.make(rv,
-                                // snack_begin + p.getReference() + snack_end,
-                                snack_begin + snack_end,
-                                Snackbar.LENGTH_LONG)
-                                .setAction(snack_action, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        // Snack bar action and animation
-                                        // Toast.makeText(finalConvertView.getContext(), "Testing", Toast.LENGTH_LONG).show();
-                                        Toast.makeText(rv.getContext(), "Testing", Toast.LENGTH_LONG).show();
-                                    }
-                                })
-                                .show();*/
                     }
-                    // mDuaData.get(finalPosition).setFav(isFav);
                 }
                 if (getItemCount() == 0) {
                     // I don't even know if this block is needed. Review once you have some sleep.

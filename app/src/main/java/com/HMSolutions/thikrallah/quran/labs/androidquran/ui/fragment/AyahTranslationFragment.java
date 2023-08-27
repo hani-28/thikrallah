@@ -3,7 +3,6 @@ package com.HMSolutions.thikrallah.quran.labs.androidquran.ui.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +23,7 @@ import com.HMSolutions.thikrallah.quran.labs.androidquran.util.QuranSettings;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.widgets.InlineTranslationView;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.widgets.QuranSpinner;
 
-import java.util.Arrays;
-import java.util.HashSet;
+
 import java.util.List;
 import java.util.Set;
 

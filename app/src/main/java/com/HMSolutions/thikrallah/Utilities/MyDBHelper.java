@@ -1,5 +1,6 @@
 package com.HMSolutions.thikrallah.Utilities;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -138,6 +139,7 @@ public class MyDBHelper  extends SQLiteOpenHelper {
         db.close();
         return newRowId;
     }
+    @SuppressLint("Range")
     public UserThikr getThikr(long id){
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -159,11 +161,11 @@ public class MyDBHelper  extends SQLiteOpenHelper {
                 null                                 // The sort order
         );
         if (cursor .moveToFirst()) {
-            String thikr = cursor.getString(cursor.getColumnIndex(THIKR_COLUMN));
-            boolean isEnabled = cursor.getInt(cursor.getColumnIndex(ENABLED_COLUMN))==1;
-            boolean isBuiltIn = cursor.getInt(cursor.getColumnIndex(IS_BUILTIN_COLUMN)) == 1;
+            @SuppressLint("Range") String thikr = cursor.getString(cursor.getColumnIndex(THIKR_COLUMN));
+            @SuppressLint("Range") boolean isEnabled = cursor.getInt(cursor.getColumnIndex(ENABLED_COLUMN))==1;
+            @SuppressLint("Range") boolean isBuiltIn = cursor.getInt(cursor.getColumnIndex(IS_BUILTIN_COLUMN)) == 1;
             id = cursor.getLong(cursor.getColumnIndex(ID_COLUMN));
-            String  file=cursor.getString(cursor.getColumnIndex(FILE_PATH));
+            @SuppressLint("Range") String  file=cursor.getString(cursor.getColumnIndex(FILE_PATH));
             if(isBuiltIn==true){
                 thikr=this.context.getResources().getStringArray(R.array.GeneralThikr)[Integer.parseInt(file)-1];
             }
@@ -203,13 +205,14 @@ public class MyDBHelper  extends SQLiteOpenHelper {
         }
 
     }
+    @SuppressLint("Range")
     public ArrayList<UserThikr> getAllThikrs(){
         String thikr="";
         boolean isEnabled=true;
         boolean isBuiltIn;
         long id=-1;
         String file="";
-        ArrayList<UserThikr> list=new ArrayList<UserThikr>();
+        ArrayList<UserThikr> list= new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor  cursor = db.rawQuery("select * from " + TABLE_NAME, null);
         if (cursor .moveToFirst()) {
@@ -231,13 +234,14 @@ public class MyDBHelper  extends SQLiteOpenHelper {
         db.close();
         return list;
     }
+    @SuppressLint("Range")
     public ArrayList<UserThikr> getAllBuiltinEnabledThikrs(){
         String thikr="";
         boolean isEnabled=true;
         boolean isBuiltIn;
         long id=-1;
         String file="";
-        ArrayList<UserThikr> list=new ArrayList<UserThikr>();
+        ArrayList<UserThikr> list= new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_NAME, null, ENABLED_COLUMN + " LIKE '%" + 1 + "%'" + " AND " + IS_BUILTIN_COLUMN + " LIKE '%" + 1 + "%'", null, null, null, null);
 
@@ -262,13 +266,14 @@ public class MyDBHelper  extends SQLiteOpenHelper {
         return list;
     }
 
+    @SuppressLint("Range")
     public ArrayList<UserThikr> getAllEnabledThikrs(){
         String thikr="";
         boolean isEnabled=true;
         boolean isBuiltIn;
         long id=-1;
         String file="";
-        ArrayList<UserThikr> list=new ArrayList<UserThikr>();
+        ArrayList<UserThikr> list= new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_NAME, null, ENABLED_COLUMN + " LIKE '%" + 1 + "%'", null, null, null, null);
 
@@ -306,13 +311,14 @@ public class MyDBHelper  extends SQLiteOpenHelper {
         Log.d("testing123", "enabledThikrs count is " + list.size());
         return list;
     }
+    @SuppressLint("Range")
     public ArrayList<UserThikr> getAllUserThikrs(SQLiteDatabase db){
         String thikr="";
         boolean isEnabled=true;
         boolean isBuiltIn;
         long id=-1;
         String file="";
-        ArrayList<UserThikr> list=new ArrayList<UserThikr>();
+        ArrayList<UserThikr> list= new ArrayList<>();
 
         Cursor cursor = db.query(TABLE_NAME, null, IS_BUILTIN_COLUMN + " LIKE '%" + 0 + "%'", null, null, null, null);
 
@@ -333,13 +339,14 @@ public class MyDBHelper  extends SQLiteOpenHelper {
 
         return list;
     }
+    @SuppressLint("Range")
     public ArrayList<UserThikr> getAllUserThikrs(){
         String thikr="";
         boolean isEnabled=true;
         boolean isBuiltIn;
         long id=-1;
         String file="";
-        ArrayList<UserThikr> list=new ArrayList<UserThikr>();
+        ArrayList<UserThikr> list= new ArrayList<>();
 
         Cursor cursor = this.getReadableDatabase().query(TABLE_NAME, null, IS_BUILTIN_COLUMN + " LIKE '%" + 0 + "%'", null, null, null, null);
 
@@ -360,13 +367,14 @@ public class MyDBHelper  extends SQLiteOpenHelper {
 
         return list;
     }
+    @SuppressLint("Range")
     public ArrayList<UserThikr> getAllBuiltinThikrs(){
         String thikr="";
         boolean isEnabled=true;
         boolean isBuiltIn;
         long id=-1;
         String file="";
-        ArrayList<UserThikr> list=new ArrayList<UserThikr>();
+        ArrayList<UserThikr> list= new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_NAME, null, IS_BUILTIN_COLUMN + " LIKE '%" + 1 + "%'", null, null, null, null);
 

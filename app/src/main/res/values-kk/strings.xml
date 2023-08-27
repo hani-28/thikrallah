@@ -169,8 +169,6 @@
   <string name="prefs_copying_app_files">Бағдарлама файлдары көшірілуде&#8230;</string>
   <string name="prefs_err_moving_app_files">Файлдарды көшіру барсындағы қателік</string>
   <string name="prefs_no_enough_space_to_move_files">Файлдарды көшіруге бос орын жетпейді</string>
-  <string name="prefs_megabytes_int">%1$d Mб</string>
-  <string name="prefs_megabytes_str">%s Mб</string>
   <string name="prefs_dual_page_mode_title">Планшет режимі</string>
   <string name="prefs_dual_page_mode_enabled">Көлденең режимде екі бет қатарынан көрсетіледі.</string>
   <string name="prefs_dual_page_mode_disabled">Көлденең режимде тек бір бет көрсетіледі.</string>

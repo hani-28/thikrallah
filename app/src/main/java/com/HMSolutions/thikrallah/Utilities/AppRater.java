@@ -17,18 +17,20 @@ import com.HMSolutions.thikrallah.R;
 
 import java.lang.ref.WeakReference;
 
+import timber.log.Timber;
+
 public class AppRater {
 	
 	private final static int DAYS_UNTIL_PROMPT = 2;
 	private final static int LAUNCHES_UNTIL_PROMPT = 5;
-	private static Context context;
+	private  Context context;
 	private static  String APP_PNAME = "";
-
-	public static void app_launched(WeakReference<Context> mContext) {
+	private static String TAG="AppRater";
+	public void app_launched(WeakReference<Context> mContext) {
 		context=mContext.get();
 		SharedPreferences prefs;
 		if (context!=null){
-			Log.d("AppRater","apprater app_launched called");
+			Timber.tag("AppRater").d("apprater app_launched called");
 			APP_PNAME=context.getResources().getString(R.string.app_package);
 			prefs = context.getSharedPreferences("apprater", 0);
 		}else{
@@ -48,7 +50,8 @@ public class AppRater {
 			date_firstLaunch = System.currentTimeMillis();
 			editor.putLong("date_firstlaunch", date_firstLaunch);
 		}
-
+		Log.d(TAG,"apprater called and showrateDialog");
+		showRateDialog(context, editor);
 		// Wait at least n days before opening
 		if (launch_count >= LAUNCHES_UNTIL_PROMPT) {
 			if (System.currentTimeMillis() >= date_firstLaunch + 
@@ -60,10 +63,10 @@ public class AppRater {
 			}
 		}
 
-		editor.commit();
+		editor.apply();
 	}   
 
-	public static void showRateDialog(final Context mContext, final SharedPreferences.Editor editor) {
+	public void showRateDialog(final Context mContext, final SharedPreferences.Editor editor) {
 		final Dialog dialog = new Dialog(mContext);
 		dialog.setTitle(context.getString(R.string.rate));
 
@@ -78,40 +81,36 @@ public class AppRater {
 
 		Button b1 = new Button(mContext);
 		b1.setText(context.getString(R.string.rate));
-		b1.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (editor != null) {
-					editor.putBoolean("dontshowagain", true);
-					editor.commit();
-				} mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + APP_PNAME)));
-				dialog.dismiss();
-
+		b1.setOnClickListener(v -> {
+			if (editor != null) {
+				editor.putBoolean("dontshowagain", true);
+				editor.commit();
 			}
-		});        
+			Intent intent =new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + APP_PNAME));
+			if (intent.resolveActivity(context.getPackageManager()) != null) {
+				mContext.startActivity(intent);
+			}else{
+				Log.d(TAG,"playstore not available");
+			}
+
+			dialog.dismiss();
+
+		});
 		ll.addView(b1);
 
 		Button b2 = new Button(mContext);
 		b2.setText(context.getString(R.string.remind_later));
-		b2.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				dialog.dismiss();
-			}
-		});
+		b2.setOnClickListener(v -> dialog.dismiss());
 		ll.addView(b2);
 
 		Button b3 = new Button(mContext);
 		b3.setText(context.getString(R.string.dont_rate));
-		b3.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (editor != null) {
-					editor.putBoolean("dontshowagain", true);
-					editor.commit();
-				}
-				dialog.dismiss();
+		b3.setOnClickListener(v -> {
+			if (editor != null) {
+				editor.putBoolean("dontshowagain", true);
+				editor.commit();
 			}
+			dialog.dismiss();
 		});
 		ll.addView(b3);
 

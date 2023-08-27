@@ -115,8 +115,6 @@ public class TimePreferenceUI extends PreferenceDialogFragmentCompat {
         if (positiveResult) {
             if (!isPickerSupported) {
 
-                //hour_text.setText(String.valueOf(lastHour));
-                //minutes_text.setText(String.valueOf(lastMinute));
                 try {
                     int hour = Integer.parseInt(hour_text.getText().toString());
                     if (hour > 0 && hour < 13) {

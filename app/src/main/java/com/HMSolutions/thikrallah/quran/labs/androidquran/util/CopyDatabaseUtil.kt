@@ -2,7 +2,6 @@ package com.HMSolutions.thikrallah.quran.labs.androidquran.util
 
 import android.content.Context
 import io.reactivex.Single
-import okio.Okio
 import okio.buffer
 import okio.sink
 import okio.source

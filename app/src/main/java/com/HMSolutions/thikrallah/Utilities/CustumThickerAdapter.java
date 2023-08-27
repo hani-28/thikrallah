@@ -49,6 +49,6 @@ public class CustumThickerAdapter extends ArrayAdapter<String> {
             tv.setBackgroundColor(Color.TRANSPARENT);
         }
         Log.d("testing123","getview called position="+position+"currentPlaying="+currentPlaying);
-		return view;
+        return view;
 	}
 }

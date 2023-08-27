@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -22,7 +21,7 @@ import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Utilities.TimePreference;
 import com.HMSolutions.thikrallah.Utilities.TimePreferenceUI;
 
-import java.util.Locale;
+import timber.log.Timber;
 
 public class PrefsThikrFragment extends PreferenceFragmentCompat implements OnSharedPreferenceChangeListener {
 	@Override
@@ -60,12 +59,12 @@ public class PrefsThikrFragment extends PreferenceFragmentCompat implements OnSh
 	private void updatePrefSummary(Preference pref) {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getApplicationContext());
 		if (pref instanceof ListPreference) {
-			Log.d("prefs", "pref is instance of listpreference");
+			Timber.tag("prefs").d("pref is instance of listpreference");
 			ListPreference listPref = (ListPreference) pref;
 			pref.setSummary(listPref.getEntry());
 		}
 		if (pref instanceof TimePreference) {
-			Log.d("prefs", "pref is instance of TimePreference");
+			Timber.tag("prefs").d("pref is instance of TimePreference");
 			String time = sharedPreferences.getString(pref.getKey(), "00:00");
 			String AMPM = "AM";
 			int hour = TimePreference.getHour(time);
@@ -121,12 +120,6 @@ public class PrefsThikrFragment extends PreferenceFragmentCompat implements OnSh
     }
 
     private void logScreen() {
-        /*
-		Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, this.getClass().getSimpleName());
-        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, this.getClass().getSimpleName());
-        FirebaseAnalytics.getInstance(this.getActivity()).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
-    */
     }
 
 

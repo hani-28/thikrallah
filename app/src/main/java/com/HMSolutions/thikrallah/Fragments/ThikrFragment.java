@@ -2,7 +2,6 @@ package com.HMSolutions.thikrallah.Fragments;
 
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,8 +19,6 @@ import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Utilities.CustumThickerAdapter;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
-
-import java.util.Locale;
 
 public class ThikrFragment extends ListFragment implements OnClickListener {
 	
@@ -54,7 +51,7 @@ public class ThikrFragment extends ListFragment implements OnClickListener {
 
     @Override
     public void onAttach(Context context) {
-        super.onAttach(context);
+		super.onAttach(context);
 		MainActivity.setLocale(context);
         try {
             mCallback = (MainInterface) context;
@@ -78,9 +75,9 @@ public class ThikrFragment extends ListFragment implements OnClickListener {
         mCallback.setThikrType(thikrType);
         View view = inflater.inflate(R.layout.fragment_thikr, container,
                 false);
-        play = (Button) view.findViewById(R.id.button_play);
-        pause = (Button) view.findViewById(R.id.button_pause);
-        stop = (Button) view.findViewById(R.id.button_stop);
+		play = (Button) view.findViewById(R.id.button_play);
+		pause = (Button) view.findViewById(R.id.button_pause);
+		stop = (Button) view.findViewById(R.id.button_stop);
 		play.setOnClickListener(this);
 		pause.setOnClickListener(this);
 		stop.setOnClickListener(this);
@@ -89,8 +86,8 @@ public class ThikrFragment extends ListFragment implements OnClickListener {
 		playPrevious = (Button) view.findViewById(R.id.button_previous);
 		playPrevious.setOnClickListener(this);
 		thickerArray=getThikrArray();
-        adapter = new CustumThickerAdapter(getActivity(), R.layout.row_format,thickerArray );
-		setListAdapter(adapter); 
+		adapter = new CustumThickerAdapter(getActivity(), R.layout.row_format,thickerArray );
+		setListAdapter(adapter);
 		//adapter.addAll(thickerArray);
 	
 
@@ -114,7 +111,7 @@ public class ThikrFragment extends ListFragment implements OnClickListener {
 			}else{
 				mCallback.resetPlayer(this.thikrType);
 				mCallback.setCurrentPlaying(this.thikrType,position + 1);
-                setCurrentlyPlaying(position+1);
+				setCurrentlyPlaying(position+1);
 				mCallback.play(this.thikrType,mCallback.getCurrentPlaying());
 			}
 			mCallback.pausePlayer(this.thikrType);
@@ -132,27 +129,19 @@ public class ThikrFragment extends ListFragment implements OnClickListener {
     }
 
     private void logScreen() {
-        /*
-		Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, this.getClass().getSimpleName());
-        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, this.getClass().getSimpleName());
-        FirebaseAnalytics.getInstance(this.getActivity()).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
-     */
-    }
+	}
 
 
     private String[] getThikrArray() {
         String[] numbers_text = null;
-        if (this.thikrType.equals(MainActivity.DATA_TYPE_DAY_THIKR)) {
+		if (this.thikrType.equals(MainActivity.DATA_TYPE_DAY_THIKR)) {
             return getResources().getStringArray(R.array.MorningThikr);
         }
-        if (this.thikrType.equals(MainActivity.DATA_TYPE_NIGHT_THIKR)) {
+		if (this.thikrType.equals(MainActivity.DATA_TYPE_NIGHT_THIKR)) {
             return getResources().getStringArray(R.array.NightThikr);
         }
-        if (this.thikrType.equals(MainActivity.DATA_TYPE_QURAN)){
-         //   surat=this.getArguments().getInt("surat");
-           // return new String[]{this.getActivity().getResources().getStringArray(R.array.surat_text)[surat]};
-        }
+		if (this.thikrType.equals(MainActivity.DATA_TYPE_QURAN)){
+		}
 		return numbers_text;
 	}
 	@Override
@@ -191,8 +180,6 @@ public class ThikrFragment extends ListFragment implements OnClickListener {
 	@Override
     public void onDestroy(){
 		super.onDestroy();
-		//player.reset();
-		//player.release();
 	}
     private int smoothpositionOn=-1;
     public void setCurrentlyPlaying(int position) {

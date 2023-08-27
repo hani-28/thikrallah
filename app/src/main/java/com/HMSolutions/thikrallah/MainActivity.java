@@ -61,7 +61,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.ref.WeakReference;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -119,10 +118,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        // if (key.equalsIgnoreCase("latitude") || key.equalsIgnoreCase("longitude")) {
-        // new updateLocationDiscription().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,this);
 
-        //}
     }
 
 
@@ -324,7 +320,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                     SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
                     editor.putString("latitude", nf.format(location.getLatitude()));
                     editor.putString("longitude", nf.format(location.getLongitude()));
-                    editor.commit();
+                    editor.apply();
                 }
                 Log.d(TAG, "isproviderenabled" + locationManager.isProviderEnabled(provider));
                 if ((!locationManager.isProviderEnabled(provider) || !isLocationEnabled(this)) &&
@@ -384,9 +380,13 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                 Log.d(TAG,"POST_NOTIFICATIONS permission requested");
             }
         }
-        int alarmsPermission = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.SCHEDULE_EXACT_ALARM);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            int alarmsPermission = ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.SCHEDULE_EXACT_ALARM);
+            if (alarmsPermission != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(Manifest.permission.SCHEDULE_EXACT_ALARM);
+            }
+        }
 
         int locationPermission = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION);
@@ -396,26 +396,12 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
 
 
 
-        if (alarmsPermission != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.SCHEDULE_EXACT_ALARM);
-        }
+
         if (locationPermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.ACCESS_COARSE_LOCATION);
 
 
         }
-/*
-        int StoragePermissions = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (StoragePermissions != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        }
-*/
-       /* if (writePermission != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        }
-*/
-
         if (!listPermissionsNeeded.isEmpty()) {
             ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),REQUEST_ID_MULTIPLE_PERMISSIONS);
         }
@@ -489,8 +475,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
         timeOperation("timing", "showing what's new screen");
 
         Log.d(TAG, "oncreate 8");
-
-        AppRater.app_launched(new WeakReference<Context>(this));
+        new AppRater().app_launched(new WeakReference<>(this));
         timeOperation("timing", "launching apprater if applicable");
         setContentView(R.layout.activity_main);
         timeOperation("timing", "setting content");
@@ -502,7 +487,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
         if (mPrefs.getBoolean("isFirstLaunch", true)) {
             Log.d(TAG, "first launch. calling boot recbiever");
             sendBroadcast(intent1);
-            mPrefs.edit().putLong("time_at_last_ad", System.currentTimeMillis()).commit();
+            mPrefs.edit().putLong("time_at_last_ad", System.currentTimeMillis()).apply();
             launchFragment(new TutorialFragment(), null, "TutorialFragment");
             timeOperation("timing", "launching tutorial freagment");
         }
@@ -869,7 +854,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
     @Override
     public void setCurrentPlaying(String AssetFolder, int currentPlaying) {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-        sharedPrefs.edit().putInt("currentPlaying", currentPlaying).commit();
+        sharedPrefs.edit().putInt("currentPlaying", currentPlaying).apply();
 
     }
 
@@ -883,7 +868,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
     @Override
     public void setThikrType(String thikrType) {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-        sharedPrefs.edit().putString("thikrType", thikrType).commit();
+        sharedPrefs.edit().putString("thikrType", thikrType).apply();
 
     }
 
@@ -1019,12 +1004,12 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
         editor.putString("latitude", nf.format(location.getLatitude()));
         editor.putString("longitude", nf.format(location.getLongitude()));
-        editor.commit();
+        editor.apply();
         stopLocationUpdates();
 
     }
 
-    private static class FilesMigration extends AsyncTask<Context, String, Boolean> {
+    private class FilesMigration extends AsyncTask<Context, String, Boolean> {
         String TAG = "FilesMigration";
         Context mContext;
 
@@ -1137,10 +1122,8 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                     String country=addresses.get(0).getCountryName();
                     String city=addresses.get(0).getLocality();
                     locationDiscription = country+"  "+city;// nbn  khjbmn countryName+" "+stateName + "" + cityName;
-                    PreferenceManager.getDefaultSharedPreferences(context).edit().putString("location", locationDiscription).commit();
+                    PreferenceManager.getDefaultSharedPreferences(context).edit().putString("location", locationDiscription).apply();
                 }else{
-                    // locationDiscription = latitude + ", "+longitude;
-                    // PreferenceManager.getDefaultSharedPreferences(context).edit().putString("location", locationDiscription).commit();
 
                 }
             } catch (IOException e) {

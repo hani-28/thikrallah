@@ -37,8 +37,8 @@ public class Polygon
 	 */
 	public static class Builder
 	{
-		private List<Point> _vertexes = new ArrayList<Point>();
-		private List<Line> _sides = new ArrayList<Line>();
+		private List<Point> _vertexes = new ArrayList<>();
+		private List<Line> _sides = new ArrayList<>();
 		private BoundingBox _boundingBox = null;
 
 		private boolean _firstPoint = true;
@@ -57,7 +57,7 @@ public class Polygon
 			if (_isClosed)
 			{
 				// each hole we start with the new array of vertex points
-				_vertexes = new ArrayList<Point>();
+				_vertexes = new ArrayList<>();
 				_isClosed = false;
 			}
 
@@ -240,9 +240,6 @@ public class Polygon
 		{
 			return false;
 		}
-
-		// System.out.println("Ray: " + ray.toString() + " ,Side: " + side);
-		// System.out.println("Intersect point: " + intersectPoint.toString());
 
 		if (side.isInside(intersectPoint) && ray.isInside(intersectPoint))
 		{

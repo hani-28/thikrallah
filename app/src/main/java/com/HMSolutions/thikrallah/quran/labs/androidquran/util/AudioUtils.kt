@@ -71,9 +71,9 @@ constructor(private val quranInfo: QuranInfo, private val quranFileUtils: QuranF
 
   fun getQariUrl(item: QariItem): String {
     return item.url + if (item.isGapless) {
-      "%03d" + AudioUtils.AUDIO_EXTENSION
+      "%03d" + AUDIO_EXTENSION
     } else {
-      "%03d%03d" + AudioUtils.AUDIO_EXTENSION
+      "%03d%03d" + AUDIO_EXTENSION
     }
   }
 
@@ -280,12 +280,6 @@ constructor(private val quranInfo: QuranInfo, private val quranFileUtils: QuranF
 
     private const val DB_EXTENSION = ".db"
     private const val ZIP_EXTENSION = ".zip"
-
-    fun haveSuraAyahForQari(baseDir: String, sura: Int, ayah: Int): Boolean {
-      val filename = baseDir + File.separator + sura +
-          File.separator + ayah + AUDIO_EXTENSION
-      return File(filename).exists()
-    }
 
 
   }

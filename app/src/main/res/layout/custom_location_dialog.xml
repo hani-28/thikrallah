@@ -3,112 +3,99 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
 
-    android:padding="15dip" >
+    android:padding="15dip">
 
-
-    <!--TextView
+    <TextView
+        android:id="@+id/adjustment_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/textView_location" /-->
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:text="@string/location_adjustment"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
-
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
-        android:layout_width="fill_parent"
+    <GridLayout
+        android:id="@+id/adjustment_section"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/adjustment_text"
+        android:gravity="center_horizontal"
+        android:layoutDirection="locale"
+        android:orientation="horizontal">
 
-        android:padding="15dip" >
         <TextView
-            android:id="@+id/adjustment_text"
+            android:id="@+id/latitude"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:gravity="right"
+            android:text="@string/latitude"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/longitude"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="2"
+            android:layout_column="0"
+            android:gravity="right"
+            android:text="@string/longitude"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <EditText
+            android:id="@+id/longitude_text"
+            tools:ignore="UnusedAttribute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="2"
+            android:layout_column="1"
+            android:digits="0123456789.,-"
+            android:inputType="numberDecimal"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/location_adjustment"
-            android:gravity="center_horizontal"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            />
+            android:textLocale="en" />
 
-        <GridLayout
-            android:id="@+id/adjustment_section"
+        <EditText
+            android:id="@+id/latitude_text"
+            tools:ignore="UnusedAttribute"
+            tools:targetApi="q"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_horizontal"
-            android:layoutDirection="locale"
-            android:layout_below="@id/adjustment_text"
-            >
+            android:layout_row="1"
+            android:layout_column="1"
+            android:digits="0123456789.,-"
+            android:inputType="numberDecimal"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textLocale="en" />
+    </GridLayout>
 
-            <TextView
-                android:id="@+id/latitude"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/latitude"
-                android:gravity="right"
-                android:layout_row="1"
-                android:layout_column="0"/>
-            <TextView
-                android:id="@+id/longitude"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/longitude"
-                android:gravity="right"
-                android:layout_row="2"
-                android:layout_column="0"/>
-            <EditText
-                android:id="@+id/longitude_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:inputType="numberDecimal"
-                android:digits="0123456789.,-"
-                android:textLocale="en"
-                android:layout_row="2"
-                android:layout_column="1"/>
-            <EditText
-                android:id="@+id/latitude_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                android:digits="0123456789.,-"
-                android:textLocale="en"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:layout_row="1"
-                android:layout_column="1"/>
-         </GridLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/adjustment_section"
+        android:layout_gravity="center"
+
+        android:layoutDirection="locale"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_yes"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layoutDirection="locale"
+            android:clickable="true"
+            android:text="@string/ok"
+            android:textStyle="bold" />
 
-            android:layout_below="@id/adjustment_section"
-            android:orientation="horizontal" >
-
-            <Button
-                android:id="@+id/btn_yes"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:text="@string/ok"
-                android:textStyle="bold" />
-            <Button
-                android:id="@+id/btn_no"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:text="@string/cancel"
-                android:textStyle="bold" />
+        <Button
+            android:id="@+id/btn_no"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:text="@string/cancel"
+            android:textStyle="bold" />
 
 
-        </LinearLayout>
+    </LinearLayout>
 
-    </RelativeLayout>
 </RelativeLayout>

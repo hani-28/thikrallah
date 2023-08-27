@@ -1,4 +1,7 @@
 package com.HMSolutions.thikrallah.Utilities.reversegeocode.Polygon;
+
+import java.util.Locale;
+
 /**
  * Point on 2D landscape
  * 
@@ -18,6 +21,6 @@ public class Point
 	@Override
 	public String toString()
 	{
-		return String.format("(%.2f,%.2f)", x, y);
+		return String.format(Locale.ENGLISH,"(%.2f,%.2f)", x, y);
 	}
 }

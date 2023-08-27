@@ -287,7 +287,7 @@ public class PagerActivity extends QuranActionBarActivity implements
           SharedPreferences sharedPrefs = PreferenceManager
                   .getDefaultSharedPreferences(this.getApplicationContext());
           int qari_num=Integer.parseInt(sharedPrefs.getString("quran_readers_name","11"));
-          sharedPrefs.edit().putInt(Constants.PREF_DEFAULT_QARI, qari_num).commit();
+          sharedPrefs.edit().putInt(Constants.PREF_DEFAULT_QARI, qari_num).apply();
         }
 
       }

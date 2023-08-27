@@ -2,12 +2,10 @@ package com.HMSolutions.thikrallah.Fragments;
 
 import static android.content.Context.POWER_SERVICE;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,16 +21,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
-
-import java.util.Locale;
 
 public class TutorialFragment extends Fragment {
     private static final String TAG ="TutorialFragment" ;
@@ -53,12 +47,6 @@ public class TutorialFragment extends Fragment {
     }
 
     private void logScreen() {
-        /*
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, this.getClass().getSimpleName());
-        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, this.getClass().getSimpleName());
-        FirebaseAnalytics.getInstance(this.getActivity()).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
-    */
     }
 
     @Override
@@ -90,9 +78,8 @@ public class TutorialFragment extends Fragment {
                 showNextScreen(count);
             }
         });
-
-		Tutorial_description = (TextView) view.findViewById(R.id.tutorial_description);
-		Tutorial_description.setText(1+" / "+this.final_count);
+        Tutorial_description = (TextView) view.findViewById(R.id.tutorial_description);
+        Tutorial_description.setText(1+" / "+this.final_count);
         count=0;
         showNextScreen(count);
 
@@ -133,20 +120,18 @@ public class TutorialFragment extends Fragment {
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commitAllowingStateLoss();
         }else{
-            PreferenceManager.getDefaultSharedPreferences(this.getActivity()).edit().putBoolean("isFirstLaunch", false).commit();
+            PreferenceManager.getDefaultSharedPreferences(this.getActivity()).edit().putBoolean("isFirstLaunch", false).apply();
             this.getActivity().onBackPressed();
             fragment.setArguments(data);
             ft.replace(R.id.preference_container, new MainFragment());
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commitAllowingStateLoss();
-            //mCallback.launchFragment(new MainFragment(),null,"MainFragment");
-            //this.getActivity().onBackPressed();
             count++;
             return;
         }
         count++;
-		if (count>final_count){
-			PreferenceManager.getDefaultSharedPreferences(this.getActivity()).edit().putBoolean("isFirstLaunch", false).commit();
+        if (count>final_count){
+			PreferenceManager.getDefaultSharedPreferences(this.getActivity()).edit().putBoolean("isFirstLaunch", false).apply();
 			this.getActivity().onBackPressed();
 			//mCallback.launchFragment(new MainFragment(),null,"MainFragment");
 		}

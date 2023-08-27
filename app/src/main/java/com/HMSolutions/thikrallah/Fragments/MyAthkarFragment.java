@@ -2,7 +2,6 @@ package com.HMSolutions.thikrallah.Fragments;
 
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,7 +26,6 @@ import com.HMSolutions.thikrallah.Utilities.RecordThikrDialog;
 import com.HMSolutions.thikrallah.Utilities.UserThikrArrayAdapter;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class MyAthkarFragment extends Fragment implements MyThikrDialogInterface {
     private MainInterface mCallback;
@@ -52,12 +50,6 @@ public class MyAthkarFragment extends Fragment implements MyThikrDialogInterface
     }
 
     private void logScreen() {
-        /*
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, this.getClass().getSimpleName());
-        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, this.getClass().getSimpleName());
-        FirebaseAnalytics.getInstance(this.getActivity()).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
-    */
     }
 
     @Override

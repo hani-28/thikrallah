@@ -18,7 +18,6 @@ import androidx.annotation.MenuRes;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
 
-import com.HMSolutions.thikrallah.BuildConfig;
 import com.HMSolutions.thikrallah.R;
 
 public class AyahToolBar extends ViewGroup implements

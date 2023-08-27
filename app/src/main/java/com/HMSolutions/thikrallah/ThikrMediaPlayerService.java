@@ -105,7 +105,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         private final WeakReference<ThikrMediaPlayerService> mService;
 
         IncomingHandler(ThikrMediaPlayerService service) {
-            mService = new WeakReference<ThikrMediaPlayerService>(service);
+            mService = new WeakReference<>(service);
         }
 
         @Override
@@ -164,7 +164,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         private final WeakReference<Context> mApplicationContext;
 
         UpdateAlarmsRunnable(Context context) {
-            mApplicationContext = new WeakReference<Context>(context);
+            mApplicationContext = new WeakReference<>(context);
         }
         @Override
         public void run() {
@@ -300,8 +300,6 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     private void SetMediaMetadata() {
         MediaMetadataCompat.Builder builder;
         builder = new Builder();
-        // builder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, "title");
-        //  builder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, "currentTrack.artist");
         mediaSession.setMetadata(builder.build());
 
     }
@@ -348,19 +346,11 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
     private NotificationCompat.Builder addAction(NotificationCompat.Builder builder, String label, int icon) {
 
-        //   Intent recieverIntent = new Intent(this, ThikrMediaBroadcastReciever.class);
-        // recieverIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         Intent intent = new Intent(label).setClass(this.getApplicationContext(), ThikrMediaBroadcastReciever.class);
         intent.putExtras(callingintent.getExtras());
         PendingIntent RecieverPendingIntent = PendingIntent.getBroadcast(this, 1,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_MUTABLE);
 
-
-        // Timber.d( RecieverPendingIntent.getTargetPackage());
-
-        //recieverIntent.setAction(label);
-
-        // PendingIntent mediaPendingIntent = PendingIntent.getActivity(this,0, recieverIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         return builder.addAction(new Action(icon, label, RecieverPendingIntent));
 
@@ -435,11 +425,6 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             case MEDIA_PLAYER_PAUSE:
                 Timber.d( "pause called");
 
-                //  mediaSession.setPlaybackState(new PlaybackStateCompat.Builder()
-                //          .setState(PlaybackStateCompat.STATE_PAUSED, 0, 0)
-                //          .setActions(PlaybackStateCompat.ACTION_STOP | PlaybackStateCompat.ACTION_PLAY)
-                //           .build());
-
                 this.pausePlayer();
                 updateActions();
                 break;
@@ -465,10 +450,6 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 break;
             case MEDIA_PLAYER_PLAYALL:
                 Timber.d( "playall called");
-                // mediaSession.setPlaybackState(new PlaybackStateCompat.Builder()
-                //         .setState(PlaybackStateCompat.STATE_PLAYING, 0, 0)
-                //       .setActions(PlaybackStateCompat.ACTION_PAUSE | PlaybackStateCompat.ACTION_STOP)
-                //     .build());
                 currentThikrCounter = 0;
                 this.playAll();
                 updateActions();
@@ -501,10 +482,6 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
 
                 Timber.d( "play " + file + " called");
-                //  mediaSession.setPlaybackState(new PlaybackStateCompat.Builder()
-                //        .setState(PlaybackStateCompat.STATE_PLAYING, 0, 0)
-                //        .setActions(PlaybackStateCompat.ACTION_PAUSE | PlaybackStateCompat.ACTION_STOP)
-                //        .build());
                 currentThikrCounter = 0;
                 this.play(file);
                 updateActions();
@@ -647,9 +624,6 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                     }
                 } else {
                     Timber.d( "audio focus request denied.");
-                    //am.abandonAudioFocus(this);
-                    //this.stopForeground(true);
-                    //this.stopSelf();
                 }
 
             } else {
@@ -746,8 +720,6 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 if (this.getCurrentPlaying() > this.getThikrArray().length) {
                     setCurrentPlaying(this.getThikrArray().length);
                 }
-                //setCurrentPlaying(1);
-                //e.printStackTrace();
 
             }
 
@@ -927,9 +899,6 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         if (this.player != null) {
             this.player.stop();
             this.player.reset();
-            //am.abandonAudioFocus(this);
-            //player.release();
-            //this.stopSelf();
         }
 
     }
@@ -944,8 +913,6 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             }
 
         }
-        //SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-        //sharedPrefs.edit().putBoolean("d", isPlaying).commit();
         Timber.d("isPlaying returning %s",isPlaying);
         return isPlaying;
 
@@ -1132,11 +1099,6 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
             mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
                     MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
-            // updateActions();
-            // mediaSession.setPlaybackState(new PlaybackStateCompat.Builder()
-            ////       .setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE)
-            //   .setState(PlaybackStateCompat.STATE_PAUSED, 0, 0)
-            //     .build());
 
             mediaSession.setCallback(new MediaSessionCompat.Callback() {
                 @Override

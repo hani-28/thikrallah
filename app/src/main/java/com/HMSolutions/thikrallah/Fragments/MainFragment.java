@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,7 +31,6 @@ import com.HMSolutions.thikrallah.hisnulmuslim.DuaGroupActivity;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.QuranDataActivity;
 
 
-import java.util.Locale;
 
 public class MainFragment extends Fragment {
     private MainInterface mCallback;
@@ -100,10 +98,7 @@ public class MainFragment extends Fragment {
 
 		});
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-
-
-
-        button_quran.setOnClickListener(new OnClickListener() {
+		button_quran.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -115,39 +110,26 @@ public class MainFragment extends Fragment {
 
             }
         });
-        button_sadaqa.setOnClickListener(new OnClickListener() {
+		button_sadaqa.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCallback.share();
             }
         });
-        /*
-        button_donate.setOnClickListener(new OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-                mCallback.upgrade();
-
-            }
-
-        });
-		*/
 		button_remind_me_settings.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent();
 				intent.setClass(v.getContext(), PreferenceActivity.class);
-				startActivityForResult(intent, 0); 
+				startActivityForResult(intent, 0);
 			}});
-
-        button_hisn_almuslim.setOnClickListener(new OnClickListener(){
+		button_hisn_almuslim.setOnClickListener(new OnClickListener(){
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClass(v.getContext(), DuaGroupActivity.class);
                 startActivityForResult(intent, 0);
             }});
-		
 		button_morning_thikr.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {
@@ -163,14 +145,14 @@ public class MainFragment extends Fragment {
 				data.putString("DataType", MainActivity.DATA_TYPE_NIGHT_THIKR);
                 mCallback.launchFragment(new ThikrFragment(), data, "ThikrFragment");
             }
-        });
-        button_my_athkar.setOnClickListener(new OnClickListener() {
+		});
+		button_my_athkar.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle data = new Bundle();
                 mCallback.launchFragment(new MyAthkarFragment(), data, "MyAthkarFragment");
             }
-        });
+		});
 		Log.d(TAG,"requestBatteryExclusion");
 		requestBatteryExclusion(mContext);
         return view;
@@ -183,12 +165,7 @@ public class MainFragment extends Fragment {
     }
 
     private void logScreen() {
-        /*
-    	Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, this.getClass().getSimpleName());
-        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, this.getClass().getSimpleName());
-        FirebaseAnalytics.getInstance(this.getActivity()).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
-   */
+
     }
 	private void requestBatteryExclusion(Context mContext) {
 		//first time launch, request is made in tutorial fragment, do not request here:

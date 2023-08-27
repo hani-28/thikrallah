@@ -70,10 +70,6 @@ public class Compass implements SensorEventListener {
                         * event.values[1];
                 mGravity[2] = alpha * mGravity[2] + (1 - alpha)
                         * event.values[2];
-
-                // mGravity = event.values;
-
-                // Log.e(TAG, Float.toString(mGravity[0]));
             }
 
             if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {

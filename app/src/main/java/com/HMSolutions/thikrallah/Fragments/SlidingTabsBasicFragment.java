@@ -19,7 +19,6 @@ package com.HMSolutions.thikrallah.Fragments;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,8 +32,6 @@ import androidx.viewpager.widget.ViewPager;
 import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Utilities.SlidingTabLayout;
-
-import java.util.Locale;
 
 /**
  * A basic sample which shows how to use {@link com.HMSolutions.thikrallah.Utilities.SlidingTabLayout}

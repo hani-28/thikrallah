@@ -42,7 +42,7 @@ public class MediaBrowser extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.pathlist);
         pathTextView = (TextView) findViewById(R.id.path);
-        myList = new ArrayList<String>();
+        myList = new ArrayList<>();
         AllAudioFiles = getAllAudioFromDevice(this.getApplicationContext());
         for (int i = 0; i < AllAudioFiles.size(); i++) {
             Log.d(TAG, "i=" + i);
@@ -50,7 +50,7 @@ public class MediaBrowser extends AppCompatActivity {
         }
 
         pathTextView.setText("Select Audio File from below:");
-        listView.setAdapter(new ArrayAdapter<String>(this,
+        listView.setAdapter(new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, myList));
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

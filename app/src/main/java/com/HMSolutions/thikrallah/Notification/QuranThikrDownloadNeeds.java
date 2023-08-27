@@ -59,15 +59,6 @@ public class QuranThikrDownloadNeeds extends BroadcastReceiver {
         QariItem qari=qlist.get(qari_num);
 
         AudioPathInfo audioPathInfo = this.getLocalAudioPathInfo(qari);
-               /*
-                File databaseFile=new File(audioPathInfo.getGaplessDatabase());
-                if(!databaseFile.exists()){
-
-                    Intent downloadIntent = ServiceIntentHelper.getAudioDownloadIntent(this, getGaplessDatabaseUrl(qari), audioPathInfo.getLocalDirectory(), mcontext.getString(R.string.timing_database));
-                    startService(downloadIntent);
-                }
-
-*/
         if (audioPathInfo != null) {
             // override streaming if all the files are already downloaded
             boolean stream = false;
@@ -90,15 +81,15 @@ public class QuranThikrDownloadNeeds extends BroadcastReceiver {
             }
 
 
-            Log.d(TAG, "ready to play Quran");
+            Timber.tag(TAG).d("ready to play Quran");
             if (audioPathInfo != null) {
                 AudioRequest audioRequest = new AudioRequest(start, end, qari, 0, 0, true, false, audioPath);
 
                 //TODO:Check for all needed files downloaded yet
                 ArrayList<Intent> DownloadIntents=DownloadedNeededFiles(mcontext,audioRequest);
-                Log.d(TAG, "DownloadIntents are "+DownloadIntents.size());
+                Timber.tag(TAG).d("DownloadIntents are " + DownloadIntents.size());
                 if (DownloadIntents.size()==0){
-                    Log.d(TAG, "calling handlePlayback");
+                    Timber.d("calling handlePlayback");
                     handlePlayback(audioRequest);
                 }else{
                     for (int i=0;i<DownloadIntents.size();i++){
@@ -156,7 +147,7 @@ public class QuranThikrDownloadNeeds extends BroadcastReceiver {
     }
 
     private ArrayList<Intent> DownloadedNeededFiles(Context context, AudioRequest request){
-        ArrayList<Intent> downloadIntents=new ArrayList<Intent>();
+        ArrayList<Intent> downloadIntents= new ArrayList<>();
         QariItem qari = request.getQari();
         AudioPathInfo audioPathInfo = request.getAudioPathInfo();
         String path = audioPathInfo.getLocalDirectory();
@@ -341,7 +332,7 @@ public class QuranThikrDownloadNeeds extends BroadcastReceiver {
         String[]urls = resources.getStringArray(R.array.quran_readers_urls);
         String[]databases = resources.getStringArray(R.array.quran_readers_db_name);
         int[] hasGaplessEquivalent = resources.getIntArray(R.array.quran_readers_have_gapless_equivalents);
-        List<QariItem> items = new ArrayList<QariItem>();
+        List<QariItem> items = new ArrayList<>();
 
         for (int i=0;i<shuyookh.length;i++ ) {
             items.add(new QariItem(i, shuyookh[i], urls[i], paths[i], databases[i]));

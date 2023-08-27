@@ -29,7 +29,6 @@ import androidx.core.app.NotificationCompat;
 
 import com.HMSolutions.thikrallah.BuildConfig;
 import com.HMSolutions.thikrallah.MainActivity;
-import com.HMSolutions.thikrallah.Models.Prayer;
 import com.HMSolutions.thikrallah.Models.UserThikr;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.ThikrMediaPlayerService;
@@ -100,14 +99,7 @@ public class ThikrService extends IntentService  {
         //update all alarms
         Intent boot_reciever = new Intent("com.HMSolutions.thikrallah.Notification.ThikrBootReceiver.android.action.broadcast");
         this.sendBroadcast(boot_reciever);
-        /*new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                new MyAlarmsManager(mcontext).UpdateAllApplicableAlarms();
-            }
-        }, 10000);
-        */
-		Log.d(TAG,"onhandleintnet called");
+        Log.d(TAG,"onhandleintnet called");
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         String lang=sharedPrefs.getString("language",null);
         boolean isRespectMute = sharedPrefs.getBoolean("mute_thikr_when_ringer_mute", true);
@@ -175,7 +167,7 @@ public class ThikrService extends IntentService  {
 			int reminderType=Integer.parseInt(sharedPrefs.getString("RemindmeThroughTheDayType", "1"));
 			boolean isQuietTime=isTimeNowQuietTime();
 			if (((reminderType==1 ||reminderType==2)&&isQuietTime==false&&(thikr.isBuiltIn()==true||thikr.getFile().length()>2))&&(am.getRingerMode() == AudioManager.RINGER_MODE_NORMAL||isRespectMute==false)){
-                sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_GENERAL_THIKR).commit();
+                sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_GENERAL_THIKR).apply();
                 data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAY);
                 Log.d(TAG,"fileNumber sent through intent is "+fileNumber);
                 data.putInt("FILE", fileNumber);
@@ -207,8 +199,8 @@ public class ThikrService extends IntentService  {
 
 				Intent launchAppIntent = new Intent(this, MainActivity.class);
                 launchAppIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				launchAppIntent.putExtra("FromNotification",true);
-				launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_DAY_THIKR);
+                launchAppIntent.putExtra("FromNotification",true);
+                launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_DAY_THIKR);
 				PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
 						1458, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE
 						);
@@ -226,11 +218,11 @@ public class ThikrService extends IntentService  {
                     manager.createNotificationChannel(chan);
                     mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID);
                 }
-				mNotificationManager.notify(NOTIFICATION_ID_MORNING_NIGHT_THIKR, mBuilder.build());
+                mNotificationManager.notify(NOTIFICATION_ID_MORNING_NIGHT_THIKR, mBuilder.build());
 			}else{
 				//new here
 
-				sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_DAY_THIKR).commit();
+				sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_DAY_THIKR).apply();
 
 				data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAYALL);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -256,8 +248,8 @@ public class ThikrService extends IntentService  {
 
 				Intent launchAppIntent = new Intent(this, MainActivity.class);
                 launchAppIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				launchAppIntent.putExtra("FromNotification",true);
-				launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_NIGHT_THIKR);
+                launchAppIntent.putExtra("FromNotification",true);
+                launchAppIntent.putExtra("DataType", MainActivity.DATA_TYPE_NIGHT_THIKR);
 				PendingIntent launchAppPendingIntent = PendingIntent.getActivity(this,
 						2354, launchAppIntent, PendingIntent.FLAG_ONE_SHOT|PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE
 						);
@@ -275,10 +267,10 @@ public class ThikrService extends IntentService  {
                     manager.createNotificationChannel(chan);
                     mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID);
                 }
-				mNotificationManager.notify(NOTIFICATION_ID_MORNING_NIGHT_THIKR, mBuilder.build());
+                mNotificationManager.notify(NOTIFICATION_ID_MORNING_NIGHT_THIKR, mBuilder.build());
 			}else{
 
-				sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_NIGHT_THIKR).commit();
+				sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_NIGHT_THIKR).apply();
 				data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAYALL);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     this.startForegroundService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
@@ -332,7 +324,7 @@ public class ThikrService extends IntentService  {
             }else{
                 //new here
                 Log.d(TAG,"Quran Mulk audio reminder");
-                sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_QURAN_MULK).commit();
+                sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_QURAN_MULK).apply();
 
                 data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAYALL);
                 SuraAyah start = new SuraAyah(67, 1);
@@ -358,21 +350,19 @@ public class ThikrService extends IntentService  {
                     } else {
                         audioPath = audioPathInfo;
                         //check if the audio files are available
-                       // if (!haveAllFiles(audioPathInfo.getUrlFormat(),audioPathInfo.getLocalDirectory(), start, end,qari.isGapless())){
 
-                       // }
                     }
 
 
-                    Log.d(TAG, "ready to play Quran");
+                    Timber.tag(TAG).d("ready to play Quran");
                     if (audioPathInfo != null) {
                         AudioRequest audioRequest = new AudioRequest(start, end, qari, 0, 0, true, false, audioPath);
 
 
                         ArrayList<Intent> DownloadIntents=DownloadedNeededFiles(this,audioRequest);
-                        Log.d(TAG, "DownloadIntents are "+DownloadIntents.size());
+                        Timber.tag(TAG).d("DownloadIntents are " + DownloadIntents.size());
                         if (DownloadIntents.size()==0){
-                            Log.d(TAG, "calling handlePlayback");
+                            Timber.d("calling handlePlayback");
                             handlePlayback(audioRequest);
                         }else{
                             Log.d(TAG,"Quran Mulk audio reminder. Need to download files");
@@ -425,18 +415,11 @@ public class ThikrService extends IntentService  {
                 }else{
                     Log.d(TAG,"audioPathInfo is NULL");
                 }
-               /*
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    this.startForegroundService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
-                } else {
-                    this.startService(new Intent(this, ThikrMediaPlayerService.class).putExtras(data));
-                }
-                */
             }
             return;
         }
         if (thikrType.equals(MainActivity.DATA_TYPE_QURAN_KAHF)){
-            sharedPrefs.edit().putInt("", Calendar.getInstance().get(Calendar.DAY_OF_MONTH)).commit();
+            sharedPrefs.edit().putInt("", Calendar.getInstance().get(Calendar.DAY_OF_MONTH)).apply();
 
             int reminderType=Integer.parseInt(sharedPrefs.getString("remindMekahfType", "1"));
             if (reminderType==1){
@@ -476,7 +459,7 @@ public class ThikrService extends IntentService  {
                 mNotificationManager.notify(NOTIFICATION_ID_QURAN_THIKR, mBuilder.build());
             }else{
 
-                sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_QURAN_MULK).commit();
+                sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_QURAN_MULK).apply();
 
                 data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAYALL);
                 SuraAyah start = new SuraAyah(18, 1);
@@ -508,15 +491,15 @@ public class ThikrService extends IntentService  {
                     }
 
 
-                    Log.d(TAG, "ready to play Quran");
+                    Timber.tag(TAG).d("ready to play Quran");
                     if (audioPathInfo != null) {
                         AudioRequest audioRequest = new AudioRequest(start, end, qari, 0, 0, true, false, audioPath);
 
 
                         ArrayList<Intent> DownloadIntents=DownloadedNeededFiles(this,audioRequest);
-                        Log.d(TAG, "DownloadIntents are "+DownloadIntents.size());
+                        Timber.tag(TAG).d("DownloadIntents are " + DownloadIntents.size());
                         if (DownloadIntents.size()==0){
-                            Log.d(TAG, "calling handlePlayback");
+                            Timber.d("calling handlePlayback");
                             handlePlayback(audioRequest);
                         }else{
                             Intent RecieverIntent_=new Intent(mcontext, QuranThikrDownloadNeeds.class);
@@ -605,7 +588,7 @@ public class ThikrService extends IntentService  {
             } else {
                 if (reminderType != 1) {
                     //starting audioservice
-                    sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", thikrType).commit();
+                    sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", thikrType).apply();
                     data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAY);
                     int file = reminderType;
                     Log.d(TAG, "fileNumber sent through intent is " + file);
@@ -735,7 +718,7 @@ public class ThikrService extends IntentService  {
     }
 
     private ArrayList<Intent> DownloadedNeededFiles(Context context, AudioRequest request){
-        ArrayList<Intent> downloadIntents=new ArrayList<Intent>();
+        ArrayList<Intent> downloadIntents= new ArrayList<>();
         QariItem qari = request.getQari();
         AudioPathInfo audioPathInfo = request.getAudioPathInfo();
         String path = audioPathInfo.getLocalDirectory();
@@ -913,7 +896,7 @@ public class ThikrService extends IntentService  {
         String[]urls = resources.getStringArray(R.array.quran_readers_urls);
         String[]databases = resources.getStringArray(R.array.quran_readers_db_name);
         int[] hasGaplessEquivalent = resources.getIntArray(R.array.quran_readers_have_gapless_equivalents);
-        List<QariItem> items = new ArrayList<QariItem>();
+        List<QariItem> items = new ArrayList<>();
 
         for (int i=0;i<shuyookh.length;i++ ) {
                 items.add(new QariItem(i, shuyookh[i], urls[i], paths[i], databases[i]));

@@ -15,6 +15,7 @@
  */
 package com.HMSolutions.thikrallah.Utilities;
 
+//noinspection SuspiciousImport
 import android.R;
 import android.content.Context;
 import android.graphics.Canvas;

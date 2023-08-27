@@ -230,8 +230,8 @@ public class AudioService extends Service implements OnCompletionListener,
 
     @Override
     public void handleMessage(Message msg) {
-      Log.d(TAG,"handle message called");
-      Log.d(TAG,"msg is: "+msg.toString());
+      Timber.tag(TAG).d("handle message called");
+      Timber.tag(TAG).d("msg is: " + msg.toString());
       if (msg.what == MSG_INCOMING && msg.obj != null) {
         Intent intent = (Intent) msg.obj;
         handleIntent(intent);
@@ -946,14 +946,13 @@ public class AudioService extends Service implements OnCompletionListener,
           Log.d(TAG,"got timing: "+timing+", seeking and updating later..");
           Timber.d("got timing: %d, seeking and updating later...", timing);
           player.seekTo(timing);
-          return;
         } else {
           Log.d(TAG,"no timing data yet, will try again...");
           Timber.d("no timing data yet, will try again...");
           // try to play again after 200 ms
           serviceHandler.sendEmptyMessageDelayed(MSG_START_AUDIO, 200);
-          return;
         }
+        return;
       } else if (audioRequest.isGapless()) {
         Log.d(TAG,"sendEmptyMessageDelayed");
         serviceHandler.sendEmptyMessageDelayed(MSG_UPDATE_AUDIO_POS, 200);

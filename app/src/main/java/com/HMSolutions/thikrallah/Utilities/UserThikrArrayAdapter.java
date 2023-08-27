@@ -153,19 +153,15 @@ public class UserThikrArrayAdapter extends ArrayAdapter<UserThikr> implements Co
     @Override
     public void onClick(View v) {
         MyDBHelper db=new MyDBHelper(this.getContext());
-        switch (v.getId()){
-            case R.id.deleteButton:
+        int id = v.getId();
+        if (id == R.id.deleteButton) {//delete button clicked
 
-                //delete button clicked
-
-                db.deleteThikr((Long) v.getTag());
-                updateData();
-                this.notifyDataSetChanged();
-                break;
-            case R.id.my_thikr_textview:
-                CheckBox isEnabledCheckbox=(CheckBox)((View)v.getParent()).findViewById(R.id.isThikrEnabledCheckbox);
-                isEnabledCheckbox.setChecked(!isEnabledCheckbox.isChecked());
-                break;
+            db.deleteThikr((Long) v.getTag());
+            updateData();
+            this.notifyDataSetChanged();
+        } else if (id == R.id.my_thikr_textview) {
+            CheckBox isEnabledCheckbox = (CheckBox) ((View) v.getParent()).findViewById(R.id.isThikrEnabledCheckbox);
+            isEnabledCheckbox.setChecked(!isEnabledCheckbox.isChecked());
         }
     }
 

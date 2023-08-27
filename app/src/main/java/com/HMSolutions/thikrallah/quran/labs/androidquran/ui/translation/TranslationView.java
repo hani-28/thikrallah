@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.HMSolutions.thikrallah.BuildConfig;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.common.LocalTranslation;
 import com.HMSolutions.thikrallah.quran.labs.androidquran.common.QuranAyahInfo;
@@ -73,7 +72,6 @@ public class TranslationView extends FrameLayout implements View.OnClickListener
     ayahToolBar.setOnItemSelectedListener(this);
     ayahToolBar.setVisibility(View.GONE);
 
-    //noinspection ConstantConditions
 
     addView(ayahToolBar, LayoutParams.WRAP_CONTENT,
         context.getResources().getDimensionPixelSize(R.dimen.toolbar_total_height));

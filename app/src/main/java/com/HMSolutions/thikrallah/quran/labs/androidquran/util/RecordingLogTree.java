@@ -35,8 +35,6 @@ public class RecordingLogTree extends Timber.Tree {
     }
 
     if (t != null && priority == Log.ERROR) {
-      //FirebaseCrashlytics.getInstance().log(getLogs());
-     // FirebaseCrashlytics.getInstance().recordException(t);
     }
   }
 

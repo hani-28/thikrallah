@@ -98,6 +98,7 @@ public class RecordThikrDialog extends DialogFragment {
                         if (newThikr.equalsIgnoreCase("")==true && file.equalsIgnoreCase("")){
                             mCallback.resetPlayer(MainActivity.DATA_TYPE_GENERAL_THIKR);
                             Toast.makeText(context, R.string.thikr_text_required, Toast.LENGTH_LONG).show();
+                            return;
                         }else if (newThikr.equalsIgnoreCase("")==true){
                             newThikr = context.getString(R.string.my_app_name);
                         }

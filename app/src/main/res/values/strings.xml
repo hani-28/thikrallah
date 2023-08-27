@@ -212,7 +212,7 @@
 
 
     <string name="stop_recording">اوقف التسجيل</string>
-    <string name="thikr_text_required">نص الذكر لا يحتوي على اي ذكر. يرجى اضافة نص الدعاء</string>
+    <string name="thikr_text_required">لم يتم اختيار ملف صوتي او اضافة نص كتابي للذكر</string>
     <string name="recording">جاري التسجيل</string>
     <string name="next">التالي</string>
  <string name="location_adjustment">تعديل موقع المدينة يدويا:</string>

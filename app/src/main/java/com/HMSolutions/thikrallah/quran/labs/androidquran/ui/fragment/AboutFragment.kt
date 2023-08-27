@@ -3,7 +3,6 @@ package com.HMSolutions.thikrallah.quran.labs.androidquran.ui.fragment
 import android.os.Bundle
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
-import com.HMSolutions.thikrallah.BuildConfig
 import com.HMSolutions.thikrallah.R
 
 class AboutFragment : PreferenceFragmentCompat() {

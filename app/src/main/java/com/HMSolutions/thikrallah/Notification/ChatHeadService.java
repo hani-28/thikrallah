@@ -15,8 +15,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
-import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
@@ -34,8 +32,6 @@ import com.HMSolutions.thikrallah.ThikrMediaPlayerService;
 
 import java.lang.ref.WeakReference;
 import java.util.Locale;
-
-import timber.log.Timber;
 
 public class ChatHeadService extends Service implements View.OnTouchListener {
 
@@ -121,7 +117,7 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 		}
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
 		int reminderType=Integer.parseInt(sharedPrefs.getString("RemindmeThroughTheDayType", "1"));
-	    if (reminderType==1 ||reminderType==3) {
+		if (reminderType==1 ||reminderType==3) {
 
 			String thikr = intent.getStringExtra("thikr");
 			isAthan = intent.getBooleanExtra("isAthan", false);
@@ -203,8 +199,7 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 			chatHead.setOnTouchListener(this);
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 				if (Settings.canDrawOverlays(this)) {
-                    windowManager.addView(chatHead, params);
-
+					windowManager.addView(chatHead, params);
 					if (!isAthan){
 						new Handler().postDelayed(new DestroyRunnable(this) , 10000);    //will stop service after 10 seconds
 					}
@@ -218,15 +213,14 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 					new Handler().postDelayed(new DestroyRunnable(this) , 10000);    //will stop service after 10 seconds
 				}
 			}
-			return START_NOT_STICKY;
 
-	    }else{
+		}else{
 			Log.d(TAG,"not reminder type 1 or 3? what then?");
 			startnotification();
 	    	this.stopSelf();
-	    	return START_NOT_STICKY;
-	    }
-		
+		}
+		return START_NOT_STICKY;
+
 	}
 
 	static class DestroyRunnable implements Runnable {
@@ -237,7 +231,7 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 		private final WeakReference<ChatHeadService> mService;
 
 		DestroyRunnable(ChatHeadService service) {
-			mService = new WeakReference<ChatHeadService>(service);
+			mService = new WeakReference<>(service);
 		}
 
 

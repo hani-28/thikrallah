@@ -110,11 +110,6 @@ public class QuranDataActivity extends Activity implements
       intent2.setClass(this, PagerActivity.class);
       intent2.putExtras(intent.getExtras());
       startActivityForResult(intent2, 0);
-      //Bundle data = new Bundle();
-      //data.putString("DataType", intent.getExtras().getString("DataType"));
-      //data.putInt("surat", Integer.parseInt(intent.getExtras().getString("DataType").split("/")[1]));
-      //data.putInt("surat", this.getResources().getIntArray(R.array.surat_values)[0]);
-      //launchFragment(new QuranFragment(), data, "QuranFragment");
     }
   }
 
@@ -515,7 +510,6 @@ public class QuranDataActivity extends Activity implements
     // if we have all the files, since if not, they come bundled with the full pages
     // zip file anyway. Note that, for now, this only applies for the madani app.
 
-    //noinspection ConstantConditions
     if (!quranFileUtils.hasArabicSearchDatabase(getApplicationContext())) {
       final boolean success =
           copyDatabaseUtil.copyArabicDatabaseFromAssets(QuranDataProvider.QURAN_ARABIC_DATABASE)

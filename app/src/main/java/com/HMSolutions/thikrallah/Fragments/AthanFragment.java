@@ -3,7 +3,6 @@ package com.HMSolutions.thikrallah.Fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.icu.util.Calendar;
 import android.icu.util.IslamicCalendar;
 import android.icu.util.ULocale;
 import android.os.Build;
@@ -15,11 +14,10 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
-import android.widget.Switch;
+import androidx.appcompat.widget.SwitchCompat;
 import android.widget.TextView;
 import net.time4j.*;
 import net.time4j.calendar.HijriCalendar;
-import net.time4j.engine.StartOfDay;
 import net.time4j.format.expert.ChronoFormatter;
 import net.time4j.format.expert.PatternType;
 
@@ -35,7 +33,6 @@ import com.HMSolutions.thikrallah.Utilities.CustomLocation;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
 import com.HMSolutions.thikrallah.Utilities.PrayTime;
 
-import java.util.Locale;
 
 public class AthanFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener, View.OnClickListener {
 
@@ -52,11 +49,11 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
     private TextView prayer4_time;
     private TextView prayer5_time;
     private TextView sunrise_time;
-    private Switch fajr_switch;
-    private Switch duhr_switch;
-    private Switch asr_switch;
-    private Switch maghrib_switch;
-    private Switch ishaa_switch;
+    private SwitchCompat fajr_switch;
+    private SwitchCompat duhr_switch;
+    private SwitchCompat asr_switch;
+    private SwitchCompat maghrib_switch;
+    private SwitchCompat ishaa_switch;
     private SharedPreferences mPrefs;
     private SharedPreferences.OnSharedPreferenceChangeListener prefListener;
     private CheckBox is_Manual_Location;
@@ -147,11 +144,11 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
         is_Manual_Location.setOnClickListener(this);
         currentLocation= view.findViewById(R.id.current_location);
         currentLocation.setText(this.getContext().getResources().getString(R.string.current_location)+MainActivity.getLatitude(getContext())+", "+ MainActivity.getLongitude(getContext()));
-        fajr_switch=(Switch) view.findViewById(R.id.switch1);
-        duhr_switch=(Switch) view.findViewById(R.id.switch2);
-        asr_switch=(Switch) view.findViewById(R.id.switch3);
-        maghrib_switch=(Switch) view.findViewById(R.id.switch4);
-        ishaa_switch=(Switch) view.findViewById(R.id.switch5);
+        fajr_switch=(SwitchCompat) view.findViewById(R.id.switch1);
+        duhr_switch=(SwitchCompat) view.findViewById(R.id.switch2);
+        asr_switch=(SwitchCompat) view.findViewById(R.id.switch3);
+        maghrib_switch=(SwitchCompat) view.findViewById(R.id.switch4);
+        ishaa_switch=(SwitchCompat) view.findViewById(R.id.switch5);
 
         fajr_switch.setChecked(mPrefs.getBoolean("isFajrReminder",true));
         duhr_switch.setChecked(mPrefs.getBoolean("isDuhrReminder",true));
@@ -162,80 +159,64 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
 
 
 
-        fajr_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        fajr_switch.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-                if (isChecked==true){
-                    mPrefs.edit().putBoolean("isFajrReminder",true).commit();
-                }else{
-                    mPrefs.edit().putBoolean("isFajrReminder",false).commit();
-                }
-                updateAthanAlarms();
+            if (isChecked==true){
+                mPrefs.edit().putBoolean("isFajrReminder",true).apply();
+            }else{
+                mPrefs.edit().putBoolean("isFajrReminder",false).apply();
             }
+            updateAthanAlarms();
         });
 
 
-        duhr_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        duhr_switch.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-                if (isChecked==true){
-                    mPrefs.edit().putBoolean("isDuhrReminder",true).commit();
-                }else{
-                    mPrefs.edit().putBoolean("isDuhrReminder",false).commit();
-                }
-                updateAthanAlarms();
-
+            if (isChecked==true){
+                mPrefs.edit().putBoolean("isDuhrReminder",true).apply();
+            }else{
+                mPrefs.edit().putBoolean("isDuhrReminder",false).apply();
             }
+            updateAthanAlarms();
+
         });
 
 
-        asr_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        asr_switch.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-                if (isChecked==true){
-                    mPrefs.edit().putBoolean("isAsrReminder",true).commit();
-                }else{
-                    mPrefs.edit().putBoolean("isAsrReminder",false).commit();
-                }
-                updateAthanAlarms();
+            if (isChecked==true){
+                mPrefs.edit().putBoolean("isAsrReminder",true).apply();
+            }else{
+                mPrefs.edit().putBoolean("isAsrReminder",false).apply();
             }
+            updateAthanAlarms();
         });
 
 
-        maghrib_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        maghrib_switch.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-                if (isChecked==true){
-                    mPrefs.edit().putBoolean("isMaghribReminder",true).commit();
-                }else{
-                    mPrefs.edit().putBoolean("isMaghribReminder",false).commit();
-                }
-                updateAthanAlarms();
-
+            if (isChecked==true){
+                mPrefs.edit().putBoolean("isMaghribReminder",true).apply();
+            }else{
+                mPrefs.edit().putBoolean("isMaghribReminder",false).apply();
             }
+            updateAthanAlarms();
+
         });
 
 
-        ishaa_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        ishaa_switch.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-                if (isChecked==true){
-                    mPrefs.edit().putBoolean("isIshaaReminder",true).commit();
-                }else{
-                    mPrefs.edit().putBoolean("isIshaaReminder",false).commit();
-                }
-                updateAthanAlarms();
+            if (isChecked==true){
+                mPrefs.edit().putBoolean("isIshaaReminder",true).apply();
+            }else{
+                mPrefs.edit().putBoolean("isIshaaReminder",false).apply();
             }
+            updateAthanAlarms();
         });
         PreferenceManager.getDefaultSharedPreferences(this.getContext()).registerOnSharedPreferenceChangeListener(prefListener);
         this.updateprayerTimes();
-
-		return view;
+        return view;
 	}
 
     private void updateprayerTimes() {
@@ -280,9 +261,8 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
         Prayer[] prayers=new Prayer[7];
         for (int i=0;i<7;i++){
            prayers[i]=new Prayer(names[i],times[i]);
-
         }
-		return prayers;
+        return prayers;
 	}
 
 	@Override
@@ -301,12 +281,7 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
     }
 
     private void logScreen() {
-        /*
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, this.getClass().getSimpleName());
-        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, this.getClass().getSimpleName());
-        FirebaseAnalytics.getInstance(this.getActivity()).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
-    */
+
     }
 
     @Override
@@ -321,7 +296,7 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
             CustomLocation Customlocation=new CustomLocation(this.getActivity());
             Customlocation.show();
         }else{
-            PreferenceManager.getDefaultSharedPreferences(this.getContext()).edit().putBoolean("isCustomLocation", false).commit();
+            PreferenceManager.getDefaultSharedPreferences(this.getContext()).edit().putBoolean("isCustomLocation", false).apply();
         }
         currentLocation.setText(this.getContext().getResources().getString(R.string.current_location)+MainActivity.getLatitude(getContext())+", "+ MainActivity.getLongitude(getContext()));
         updateprayerTimes();
@@ -345,16 +320,5 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
                 );
         return hijriFormat.format(today); // 22nd Rajab 1438
 
-// taking into account the specific start of day for Hijri calendar
- /*       HijriCalendar todayExact =
-                SystemClock.inLocalView().now(
-                        HijriCalendar.family(),
-                        HijriCalendar.VARIANT_UMALQURA,
-                        StartOfDay.EVENING // simple approximation => 18:00
-                ).toDate();
-        //System.out.println(hijriFormat.format(todayExact)); // 22nd Rajab 1438 (23rd after 18:00)
-        return hijriFormat.format(todayExact);
-
-  */
     }
 }

@@ -120,7 +120,7 @@ public class QiblaFragment extends Fragment implements SharedPreferences.OnShare
         currentLocation= view.findViewById(R.id.current_location);
         this.updateQiblaDirection();
         PreferenceManager.getDefaultSharedPreferences(this.getContext()).registerOnSharedPreferenceChangeListener(prefListener);
-		return view;
+        return view;
 	}
 
     private void setupCompass() {
@@ -204,12 +204,6 @@ public class QiblaFragment extends Fragment implements SharedPreferences.OnShare
     }
 
     private void logScreen() {
-        /*
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, this.getClass().getSimpleName());
-        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, this.getClass().getSimpleName());
-        FirebaseAnalytics.getInstance(this.getActivity()).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
-    */
     }
 
     @Override
@@ -224,7 +218,7 @@ public class QiblaFragment extends Fragment implements SharedPreferences.OnShare
             CustomLocation Customlocation=new CustomLocation(this.getActivity());
             Customlocation.show();
         }else{
-            PreferenceManager.getDefaultSharedPreferences(this.getContext()).edit().putBoolean("isCustomLocation", false).commit();
+            PreferenceManager.getDefaultSharedPreferences(this.getContext()).edit().putBoolean("isCustomLocation", false).apply();
         }
         this.updateQiblaDirection();
     }

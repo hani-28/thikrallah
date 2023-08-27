@@ -217,19 +217,17 @@ public class PrayTime {
 
             if (default_method!=-100){
               //  Log.d(TAG,"default method returned is"+default_method);
-                PreferenceManager.getDefaultSharedPreferences(context).edit().putString("calc_method",Integer.toString(default_method)).commit();
+                PreferenceManager.getDefaultSharedPreferences(context).edit().putString("calc_method",Integer.toString(default_method)).apply();
                 Log.d(TAG,"calc method: committed");
                 return default_method;
             }else{
-                PreferenceManager.getDefaultSharedPreferences(context).edit().putString("calc_method",Integer.toString(CALC_METHOD_MWL)).commit();
+                PreferenceManager.getDefaultSharedPreferences(context).edit().putString("calc_method",Integer.toString(CALC_METHOD_MWL)).apply();
                 Log.d(TAG,"calc method: committed");
                 return CALC_METHOD_MWL;
             }
 
         }
 
-       // Log.d(TAG,"0 addresses receieved.returned");
-        //PreferenceManager.getDefaultSharedPreferences(context).edit().putString("calc_method",Integer.toString(CALC_METHOD_MWL)).commit();
         return CALC_METHOD_MWL;
     }
 
@@ -276,17 +274,15 @@ public class PrayTime {
 
             if (default_juristic_method!=-100){
                 Log.d(TAG,"default juristic method returned is"+default_juristic_method);
-                PreferenceManager.getDefaultSharedPreferences(context).edit().putString("asr_calc_method",Integer.toString(default_juristic_method)).commit();
+                PreferenceManager.getDefaultSharedPreferences(context).edit().putString("asr_calc_method",Integer.toString(default_juristic_method)).apply();
                 return default_juristic_method;
             }else{
-                PreferenceManager.getDefaultSharedPreferences(context).edit().putString("asr_calc_method",Integer.toString(JURISTIC_METHOD_Shafii)).commit();
+                PreferenceManager.getDefaultSharedPreferences(context).edit().putString("asr_calc_method",Integer.toString(JURISTIC_METHOD_Shafii)).apply();
                 return JURISTIC_METHOD_Shafii;
             }
 
         }
 
-       // Log.d(TAG,"0 addresses receieved.returned");
-        //PreferenceManager.getDefaultSharedPreferences(context).edit().putString("calc_method",Integer.toString(CALC_METHOD_MWL)).commit();
         return JURISTIC_METHOD_Shafii;
     }
     public final static double AVERAGE_RADIUS_OF_EARTH_KM = 6371;
@@ -332,7 +328,7 @@ public class PrayTime {
             String high_latitude_adjustment=(PreferenceManager.getDefaultSharedPreferences(context).getString("adjustment_method",null));
             if (high_latitude_adjustment == null ||high_latitude_adjustment.equalsIgnoreCase("0")) {
 
-                PreferenceManager.getDefaultSharedPreferences(context).edit().putString("adjustment_method","3").commit();
+                PreferenceManager.getDefaultSharedPreferences(context).edit().putString("adjustment_method","3").apply();
                // Toast.makeText(context, R.string.latitude_adjustment_method_chosen,Toast.LENGTH_LONG).show();
                 this.setAdjustHighLats(3);
                 prayerTimes = this.getPrayerTimes(cal,
@@ -388,43 +384,43 @@ public class PrayTime {
          * selector (0 = angle; 1 = minutes after maghrib) iv : isha parameter
          * value (in angle or minutes)
          */
-        methodParams = new HashMap<Integer, double[]>();
+        methodParams = new HashMap<>();
 
         // Jafari
         double[] Jvalues = {16,0,4,0,14};
-        methodParams.put(Integer.valueOf(this.getJafari()), Jvalues);
+        methodParams.put(this.getJafari(), Jvalues);
 
         // Karachi
         double[] Kvalues = {18,1,0,0,18};
-        methodParams.put(Integer.valueOf(this.getKarachi()), Kvalues);
+        methodParams.put(this.getKarachi(), Kvalues);
 
         // Karachi
         double[] Ovalues = {18,1,0,0,18};
-        methodParams.put(Integer.valueOf(this.getOman()), Ovalues);
+        methodParams.put(this.getOman(), Ovalues);
 
         // ISNA
         double[] Ivalues = {15,1,0,0,15};
-        methodParams.put(Integer.valueOf(this.getISNA()), Ivalues);
+        methodParams.put(this.getISNA(), Ivalues);
 
         // MWL
         double[] MWvalues = {18,1,0,0,17};
-        methodParams.put(Integer.valueOf(this.getMWL()), MWvalues);
+        methodParams.put(this.getMWL(), MWvalues);
 
         // Makkah
         double[] MKvalues = {18.5,1,0,1,90};
-        methodParams.put(Integer.valueOf(this.getMakkah()), MKvalues);
+        methodParams.put(this.getMakkah(), MKvalues);
 
         // Egypt
         double[] Evalues = {19.5,1,0,0,17.5};
-        methodParams.put(Integer.valueOf(this.getEgypt()), Evalues);
+        methodParams.put(this.getEgypt(), Evalues);
 
         // Tehran
         double[] Tvalues = {17.7,0,4.5,0,14};
-        methodParams.put(Integer.valueOf(this.getTehran()), Tvalues);
+        methodParams.put(this.getTehran(), Tvalues);
 
         // Custom
         double[] Cvalues = {18,1,0,0,17};
-        methodParams.put(Integer.valueOf(this.getCustom()), Cvalues);
+        methodParams.put(this.getCustom(), Cvalues);
 
     }
 
@@ -739,9 +735,6 @@ public class PrayTime {
             suffix = "am";
         }
         hours = ((((hours + 12) - 1) % 12) + 1);
-        /*hours = (hours + 12) - 1;
-        int hrs = (int) hours % 12;
-        hrs += 1;*/
         if (noSuffix == false) {
             if ((hours >= 0 && hours <= 9) && (minutes >= 0 && minutes <= 9)) {
                 result = "0" + hours + ":0" + Math.round(minutes) + " "

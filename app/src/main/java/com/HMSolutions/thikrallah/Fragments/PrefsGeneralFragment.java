@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -20,7 +20,7 @@ import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Utilities.TimePreference;
 
-import java.util.Locale;
+import timber.log.Timber;
 
 public class PrefsGeneralFragment extends PreferenceFragmentCompat implements OnSharedPreferenceChangeListener {
 	@Override
@@ -30,6 +30,25 @@ public class PrefsGeneralFragment extends PreferenceFragmentCompat implements On
 		addPreferencesFromResource(R.xml.preferences_general);
 		initSummary(getPreferenceScreen());
 		//findPreference()
+		Preference contactUsPref = findPreference("contactDevKey");
+		Log.d("prefsGeneral","finding contactUsPref");
+		Log.d("prefsGeneral","finding contactUsPref"+contactUsPref.toString());
+		contactUsPref.setOnPreferenceClickListener(
+				new Preference.OnPreferenceClickListener() {
+					@Override
+					public boolean onPreferenceClick(Preference arg0) {
+						Log.d("prefsGeneral","onPreferenceClick called");
+						Intent intent = new Intent(Intent.ACTION_SENDTO);
+						intent.setData(Uri.parse("mailto:")); // Only email apps handle this.
+						intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"28.hani@gmail.com"});
+						intent.putExtra(Intent.EXTRA_SUBJECT, getContext().getString(R.string.email_subject));
+						if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+							Log.d("prefsGeneral","Intent called");
+							startActivity(intent);
+						}
+						return true;
+					}
+				});
 	}
 
 	@Override
@@ -45,12 +64,12 @@ public class PrefsGeneralFragment extends PreferenceFragmentCompat implements On
 	private void updatePrefSummary(Preference pref) {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getApplicationContext());
 		if (pref instanceof ListPreference) {
-			Log.d("prefs", "pref is instance of listpreference");
+			Timber.tag("prefs").d("pref is instance of listpreference");
 			ListPreference listPref = (ListPreference) pref;
 			pref.setSummary(listPref.getEntry());
 		}
 		if (pref instanceof TimePreference) {
-			Log.d("prefs", "pref is instance of TimePreference");
+			Timber.tag("prefs").d("pref is instance of TimePreference");
 			String time = sharedPreferences.getString(pref.getKey(), "00:00");
 			String AMPM = "AM";
 			int hour = TimePreference.getHour(time);
@@ -97,7 +116,6 @@ public class PrefsGeneralFragment extends PreferenceFragmentCompat implements On
             updatePrefSummary(p);
         }
     }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -106,12 +124,6 @@ public class PrefsGeneralFragment extends PreferenceFragmentCompat implements On
     }
 
     private void logScreen() {
-		/*
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, this.getClass().getSimpleName());
-        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, this.getClass().getSimpleName());
-        FirebaseAnalytics.getInstance(this.getActivity()).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
-  	  */
 	}
 
     @Override

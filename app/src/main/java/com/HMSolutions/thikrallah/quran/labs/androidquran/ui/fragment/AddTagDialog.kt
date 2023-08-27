@@ -59,7 +59,7 @@ class AddTagDialog : androidx.fragment.app.DialogFragment() {
     val id = args?.getLong(EXTRA_ID, -1) ?: -1
     val originalName = args?.getString(EXTRA_NAME, "") ?: ""
 
-    val activity = activity!!
+    val activity = requireActivity()
     val inflater = activity.layoutInflater
 
     @SuppressLint("InflateParams")

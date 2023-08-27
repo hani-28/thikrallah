@@ -58,29 +58,12 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
         mSeekBar.setOnSeekBarChangeListener(this);
     }
 
-    /*
-        @Override
-        protected void onBindView(View view) {
-            super.onBindView(view);
-
-            Log.d("1thikr1", "onBindView called");
-            //summaryTV=(TextView) view.findViewById(R.id.sum);
-            mSeekBar = view.findViewById(R.id.seekbar);
-            volumeValue =  view.findViewById(R.id.volumeValue);
-            mSeekBar.setMax(100);
-            mSeekBar.setProgress(mProgress);
-            volumeValue.setText(String.valueOf(mProgress));
-            mSeekBar.setOnSeekBarChangeListener(this);
-        }
-    */
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         Log.d("1thikr1", "onProgressChanged called");
         this.uncommittedProgress=progress;
         if (!fromUser)
             return;
-        // this.summaryTV.setText(progress);
-        //volumeValue.setText(progress);
 
     }
 
@@ -133,25 +116,7 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 
     }
     public void playUserFile() {
-        /*
-        MyDBHelper db = new MyDBHelper(this.getContext());
-        ArrayList<UserThikr> thikr=db.getAllUserThikrs();
 
-        Bundle data=new Bundle();
-        data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAY);
-        data.putInt("FILE",   -1);
-        data.putString("FILE_PATH",  thikr.get(0).getFile());
-        Log.d(TAG,"file_path="+thikr.get(0).getFile()+thikr.toString());
-        data.putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_GENERAL_THIKR);
-        sendActionToMediaService(data);
-*/
-
-
-        /*Bundle data1=new Bundle();
-        data1.putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_GENERAL_THIKR);
-        data1.putBoolean("isUserAction",false);
-        this.getContext().startService(new Intent(this.getContext(), ThikrService.class).putExtras(data1));
-        */
 
     }
     public void sendActionToMediaService(Bundle data){

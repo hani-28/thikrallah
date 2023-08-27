@@ -76,7 +76,8 @@ public class DuaGroupAdapter extends BaseAdapter implements Filterable {
                             new String[]{"%" + constraint + "%"}, null, null, null);
                     if (c != null && c.moveToFirst()) {
                         do {
-                            final Dua dua = new Dua(c.getInt(0), c.getString(c.getColumnIndex(groupTitleLanguage)));
+                            int col=c.getColumnIndex(groupTitleLanguage);
+                            final Dua dua = new Dua(c.getInt(0), c.getString(col));
                             duas.add(dua);
                         } while (c.moveToNext());
                     }
