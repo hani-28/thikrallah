@@ -1,5 +1,6 @@
 package com.HMSolutions.thikrallah.Utilities;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -34,7 +35,11 @@ public interface MainInterface {
     void setThikrType(String thikrType);
 
 	void requestLocationUpdate();
-
+    void requestPermission(String string);
+    void requestOverLayPermission();
+    void requestBatteryExclusion() ;
+    void requestLocationPermission();
+    void requestNotificationPermission();
 	void requestMediaServiceStatus();
-
+    void showMessageAndLaunchIntent(Intent intent, int title_resource, int message_resource);
 }

@@ -122,7 +122,6 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
     }
 
 
-
     class IncomingHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -175,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
 
             }
         }
+
         @Override
         public void onServiceDisconnected(ComponentName className) {
             // This is called when the connection with the service has been unexpectedly disconnected - process crashed.
@@ -231,18 +231,9 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
     }
 
 
-
-
-
     @Override
     protected void onStart() {
-        timeOperation("timing", "onstart called");
-        Log.d(TAG, "onStart called");
-
-
         bindtoMediaService();
-        timeOperation("timing", "onstart finished");
-
         super.onStart();
 
 
@@ -276,12 +267,60 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
     @Override
     protected void onStop() {
         super.onStop();// ATTENTION: This was auto-generated to implement the App Indexing API.
-        Log.d(TAG,"onstop finished");
+        Log.d(TAG, "onstop finished");
+    }
+    @Override
+    public void requestOverLayPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(this)) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:" + this.getPackageName()));
+                showMessageAndLaunchIntent(intent, R.string.need_overlay_permission_title, R.string.need_overlay_permission_message);
+
+            }
+        }
+    }
+@Override
+public void requestBatteryExclusion() {
+    Log.d(TAG,"requestBatteryExclusion");
+    PowerManager powerManager = (PowerManager) this.getSystemService(POWER_SERVICE);
+    String packageName = "com.HMSolutions.thikrallah";
+    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+        if (!powerManager.isIgnoringBatteryOptimizations(packageName)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(this.getResources().getString(R.string.power_Exclusion)).setMessage(this.getResources().getString(R.string.power_Exclusion_message))
+                    .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent();
+                            intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                            intent.setData(Uri.parse("package:" + mcontext.getPackageName()));
+                            startActivity(intent);
+                        }
+                    })
+                    .setCancelable(false)
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    })
+                    .create().show();
+        }
+    }
+}
+    @Override
+    public void requestPermission(String perm) {
+            int isGranted = ContextCompat.checkSelfPermission(this,
+                    perm);
+            if (isGranted != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,new String[]{perm}, 9999);
+            }
+
     }
 
     @Override
     public void requestLocationUpdate() {
-        Log.d(TAG, "requestLocationUpdate");
         Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.NO_REQUIREMENT);
         criteria.setPowerRequirement(Criteria.NO_REQUIREMENT);
@@ -289,16 +328,15 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
         int permissionCheck = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    MY_PERMISSIONS_REQUEST_ACCESS_LOCATION_FOR_LOCATION_UPDATES);
+            showMessageAndLaunchLocationPermission(R.string.need_location_permission_title, R.string.need_location_permission_message);
+
         } else {
             Log.d(TAG, "location permission granted");
             if (locationManager == null) {
                 locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             }
             String provider = locationManager.getBestProvider(criteria, true);
-            if (provider==null) {
+            if (provider == null) {
                 Log.d(TAG, "provider is null. Enabled providers are " + locationManager.getProviders(true).size());
 
                 if (PreferenceManager.getDefaultSharedPreferences(this).getString("latitude", "0.0").equalsIgnoreCase("0.0")) {
@@ -306,7 +344,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                 }
 
                 return;
-            }else {
+            } else {
                 Log.d(TAG, "provider is " + provider.toString());
 
 
@@ -331,12 +369,22 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
         }
 
 
+
+    }
+    @Override
+    public void requestLocationPermission(){
+        int permissionCheck = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION);
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            showMessageAndLaunchLocationPermission(R.string.need_location_permission_title, R.string.need_location_permission_message);
+
+        }
     }
     public static boolean isLocationEnabled(Context context) {
         int locationMode = 0;
         String locationProviders;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             try {
                 locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
 
@@ -347,15 +395,17 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
 
             return locationMode != Settings.Secure.LOCATION_MODE_OFF;
 
-        }else{
+        } else {
             locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
             return !TextUtils.isEmpty(locationProviders);
         }
 
 
     }
-    private void requestPermissions(){
+
+    private void requestNormalPermissions() {
         List<String> listPermissionsNeeded = new ArrayList<>();
+        /*
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(this)) {
                 Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
@@ -364,14 +414,16 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
 
             }
         }
+
+         */
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             int foregroundservice_permission = ContextCompat.checkSelfPermission(this,
                     Manifest.permission.FOREGROUND_SERVICE);
             if (foregroundservice_permission != PackageManager.PERMISSION_GRANTED) {
                 listPermissionsNeeded.add(Manifest.permission.FOREGROUND_SERVICE);
-                Log.d(TAG,"forground_service permission requested");
             }
         }
+        /*
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             int postnotification_permission = ContextCompat.checkSelfPermission(this,
                     Manifest.permission.POST_NOTIFICATIONS);
@@ -380,6 +432,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                 Log.d(TAG,"POST_NOTIFICATIONS permission requested");
             }
         }
+        */
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             int alarmsPermission = ContextCompat.checkSelfPermission(this,
                     Manifest.permission.SCHEDULE_EXACT_ALARM);
@@ -387,33 +440,18 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                 listPermissionsNeeded.add(Manifest.permission.SCHEDULE_EXACT_ALARM);
             }
         }
-
+        /*
         int locationPermission = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION);
-
-        //ask for this when needed and not here
-       // int writePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-
-
-
         if (locationPermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.ACCESS_COARSE_LOCATION);
-
-
-        }
+        }*/
         if (!listPermissionsNeeded.isEmpty()) {
-            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),REQUEST_ID_MULTIPLE_PERMISSIONS);
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), REQUEST_ID_MULTIPLE_PERMISSIONS);
         }
-
-
-
-
         int permissionCheck = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.SYSTEM_ALERT_WINDOW);
-        Log.d(TAG,"SYSTEM_ALERT_WINDOW permission ="+permissionCheck);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            Log.d(TAG,"SYSTEM_ALERT_WINDOW permission requested");
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.SYSTEM_ALERT_WINDOW},
                     1);
@@ -425,32 +463,15 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        Log.d(TAG, "oncreate 2");
-        timeOperation("timing", "minor_setups");
         MainActivity.setLocale(this);
         super.onCreate(savedInstanceState);
-        requestPermissions();
-        timeOperation("timing", "oncreate_started");
-        Log.d(TAG, "oncreate 1");
+        requestNormalPermissions();
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         PreferenceManager.setDefaultValues(this.getApplicationContext(), R.xml.preferences, true);
         PreferenceManager.setDefaultValues(this.getApplicationContext(), R.xml.preferences_athan, true);
         PreferenceManager.setDefaultValues(this.getApplicationContext(), R.xml.preferences_general, true);
         mcontext = this.getApplicationContext();
-
-        timeOperation("timing", "locale_setup_if_needed");
-        Log.d(TAG, "oncreate 4");
-
-
-        timeOperation("timing", "defined_mgoogleApiClient");
-
-
         populateBuiltinDatabase();
-        timeOperation("timing", "populating builtin database");
-
-
-        Log.d(TAG, "oncreate 7");
-
         if (!mPrefs.getBoolean("isFirstLaunch", true) &&
                 !mPrefs.getBoolean("isMigrated", false) &&
                 ContextCompat.checkSelfPermission(this,
@@ -470,28 +491,17 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
         //below is not nice or organized but will refactor and improve code next time
         MyListPreference isDownload = new MyListPreference(this);
         isDownload.downloadFilesIfNeeded();
-
-
-        timeOperation("timing", "showing what's new screen");
-
-        Log.d(TAG, "oncreate 8");
         new AppRater().app_launched(new WeakReference<>(this));
-        timeOperation("timing", "launching apprater if applicable");
         setContentView(R.layout.activity_main);
-        timeOperation("timing", "setting content");
-
-        timeOperation("timing", "replacing with main fragment");
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().add(R.id.container, new MainFragment()).commit();
         }
         if (mPrefs.getBoolean("isFirstLaunch", true)) {
-            Log.d(TAG, "first launch. calling boot recbiever");
             sendBroadcast(intent1);
             mPrefs.edit().putLong("time_at_last_ad", System.currentTimeMillis()).apply();
             launchFragment(new TutorialFragment(), null, "TutorialFragment");
-            timeOperation("timing", "launching tutorial freagment");
         }
-        if(!mPrefs.getBoolean("protected",false)) {
+        if (!mPrefs.getBoolean("protected", false)) {
             for (final Intent intent : POWERMANAGER_INTENTS)
                 if (getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null) {
 
@@ -500,15 +510,14 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                             .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    try{
+                                    try {
                                         startActivity(intent);
-                                    }catch(Exception e){
+                                    } catch (Exception e) {
                                         e.printStackTrace();
-                                        Log.d(TAG,""+e.getMessage());
-                                    }finally{
+                                        Log.d(TAG, "" + e.getMessage());
+                                    } finally {
                                         mPrefs.edit().putBoolean("protected", true).apply();
                                     }
-
 
 
                                 }
@@ -528,20 +537,11 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
         PowerManager powerManager = (PowerManager) getApplicationContext().getSystemService(POWER_SERVICE);
         String packageName = "com.HMSolutions.thikrallah";
         startAthanTimer(this.getApplicationContext());
-
-
-
-
-        timeOperation("timing", "defining intersittal ad");
-
-
-
-
         Intent intent = this.getIntent();
         boolean isNotification = intent.getBooleanExtra("FromNotification", false);
         if (isNotification == true) {
             Log.d(TAG, "from notification");
-            if (intent.getExtras().getString("DataType")!=null){
+            if (intent.getExtras().getString("DataType") != null) {
                 if (intent.getExtras().getString("DataType").equalsIgnoreCase(MainActivity.DATA_TYPE_DAY_THIKR) ||
                         intent.getExtras().getString("DataType").equalsIgnoreCase(MainActivity.DATA_TYPE_NIGHT_THIKR)) {
                     Log.d(TAG, "general thikr notification");
@@ -556,7 +556,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                 }
                 if (intent.getExtras().getString("DataType").contains(MainActivity.DATA_TYPE_ATHAN)) {
                     Log.d(TAG, "athan thikr notification");
-                    launchFragment(new AthanFragment(), new Bundle(),"AthanFragment");
+                    launchFragment(new AthanFragment(), new Bundle(), "AthanFragment");
                 }
             }
 
@@ -567,9 +567,6 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
             intent.setClass(MainActivity.this, PreferenceActivity.class);
             startActivityForResult(intent, 0);
         }
-        timeOperation("timing", "remainder of oncreate ");
-
-
     }
 
     public static void startAthanTimer(Context context) {
@@ -605,7 +602,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                 .create().show();
     }
 
-    private void showMessageAndLaunchIntent(Intent intent, int title_resource, int message_resource) {
+    public void showMessageAndLaunchIntent(Intent intent, int title_resource, int message_resource) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(this.getResources().getString(title_resource)).setMessage(this.getResources().getString(message_resource))
                 .setPositiveButton(this.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
@@ -629,8 +626,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
 
     private void timeOperation(String mytag, String operation) {
         endnow = SystemClock.elapsedRealtime();
-        Log.d(mytag, "Execution time: " + (endnow - startnow) + " ms for " + operation);
-        //Log.d(tag,operation);
+        Timber.d("Execution time: " + (endnow - startnow) + " ms for " + operation);
         startnow = SystemClock.elapsedRealtime();
     }
 
@@ -674,7 +670,6 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
     }
 
 
-
     @Override
     public void launchFragment(Fragment iFragment, Bundle args, String mytag) {
         iFragment.setArguments(args);
@@ -684,6 +679,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
         fragmentTransaction1.commit();
 
     }
+
     @Override
     public void share() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -693,38 +689,40 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
     }
 
 
-
     @Override
     public void onPause() {
-        Log.d(TAG,"on pause started");
+        Log.d(TAG, "on pause started");
 
         stopLocationUpdates();
         unbindtoMediaService();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.unregisterOnSharedPreferenceChangeListener(this);
-        Log.d(TAG,"on pause finished");
+        Log.d(TAG, "on pause finished");
         super.onPause();
-        Log.d(TAG,"on pause finished on parent");
+        Log.d(TAG, "on pause finished on parent");
 
     }
+
     public static String getLatitude(Context context) {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPrefs.getBoolean("isCustomLocation", false)) {
             return sharedPrefs.getString("c_latitude", "0.0");
-        }else{
+        } else {
             return sharedPrefs.getString("latitude", "0.0");
 
         }
     }
+
     public static String getLongitude(Context context) {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPrefs.getBoolean("isCustomLocation", false)) {
             return sharedPrefs.getString("c_longitude", "0.0");
-        }else{
+        } else {
             return sharedPrefs.getString("longitude", "0.0");
 
         }
     }
+
     public static void setLocale(Context context) {
         if (androidx.preference.PreferenceManager.getDefaultSharedPreferences(context).getString("language", null) != null) {
             Locale locale = new Locale(androidx.preference.PreferenceManager.getDefaultSharedPreferences(context).getString("language", null));
@@ -735,21 +733,15 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                     context.getResources().getDisplayMetrics());
         }
     }
+
     @Override
     protected void onResume() {
-
-        timeOperation("timing", "onresume started");
         bindtoMediaService();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         prefListener = this;
         prefs.registerOnSharedPreferenceChangeListener(prefListener);
         MainActivity.setLocale(this);
-
-
-        timeOperation("timing", "onresume finished");
-
-
         super.onResume();
 
     }
@@ -889,7 +881,32 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
 
     private Location mLastLocation;
     private LocationRequest locationRequest;
+    @Override
+    public void requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            int postnotification_permission = ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.POST_NOTIFICATIONS);
+            if (postnotification_permission != PackageManager.PERMISSION_GRANTED) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(this.getResources().getString(R.string.need_notification_permission_title)).setMessage(this.getResources().getString(R.string.need_notification_permission_message))
+                        .setPositiveButton(this.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                try {
+                                    requestPermission(Manifest.permission.POST_NOTIFICATIONS);
+                                } catch (Exception e) {
 
+                                }
+
+
+                            }
+                        })
+                        .setCancelable(false)
+                        .create().show();
+
+            }
+        }
+    }
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -964,7 +981,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                        startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS),RC_ENABLE_LOCATION_SETTINGS);
+                        startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), RC_ENABLE_LOCATION_SETTINGS);
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -976,6 +993,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
         final AlertDialog alert = builder.create();
         alert.show();
     }
+
     protected void stopLocationUpdates() {
         int permissionCheck = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION);
@@ -986,7 +1004,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                     MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION_FOR_STOP_LOCATION_UPDATES);
             */
         } else {
-            if(locationManager!=null){
+            if (locationManager != null) {
                 locationManager.removeUpdates(this);
             }
         }
@@ -1118,17 +1136,17 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
 //                String cityName = addresses.get(0).getAddressLine(0);
                 //un hg              String stateName = addresses.get(0).getAddressLine(1);
                 //       String countryName = addresses.get(0).getAddressLine(2);
-                if (addresses.size()>0) {
-                    String country=addresses.get(0).getCountryName();
-                    String city=addresses.get(0).getLocality();
-                    locationDiscription = country+"  "+city;// nbn  khjbmn countryName+" "+stateName + "" + cityName;
+                if (addresses.size() > 0) {
+                    String country = addresses.get(0).getCountryName();
+                    String city = addresses.get(0).getLocality();
+                    locationDiscription = country + "  " + city;// nbn  khjbmn countryName+" "+stateName + "" + cityName;
                     PreferenceManager.getDefaultSharedPreferences(context).edit().putString("location", locationDiscription).apply();
-                }else{
+                } else {
 
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.e(TAG,""+e.getMessage());
+                Log.e(TAG, "" + e.getMessage());
             }
             return locationDiscription;
         }
@@ -1137,7 +1155,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-        Log.d(TAG,"onStatusChanged called");
+        Log.d(TAG, "onStatusChanged called");
 
     }
 
@@ -1150,9 +1168,6 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
     public void onProviderDisabled(String provider) {
 
     }
-
-
-
 
 
 }

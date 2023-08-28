@@ -1,22 +1,13 @@
 package com.HMSolutions.thikrallah.Fragments;
 
-import static android.content.Context.POWER_SERVICE;
-
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 
@@ -78,80 +69,43 @@ public class MainFragment extends Fragment {
 		Button button_athan = (Button) view.findViewById(R.id.button_athan);
 		Button button_qibla = (Button) view.findViewById(R.id.button_qibla);
 
-		button_athan.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				mCallback.launchFragment(new AthanFragment(), new Bundle(), "AthanFragment");
-				
-			}
-			
-		});
-		button_qibla.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				mCallback.launchFragment(new QiblaFragment(), new Bundle(), "QiblaFragment");
-
-
-			}
-
-		});
+		button_athan.setOnClickListener(v -> mCallback.launchFragment(new AthanFragment(), new Bundle(), "AthanFragment"));
+		button_qibla.setOnClickListener(v -> mCallback.launchFragment(new QiblaFragment(), new Bundle(), "QiblaFragment"));
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-		button_quran.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
+		button_quran.setOnClickListener(v -> {
 
 
-				Intent intent = new Intent();
-				intent.setClass(v.getContext(), QuranDataActivity.class);
-				startActivityForResult(intent, 0);
+			Intent intent = new Intent();
+			intent.setClass(v.getContext(), QuranDataActivity.class);
+			startActivityForResult(intent, 0);
 
 
-            }
-        });
-		button_sadaqa.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallback.share();
-            }
-        });
-		button_remind_me_settings.setOnClickListener(new OnClickListener(){
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent();
-				intent.setClass(v.getContext(), PreferenceActivity.class);
-				startActivityForResult(intent, 0);
-			}});
-		button_hisn_almuslim.setOnClickListener(new OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(v.getContext(), DuaGroupActivity.class);
-                startActivityForResult(intent, 0);
-            }});
-		button_morning_thikr.setOnClickListener(new OnClickListener(){
-			@Override
-			public void onClick(View v) {
-				Bundle data=new Bundle();
-				data.putString("DataType", MainActivity.DATA_TYPE_DAY_THIKR);
-				mCallback.launchFragment(new ThikrFragment(), data,"ThikrFragment");
-			}});
-		
-		button_night_thikr.setOnClickListener(new OnClickListener(){
-			@Override
-			public void onClick(View v) {
-				Bundle data=new Bundle();
-				data.putString("DataType", MainActivity.DATA_TYPE_NIGHT_THIKR);
-                mCallback.launchFragment(new ThikrFragment(), data, "ThikrFragment");
-            }
 		});
-		button_my_athkar.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle data = new Bundle();
-                mCallback.launchFragment(new MyAthkarFragment(), data, "MyAthkarFragment");
-            }
+		button_sadaqa.setOnClickListener(v -> mCallback.share());
+		button_remind_me_settings.setOnClickListener(v -> {
+			Intent intent = new Intent();
+			intent.setClass(v.getContext(), PreferenceActivity.class);
+			startActivityForResult(intent, 0);
+		});
+		button_hisn_almuslim.setOnClickListener(v -> {
+			Intent intent = new Intent();
+			intent.setClass(v.getContext(), DuaGroupActivity.class);
+			startActivityForResult(intent, 0);
+		});
+		button_morning_thikr.setOnClickListener(v -> {
+			Bundle data=new Bundle();
+			data.putString("DataType", MainActivity.DATA_TYPE_DAY_THIKR);
+			mCallback.launchFragment(new ThikrFragment(), data,"ThikrFragment");
+		});
+		
+		button_night_thikr.setOnClickListener(v -> {
+			Bundle data=new Bundle();
+			data.putString("DataType", MainActivity.DATA_TYPE_NIGHT_THIKR);
+mCallback.launchFragment(new ThikrFragment(), data, "ThikrFragment");
+});
+		button_my_athkar.setOnClickListener(v -> {
+			Bundle data = new Bundle();
+			mCallback.launchFragment(new MyAthkarFragment(), data, "MyAthkarFragment");
 		});
 		Log.d(TAG,"requestBatteryExclusion");
 		requestBatteryExclusion(mContext);
@@ -169,32 +123,11 @@ public class MainFragment extends Fragment {
     }
 	private void requestBatteryExclusion(Context mContext) {
 		//first time launch, request is made in tutorial fragment, do not request here:
-		if (mPrefs.getBoolean("isFirstLaunch", true)==false) {
-			PowerManager powerManager = (PowerManager) mContext.getSystemService(POWER_SERVICE);
-			String packageName = "com.HMSolutions.thikrallah";
-			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-				if (!powerManager.isIgnoringBatteryOptimizations(packageName)) {
-					AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-					builder.setTitle(this.getResources().getString(R.string.power_Exclusion)).setMessage(this.getResources().getString(R.string.power_Exclusion_message))
-							.setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialogInterface, int i) {
-									Intent intent = new Intent();
-									intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
-									intent.setData(Uri.parse("package:" + mContext.getPackageName()));
-									startActivity(intent);
-								}
-							})
-							.setCancelable(false)
-							.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-								}
-							})
-							.create().show();
-				}
-			}
+		if (!mPrefs.getBoolean("isFirstLaunch", true)) {
+			mCallback.requestOverLayPermission();
+			mCallback.requestNotificationPermission();
+			mCallback.requestBatteryExclusion();
+			mCallback.requestLocationPermission();
 		}
 
 	}

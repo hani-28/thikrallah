@@ -27,7 +27,7 @@
     <string name="quran_thikr_download_need_files_permission">التذكير الصوتي بالقرءان يحتاج ان يحمل الملفات الصوتية المطلوبة لكي تشتغل هذه الخاصية. هل تريد تحميل الملف الصوتي الان؟</string>
     <string name="quran_thikr_need_files_prompt_title">تحميل ملفات</string>
     <string name="power_Exclusion">استثناءات توفير الطاقة</string>
-    <string name="power_Exclusion_message">الرجاء استثناء برنامج اذكر الله من خاصية توفير طاقة البطارية. هذا لكي تعمل التذكيرات والاذان في وقتهم الصحيح بدون تأخير. لا تقلق فالبرنامج لن يستعمل من البطارية الا نسية بسيطة جدا.</string>
+    <string name="power_Exclusion_message">الرجاء استثناء برنامج اذكر الله من خاصية توفير طاقة البطارية. هذا لكي تعمل التذكيرات والاذان في وقتهم الصحيح بدون تأخير. لا تقلق فالبرنامج لن يستعمل من البطارية الا نسبة بسيطة جدا.</string>
 
     <string name="autostart">تفعيل التشغل الذاتي</string>
     <string name="autostart_message">الرجاء السماح لبرنامجنا بالعمل بالخلفية حتى لو كان البرنامج مغلقا حتى يشتغل البرنامج بشكل صحيح.</string>
@@ -643,6 +643,9 @@
     <string name="notification_channel_audio" translatable="false">Quran Recitation</string>
     <string name="need_overlay_permission_title">اظهار فوق التطبيقات الاخرى</string>
     <string name="need_overlay_permission_message">ير جى السماح لبرنامجنا بالظهور فوق التطبيقات الاخرى لكي نتمكن من عرض التذكيرات بالله لك وانت في اي تطبيق</string>
+    <string name="need_notification_permission_title">السماح بالاشعارات</string>
+    <string name="need_notification_permission_message">ير جى السماح لبرنامجنا بأظهار الاشعارات لكي نتمكن من عرض التذكيرات بالله والاذان باوقات الصلوات. تستطيع تخصيص كيف تود الحصول على الاشعارات في اعدادات البرنامج</string>
+
     <string name="need_location_permission_title">السماح بمعلومات الموقع</string>
     <string name="need_location_permission_message">يرجى السماح لبرنامج اذكر الله بالاذن للحصول على معلومات موقعك لكي يستطيع البرنامج تحديد موقع مدينتك. هذا ضروري لكي يتم حساب اوقات الصلاة بشكل صحيح</string>
     <string name="longitude">خط الطول</string>
@@ -651,5 +654,6 @@
     <string name="number_format_error">خطأ في الرقم المدخل</string>
 
     <string name="override_location">لا تستعمل الموقع بناء على الGPS. حدد الموقع يدويا</string>
+    <string name="mishari_walk">Mishari and Ibrahim Walk (English translation (gapless))</string>
 
 </resources>

@@ -525,10 +525,16 @@ He knows what lies before them and what is after them, And they comprehend not a
     <string name="tag_duplicate_tag_error">Tag name already exists!</string>
     <!-- format strings -->
     <!-- notification channel names [CHAR LIMIT=40] -->
+    <string name="need_location_permission_title">Location Permission</string>
+    <string name="need_location_permission_message">App needs location permission so that it can calculate prayer times correctly and also to be able to show Qibla direction accurately. Please grant permission to ensure proper functionality of those functions</string>
     <string name="longitude">Longitude</string>
     <string name="latitude">Latitude</string>
     <string name="number_format_error">ُError in number format</string>
     <string name="current_location">Current location: </string>
     <string name="override_location">Use manual location instead of GPS</string>
+    <string name="need_overlay_permission_title">Overlay permission</string>
+    <string name="need_overlay_permission_message">Please allow app to overlay notification on toop of other apps. This allows our app to remind you of Allah even when you are using other applications</string>
+    <string name="need_notification_permission_title">Notification Permission</string>
+    <string name="need_notification_permission_message">Please allow app to show you notifications to remember Allah and for prayer reminders. You can customize amount and type of notifcations from app setting</string>
 
 </resources>
