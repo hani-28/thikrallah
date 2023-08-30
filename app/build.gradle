@@ -30,8 +30,8 @@ android {
         applicationId "com.HMSolutions.thikrallah"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 130
-        versionName "7.0.4"
+        versionCode 131
+        versionName "7.0.5"
     }
     buildTypes {
         release {
