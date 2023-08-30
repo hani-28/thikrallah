@@ -211,7 +211,7 @@ public class MyAlarmsManager {
 	}
     void setPeriodicAlarmManagerUpdates(AlarmManager alarmmnager){
         Intent launchIntent=new Intent(context, ThikrBootReceiver.class);
-
+        launchIntent.setAction("com.HMSolutions.thikrallah.Notification.ThikrBootReceiver.android.action.broadcast");
         Date dat  = new Date();
         Calendar now = Calendar.getInstance();
         now.setTime(dat);

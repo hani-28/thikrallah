@@ -15,18 +15,22 @@ public class ThikrBootReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		Log.d(TAG,"ThikrBootReceiver onrecieve called");
+		if (null != intent.getAction()){
+			if (intent.getAction().equalsIgnoreCase("com.HMSolutions.thikrallah.Notification.ThikrBootReceiver.android.action.broadcast")
+					|| intent.getAction().equalsIgnoreCase(Intent.ACTION_BOOT_COMPLETED)){
+				MyAlarmsManager manager=new MyAlarmsManager(context);
+				manager.UpdateAllApplicableAlarms();
 
-		MyAlarmsManager manager=new MyAlarmsManager(context);
-		manager.UpdateAllApplicableAlarms();
+				SharedPreferences mPrefs=PreferenceManager.getDefaultSharedPreferences(context);;
+				boolean isTimer=mPrefs.getBoolean("foreground_athan_timer",true);
 
-		SharedPreferences mPrefs=PreferenceManager.getDefaultSharedPreferences(context);
-		boolean isTimer=mPrefs.getBoolean("foreground_athan_timer",true);
-
-		if(isTimer){
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-				context.startForegroundService(new Intent(context,AthanTimerService.class));
-			} else {
-				context.startService(new Intent(context,AthanTimerService.class));
+				if(isTimer){
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+						context.startForegroundService(new Intent(context,AthanTimerService.class));
+					} else {
+						context.startService(new Intent(context,AthanTimerService.class));
+					}
+				}
 			}
 		}
 
