@@ -34,7 +34,8 @@ import android.preference.PreferenceManager;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
-
+import android.util.Log;
+import android.widget.Toast;
 
 
 import androidx.core.app.NotificationCompat;
@@ -62,7 +63,7 @@ import timber.log.Timber;
 
 public class ThikrMediaPlayerService extends Service implements OnCompletionListener,
         AudioManager.OnAudioFocusChangeListener {
-    String TAG = "ThikrMediaPlayerService";
+    static String TAG = "ThikrMediaPlayerService";
     public static final int MEDIA_PLAYER_PAUSE = 1;
     public static final int MEDIA_PLAYER_RESET = 2;
     public static final int MEDIA_PLAYER_PLAY = 3;
@@ -170,6 +171,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         public void run() {
             Context mContext=mApplicationContext.get();
             if (mContext!=null){
+                Log.d(TAG,"calling UpdateAllApplicableAlarms from ThikrMediaPlayerService");
                 new MyAlarmsManager(mApplicationContext.get()).UpdateAllApplicableAlarms();
             }
 
@@ -630,7 +632,15 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 FileDescriptor afd;
                 FileInputStream fis;
                 if (uri != null) {
-                    fis = new FileInputStream(this.getApplicationContext().getContentResolver().openFileDescriptor(uri, "r").getFileDescriptor());
+                    try{
+                        fis = new FileInputStream(this.getApplicationContext().getContentResolver().openFileDescriptor(uri, "r").getFileDescriptor());
+                    }catch (java.lang.SecurityException e){
+                        sharedPrefs.edit().putBoolean("isMediaPermissionNeeded",true).commit();
+                        Toast.makeText(this,R.string.need_audio_media_permission_message,Toast.LENGTH_LONG).show();
+                        this.stopSelf();
+                        return;
+                    }
+
                 } else {
                     fis = new FileInputStream(this.filepath);
                 }

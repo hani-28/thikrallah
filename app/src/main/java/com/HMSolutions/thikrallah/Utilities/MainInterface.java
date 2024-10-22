@@ -42,4 +42,8 @@ public interface MainInterface {
     void requestNotificationPermission();
 	void requestMediaServiceStatus();
     void showMessageAndLaunchIntent(Intent intent, int title_resource, int message_resource);
+
+    void requestMediaOrStoragePermission();
+
+    void requestExactAlarmPermission();
 }

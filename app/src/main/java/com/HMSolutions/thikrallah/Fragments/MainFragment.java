@@ -127,7 +127,11 @@ mCallback.launchFragment(new ThikrFragment(), data, "ThikrFragment");
 			mCallback.requestOverLayPermission();
 			mCallback.requestNotificationPermission();
 			mCallback.requestBatteryExclusion();
+			mCallback.requestExactAlarmPermission();
 			mCallback.requestLocationPermission();
+			if (mPrefs.getBoolean("isMediaPermissionNeeded",false)){
+				mCallback.requestMediaOrStoragePermission();
+			}
 		}
 
 	}

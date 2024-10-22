@@ -129,7 +129,7 @@ public class PrefsThikrFragmentTutorial extends PreferenceFragmentCompat impleme
         if (key.equalsIgnoreCase("volume")) {
 			return;
 		}
-		MyAlarmsManager manager = new MyAlarmsManager(mcontext);
+		MyAlarmsManager manager = new MyAlarmsManager(this.getActivity());
 		manager.UpdateAllApplicableAlarms();
 		Preference pref = this.findPreference((CharSequence) key);
 		updatePrefSummary(pref);

@@ -1,18 +1,24 @@
 package com.HMSolutions.thikrallah.Notification;
 
 
+import android.app.AlarmManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 
 public class ThikrBootReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		if (null != intent.getAction()){
+			Log.d("ThikrBootReceiver","intent called with action"+intent.getAction());
+			if (intent.getAction().equalsIgnoreCase(AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED)){
+				new MyAlarmsManager(context).UpdateAllApplicableAlarms();
+			}
 			if (intent.getAction().equalsIgnoreCase("com.HMSolutions.thikrallah.Notification.ThikrBootReceiver.android.action.broadcast")
 					|| intent.getAction().equalsIgnoreCase(Intent.ACTION_BOOT_COMPLETED)){
 				MyAlarmsManager manager=new MyAlarmsManager(context);

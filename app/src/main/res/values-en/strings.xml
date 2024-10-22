@@ -323,6 +323,9 @@ He knows what lies before them and what is after them, And they comprehend not a
     <string name="prefs_landscape_orientation_summary_off">Always use portrait mode</string>
     <string name="prefs_night_mode_title">Night mode</string>
     <string name="prefs_night_mode_summary">Use dark background and light fonts</string>
+    <string name="need_audio_media_permission_title">Audio Media Permission Request</string>
+    <string name="need_audio_media_permission_message">Please allow app access to audio files on your device, so you can use custom audio Duaa functionality in the app</string>
+
     <string name="prefs_night_mode_text_brightness_title">Text brightness</string>
     <string name="prefs_night_mode_text_brightness_summary">Brightness of the text when night mode is active</string>
     <string name="prefs_overlay_page_info_title">Show page info</string>
@@ -536,5 +539,6 @@ He knows what lies before them and what is after them, And they comprehend not a
     <string name="need_overlay_permission_message">Please allow app to overlay notification on toop of other apps. This allows our app to remind you of Allah even when you are using other applications</string>
     <string name="need_notification_permission_title">Notification Permission</string>
     <string name="need_notification_permission_message">Please allow app to show you notifications to remember Allah and for prayer reminders. You can customize amount and type of notifcations from app setting</string>
-
+    <string name="exact_alarm_message">Please allow our app to set exact alarms so that prayer times Athan is able to be set exactly on time</string>
+    <string name="exact_alarm_title">Exact Alarm Permission</string>
 </resources>

@@ -1,16 +1,25 @@
 package com.HMSolutions.thikrallah.Notification;
 
+import static android.content.Context.ALARM_SERVICE;
+
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.HMSolutions.thikrallah.MainActivity;
+import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.Utilities.PrayTime;
 
 import java.util.Calendar;
@@ -28,6 +37,7 @@ public class MyAlarmsManager {
     public static final int requestCodeAthan3=102;
     public static final int requestCodeAthan4=103;
     public static final int requestCodeAthan5=104;
+    boolean isPermissionRequested=false;
 	AlarmManager alarmMgr;
 	Context context;
     private SharedPreferences sharedPrefs;
@@ -37,8 +47,16 @@ public class MyAlarmsManager {
 	}
 	public void UpdateAllApplicableAlarms() {
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-        alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-
+        Long timestamp = Calendar.getInstance().getTimeInMillis();
+        Long diff = timestamp-sharedPrefs.getLong("lastAlarmsUpdate",0);
+        if (diff<1000){
+            //Do not update alarms too frequently
+            Log.d(TAG,"last AlarmsUpdate less than 1 second"+diff);
+            return;
+        }
+        sharedPrefs.edit().putLong("lastAlarmsUpdate", timestamp).commit();
+        alarmMgr = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+        Log.d("MyAlarmsManager","UpdateAllApplicableAlarms called");
         setPeriodicAlarmManagerUpdates(alarmMgr);
         String[] MorningReminderTime = sharedPrefs.getString("daytReminderTime", "8:00").split(":", 3);
         String[] NightReminderTime = sharedPrefs.getString("nightReminderTime", "20:00").split(":", 3);
@@ -73,14 +91,9 @@ public class MyAlarmsManager {
             calendar0.set(Calendar.HOUR_OF_DAY, Integer.parseInt(mulkReminderTime[0]));
             calendar0.set(Calendar.MINUTE, Integer.parseInt(mulkReminderTime[1]));
             calendar0.set(Calendar.SECOND, 0);
-
-
-            setAlarm(calendar0,pendingIntentMulk);
-
-
             if(calendar0.after(now)){
-                setAlarm(calendar0, pendingIntentMulk);
                 Log.d(TAG,"mulk reminder set"+calendar0.getTime());
+                setAlarm(calendar0, pendingIntentMulk);
             }else{
                 calendar0.add(Calendar.HOUR,24);
                 Log.d(TAG,"mulk reminder time in past. 1 day added. alarm set on "+calendar0.getTime());
@@ -104,13 +117,9 @@ public class MyAlarmsManager {
 			calendar0.set(Calendar.MINUTE, Integer.parseInt(MorningReminderTime[1]));
 			calendar0.set(Calendar.SECOND, 0);
 
-
-			setAlarm(calendar0,pendingIntentMorningThikr);
-
-
             if(calendar0.after(now)){
-                setAlarm(calendar0, pendingIntentMorningThikr);
                 Log.d(TAG,"daytime reminder set"+calendar0.getTime());
+                setAlarm(calendar0, pendingIntentMorningThikr);
             }else{
                 calendar0.add(Calendar.HOUR,24);
                 Log.d(TAG,"daytime reminder time in past. 1 day added. alarm set on "+calendar0.getTime());
@@ -136,8 +145,8 @@ public class MyAlarmsManager {
 			calendar1.set(Calendar.SECOND, 0);
 
             if(calendar1.after(now)){
-                setAlarm(calendar1, pendingIntentNightThikr);
                 Log.d(TAG,"night reminder set"+calendar1.getTime());
+                setAlarm(calendar1, pendingIntentNightThikr);
             }else{
                 calendar1.add(Calendar.HOUR,24);
                 Log.d(TAG,"nigh reminder time in past. 1 day added. alarm set on "+calendar1.getTime());
@@ -159,6 +168,7 @@ public class MyAlarmsManager {
             Calendar calendar1 = Calendar.getInstance();
             calendar1.setTime(dat);
             calendar1.add(Calendar.MINUTE,Integer.parseInt(RandomReminderInterval));
+            Log.d(TAG,"reminder throghout the day set"+calendar1.getTime());
             this.setAlarm(calendar1, pendingIntentGeneral);
 
 		}else{
@@ -180,8 +190,8 @@ public class MyAlarmsManager {
             calendar1.set(Calendar.SECOND, 0);
 
             if(calendar1.after(now)){
-                setAlarm(calendar1, pendingIntentKahf);
                 Log.d(TAG,"kahf reminder set"+calendar1.getTime());
+                setAlarm(calendar1, pendingIntentKahf);
             }else{
                 calendar1.add(Calendar.HOUR,24*7);
                 Log.d(TAG,"kahf reminder time in past. 7 days added. alarm set on "+calendar1.getTime());
@@ -201,14 +211,76 @@ public class MyAlarmsManager {
     @SuppressLint("NewApi")
 	private void setAlarm(Calendar time, PendingIntent pendingIntent){
 		Long timeInMilliseconds=getFutureTimeIfTimeInPast(time.getTimeInMillis());
+        Date dat = new Date();
+        Calendar now = Calendar.getInstance();
+        now.setTime(dat);
+        Log.d("MyAlarmsManager","was able to set exact alarm. is after?"+time.after(now)+" now is "+now.getTime()+" alarm is "+time.getTime());
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
 			alarmMgr.set(AlarmManager.RTC_WAKEUP, timeInMilliseconds, pendingIntent);
 		} else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
 			alarmMgr.setExact(AlarmManager.RTC_WAKEUP,timeInMilliseconds, pendingIntent);
 		}else{
-            alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,timeInMilliseconds, pendingIntent);
+            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,timeInMilliseconds, pendingIntent);
+            }else{
+                if (alarmMgr.canScheduleExactAlarms()){
+                    alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,timeInMilliseconds, pendingIntent);
+                    Log.d("MyAlarmsManager","was able to set exact alarm");
+
+                }else{
+                    Log.d("MyAlarmsManager","unable to set exact alarm due to permission issue. Requesting permission");
+                    requestExactAlarmPermission();
+                }
+            }
+
+
         }
 	}
+    private boolean requestExactAlarmPermission(){
+        Log.d(TAG,"requestExactAlarmPermission");
+        if ( !(context instanceof Activity)) {
+            return false;
+        }else{
+            AlarmManager alarmManager = (AlarmManager) this.context.getSystemService(ALARM_SERVICE);
+            String packageName = "com.HMSolutions.thikrallah";
+            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                return true;
+            }
+            else{
+
+                if (alarmManager.canScheduleExactAlarms()) {
+                    return true;
+                }else{
+                    if (isPermissionRequested==true){
+                        return false;
+                    }else{
+                        isPermissionRequested=true;
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this.context);
+                        builder.setTitle(this.context.getResources().getString(R.string.exact_alarm_title)).setMessage(this.context.getResources().getString(R.string.exact_alarm_message))
+                                .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        Intent intent = new Intent();
+                                        intent.setAction(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
+                                        intent.setData(Uri.parse("package:" + context.getPackageName()));
+                                        context.startActivity(intent);
+                                    }
+                                })
+                                .setCancelable(false)
+                                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                })
+                                .create().show();
+                    }
+
+                }
+                return false;
+            }
+        }
+
+    }
     void setPeriodicAlarmManagerUpdates(AlarmManager alarmmnager){
         Intent launchIntent=new Intent(context, ThikrBootReceiver.class);
         launchIntent.setAction("com.HMSolutions.thikrallah.Notification.ThikrBootReceiver.android.action.broadcast");
@@ -284,7 +356,7 @@ public class MyAlarmsManager {
 
             if (calendar0.after(now)) {
                 setAlarm(calendar0, pendingIntentAthan);
-                // Log.d(TAG,"athan reminder set"+calendar0.getTime());
+                Log.d(TAG,"athan reminder set"+calendar0.getTime());
             } else {
                 calendar0.add(Calendar.HOUR, 24);
                 // Log.d(TAG,"athan reminder time in past. 1 day added. alarm set on "+calendar0.getTime());

@@ -94,7 +94,6 @@ public class ThikrService extends IntentService  {
 
         calling_intent=intent;
         mcontext=this.getApplicationContext();
-        new MyAlarmsManager(mcontext).UpdateAllApplicableAlarms();
         quransettings=QuranSettings.getInstance(mcontext);
         //update all alarms
         Intent boot_reciever = new Intent("com.HMSolutions.thikrallah.Notification.ThikrBootReceiver.android.action.broadcast");

@@ -642,6 +642,9 @@
     <string name="notification_channel_download" translatable="false">Quran Downloads</string>
     <string name="notification_channel_audio" translatable="false">Quran Recitation</string>
     <string name="need_overlay_permission_title">اظهار فوق التطبيقات الاخرى</string>
+    <string name="need_audio_media_permission_title">طلب سماح للملفات الصوتيه</string>
+    <string name="need_audio_media_permission_message">يرجى السماح للبرنامج بالحصول على الاذن بالوصول الى الملفات الصوتيه في جهازك لكي تتمكن من استخدام خاصية أذكاري الصوتيه</string>
+
     <string name="need_overlay_permission_message">ير جى السماح لبرنامجنا بالظهور فوق التطبيقات الاخرى لكي نتمكن من عرض التذكيرات بالله لك وانت في اي تطبيق</string>
     <string name="need_notification_permission_title">السماح بالاشعارات</string>
     <string name="need_notification_permission_message">ير جى السماح لبرنامجنا بأظهار الاشعارات لكي نتمكن من عرض التذكيرات بالله والاذان باوقات الصلوات. تستطيع تخصيص كيف تود الحصول على الاشعارات في اعدادات البرنامج</string>
@@ -656,4 +659,6 @@
     <string name="override_location">لا تستعمل الموقع بناء على الGPS. حدد الموقع يدويا</string>
     <string name="mishari_walk">Mishari and Ibrahim Walk (English translation (gapless))</string>
 
+    <string name="exact_alarm_message">ير جى السماح لبرنامجنا بتحديد اشعارات بوقت دقيق لكي نتمكن من تحديد وقت الأذان بدقه</string>
+    <string name="exact_alarm_title">السماح بالاشعارات الدقيقه</string>
 </resources>

@@ -240,7 +240,7 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
 
     }
     private void updateAthanAlarms(){
-        new MyAlarmsManager(this.getActivity().getApplicationContext()).UpdateAllApplicableAlarms();
+        new MyAlarmsManager(this.getActivity()).UpdateAllApplicableAlarms();
     }
 
     @Override

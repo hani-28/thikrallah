@@ -2,6 +2,7 @@ package com.HMSolutions.thikrallah;
 
 
 import android.Manifest;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -71,6 +72,7 @@ import timber.log.Timber;
 public class MainActivity extends AppCompatActivity implements MainInterface, LocationListener, android.location.LocationListener,
         SharedPreferences.OnSharedPreferenceChangeListener {
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 2334;
+    private static final int MY_PERMISSIONS_REQUEST_READ_MEDIA_AUDIO = 43424;
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION_FOR_LOCATION_UPDATES = 5678;
     private static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 7051;
     String TAG = "MainActivity";
@@ -280,35 +282,64 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
             }
         }
     }
-@Override
-public void requestBatteryExclusion() {
-    Log.d(TAG,"requestBatteryExclusion");
-    PowerManager powerManager = (PowerManager) this.getSystemService(POWER_SERVICE);
-    String packageName = "com.HMSolutions.thikrallah";
-    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    @Override
+    public void requestBatteryExclusion() {
+        Log.d(TAG,"requestBatteryExclusion");
+        PowerManager powerManager = (PowerManager) this.getSystemService(POWER_SERVICE);
+        String packageName = "com.HMSolutions.thikrallah";
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
-        if (!powerManager.isIgnoringBatteryOptimizations(packageName)) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(this.getResources().getString(R.string.power_Exclusion)).setMessage(this.getResources().getString(R.string.power_Exclusion_message))
-                    .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent();
-                            intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
-                            intent.setData(Uri.parse("package:" + mcontext.getPackageName()));
-                            startActivity(intent);
-                        }
-                    })
-                    .setCancelable(false)
-                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    })
-                    .create().show();
+            if (!powerManager.isIgnoringBatteryOptimizations(packageName)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(this.getResources().getString(R.string.power_Exclusion)).setMessage(this.getResources().getString(R.string.power_Exclusion_message))
+                        .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Intent intent = new Intent();
+                                intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                                intent.setData(Uri.parse("package:" + mcontext.getPackageName()));
+                                startActivity(intent);
+                            }
+                        })
+                        .setCancelable(false)
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .create().show();
+            }
         }
     }
-}
+    @Override
+    public void requestExactAlarmPermission(){
+        Log.d(TAG,"requestExactAlarmPermission");
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(ALARM_SERVICE);
+        String packageName = "com.HMSolutions.thikrallah";
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+            if (!alarmManager.canScheduleExactAlarms()) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(this.getResources().getString(R.string.exact_alarm_title)).setMessage(this.getResources().getString(R.string.exact_alarm_message))
+                        .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Intent intent = new Intent();
+                                intent.setAction(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
+                                intent.setData(Uri.parse("package:" + mcontext.getPackageName()));
+                                startActivity(intent);
+                            }
+                        })
+                        .setCancelable(false)
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .create().show();
+            }
+        }
+    }
     @Override
     public void requestPermission(String perm) {
             int isGranted = ContextCompat.checkSelfPermission(this,
@@ -624,6 +655,61 @@ public void requestBatteryExclusion() {
                 .create().show();
     }
 
+    @Override
+    public void requestMediaOrStoragePermission() {
+        int reminderType=Integer.parseInt(mPrefs.getString("RemindmeThroughTheDayType", "1"));
+        if (reminderType==1 || reminderType==2){//audio notification
+            AppCompatActivity activity = this;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+                int permissionCheck = ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.READ_MEDIA_AUDIO);
+                if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(this.getResources().getString(R.string.need_audio_media_permission_title)).setMessage(this.getResources().getString(R.string.need_audio_media_permission_message))
+                            .setPositiveButton(this.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    try {
+                                        ActivityCompat.requestPermissions(activity,new String[]{Manifest.permission.READ_MEDIA_AUDIO}, MY_PERMISSIONS_REQUEST_READ_MEDIA_AUDIO);
+
+                                    } catch (Exception e) {
+
+                                    }
+
+
+                                }
+                            })
+                            .setCancelable(false)
+                            .create().show();
+                }
+            }else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                int permissionCheck = ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(this.getResources().getString(R.string.need_audio_media_permission_title)).setMessage(this.getResources().getString(R.string.need_audio_media_permission_message))
+                            .setPositiveButton(this.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    try {
+                                        ActivityCompat.requestPermissions(activity,new String[]{Manifest.permission.READ_MEDIA_AUDIO}, MY_PERMISSIONS_REQUEST_READ_MEDIA_AUDIO);
+                                        requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                                    } catch (Exception e) {
+
+                                    }
+
+
+                                }
+                            })
+                            .setCancelable(false)
+                            .create().show();
+
+                }
+            }
+        }
+
+    }
+
     private void timeOperation(String mytag, String operation) {
         endnow = SystemClock.elapsedRealtime();
         Timber.d("Execution time: " + (endnow - startnow) + " ms for " + operation);
@@ -935,6 +1021,7 @@ public void requestBatteryExclusion() {
                 }
                 return;
             }
+
             case MY_PERMISSIONS_REQUEST_ACCESS_LOCATION: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0

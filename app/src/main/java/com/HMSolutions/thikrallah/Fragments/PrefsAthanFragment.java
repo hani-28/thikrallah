@@ -121,7 +121,8 @@ public class PrefsAthanFragment extends PreferenceFragmentCompat implements OnSh
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
                                           String key) {
-        MyAlarmsManager manager = new MyAlarmsManager(this.getActivity().getApplicationContext());
+        MyAlarmsManager manager = new MyAlarmsManager(this.getActivity());
+		Log.d("MyAlarmsManager","onSharedPreferenceChanged called. Now calling UpdateAllApplicableAlarms");
 		manager.UpdateAllApplicableAlarms();
 		Preference pref = findPreference(key);
 		updatePrefSummary(pref);

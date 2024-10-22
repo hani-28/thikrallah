@@ -95,6 +95,7 @@ public class TutorialFragment extends Fragment {
                 data.putInt(PrefsThikrFragmentTutorial.PREF_XML_FILE,R.xml.prefs_tutorial4);
                 break;
             default:
+                mCallback.requestExactAlarmPermission();
                 data=null;
                 break;
         }
