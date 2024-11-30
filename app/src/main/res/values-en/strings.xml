@@ -530,8 +530,10 @@ He knows what lies before them and what is after them, And they comprehend not a
     <!-- notification channel names [CHAR LIMIT=40] -->
     <string name="need_location_permission_title">Location Permission</string>
     <string name="need_location_permission_message">App needs location permission so that it can calculate prayer times correctly and also to be able to show Qibla direction accurately. Please grant permission to ensure proper functionality of those functions</string>
-    <string name="longitude">Longitude</string>
-    <string name="latitude">Latitude</string>
+    <string name="choose_manual_location">Location</string>
+    <string name="choose_manual_location_message">Since location permission was not granted for application, please provide country and nearest city so that prayer times and Qibla directions cane be calculated accurately</string>
+    <string name="city">City</string>
+    <string name="country">Country</string>
     <string name="number_format_error">ُError in number format</string>
     <string name="current_location">Current location: </string>
     <string name="override_location">Use manual location instead of GPS</string>

@@ -50,5 +50,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_below="@id/is_manual_location"
         android:layoutDirection="locale"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
         />
 </RelativeLayout>

@@ -651,8 +651,8 @@
 
     <string name="need_location_permission_title">السماح بمعلومات الموقع</string>
     <string name="need_location_permission_message">يرجى السماح لبرنامج اذكر الله بالاذن للحصول على معلومات موقعك لكي يستطيع البرنامج تحديد موقع مدينتك. هذا ضروري لكي يتم حساب اوقات الصلاة بشكل صحيح</string>
-    <string name="longitude">خط الطول</string>
-    <string name="latitude">خط العرض</string>
+    <string name="city">المدينه</string>
+    <string name="country">الدوله</string>
     <string name="current_location">الموقع الحالي: </string>
     <string name="number_format_error">خطأ في الرقم المدخل</string>
 
@@ -661,4 +661,7 @@
 
     <string name="exact_alarm_message">ير جى السماح لبرنامجنا بتحديد اشعارات بوقت دقيق لكي نتمكن من تحديد وقت الأذان بدقه</string>
     <string name="exact_alarm_title">السماح بالاشعارات الدقيقه</string>
+    <string name="choose_manual_location">تحديد الموقع</string>
+    <string name="choose_manual_location_message">بما انك لم تسمح للبرنامج باسماح للوصول للموقع الجغرافي عن طريق الجي بي اس, يرجى تحديد دولتك واقرب مدينه اليك حتى يتم حساب وقت الصلاه واتجاه القبله بشكل صحيح</string>
+
 </resources>

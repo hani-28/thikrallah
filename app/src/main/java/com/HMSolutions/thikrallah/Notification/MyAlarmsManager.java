@@ -49,9 +49,9 @@ public class MyAlarmsManager {
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         Long timestamp = Calendar.getInstance().getTimeInMillis();
         Long diff = timestamp-sharedPrefs.getLong("lastAlarmsUpdate",0);
-        if (diff<1000){
+        if (diff<10000){
             //Do not update alarms too frequently
-            Log.d(TAG,"last AlarmsUpdate less than 1 second"+diff);
+            Log.d(TAG,"last AlarmsUpdate less than 10 second"+diff);
             return;
         }
         sharedPrefs.edit().putLong("lastAlarmsUpdate", timestamp).commit();
@@ -319,6 +319,11 @@ public class MyAlarmsManager {
 
 	}
     private void updateAllPrayerAlarms() {
+        double latitude =  Double.parseDouble(MainActivity.getLatitude(context));
+        double longitude = Double.parseDouble(MainActivity.getLongitude(context));
+        if (latitude==0 && longitude==0){
+            return;
+        }
         updatePrayerAlarms(requestCodeAthan1,"isFajrReminder",0,MainActivity.DATA_TYPE_ATHAN1);
         updatePrayerAlarms(requestCodeAthan2,"isDuhrReminder",2,MainActivity.DATA_TYPE_ATHAN2);
         updatePrayerAlarms(requestCodeAthan3,"isAsrReminder",3,MainActivity.DATA_TYPE_ATHAN3);

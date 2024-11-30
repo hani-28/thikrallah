@@ -2,6 +2,7 @@ package com.HMSolutions.thikrallah.Fragments;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,7 +29,7 @@ import com.HMSolutions.thikrallah.compass.SOTWFormatter;
 
 
 
-public class QiblaFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener, View.OnClickListener {
+public class QiblaFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener, View.OnClickListener, DialogInterface.OnDismissListener {
 	private MainInterface mCallback;
     private SharedPreferences.OnSharedPreferenceChangeListener prefListener;
     private CheckBox is_Manual_Location;
@@ -64,8 +65,14 @@ public class QiblaFragment extends Fragment implements SharedPreferences.OnShare
 
     private void updateQiblaDirection() {
         this.calculateQiblaDirection();
-        currentLocation.setText(this.getContext().getResources().getString(R.string.current_location)
-                +MainActivity.getLatitude(getContext())+"; "+ MainActivity.getLongitude(getContext()));
+        boolean isLocationManual = PreferenceManager.getDefaultSharedPreferences(this.getContext()).getBoolean("isCustomLocation", false);
+        if (isLocationManual){
+            currentLocation.setText(
+                    PreferenceManager.getDefaultSharedPreferences(this.getContext()).getString("city", "")+", "+
+                            PreferenceManager.getDefaultSharedPreferences(this.getContext()).getString("country", ""));
+        }else{
+            currentLocation.setText(this.getContext().getResources().getString(R.string.current_location)+MainActivity.getLatitude(getContext())+", "+ MainActivity.getLongitude(getContext()));
+        }
     }
 
 
@@ -118,6 +125,7 @@ public class QiblaFragment extends Fragment implements SharedPreferences.OnShare
 
         is_Manual_Location.setOnClickListener(this);
         currentLocation= view.findViewById(R.id.current_location);
+        currentLocation.setOnClickListener(this);
         this.updateQiblaDirection();
         PreferenceManager.getDefaultSharedPreferences(this.getContext()).registerOnSharedPreferenceChangeListener(prefListener);
         return view;
@@ -214,13 +222,29 @@ public class QiblaFragment extends Fragment implements SharedPreferences.OnShare
 
     @Override
     public void onClick(View v) {
-        if (is_Manual_Location.isChecked()){
-            CustomLocation Customlocation=new CustomLocation(this.getActivity());
-            Customlocation.show();
-        }else{
-            PreferenceManager.getDefaultSharedPreferences(this.getContext()).edit().putBoolean("isCustomLocation", false).apply();
+        switch (v.getId()){
+            case R.id.is_manual_location:
+                if (is_Manual_Location.isChecked()){
+                    CustomLocation Customlocation=new CustomLocation(this.getActivity());
+                    Customlocation.setCanceledOnTouchOutside(true);
+                    Customlocation.setOnDismissListener(this);
+                    Customlocation.show();
+                }else{
+                    PreferenceManager.getDefaultSharedPreferences(this.getContext()).edit().putBoolean("isCustomLocation", false).apply();
+                }
+                this.updateQiblaDirection();
+                break;
+            case R.id.current_location:
+                boolean isLocationManual = PreferenceManager.getDefaultSharedPreferences(this.getContext()).getBoolean("isCustomLocation", false);
+                if (isLocationManual){
+                    CustomLocation Customlocation=new CustomLocation(this.getActivity());
+                    Customlocation.setCanceledOnTouchOutside(true);
+                    Customlocation.setOnDismissListener(this);
+                    Customlocation.show();
+                }
+                break;
         }
-        this.updateQiblaDirection();
+
     }
 
     /**
@@ -241,5 +265,12 @@ public class QiblaFragment extends Fragment implements SharedPreferences.OnShare
         }else{
             return deg+360;
         }
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialogInterface) {
+        //called when location dialog is cancelled
+        boolean isLocationManual = PreferenceManager.getDefaultSharedPreferences(this.getContext()).getBoolean("isCustomLocation", false);
+        is_Manual_Location.setChecked(isLocationManual);
     }
 }

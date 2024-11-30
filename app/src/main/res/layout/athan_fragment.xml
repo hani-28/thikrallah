@@ -28,183 +28,183 @@
     <View style="@style/Divider"
         android:id="@+id/divider_1"
         android:layout_below="@id/Hijri_date"/>
+
     <GridLayout
-        android:layout_width="wrap_content"
+        android:id="@+id/gridview_athan"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/divider_1"
-        android:gravity="start"
-        android:rowCount="7"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
         android:columnCount="3"
-        android:verticalSpacing="@dimen/grid_vertical_spacing"
         android:horizontalSpacing="@dimen/grid_vertical_spacing"
-        android:id="@+id/gridview_athan">
-
+        android:rowCount="7"
+        android:verticalSpacing="@dimen/grid_vertical_spacing">
 
 
         <TextView
             android:id="@+id/athan_timing1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large"
             android:layout_row="0"
-            android:layout_column="0"/>
+            android:layout_column="0"
+            android:text="Large"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
             android:layout_row="0"
             android:layout_column="1"
-            android:checked="true"/>
+            android:checked="true"
+            android:text="" />
 
         <TextView
             android:id="@+id/athan_name1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="start"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/prayer1"
             android:layout_row="0"
-            android:layout_column="2"/>
+            android:layout_column="2"
+            android:gravity="start"
+            android:text="@string/prayer1"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
             android:id="@+id/sunrise_timing1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
             android:layout_row="1"
-            android:layout_column="0"/>
+            android:layout_column="0"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
             android:id="@+id/sunrise_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/sunrise"
-            android:gravity="start"
             android:layout_row="1"
-            android:layout_column="2"/>
+            android:layout_column="2"
+            android:gravity="start"
+            android:text="@string/sunrise"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
 
         <TextView
             android:id="@+id/athan_timing2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
             android:layout_row="2"
-            android:layout_column="0"/>
+            android:layout_column="0"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
             android:layout_row="2"
             android:layout_column="1"
-            android:checked="true"/>
+            android:checked="true"
+            android:text="" />
 
         <TextView
             android:id="@+id/athan_name2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/prayer2"
-            android:gravity="start"
             android:layout_row="2"
-            android:layout_column="2"/>
+            android:layout_column="2"
+            android:gravity="start"
+            android:text="@string/prayer2"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
 
         <TextView
             android:id="@+id/athan_timing3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
             android:layout_row="3"
-            android:layout_column="0"/>
+            android:layout_column="0"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
             android:layout_row="3"
             android:layout_column="1"
-            android:checked="true"/>
+            android:checked="true"
+            android:text="" />
 
         <TextView
             android:id="@+id/athan_name3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/prayer3"
-            android:gravity="start"
             android:layout_row="3"
-            android:layout_column="2"/>
+            android:layout_column="2"
+            android:gravity="start"
+            android:text="@string/prayer3"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
 
         <TextView
             android:id="@+id/athan_timing4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
-            android:gravity="start"
             android:layout_row="5"
-            android:layout_column="0"/>
+            android:layout_column="0"
+            android:gravity="start"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
             android:layout_row="5"
             android:layout_column="1"
-            android:checked="true"/>
+            android:checked="true"
+            android:text="" />
 
         <TextView
             android:id="@+id/athan_name4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/prayer4"
-            android:gravity="start"
             android:layout_row="5"
-            android:layout_column="2"/>
-
+            android:layout_column="2"
+            android:gravity="start"
+            android:text="@string/prayer4"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
 
         <TextView
             android:id="@+id/athan_timing5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
             android:layout_row="6"
-            android:layout_column="0"/>
+            android:layout_column="0"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
             android:layout_row="6"
             android:layout_column="1"
-            android:checked="true"/>
+            android:checked="true"
+            android:text="" />
 
         <TextView
             android:id="@+id/athan_name5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/prayer5"
-            android:gravity="start"
             android:layout_row="6"
-            android:layout_column="2"/>
+            android:layout_column="2"
+            android:gravity="start"
+            android:text="@string/prayer5"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
     </GridLayout>
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -221,7 +221,8 @@
             android:layout_height="wrap_content"
             android:text="@string/current_location"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:layoutDirection="locale"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
             />
         <View style="@style/Divider"
             android:id="@+id/divider_2"

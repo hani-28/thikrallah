@@ -2,11 +2,13 @@ package com.HMSolutions.thikrallah.Fragments;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.icu.util.IslamicCalendar;
 import android.icu.util.ULocale;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,7 +36,7 @@ import com.HMSolutions.thikrallah.Utilities.MainInterface;
 import com.HMSolutions.thikrallah.Utilities.PrayTime;
 
 
-public class AthanFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener, View.OnClickListener {
+public class AthanFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener, View.OnClickListener,  DialogInterface.OnDismissListener {
 
 
 
@@ -72,8 +74,16 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
                 ||key.equalsIgnoreCase("c_longitude")) {
             if (this.getView()!=null){
                 updateprayerTimes();
-                currentLocation.setText(this.getContext().getResources().getString(R.string.current_location)+MainActivity.getLatitude(getContext())+", "+ MainActivity.getLongitude(getContext()));
-                is_Manual_Location.setChecked(PreferenceManager.getDefaultSharedPreferences(this.getContext()).getBoolean("isCustomLocation",false));
+                boolean isLocationManual = PreferenceManager.getDefaultSharedPreferences(this.getContext()).getBoolean("isCustomLocation", false);
+                is_Manual_Location.setChecked(isLocationManual);
+                if (isLocationManual){
+                    currentLocation.setText(
+                            PreferenceManager.getDefaultSharedPreferences(this.getContext()).getString("city", "")+", "+
+                                    PreferenceManager.getDefaultSharedPreferences(this.getContext()).getString("country", ""));
+                }else{
+                    currentLocation.setText(this.getContext().getResources().getString(R.string.current_location)+MainActivity.getLatitude(getContext())+", "+ MainActivity.getLongitude(getContext()));
+                }
+
             }
 
         }
@@ -135,15 +145,20 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
         prayer5_time=(TextView) view.findViewById(R.id.athan_timing5);
         sunrise_time=(TextView) view.findViewById(R.id.sunrise_timing1);
         is_Manual_Location= (CheckBox) view.findViewById(R.id.is_manual_location);
+        currentLocation= view.findViewById(R.id.current_location);
         if (PreferenceManager.getDefaultSharedPreferences(this.getContext()).getBoolean("isCustomLocation", false)) {
             is_Manual_Location.setChecked(true);
+            currentLocation.setText(
+                    PreferenceManager.getDefaultSharedPreferences(this.getContext()).getString("city", "")+", "+
+                            PreferenceManager.getDefaultSharedPreferences(this.getContext()).getString("country", ""));
         }else{
             is_Manual_Location.setChecked(false);
-        }
+            currentLocation.setText(this.getContext().getResources().getString(R.string.current_location)+MainActivity.getLatitude(getContext())+", "+ MainActivity.getLongitude(getContext()));
 
+        }
+        currentLocation.setOnClickListener(this);
         is_Manual_Location.setOnClickListener(this);
-        currentLocation= view.findViewById(R.id.current_location);
-        currentLocation.setText(this.getContext().getResources().getString(R.string.current_location)+MainActivity.getLatitude(getContext())+", "+ MainActivity.getLongitude(getContext()));
+
         fajr_switch=(SwitchCompat) view.findViewById(R.id.switch1);
         duhr_switch=(SwitchCompat) view.findViewById(R.id.switch2);
         asr_switch=(SwitchCompat) view.findViewById(R.id.switch3);
@@ -220,7 +235,19 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
 	}
 
     private void updateprayerTimes() {
-            prayers=getPrayersArray();
+        double latitude =  Double.parseDouble(MainActivity.getLatitude(this.getContext()));
+        double longitude = Double.parseDouble(MainActivity.getLongitude(this.getContext()));
+        if (latitude==0.0 && longitude==0.0){
+            prayer1_time.setText("NA:NA");
+            sunrise_time.setText("NA:NA");
+            prayer2_time.setText("NA:NA");
+            prayer3_time.setText("NA:NA");
+
+            prayer4_time.setText("NA:NA");
+            prayer5_time.setText("NA:NA");
+            return;
+        }
+        prayers=getPrayersArray();
             try{
                 //locationDescription.setText(PreferenceManager.getDefaultSharedPreferences(this.getActivity()).getString("location",""));
                 prayer1_time.setText(prayers[0].getTime());
@@ -292,15 +319,30 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
 
     @Override
     public void onClick(View v) {
-        if (is_Manual_Location.isChecked()){
-            CustomLocation Customlocation=new CustomLocation(this.getActivity());
-            Customlocation.show();
-        }else{
-            PreferenceManager.getDefaultSharedPreferences(this.getContext()).edit().putBoolean("isCustomLocation", false).apply();
+        switch (v.getId()){
+            case R.id.is_manual_location:
+                if (is_Manual_Location.isChecked()){
+                    CustomLocation Customlocation=new CustomLocation(this.getActivity());
+                    Customlocation.setCanceledOnTouchOutside(true);
+                    Customlocation.setOnDismissListener(this);
+                    Customlocation.show();
+                }else{
+                    PreferenceManager.getDefaultSharedPreferences(this.getContext()).edit().putBoolean("isCustomLocation", false).apply();
+                }
+                currentLocation.setText(this.getContext().getResources().getString(R.string.current_location)+MainActivity.getLatitude(getContext())+", "+ MainActivity.getLongitude(getContext()));
+                updateprayerTimes();
+                updateAthanAlarms();
+                break;
+            case R.id.current_location:
+                boolean isLocationManual = PreferenceManager.getDefaultSharedPreferences(this.getContext()).getBoolean("isCustomLocation", false);
+                if (isLocationManual){
+                    CustomLocation Customlocation=new CustomLocation(this.getActivity());
+                    Customlocation.setCanceledOnTouchOutside(true);
+                    Customlocation.setOnDismissListener(this);
+                    Customlocation.show();
+                }
+                break;
         }
-        currentLocation.setText(this.getContext().getResources().getString(R.string.current_location)+MainActivity.getLatitude(getContext())+", "+ MainActivity.getLongitude(getContext()));
-        updateprayerTimes();
-        updateAthanAlarms();
     }
     private String getHijriDate(){
 
@@ -320,5 +362,15 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
                 );
         return hijriFormat.format(today); // 22nd Rajab 1438
 
+    }
+
+
+
+    @Override
+    public void onDismiss(DialogInterface dialogInterface) {
+        Log.d("AthanFragment","onDismiss called. isLocationManual:");
+        //called when location dialog is cancelled
+        boolean isLocationManual = PreferenceManager.getDefaultSharedPreferences(this.getContext()).getBoolean("isCustomLocation", false);
+        is_Manual_Location.setChecked(isLocationManual);
     }
 }

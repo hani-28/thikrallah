@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.PowerManager;
@@ -48,6 +49,8 @@ import com.HMSolutions.thikrallah.Fragments.ThikrFragment;
 import com.HMSolutions.thikrallah.Fragments.TutorialFragment;
 import com.HMSolutions.thikrallah.Notification.AthanTimerService;
 import com.HMSolutions.thikrallah.Utilities.AppRater;
+import com.HMSolutions.thikrallah.Utilities.CitiesCoordinatesDbOpenHelper;
+import com.HMSolutions.thikrallah.Utilities.CustomLocation;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
 import com.HMSolutions.thikrallah.Utilities.MyDBHelper;
 import com.HMSolutions.thikrallah.Utilities.MyListPreference;
@@ -66,6 +69,9 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import timber.log.Timber;
 
@@ -352,6 +358,9 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
 
     @Override
     public void requestLocationUpdate() {
+        if (mPrefs.getBoolean("isCustomLocation",false)){
+            return;
+        }
         Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.NO_REQUIREMENT);
         criteria.setPowerRequirement(Criteria.NO_REQUIREMENT);
@@ -404,6 +413,16 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
     }
     @Override
     public void requestLocationPermission(){
+        if (mPrefs.getBoolean("isCustomLocation",false)){
+            if (MainActivity.getLatitude(this).equalsIgnoreCase("0.0")
+                    || MainActivity.getLongitude(this).equalsIgnoreCase("0.0") ){
+                //custom location not set. Manually set
+                this.showMessageAndLaunchManualLocation();
+                return;
+            }else{
+                return;
+            }
+        }
         int permissionCheck = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
@@ -532,6 +551,22 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
             mPrefs.edit().putLong("time_at_last_ad", System.currentTimeMillis()).apply();
             launchFragment(new TutorialFragment(), null, "TutorialFragment");
         }
+        if (!mPrefs.getBoolean("isCitiesDatabaseCopied",false)){
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            Handler handler = new Handler(Looper.getMainLooper());
+
+            executor.execute(() -> {
+                CitiesCoordinatesDbOpenHelper citiesDb = CitiesCoordinatesDbOpenHelper.getInstance(this);
+                if (citiesDb.checkDataBase()){
+                    mPrefs.edit().putBoolean("isCitiesDatabaseCopied", true).apply();
+                }
+
+                handler.post(() -> {
+                    //UI Thread work here
+                });
+            });
+
+        }
         if (!mPrefs.getBoolean("protected", false)) {
             for (final Intent intent : POWERMANAGER_INTENTS)
                 if (getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null) {
@@ -625,6 +660,24 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                         ActivityCompat.requestPermissions(activity,
                                 new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                                 MY_PERMISSIONS_REQUEST_ACCESS_LOCATION_FOR_LOCATION_UPDATES);
+
+
+                    }
+                })
+                .setCancelable(false)
+                .create().show();
+    }
+
+    private void showMessageAndLaunchManualLocation() {
+        AppCompatActivity activity = this;
+        CustomLocation Customlocation=new CustomLocation(this);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(this.getResources().getString(R.string.choose_manual_location)).setMessage(this.getResources().getString(R.string.choose_manual_location_message))
+                .setPositiveButton(this.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Customlocation.show();
 
 
                     }
@@ -965,8 +1018,6 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
 
     }
 
-    private Location mLastLocation;
-    private LocationRequest locationRequest;
     @Override
     public void requestNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -1009,11 +1060,9 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                     // permission was granted, yay! Do the
                     // location-related task you need to do.
                 } else {
-                    if ((ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) ==
-                            PackageManager.PERMISSION_DENIED) &&
-                            ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                        showMessageAndLaunchLocationPermission(R.string.need_location_permission_title, R.string.need_location_permission_message);
-
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) ==
+                            PackageManager.PERMISSION_DENIED) {
+                        showMessageAndLaunchManualLocation();
                     }
 
                     // permission denied, boo! Disable the
@@ -1033,7 +1082,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                     // permission was granted, yay! Do the
                     // location-related task you need to do.
                 } else {
-
+                    showMessageAndLaunchManualLocation();
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
@@ -1049,7 +1098,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                     // permission was granted, yay! Do the
                     // location-related task you need to do.
                 } else {
-
+                    showMessageAndLaunchManualLocation();
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
