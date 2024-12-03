@@ -22,6 +22,7 @@ import androidx.preference.PreferenceManager;
 
 import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.R;
+import com.HMSolutions.thikrallah.Utilities.CitiesCoordinatesDbOpenHelper;
 import com.HMSolutions.thikrallah.Utilities.CustomLocation;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
 import com.HMSolutions.thikrallah.compass.Compass;
@@ -56,7 +57,6 @@ public class QiblaFragment extends Fragment implements SharedPreferences.OnShare
                 ||key.equalsIgnoreCase("c_longitude")) {
             if (this.getView()!=null){
                 updateQiblaDirection();
-                is_Manual_Location.setChecked(PreferenceManager.getDefaultSharedPreferences(this.getContext()).getBoolean("isCustomLocation",false));
             }
 
         }
@@ -65,14 +65,8 @@ public class QiblaFragment extends Fragment implements SharedPreferences.OnShare
 
     private void updateQiblaDirection() {
         this.calculateQiblaDirection();
-        boolean isLocationManual = PreferenceManager.getDefaultSharedPreferences(this.getContext()).getBoolean("isCustomLocation", false);
-        if (isLocationManual){
-            currentLocation.setText(
-                    PreferenceManager.getDefaultSharedPreferences(this.getContext()).getString("city", "")+", "+
-                            PreferenceManager.getDefaultSharedPreferences(this.getContext()).getString("country", ""));
-        }else{
-            currentLocation.setText(this.getContext().getResources().getString(R.string.current_location)+MainActivity.getLatitude(getContext())+", "+ MainActivity.getLongitude(getContext()));
-        }
+        is_Manual_Location.setChecked(PreferenceManager.getDefaultSharedPreferences(this.getContext()).getBoolean("isCustomLocation",false));
+        currentLocation.setText(MainActivity.getCityCountryLocation(this.getContext()));
     }
 
 
@@ -117,12 +111,6 @@ public class QiblaFragment extends Fragment implements SharedPreferences.OnShare
         //locationDescription=(TextView)  view.findViewById(R.id.textView_location);
 
         is_Manual_Location= (CheckBox) view.findViewById(R.id.is_manual_location);
-        if (PreferenceManager.getDefaultSharedPreferences(this.getContext()).getBoolean("isCustomLocation", false)) {
-            is_Manual_Location.setChecked(true);
-        }else{
-            is_Manual_Location.setChecked(false);
-        }
-
         is_Manual_Location.setOnClickListener(this);
         currentLocation= view.findViewById(R.id.current_location);
         currentLocation.setOnClickListener(this);
@@ -231,6 +219,7 @@ public class QiblaFragment extends Fragment implements SharedPreferences.OnShare
                     Customlocation.show();
                 }else{
                     PreferenceManager.getDefaultSharedPreferences(this.getContext()).edit().putBoolean("isCustomLocation", false).apply();
+                    mCallback.requestLocationUpdate();
                 }
                 this.updateQiblaDirection();
                 break;

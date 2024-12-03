@@ -368,8 +368,14 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
         int permissionCheck = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            showMessageAndLaunchLocationPermission(R.string.need_location_permission_title, R.string.need_location_permission_message);
-
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)){
+                showMessageAndLaunchLocationPermission(R.string.need_location_permission_title, R.string.need_location_permission_message);
+            }else{
+                //No UI explanation needed
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_ACCESS_LOCATION_FOR_LOCATION_UPDATES);
+            }
         } else {
             Log.d(TAG, "location permission granted");
             if (locationManager == null) {
@@ -425,8 +431,12 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
         }
         int permissionCheck = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION);
-        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            showMessageAndLaunchLocationPermission(R.string.need_location_permission_title, R.string.need_location_permission_message);
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED ) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)){
+                showMessageAndLaunchLocationPermission(R.string.need_location_permission_title, R.string.need_location_permission_message);
+            }else{
+                this.showMessageAndLaunchManualLocation();
+            }
 
         }
     }
@@ -858,6 +868,25 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
             return sharedPrefs.getString("c_longitude", "0.0");
         } else {
             return sharedPrefs.getString("longitude", "0.0");
+
+        }
+    }
+    public static String getCityCountryLocation(Context context) {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        if (sharedPrefs.getBoolean("isCustomLocation", false)) {
+            if (PreferenceManager.getDefaultSharedPreferences(context).getString("city", "").equalsIgnoreCase("")){
+                //This section deals with upgrading prior versions that do not have city adn country saved
+                String[] approxLocation = CitiesCoordinatesDbOpenHelper.getInstance(context).getClosestLocation();
+                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+                editor.putString("city", approxLocation[1]);
+                editor.putString("country", approxLocation[0]);
+                editor.commit();
+            }
+            return PreferenceManager.getDefaultSharedPreferences(context).getString("city", "")+", "+
+                    PreferenceManager.getDefaultSharedPreferences(context).getString("country", "");
+        } else {
+            String[] approxLocation= CitiesCoordinatesDbOpenHelper.getInstance(context).getClosestLocation();
+            return approxLocation[1]+", "+approxLocation[0];
 
         }
     }

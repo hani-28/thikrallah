@@ -31,6 +31,7 @@ import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.Models.Prayer;
 import com.HMSolutions.thikrallah.Notification.MyAlarmsManager;
 import com.HMSolutions.thikrallah.R;
+import com.HMSolutions.thikrallah.Utilities.CitiesCoordinatesDbOpenHelper;
 import com.HMSolutions.thikrallah.Utilities.CustomLocation;
 import com.HMSolutions.thikrallah.Utilities.MainInterface;
 import com.HMSolutions.thikrallah.Utilities.PrayTime;
@@ -71,32 +72,18 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equalsIgnoreCase("latitude") || key.equalsIgnoreCase("longitude")
                 || key.equalsIgnoreCase("isCustomLocation")||key.equalsIgnoreCase("c_latitude")
-                ||key.equalsIgnoreCase("c_longitude")) {
+                ||key.equalsIgnoreCase("c_longitude")|| key.equalsIgnoreCase("city")) {
             if (this.getView()!=null){
                 updateprayerTimes();
                 boolean isLocationManual = PreferenceManager.getDefaultSharedPreferences(this.getContext()).getBoolean("isCustomLocation", false);
                 is_Manual_Location.setChecked(isLocationManual);
-                if (isLocationManual){
-                    currentLocation.setText(
-                            PreferenceManager.getDefaultSharedPreferences(this.getContext()).getString("city", "")+", "+
-                                    PreferenceManager.getDefaultSharedPreferences(this.getContext()).getString("country", ""));
-                }else{
-                    currentLocation.setText(this.getContext().getResources().getString(R.string.current_location)+MainActivity.getLatitude(getContext())+", "+ MainActivity.getLongitude(getContext()));
-                }
+                currentLocation.setText(MainActivity.getCityCountryLocation(this.getContext()));
 
             }
 
         }
 
     }
-
-
-       /* if (key.equalsIgnoreCase("location")){
-            locationDescription.setText(PreferenceManager.getDefaultSharedPreferences(this.getActivity()).getString("location",""));
-
-        }*/
-
-
 
     @Override
     public void onAttach(Context context) {
@@ -146,16 +133,10 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
         sunrise_time=(TextView) view.findViewById(R.id.sunrise_timing1);
         is_Manual_Location= (CheckBox) view.findViewById(R.id.is_manual_location);
         currentLocation= view.findViewById(R.id.current_location);
-        if (PreferenceManager.getDefaultSharedPreferences(this.getContext()).getBoolean("isCustomLocation", false)) {
-            is_Manual_Location.setChecked(true);
-            currentLocation.setText(
-                    PreferenceManager.getDefaultSharedPreferences(this.getContext()).getString("city", "")+", "+
-                            PreferenceManager.getDefaultSharedPreferences(this.getContext()).getString("country", ""));
-        }else{
-            is_Manual_Location.setChecked(false);
-            currentLocation.setText(this.getContext().getResources().getString(R.string.current_location)+MainActivity.getLatitude(getContext())+", "+ MainActivity.getLongitude(getContext()));
+        boolean isLocationManual = PreferenceManager.getDefaultSharedPreferences(this.getContext()).getBoolean("isCustomLocation", false);
+        is_Manual_Location.setChecked(isLocationManual);
+        currentLocation.setText(MainActivity.getCityCountryLocation(this.getContext()));
 
-        }
         currentLocation.setOnClickListener(this);
         is_Manual_Location.setOnClickListener(this);
 
@@ -328,8 +309,9 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
                     Customlocation.show();
                 }else{
                     PreferenceManager.getDefaultSharedPreferences(this.getContext()).edit().putBoolean("isCustomLocation", false).apply();
+                    mCallback.requestLocationUpdate();
                 }
-                currentLocation.setText(this.getContext().getResources().getString(R.string.current_location)+MainActivity.getLatitude(getContext())+", "+ MainActivity.getLongitude(getContext()));
+                //currentLocation.setText(this.getContext().getResources().getString(R.string.current_location)+MainActivity.getLatitude(getContext())+", "+ MainActivity.getLongitude(getContext()));
                 updateprayerTimes();
                 updateAthanAlarms();
                 break;

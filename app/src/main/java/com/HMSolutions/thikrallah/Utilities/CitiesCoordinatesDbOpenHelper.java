@@ -1,5 +1,8 @@
 package com.HMSolutions.thikrallah.Utilities;
 
+import static java.lang.Math.PI;
+import static java.lang.Math.cos;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
@@ -8,6 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.HMSolutions.thikrallah.MainActivity;
 import com.HMSolutions.thikrallah.Models.UserThikr;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.hisnulmuslim.database.HisnDatabaseInfo;
@@ -67,6 +71,7 @@ public class CitiesCoordinatesDbOpenHelper extends SQLiteOpenHelper {
             this.close();
             try {
                 copyDataBase();
+                this.getWritableDatabase().execSQL("CREATE INDEX position ON cities (latitude, longitude)");
             } catch (IOException e) {
                 Log.e(this.getClass().toString(), "Copying error");
                 throw new Error("Error copying com.HMSolutions.thikrallah.cities_coordinates.sqlite3!");
@@ -185,5 +190,24 @@ public class CitiesCoordinatesDbOpenHelper extends SQLiteOpenHelper {
         }
         db.close();
         return coordinates;
+    }
+    @SuppressLint("Range")
+    public String[] getClosestLocation(){
+        String[] closestLocation = new String[2];
+        String latitude = MainActivity.getLatitude(context);
+        String longitude = MainActivity.getLongitude(context);
+        String cos_lat_2 = String.valueOf(Math.pow(cos(Double.parseDouble(latitude) * PI / 180),2));
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT city, country FROM cities ORDER BY ((?-latitude)*(?-latitude)) + ((? - longitude)*(? - longitude)*?) ASC"
+                ,new String[]{latitude,latitude,longitude,longitude,cos_lat_2});
+        if (cursor .moveToFirst()) {
+            closestLocation[0]=cursor.getString(cursor.getColumnIndex("country"));
+            closestLocation[1]=cursor.getString(cursor.getColumnIndex("city"));
+
+        }
+        db.close();
+        return closestLocation;
     }
 }

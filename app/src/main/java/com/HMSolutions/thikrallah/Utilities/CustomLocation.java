@@ -68,9 +68,7 @@ public class CustomLocation extends Dialog implements
 
 
         countriesInput.setOnItemSelectedListener(this);
-        Log.d("CustomLocation","countries list is: "+countries.toString());
         ArrayList<String> cities = db.getCities(countries.get(countries.size()-4));
-        Log.d("CustomLocation","cities list is: "+cities.toString());
 
 
     }
