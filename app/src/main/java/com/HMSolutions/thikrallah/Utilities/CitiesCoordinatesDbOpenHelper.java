@@ -71,7 +71,6 @@ public class CitiesCoordinatesDbOpenHelper extends SQLiteOpenHelper {
             this.close();
             try {
                 copyDataBase();
-                this.getWritableDatabase().execSQL("CREATE INDEX position ON cities (latitude, longitude)");
             } catch (IOException e) {
                 Log.e(this.getClass().toString(), "Copying error");
                 throw new Error("Error copying com.HMSolutions.thikrallah.cities_coordinates.sqlite3!");
