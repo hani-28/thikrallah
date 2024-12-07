@@ -8,6 +8,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
@@ -16,6 +17,7 @@ import com.HMSolutions.thikrallah.Models.UserThikr;
 import com.HMSolutions.thikrallah.R;
 import com.HMSolutions.thikrallah.hisnulmuslim.database.HisnDatabaseInfo;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -67,7 +69,7 @@ public class CitiesCoordinatesDbOpenHelper extends SQLiteOpenHelper {
         boolean dbExist = checkDataBase();
 
         if (!dbExist) {
-            this.getReadableDatabase();
+            this.getReadableDatabase();//This should make necessary parent directory and dummy database to overwrite
             this.close();
             try {
                 copyDataBase();
@@ -109,6 +111,10 @@ public class CitiesCoordinatesDbOpenHelper extends SQLiteOpenHelper {
         //Path to the created empty com.HMSolutions.thikrallah.cities_coordinates.sqlite3 on your Android device
         String outFileName = DB_PATH;
 
+        File db_directory = context.getDatabasePath(DB_NAME).getParentFile();
+        if (!db_directory.exists()) {
+            db_directory.mkdirs();
+        }
         //Now create a stream for writing the com.HMSolutions.thikrallah.cities_coordinates.sqlite3 byte by byte
         OutputStream localDbStream = new FileOutputStream(outFileName);
 
@@ -198,13 +204,18 @@ public class CitiesCoordinatesDbOpenHelper extends SQLiteOpenHelper {
         String cos_lat_2 = String.valueOf(Math.pow(cos(Double.parseDouble(latitude) * PI / 180),2));
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(
-                "SELECT city, country FROM cities ORDER BY ((?-latitude)*(?-latitude)) + ((? - longitude)*(? - longitude)*?) ASC"
-                ,new String[]{latitude,latitude,longitude,longitude,cos_lat_2});
-        if (cursor .moveToFirst()) {
-            closestLocation[0]=cursor.getString(cursor.getColumnIndex("country"));
-            closestLocation[1]=cursor.getString(cursor.getColumnIndex("city"));
+        try{
+            Cursor cursor = db.rawQuery(
+                    "SELECT city, country FROM cities ORDER BY (( ? - latitude ) * ( ? - latitude )) + (( ? - longitude)*( ? - longitude ) * ? ) ASC LIMIT 1"
+                    ,new String[]{latitude,latitude,longitude,longitude,cos_lat_2});
+            if (cursor .moveToFirst()) {
+                closestLocation[0]=cursor.getString(cursor.getColumnIndex("country"));
+                closestLocation[1]=cursor.getString(cursor.getColumnIndex("city"));
 
+            }
+        }catch (SQLiteException e){
+            closestLocation[1]=latitude;
+            closestLocation[0]=longitude;
         }
         db.close();
         return closestLocation;
