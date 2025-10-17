@@ -101,7 +101,6 @@ public class ThikrService extends IntentService  {
         Log.d(TAG,"onhandleintnet called");
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         String lang=sharedPrefs.getString("language",null);
-        boolean isRespectMute = sharedPrefs.getBoolean("mute_thikr_when_ringer_mute", true);
         if (lang!=null){
             Locale locale = new Locale(lang);
             Locale.setDefault(locale);
@@ -137,11 +136,22 @@ public class ThikrService extends IntentService  {
                 fileNumber=Integer.parseInt(thikr.getFile());
             }
             Log.d(TAG,"filenumber is"+fileNumber);
+            int reminderType=Integer.parseInt(sharedPrefs.getString("RemindmeThroughTheDayType", "1"));
 			//fire text chat head service
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (Settings.canDrawOverlays(this)) {
-                    Log.d(TAG, "calling chatheadservice 150");
+            if (reminderType==1 ||reminderType==3){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (Settings.canDrawOverlays(this)) {
+                        Log.d(TAG, "calling chatheadservice 150");
+                        Intent intentChatHead=new Intent(this.getApplicationContext(), ChatHeadService.class);
+                        intentChatHead.putExtra("thikr", thikr.getThikrText());
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            startForegroundService(intentChatHead);
+                        } else {
+                            startService(intentChatHead);
+                        }
+                    }
+                }else{
+                    Log.d(TAG, "calling chatheadservice 160");
                     Intent intentChatHead=new Intent(this.getApplicationContext(), ChatHeadService.class);
                     intentChatHead.putExtra("thikr", thikr.getThikrText());
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -150,22 +160,13 @@ public class ThikrService extends IntentService  {
                         startService(intentChatHead);
                     }
                 }
-            }else{
-                Log.d(TAG, "calling chatheadservice 160");
-                Intent intentChatHead=new Intent(this.getApplicationContext(), ChatHeadService.class);
-                intentChatHead.putExtra("thikr", thikr.getThikrText());
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    startForegroundService(intentChatHead);
-                } else {
-                    startService(intentChatHead);
-                }
             }
 
 
 
-			int reminderType=Integer.parseInt(sharedPrefs.getString("RemindmeThroughTheDayType", "1"));
+
 			boolean isQuietTime=isTimeNowQuietTime();
-			if (((reminderType==1 ||reminderType==2)&&isQuietTime==false&&(thikr.isBuiltIn()==true||thikr.getFile().length()>2))&&(am.getRingerMode() == AudioManager.RINGER_MODE_NORMAL||isRespectMute==false)){
+			if (((reminderType==1 ||reminderType==2)&&isQuietTime==false&&(thikr.isBuiltIn()==true||thikr.getFile().length()>2))){
                 sharedPrefs.edit().putString("com.HMSolutions.thikrallah.datatype", MainActivity.DATA_TYPE_GENERAL_THIKR).apply();
                 data.putInt("ACTION", ThikrMediaPlayerService.MEDIA_PLAYER_PLAY);
                 Log.d(TAG,"fileNumber sent through intent is "+fileNumber);

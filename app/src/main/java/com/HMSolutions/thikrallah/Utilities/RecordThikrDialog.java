@@ -136,9 +136,9 @@ public class RecordThikrDialog extends DialogFragment {
                     }
                 }else{
                     int permissionCheck = ContextCompat.checkSelfPermission(context,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                            Manifest.permission.READ_EXTERNAL_STORAGE);
                     if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-                            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                                     MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
 
                     } else {

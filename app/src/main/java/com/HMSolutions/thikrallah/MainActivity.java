@@ -423,22 +423,33 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
             if (MainActivity.getLatitude(this).equalsIgnoreCase("0.0")
                     || MainActivity.getLongitude(this).equalsIgnoreCase("0.0") ){
                 //custom location not set. Manually set
+                Log.d(TAG,"LOCATION:0,0 location even though custom location is chosen");
                 this.showMessageAndLaunchManualLocation();
                 return;
             }else{
+                //custom location already set. Do nothing
                 return;
+            }
+        }else{
+            int permissionCheck = ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION);
+            if (permissionCheck != PackageManager.PERMISSION_GRANTED ) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)){
+                    showMessageAndLaunchLocationPermission(R.string.need_location_permission_title, R.string.need_location_permission_message);
+                }else{
+                    if (MainActivity.getLatitude(this).equalsIgnoreCase("0.0")
+                            || MainActivity.getLongitude(this).equalsIgnoreCase("0.0")){
+                        ActivityCompat.requestPermissions(this,
+                                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                                MY_PERMISSIONS_REQUEST_ACCESS_LOCATION_FOR_LOCATION_UPDATES);
+                        //can no longer ask for location permission. If latest location is zero, ask for user to set manual location
+                        //otherwise, use last known location and don't bother asking for location permission anymore
+                        //showMessageAndLaunchManualLocation();
+                    }
+                }
             }
         }
-        int permissionCheck = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION);
-        if (permissionCheck != PackageManager.PERMISSION_GRANTED ) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)){
-                showMessageAndLaunchLocationPermission(R.string.need_location_permission_title, R.string.need_location_permission_message);
-            }else{
-                this.showMessageAndLaunchManualLocation();
-            }
 
-        }
     }
     public static boolean isLocationEnabled(Context context) {
         int locationMode = 0;
@@ -1078,40 +1089,21 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                                            String permissions[], int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case REQUEST_ID_MULTIPLE_PERMISSIONS: {
-                if (grantResults.length > 0
-                        && (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                        == PackageManager.PERMISSION_GRANTED)) {
-                    Log.d(TAG, "requestLocationUpdate. permissions granted");
-
-                    this.requestLocationUpdate();
-                    startAthanTimer(this.getApplicationContext());
-                    // permission was granted, yay! Do the
-                    // location-related task you need to do.
-                } else {
-                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) ==
-                            PackageManager.PERMISSION_DENIED) {
-                        showMessageAndLaunchManualLocation();
-                    }
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-
             case MY_PERMISSIONS_REQUEST_ACCESS_LOCATION: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
                     Log.d(TAG, "requestLocationUpdate. permissions granted");
-
                     this.requestLocationUpdate();
                     startAthanTimer(this.getApplicationContext());
                     // permission was granted, yay! Do the
                     // location-related task you need to do.
                 } else {
-                    showMessageAndLaunchManualLocation();
+                    if (!mPrefs.getBoolean("isCustomLocation",false)){
+                        Log.d(TAG,"LOCATION: onRequestPermissionsResult MY_PERMISSIONS_REQUEST_ACCESS_LOCATION");
+                        showMessageAndLaunchManualLocation();
+                    }
+
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
@@ -1127,7 +1119,10 @@ public class MainActivity extends AppCompatActivity implements MainInterface, Lo
                     // permission was granted, yay! Do the
                     // location-related task you need to do.
                 } else {
-                    showMessageAndLaunchManualLocation();
+                    if (!mPrefs.getBoolean("isCustomLocation",false)){
+                        Log.d(TAG,"LOCATION: onRequestPermissionsResult MY_PERMISSIONS_REQUEST_ACCESS_LOCATION_FOR_LOCATION_UPDATES");
+                        showMessageAndLaunchManualLocation();
+                    }
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }

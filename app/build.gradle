@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-        maven { url "https://maven.google.com" }
+        maven { url = "https://maven.google.com" }
         google()
 
     }
@@ -24,14 +24,14 @@ android {
             keyPassword ''
         }
     }
-    compileSdk 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId "com.HMSolutions.thikrallah"
         minSdkVersion 21
-        targetSdkVersion 34
-        versionCode 141
-        versionName "7.3.4"
+        targetSdkVersion 36
+        versionCode 147
+        versionName "7.6.1"
     }
     buildTypes {
         release {
@@ -44,15 +44,15 @@ android {
         sourceCompatibility = JavaVersion.VERSION_18
         targetCompatibility = JavaVersion.VERSION_18
     }
-    kotlinOptions {
-        jvmTarget = "18"
-    }
 
     lint {
-        checkReleaseBuilds false
+        checkReleaseBuilds = false
         disable 'MissingTranslation'
     }
-    namespace 'com.HMSolutions.thikrallah'
+    namespace = 'com.HMSolutions.thikrallah'
+    buildFeatures {
+        buildConfig = true
+    }
 
 }
 kotlin {
@@ -62,32 +62,32 @@ repositories {
     google()
     mavenCentral()
     //jcenter()
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-    maven { url "https://maven.google.com" }
+    maven { url = "https://oss.sonatype.org/content/repositories/snapshots/" }
+    maven { url = "https://maven.google.com" }
 
 
 }
 
 dependencies {
-    implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
-    implementation 'androidx.core:core-ktx:1.13.1'
+    implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:2.0.1'
+    implementation 'androidx.core:core-ktx:1.17.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.3.2'
-    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.recyclerview:recyclerview:1.4.0'
+    implementation 'com.google.android.material:material:1.13.0'
 
     implementation group: 'net.time4j', name: 'time4j-android', version: '4.8-2021a'
 
     //BELOW is for compatibility with hisn-almuslim
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.mikepenz:iconics:1.3.0@aar'
+    implementation 'com.mikepenz:iconics:1.6.2'
     implementation 'com.vanniktech:vntnumberpickerpreference:1.0.0'
-    implementation 'com.vanniktech:vntnumberpickerpreference:1.0.1-SNAPSHOT'
+    //implementation 'com.vanniktech:vntnumberpickerpreference:1.0.1-SNAPSHOT'
     implementation 'com.vanniktech:vntfontlistpreference:1.0.0'
-    implementation 'com.vanniktech:vntfontlistpreference:1.0.1-SNAPSHOT'
+    //implementation 'com.vanniktech:vntfontlistpreference:1.0.1-SNAPSHOT'
     implementation 'me.grantland:autofittextview:0.2.1'
-    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'com.google.code.gson:gson:2.13.2'
     implementation 'com.google.android.gms:play-services-location:21.3.0'
 
     //implementation 'com.google.android.gms:play-services-appindexing:9.2.1'
@@ -99,32 +99,32 @@ dependencies {
     implementation project(path: ':search')
     implementation project(path: ':madani')
 
-    implementation deps.kotlin.stdlib
+    implementation  deps.kotlin.stdlib
     implementation "androidx.appcompat:appcompat:${androidxAppcompatVersion}"
     implementation "androidx.media:media:${androidxMediaVersion}"
     implementation "androidx.preference:preference-ktx:${androidxPreferencesVersion}"
-    implementation "androidx.recyclerview:recyclerview:1.3.2"
+    implementation "androidx.recyclerview:recyclerview:1.4.0"
     implementation "com.google.android.material:material:${androidxVersion}"
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.7'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.21'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
 
     kapt deps.dagger.apt
     implementation deps.dagger.runtime
 
     implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
-    implementation 'com.squareup.moshi:moshi:1.8.0'
-    implementation 'com.jakewharton.timber:timber:4.7.1'
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
+    implementation 'com.squareup.moshi:moshi:1.15.2'
+    implementation 'com.jakewharton.timber:timber:5.0.1'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'com.google.truth:truth:0.42'
-    testImplementation "org.mockito:mockito-core:2.23.4"
+    testImplementation 'com.google.truth:truth:1.4.5'
+    testImplementation "org.mockito:mockito-core:5.20.0"
     testImplementation "com.squareup.okhttp3:mockwebserver:${okhttpVersion}"
-    implementation 'com.squareup.okio:okio:3.0.0'
+    implementation 'com.squareup.okio:okio:3.16.2'
 
     //androidTestImplementation "androidx.test.espresso:espresso-core:${espressoVersion}"
     //androidTestImplementation "androidx.test.espresso:espresso-intents:${espressoVersion}"
     //androidTestImplementation "androidx.test.ext:junit:1.1.3"
     //androidTestImplementation "androidx.compose.ui:ui-test-junit4:1.0.5"
-    errorprone 'com.google.errorprone:error_prone_core:2.21.1'
+    errorprone 'com.google.errorprone:error_prone_core:2.42.0'
 
 }

@@ -49,9 +49,9 @@ public class MyAlarmsManager {
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         Long timestamp = Calendar.getInstance().getTimeInMillis();
         Long diff = timestamp-sharedPrefs.getLong("lastAlarmsUpdate",0);
-        if (diff<10000){
+        if (diff<3000){
             //Do not update alarms too frequently
-            Log.d(TAG,"last AlarmsUpdate less than 10 second"+diff);
+            Log.d(TAG,"last AlarmsUpdate less than 5 second"+diff);
             return;
         }
         sharedPrefs.edit().putLong("lastAlarmsUpdate", timestamp).commit();

@@ -215,7 +215,7 @@ public class ChatHeadService extends Service implements View.OnTouchListener {
 			}
 
 		}else{
-			Log.d(TAG,"not reminder type 1 or 3? what then?");
+			Log.d(TAG,"not reminder type 1 or 3? what then? It is: "+reminderType);
 			startnotification();
 	    	this.stopSelf();
 		}

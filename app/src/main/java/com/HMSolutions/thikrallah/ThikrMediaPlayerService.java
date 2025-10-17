@@ -190,7 +190,6 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     @Override
     public void onCreate() {
         super.onCreate();
-        Timber.plant(new Timber.DebugTree());
         Timber.d( "ThikrMediaPlayerService onCreate");
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
@@ -272,9 +271,9 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
 
         mediaSession.setActive(true);
-        Timber.d( "starting thikrmediaplayerservice notification on foreground");
+        Timber.d( "starting thikrmediaplayerservice notification on foreground from initNotification");
         startForeground(NOTIFICATION_ID, notificationBuilder.build());
-        Timber.d( "Finished starting thikrmediaplayerservice notification on foreground");
+        Timber.d( "Finished starting thikrmediaplayerservice notification on foreground from initNotification");
         updateActions();
 
 
@@ -336,9 +335,9 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             mediaSession.setActive(true);
 
 
-            Timber.d( "starting thikrmediaplayerservice notification on foreground");
+            //Timber.d( "starting thikrmediaplayerservice notification on foreground");
             startForeground(NOTIFICATION_ID, notificationBuilder.build());
-            Timber.d( "Finished starting thikrmediaplayerservice notification on foreground");
+            //Timber.d( "Finished starting thikrmediaplayerservice notification on foreground");
 
 
         }
@@ -400,11 +399,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         bundle.putString("thikrtype", this.getThikrType());
         if (this.getThikrType().equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)) {
             this.updateAllAlarms();
-            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-
-            boolean isRespectMute = sharedPrefs.getBoolean("mute_thikr_when_ringer_mute", true);
-            if ((am.getRingerMode() == AudioManager.RINGER_MODE_SILENT || am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE)
-                    && isRespectMute) {
+            if ((am.getRingerMode() == AudioManager.RINGER_MODE_SILENT || am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE)) {
                 if (this.getThikrType().contains(MainActivity.DATA_TYPE_ATHAN)) {//show pop up for athan
                     if (am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
                         vibrate();
@@ -634,6 +629,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 if (uri != null) {
                     try{
                         fis = new FileInputStream(this.getApplicationContext().getContentResolver().openFileDescriptor(uri, "r").getFileDescriptor());
+                        Log.d(TAG,"fis defined by uri"+uri.toString());
                     }catch (java.lang.SecurityException e){
                         sharedPrefs.edit().putBoolean("isMediaPermissionNeeded",true).commit();
                         Toast.makeText(this,R.string.need_audio_media_permission_message,Toast.LENGTH_LONG).show();
@@ -643,6 +639,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
                 } else {
                     fis = new FileInputStream(this.filepath);
+                    Log.d(TAG,"fis defined by filepath"+this.filepath);
                 }
 
 
@@ -651,10 +648,11 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 player.setAudioStreamType(getStreamType());
                 player.setDataSource(afd);
                 player.prepare();
-
+                Log.d(TAG,"player prepared");
                 int ret = requestAudioFocus();
+                Log.d(TAG,"requestAudioFocus returned "+ret);
                 if (ret == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-
+                    Log.d(TAG,"calling  startPlayerIfAllowed ");
                     startPlayerIfAllowed();
                     setVolume();
                 }
@@ -1028,12 +1026,11 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             Timber.d( "request audio focus granted");
 
             this.play_count++;
-            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-            boolean isRespectMute = sharedPrefs.getBoolean("mute_thikr_when_ringer_mute", true);
-            if ((am.getRingerMode() == AudioManager.RINGER_MODE_SILENT || am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE)
+            /*if ((am.getRingerMode() == AudioManager.RINGER_MODE_SILENT || am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE)
                     && isRespectMute && !this.overRideRespectMute && !isUserAction) {
                 if (!this.getThikrType().equalsIgnoreCase(MainActivity.DATA_TYPE_GENERAL_THIKR)) {
                     Timber.d( "pausing player");
+
                     this.pausePlayer();
                     this.updateActions();
 
@@ -1042,7 +1039,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 }
 
             } else {
-
+*/
                 sendMessageToUI(MSG_CURRENT_PLAYING, currentPlaying);
                 if (!wakeLock.isHeld()) {
                     wakeLock.acquire();
@@ -1050,7 +1047,9 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
                 player.start();
                 Timber.d( "player started");
                 this.updateActions();
-            }
+        //    }
+        }else{
+            Log.d(TAG,"audio focused request denied");
         }
     }
 

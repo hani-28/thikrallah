@@ -3,8 +3,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
-  compileSdk deps.android.build.compileSdkVersion
-  namespace 'com.HMSolutions.thikrallah.quran.labs.androidquran.pages.madani'
+  compileSdk = deps.android.build.compileSdkVersion
+  namespace = 'com.HMSolutions.thikrallah.quran.labs.androidquran.pages.madani'
   defaultConfig {
     minSdkVersion deps.android.build.minSdkVersion
     targetSdkVersion deps.android.build.targetSdkVersion

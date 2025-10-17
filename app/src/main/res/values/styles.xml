@@ -38,6 +38,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="windowActionBarOverlay">true</item>
 
+
     </style>
 
     <style name="AppTheme.Preference" parent="AppTheme">

@@ -131,11 +131,10 @@ public class CitiesCoordinatesDbOpenHelper extends SQLiteOpenHelper {
     }
 
     public SQLiteDatabase openDataBase() throws SQLException {
-        String path = DB_PATH;
         if (database == null) {
             createDataBase();
-            database = SQLiteDatabase.openDatabase(path, null,
-                    SQLiteDatabase.OPEN_READWRITE);
+            database = SQLiteDatabase.openDatabase(DB_PATH, null,
+                    SQLiteDatabase.OPEN_READONLY);
         }
         return database;
     }
