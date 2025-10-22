@@ -30,8 +30,8 @@ android {
         applicationId "com.HMSolutions.thikrallah"
         minSdkVersion 21
         targetSdkVersion 36
-        versionCode 147
-        versionName "7.6.1"
+        versionCode 148
+        versionName "7.6.2"
     }
     buildTypes {
         release {
@@ -112,7 +112,7 @@ dependencies {
     implementation deps.dagger.runtime
 
     implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
-    implementation 'com.squareup.moshi:moshi:1.15.2'
+    implementation 'com.squareup.moshi:moshi:1.8.0' //do not upgrade. breaks quran translation manager
     implementation 'com.jakewharton.timber:timber:5.0.1'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
     testImplementation 'junit:junit:4.13.2'
