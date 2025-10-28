@@ -159,7 +159,7 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
 
     private void updateAllAlarms() {
 
-        new Handler(Looper.getMainLooper()).postDelayed(new UpdateAlarmsRunnable(mcontext) , 5000);
+        new Handler(Looper.getMainLooper()).postDelayed(new UpdateAlarmsRunnable(mcontext.getApplicationContext()) , 5000);
     }
     private static class UpdateAlarmsRunnable implements Runnable{
         private final WeakReference<Context> mApplicationContext;

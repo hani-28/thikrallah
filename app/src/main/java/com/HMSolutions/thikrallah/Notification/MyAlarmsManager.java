@@ -46,6 +46,9 @@ public class MyAlarmsManager {
 		context=icontext;
 	}
 	public void UpdateAllApplicableAlarms() {
+        if (context==null){
+            return;
+        }
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         Long timestamp = Calendar.getInstance().getTimeInMillis();
         Long diff = timestamp-sharedPrefs.getLong("lastAlarmsUpdate",0);
@@ -282,6 +285,9 @@ public class MyAlarmsManager {
 
     }
     void setPeriodicAlarmManagerUpdates(AlarmManager alarmmnager){
+        if (context==null){
+            return;
+        }
         Intent launchIntent=new Intent(context, ThikrBootReceiver.class);
         launchIntent.setAction("com.HMSolutions.thikrallah.Notification.ThikrBootReceiver.android.action.broadcast");
         Date dat  = new Date();
@@ -319,6 +325,9 @@ public class MyAlarmsManager {
 
 	}
     private void updateAllPrayerAlarms() {
+        if (context == null) {
+            return;
+        }
         double latitude =  Double.parseDouble(MainActivity.getLatitude(context));
         double longitude = Double.parseDouble(MainActivity.getLongitude(context));
         if (latitude==0 && longitude==0){
@@ -332,6 +341,9 @@ public class MyAlarmsManager {
     }
 
     private void updatePrayerAlarms(int requestCode, String isReminderPreference,int prayerPosition,String datatype) {
+        if (context==null){
+            return;
+        }
         PrayTime prayers = PrayTime.instancePrayTime(context);
         prayers.setTimeFormat(PrayTime.TIME_FORMAT_Time24);
         String[] prayerTimes = prayers.getPrayerTimes(context);

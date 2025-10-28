@@ -167,7 +167,7 @@ public class PrefsGeneralFragment extends PreferenceFragmentCompat implements On
         if (key.equalsIgnoreCase("volume")) {
 			return;
 		}
-		MyAlarmsManager manager=new MyAlarmsManager(this.getActivity());
+		MyAlarmsManager manager=new MyAlarmsManager(this.getActivity().getApplicationContext());
 		manager.UpdateAllApplicableAlarms();
 		Preference pref = findPreference(key);
 		updatePrefSummary(pref);

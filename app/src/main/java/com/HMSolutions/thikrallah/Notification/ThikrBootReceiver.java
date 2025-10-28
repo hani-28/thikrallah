@@ -17,11 +17,11 @@ public class ThikrBootReceiver extends BroadcastReceiver {
 		if (null != intent.getAction()){
 			Log.d("ThikrBootReceiver","intent called with action"+intent.getAction());
 			if (intent.getAction().equalsIgnoreCase(AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED)){
-				new MyAlarmsManager(context).UpdateAllApplicableAlarms();
+				new MyAlarmsManager(context.getApplicationContext()).UpdateAllApplicableAlarms();
 			}
 			if (intent.getAction().equalsIgnoreCase("com.HMSolutions.thikrallah.Notification.ThikrBootReceiver.android.action.broadcast")
 					|| intent.getAction().equalsIgnoreCase(Intent.ACTION_BOOT_COMPLETED)){
-				MyAlarmsManager manager=new MyAlarmsManager(context);
+				MyAlarmsManager manager=new MyAlarmsManager(context.getApplicationContext());
 				manager.UpdateAllApplicableAlarms();
 
 				SharedPreferences mPrefs=PreferenceManager.getDefaultSharedPreferences(context);
