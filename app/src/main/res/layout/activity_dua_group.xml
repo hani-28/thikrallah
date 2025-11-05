@@ -2,6 +2,7 @@
     android:id="@+id/root_dua_group"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:background="@android:color/transparent"
     android:baselineAligned="false"
     android:orientation="vertical">
