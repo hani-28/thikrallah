@@ -22,6 +22,7 @@
     <item>@string/qari_mahmoud_ali_albana_gapless</item>
     <item>@string/qari_mostafa_ismaeel_gapless</item>
     <item>@string/qari_qatami_gapless</item>
+    <item>@string/qari_wadee_alyamani</item>
     <item>@string/qari_dussary</item>
     <item>@string/mishari_walk</item>
   </string-array>
@@ -49,8 +50,10 @@
         <item>20</item>
         <item>21</item>
         <item>22</item>
+        <item>23</item>
     </string-array>
   <integer-array translatable="false" name="quran_readers_have_gapless_equivalents">
+    <item>0</item>
     <item>0</item>
     <item>0</item>
     <item>0</item>
@@ -98,6 +101,7 @@
     <item>mahmoud_ali_albana</item>
     <item>mostafa_ismaeel</item>
     <item>qatami</item>
+    <item>wadee3_alyamani</item>
     <item>yasser_dussary</item>
     <item>mishari_walk</item>
   </string-array>
@@ -124,6 +128,7 @@
     <item>mahmoud_ali_albana</item>
     <item>mostafa_ismaeel</item>
     <item>qatami</item>
+    <item>wadee3_alyamani</item>
     <item>yasser_dussary</item>
     <item>mishari_walk</item>
   </string-array>
@@ -150,6 +155,7 @@
     <item>https://download.quranicaudio.com/quran/mahmood_ali_albana/</item>
     <item>https://download.quranicaudio.com/quran/mostafa_ismaeel/128kbps/</item>
     <item>https://download.quranicaudio.com/quran/nasser_bin_ali_alqatami/</item>
+    <item>https://download.quranicaudio.com/quran/wadee_hammadi_al-yamani/</item>
     <item>https://download.quranicaudio.com/quran/yasser_ad-dussary/</item>
     <item>https://download.quranicaudio.com/quran/mishaari_w_ibrahim_walk_si/</item>
   </string-array>
@@ -177,6 +183,8 @@
   <string name="qari_jibreel">محمد جبريل</string>
   <string name="qari_shuraym">سعود الشريم</string>
   <string name="qari_dussary">ياسر الدوسري</string>
+  <string name="qari_wadee_alyamani">وديع اليمني (متصل)</string>
+  <string name="qari_yasser_salama_hadr">ياسر سلامه (حدر)</string>
   <string name="qari_abdulbaset_gapless">عبد الباسط (متصل)</string>
   <string name="qari_abdulbaset_mujawwad_gapless">عبد الباسط مجود (متصل)</string>
   <string name="qari_aziz_alili_gapless">عزيز عليلي (متصل)</string>
