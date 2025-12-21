@@ -129,19 +129,21 @@ public class PrefsThikrFragmentTutorial extends PreferenceFragmentCompat impleme
         if (key.equalsIgnoreCase("volume")) {
 			return;
 		}
-		MyAlarmsManager manager = new MyAlarmsManager(this.getActivity().getApplicationContext());
-		manager.UpdateAllApplicableAlarms();
-		Preference pref = this.findPreference((CharSequence) key);
-		updatePrefSummary(pref);
-		if (key.equalsIgnoreCase("language")) {
-			Intent intent = new Intent();
-			intent.setClass(this.getActivity(), MainActivity.class);
-			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-			// intent.putExtra("FromPreferenceActivity",true);
-			this.startActivity(intent);
-		}
-		if (key.contains("_reminder_type")) {//athan type changed
-			play_athan(key);
+		if (this.getContext()!=null) {
+			MyAlarmsManager manager = new MyAlarmsManager(this.getContext());
+			manager.UpdateAllApplicableAlarms();
+			Preference pref = this.findPreference((CharSequence) key);
+			updatePrefSummary(pref);
+			if (key.equalsIgnoreCase("language")) {
+				Intent intent = new Intent();
+				intent.setClass(this.getActivity(), MainActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+				// intent.putExtra("FromPreferenceActivity",true);
+				this.startActivity(intent);
+			}
+			if (key.contains("_reminder_type")) {//athan type changed
+				play_athan(key);
+			}
 		}
 	}
 	private void play_athan(String key) {

@@ -352,7 +352,10 @@ public class AthanFragment extends Fragment implements SharedPreferences.OnShare
     public void onDismiss(DialogInterface dialogInterface) {
         Log.d("AthanFragment","onDismiss called. isLocationManual:");
         //called when location dialog is cancelled
-        boolean isLocationManual = PreferenceManager.getDefaultSharedPreferences(this.getContext()).getBoolean("isCustomLocation", false);
-        is_Manual_Location.setChecked(isLocationManual);
+        if (this.getContext()!=null){
+            boolean isLocationManual = PreferenceManager.getDefaultSharedPreferences(this.getContext()).getBoolean("isCustomLocation", false);
+            is_Manual_Location.setChecked(isLocationManual);
+        }
+
     }
 }
