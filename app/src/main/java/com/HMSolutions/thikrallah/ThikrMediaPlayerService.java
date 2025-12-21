@@ -95,7 +95,6 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     static final int MSG_CURRENT_PLAYING = 100;
     static final int MSG_UNBIND = 99;
     private String filepath;
-    private PowerManager.WakeLock wakeLock;
     private Context mcontext;
     private Uri uri;
 
@@ -191,14 +190,6 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
     public void onCreate() {
         super.onCreate();
         Timber.d( "ThikrMediaPlayerService onCreate");
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-                TAG);
-        if (!wakeLock.isHeld()) {
-            wakeLock.acquire();
-        }
-
-
 
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         String lang = mPrefs.getString("language", null);
@@ -781,9 +772,6 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             player = null;
         }
         am.abandonAudioFocus(this);
-        if (wakeLock.isHeld()) {
-            wakeLock.release();
-        }
         this.sendMessageToUI(MSG_CURRENT_PLAYING, -99);
         this.sendMessageToUI(MSG_UNBIND, MSG_UNBIND);
         this.stopSelf();
@@ -931,9 +919,6 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
         if (this.isPlaying()) {
             this.player.pause();
             this.updateActions();
-            if (wakeLock.isHeld()) {
-                wakeLock.release();
-            }
 
         } else {
             if (this.play_count == 0) {
@@ -1041,9 +1026,6 @@ public class ThikrMediaPlayerService extends Service implements OnCompletionList
             } else {
 */
                 sendMessageToUI(MSG_CURRENT_PLAYING, currentPlaying);
-                if (!wakeLock.isHeld()) {
-                    wakeLock.acquire();
-                }
                 player.start();
                 Timber.d( "player started");
                 this.updateActions();
