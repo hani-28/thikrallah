@@ -48,6 +48,7 @@ public class AthanTimerService extends Service {
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         boolean isTimer = sharedPrefs.getBoolean("foreground_athan_timer", true);
 		Timber.tag(TAG).d("istimer is " + isTimer);
+		initNotification();
 		if (isTimer) {
 			if (!isStarted) {
 				Timber.tag(TAG).d(TAG + "started");
@@ -61,8 +62,6 @@ public class AthanTimerService extends Service {
 					}
 				},0,60000);
 
-			}else{//timer is already running. Just run once to respect the runforeground promise
-				initNotification();
 			}
 		}else{
 			this.stopSelf();
